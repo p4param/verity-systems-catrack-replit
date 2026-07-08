@@ -66,7 +66,7 @@ export class NavigationService {
 
   // Navigation Items CRUD
   async createItem(data: CreateNavigationItemDto, tenantId: number, actorUserId: number) {
-    const created = await this.repository.createItem(data);
+    const created = await this.repository.createItem({ ...data, createdBy: data.createdBy || formatUserIdToUuid(actorUserId) });
     await createAuditLog({
       tenantId,
       actorUserId,
