@@ -19,6 +19,7 @@ export default function DashboardPage() {
                 const data = await fetchWithAuth("/api/secure/profile")
                 setProfile(data.user)
             } catch (err) {
+                if (err?.message === "Session expired") return
                 console.error("Dashboard profile fetch error:", err)
                 setError("Could not load profile. Please try refreshing.")
             } finally {
