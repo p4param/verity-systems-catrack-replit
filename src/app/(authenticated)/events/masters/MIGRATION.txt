@@ -1,0 +1,16 @@
+MIGRATION NOTES
+=========================================
+STATUS: DEPRECATED (LEGACY)
+
+This directory is legacy and contains event-specific master data routes.
+It has been deprecated and will be removed after migration to the platform-wide Core Master Data Engine (MDE).
+
+Legacy Tables:
+- catering_event_types -> Move data to mde_items / mde_categories
+- catering_event_statuses -> Move data to mde_items / mde_categories
+- catering_event_priorities -> Move data to mde_items / mde_categories
+- catering_event_categories -> Move data to mde_items / mde_categories
+- catering_event_occasions -> Move data to mde_items / mde_categories
+
+Migration target endpoints:
+/api/masters/* (Core MDE endpoints)

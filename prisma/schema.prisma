@@ -1,0 +1,2204 @@
+generator client {
+  provider      = "prisma-client-js"
+  output        = "../src/generated/client"
+  binaryTargets = ["native", "linux-musl-openssl-3.0.x"]
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id        Int      @id @default(autoincrement())
+  code      String   @unique
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  users     User[]
+  roles     Role[]
+  invites   UserInvite[]
+  auditLogs AuditLog[]
+
+  categories        Category[]
+  vendors           Vendor[]
+  suppliers         Supplier[]
+  apparels          Apparel[]
+  stockMovements     StockMovement[]
+  events             Event[]
+  eventReservations  EventReservation[]
+  laundryOrders      LaundryOrder[]
+  purchaseOrders     PurchaseOrder[]
+
+  // Master Data
+  movementTypes      MovementType[]
+  reasonCodes        ReasonCode[]
+  stockConditions    StockConditionMaster[]
+  unitsOfMeasure     UnitOfMeasure[]
+  locations          Location[]
+  documentNumberings DocumentNumbering[]
+  inventorySettings  InventorySettings?
+
+  // Dashboard / Analytics
+  dashboardSnapshots  DashboardSnapshot[]
+  kpiTrendSnapshots   KPITrendSnapshot[]
+  aiRecommendations   AIRecommendation[]
+
+  // Vendor Billing & Financial
+  laundryVendorRates         LaundryVendorRate[]
+  laundryVendorInvoices      LaundryVendorInvoice[]
+  laundryBillingSources      LaundryBillingSource[]
+  vendorLiabilities          VendorLiability[]
+  vendorLiabilityCredits     VendorLiabilityCredit[]
+  vendorPayments             VendorPayment[]
+  vendorLedgerEntries        VendorLedger[]
+}
+
+model User {
+  id           Int     @id @default(autoincrement())
+  tenantId     Int
+  fullName     String
+  email        String
+  passwordHash String?
+  status       String  @default("PENDING")
+
+  mfaEnabled       Boolean @default(false)
+  mfaSecret        String?
+  mfaSetupRequired Boolean @default(false)
+
+  isActive Boolean @default(true)
+  isLocked Boolean @default(false)
+
+  lastLoginAt DateTime?
+  createdAt   DateTime  @default(now())
+  createdBy   Int?
+  updatedAt   DateTime?
+  updatedBy   Int?
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  passwordResetTokens PasswordResetToken[]
+  refreshTokens       RefreshToken[]
+  userRoles           UserRole[]
+  mfaBackupCodes      MfaBackupCode[]
+
+  auditLogsInitiated AuditLog[] @relation("AuditActor")
+  auditLogsReceived  AuditLog[] @relation("AuditTarget")
+
+  securityAlerts SecurityAlert[]
+  invites        UserInvite[]
+
+  @@unique([tenantId, email])
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  tenantId    Int
+  name        String
+  description String?
+  isSystem    Boolean  @default(false)
+  requiresMfa Boolean  @default(false)
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  rolePermissions RolePermission[]
+  userRoles       UserRole[]
+
+  @@unique([tenantId, name])
+}
+
+model UserRole {
+  userId     Int
+  roleId     Int
+  assignedAt DateTime @default(now())
+  assignedBy Int?
+
+  user User @relation(fields: [userId], references: [id])
+  role Role @relation(fields: [roleId], references: [id])
+
+  @@id([userId, roleId])
+}
+
+model Permission {
+  id          Int     @id @default(autoincrement())
+  code        String  @unique
+  description String?
+
+  rolePermissions RolePermission[]
+}
+
+model RolePermission {
+  roleId       Int
+  permissionId Int
+
+  role       Role       @relation(fields: [roleId], references: [id])
+  permission Permission @relation(fields: [permissionId], references: [id])
+
+  @@id([roleId, permissionId])
+}
+
+model PasswordResetToken {
+  id        Int       @id @default(autoincrement())
+  userId    Int
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([tokenHash])
+}
+
+model PasswordResetRequest {
+  id          Int      @id @default(autoincrement())
+  email       String
+  ipAddress   String
+  requestedAt DateTime @default(now())
+
+  @@index([email, requestedAt])
+  @@index([ipAddress, requestedAt])
+}
+
+model MfaBackupCode {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  codeHash  String
+  used      Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+}
+
+model RefreshToken {
+  id          Int     @id @default(autoincrement())
+  userId      Int
+  tokenHash   String
+  mfaVerified Boolean @default(false)
+
+  deviceInfo   String?
+  ipAddress    String?
+  lastActiveAt DateTime?
+
+  expiresAt       DateTime
+  revokedAt       DateTime?
+  revokedByIp     String?
+  replacedByToken String?
+
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([tokenHash])
+}
+
+model AuditLog {
+  id           Int  @id @default(autoincrement())
+  tenantId     Int
+  actorUserId  Int?
+  targetUserId Int?
+
+  action    String
+  details   String?
+  ipAddress String?
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  actor  User? @relation("AuditActor", fields: [actorUserId], references: [id])
+  target User? @relation("AuditTarget", fields: [targetUserId], references: [id])
+
+  @@index([tenantId])
+  @@index([actorUserId])
+  @@index([targetUserId])
+  @@index([action])
+}
+
+model SecurityAlert {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  type      String
+  title     String
+  message   String
+  severity  String
+  metadata  String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@index([userId])
+  @@index([isRead])
+}
+
+model UserInvite {
+  id        String    @id @default(cuid())
+  tenantId  Int
+  email     String
+  tokenHash String
+  expiresAt DateTime
+  createdBy Int
+  usedAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  tenant  Tenant @relation(fields: [tenantId], references: [id])
+  creator User   @relation(fields: [createdBy], references: [id])
+
+  @@index([tokenHash])
+  @@index([tenantId, email])
+}
+
+model Category {
+  id        Int      @id @default(autoincrement())
+  tenantId  Int
+  name      String
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  tenant   Tenant    @relation(fields: [tenantId], references: [id])
+  apparels Apparel[]
+
+  @@unique([tenantId, name])
+}
+
+model Vendor {
+  id           Int      @id @default(autoincrement())
+  tenantId     Int
+  name         String
+  contactInfo  String?
+  taxId        String?
+  paymentTerms String?                  // e.g. "NET30", "NET60"
+  creditLimit  Decimal? @db.Decimal(12, 2)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  tenant        Tenant         @relation(fields: [tenantId], references: [id])
+  laundryOrders LaundryOrder[]
+
+  laundryVendorRates    LaundryVendorRate[]
+  laundryVendorInvoices LaundryVendorInvoice[]
+  vendorLiabilities     VendorLiability[]
+  vendorPayments        VendorPayment[]
+  vendorLedgerEntries   VendorLedger[]
+
+  @@unique([tenantId, name])
+}
+
+model Apparel {
+  id            Int      @id @default(autoincrement())
+  tenantId      Int
+  categoryId    Int
+  name          String
+  unit          String
+  minStockLevel Int      @default(0)
+  unitValue     Decimal  @default(0) @db.Decimal(10, 2)
+  isActive      Boolean  @default(true)
+  createdAt     DateTime @default(now())
+
+  tenant   Tenant   @relation(fields: [tenantId], references: [id])
+  category Category @relation(fields: [categoryId], references: [id])
+
+  stockMovements     StockMovement[]
+  eventReservations  EventReservation[]
+  laundryOrderItems  LaundryOrderItem[]
+  purchaseOrderItems PurchaseOrderItem[]
+
+  laundryVendorRates        LaundryVendorRate[]
+  laundryVendorInvoiceItems LaundryVendorInvoiceItem[]
+  vendorLiabilities         VendorLiability[]
+
+  @@unique([tenantId, name])
+}
+
+model StockMovement {
+  id                   Int            @id @default(autoincrement())
+  tenantId             Int
+  apparelId            Int
+  movementType         String
+  quantityChange       Int
+  referenceType        String?
+  referenceId          Int?
+  reason               String?
+  condition            StockCondition @default(CLEAN)
+  recoveryOfMovementId Int?
+  lossResponsibility   String?        // CUSTOMER | LAUNDRY_VENDOR | COMPANY | EVENT_TEAM | UNKNOWN
+  createdAt            DateTime       @default(now())
+  createdBy            Int
+
+  tenant     Tenant          @relation(fields: [tenantId], references: [id])
+  apparel    Apparel         @relation(fields: [apparelId], references: [id])
+  recoveryOf StockMovement?  @relation("RecoveryLink", fields: [recoveryOfMovementId], references: [id])
+  recoveries StockMovement[] @relation("RecoveryLink")
+
+  billingSource   LaundryBillingSource?
+  vendorLiability VendorLiability?
+
+  @@index([apparelId, createdAt])
+  @@index([tenantId])
+  @@index([tenantId, movementType])
+}
+
+model Event {
+  id        Int      @id @default(autoincrement())
+  tenantId  Int
+  name      String
+  eventDate DateTime
+  status    String   @default("DRAFT")
+  createdAt DateTime @default(now())
+
+  tenant            Tenant             @relation(fields: [tenantId], references: [id])
+  eventReservations EventReservation[]
+}
+
+model EventReservation {
+  id          Int      @id @default(autoincrement())
+  tenantId    Int
+  eventId     Int
+  apparelId   Int
+  reservedQty Int
+  status      String   @default("ACTIVE")
+  createdAt   DateTime @default(now())
+  createdBy   Int
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+  event   Event   @relation(fields: [eventId], references: [id])
+  apparel Apparel @relation(fields: [apparelId], references: [id])
+
+  @@index([apparelId, status])
+  @@index([tenantId])
+}
+
+model LaundryOrder {
+  id                 Int       @id @default(autoincrement())
+  tenantId           Int
+  vendorId           Int
+  dispatchDate       DateTime  @default(now())
+  expectedReturnDate DateTime?
+  status             String    @default("DISPATCHED")
+  createdAt          DateTime  @default(now())
+  createdBy          Int
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  vendor Vendor @relation(fields: [vendorId], references: [id])
+
+  items LaundryOrderItem[]
+
+  @@index([tenantId, status])
+}
+
+model LaundryOrderItem {
+  id             Int @id @default(autoincrement())
+  laundryOrderId Int
+  apparelId      Int
+  qtyDispatched  Int
+  qtyReturned    Int @default(0)
+  qtyDamaged     Int @default(0)
+  qtyMissing     Int @default(0)
+
+  laundryOrder LaundryOrder @relation(fields: [laundryOrderId], references: [id])
+  apparel      Apparel      @relation(fields: [apparelId], references: [id])
+}
+
+// Kept as an enum for the ledger backwards capability, but a model for DB logic
+// See StockCondition model below
+enum StockCondition {
+  CLEAN
+  DIRTY
+}
+
+// -------------------------------------------------------------------------------- //
+// MASTER DATA
+// -------------------------------------------------------------------------------- //
+
+model MovementType {
+  id                 Int      @id @default(autoincrement())
+  tenantId           Int
+  code               String   // e.g., PURCHASE_RECEIVE, EVENT_RETURN, LAUNDRY_DISPATCH
+  direction          String   // IN, OUT, TRANSFER
+  affectsClean       Boolean  @default(false)
+  affectsDirty       Boolean  @default(false)
+  isRecoveryType     Boolean  @default(false)
+  isSystemControlled Boolean  @default(false) // System masters cannot be deleted/edited by UI
+  isActive           Boolean  @default(true)
+  createdAt          DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, code])
+}
+
+model ReasonCode {
+  id               Int      @id @default(autoincrement())
+  tenantId         Int
+  code             String   // e.g., DAMAGED_ON_ARRIVAL, STOCK_TAKE_LOSS
+  description      String
+  appliesTo        String   // EVENT, LAUNDRY, ADJUSTMENT
+  requiresApproval Boolean  @default(false)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, code])
+}
+
+model StockConditionMaster {
+  id          Int      @id @default(autoincrement())
+  tenantId    Int
+  code        String   // CLEAN, DIRTY, DAMAGED
+  description String
+  isActive    Boolean  @default(true)
+  createdAt   DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, code])
+}
+
+model UnitOfMeasure {
+  id               Int      @id @default(autoincrement())
+  tenantId         Int
+  code             String   // PCS, SET, KG, PAIR
+  description      String
+  conversionFactor Decimal  @default(1.0) @db.Decimal(10, 4)
+  isActive         Boolean  @default(true)
+  createdAt        DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, code])
+}
+
+model Location {
+  id        Int      @id @default(autoincrement())
+  tenantId  Int
+  name      String
+  type      String   // WAREHOUSE, TRANSIT, EVENT_SITE
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, name])
+}
+
+model DocumentNumbering {
+  id              Int      @id @default(autoincrement())
+  tenantId        Int
+  entityType      String   // PO, EVENT, LAUNDRY
+  prefix          String
+  currentSequence Int      @default(0)
+  resetYearly     Boolean  @default(false)
+  lastResetYear   Int?
+  isActive        Boolean  @default(true)
+  createdAt       DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, entityType])
+}
+
+model InventorySettings {
+  id                         Int      @id @default(autoincrement())
+  tenantId                   Int      @unique
+  allowNegativeStock         Boolean  @default(false)
+  requireApprovalForRecovery Boolean  @default(true)
+  defaultLaundrySLA          Int      @default(7) // Days
+  enableMultiLocation        Boolean  @default(false)
+  enableValuation            Boolean  @default(false)
+  currencySymbol             String   @default("$") @db.VarChar(5)
+  defaultTaxRate             Decimal  @default(0) @db.Decimal(5, 2) // Global tax % for vendor invoices
+  updatedAt                  DateTime @updatedAt
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+}
+
+model Supplier {
+  id           Int      @id @default(autoincrement())
+  tenantId     Int
+  name         String
+  contactInfo  String?
+  taxId        String?
+  paymentTerms String?
+  creditLimit  Decimal? @db.Decimal(12, 2)
+  isPreferred  Boolean  @default(false)
+  isActive     Boolean  @default(true)
+  createdAt    DateTime @default(now())
+
+  tenant         Tenant          @relation(fields: [tenantId], references: [id])
+  purchaseOrders PurchaseOrder[]
+
+  @@unique([tenantId, name])
+}
+
+model PurchaseOrder {
+  id           Int       @id @default(autoincrement())
+  tenantId     Int
+  supplierId   Int
+  poNumber     String
+  status       String    @default("DRAFT")
+  orderDate    DateTime?
+  expectedDate DateTime?
+  notes        String?
+  createdBy    Int
+  approvedBy   Int?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  tenant   Tenant              @relation(fields: [tenantId], references: [id])
+  supplier Supplier            @relation(fields: [supplierId], references: [id])
+  items    PurchaseOrderItem[]
+
+  @@unique([tenantId, poNumber])
+  @@index([tenantId, status])
+}
+
+model PurchaseOrderItem {
+  id              Int      @id @default(autoincrement())
+  purchaseOrderId Int
+  apparelId       Int
+  orderedQty      Int
+  receivedQty     Int      @default(0)
+  unitCost        Decimal? @db.Decimal(10, 2)
+
+  purchaseOrder PurchaseOrder @relation(fields: [purchaseOrderId], references: [id])
+  apparel       Apparel       @relation(fields: [apparelId], references: [id])
+
+  @@unique([purchaseOrderId, apparelId])
+}
+
+// -------------------------------------------------------------------------------- //
+// DASHBOARD SNAPSHOTS
+// -------------------------------------------------------------------------------- //
+
+/// Nightly rollup of all executive KPIs per tenant.
+/// Populated by DashboardSnapshotJob. Dashboard API reads exclusively from this table.
+model DashboardSnapshot {
+  id           String   @id @default(cuid())
+  tenantId     Int
+
+  snapshotDate DateTime @db.Date
+
+  // ─── Inventory Summary ───────────────────────────────────────────────────────
+  totalPhysicalInventory Decimal? @db.Decimal(14, 2)
+  availableInventory     Decimal? @db.Decimal(14, 2)
+  reservedInventory      Decimal? @db.Decimal(14, 2)
+  dirtyInventory         Decimal? @db.Decimal(14, 2)
+  inLaundryInventory     Decimal? @db.Decimal(14, 2)
+
+  // ─── Inventory Health Score (0-100) ──────────────────────────────────────────
+  inventoryHealth        Decimal? @db.Decimal(5, 2)
+  availabilityScore      Decimal? @db.Decimal(5, 2)
+  stockoutRiskScore      Decimal? @db.Decimal(5, 2)
+  dirtyRatioScore        Decimal? @db.Decimal(5, 2)
+  lossRatioScore         Decimal? @db.Decimal(5, 2)
+  agingScore             Decimal? @db.Decimal(5, 2)
+
+  // ─── Demand Forecast (placeholders) ──────────────────────────────────────────
+  predictedDemand30Days       Decimal? @db.Decimal(14, 2)
+  forecastAccuracy            Decimal? @db.Decimal(5, 2)
+  predictedPurchaseRequirement Decimal? @db.Decimal(14, 2)
+  stockoutRisk                String?  // LOW | MEDIUM | HIGH
+
+  // ─── Event KPIs ──────────────────────────────────────────────────────────────
+  upcomingEvents              Int?
+  eventsThisMonth             Int?
+  eventCompletionRate         Decimal? @db.Decimal(5, 2)
+  eventsPendingReconciliation Int?
+
+  // ─── Loss & Recovery ─────────────────────────────────────────────────────────
+  grossLoss       Decimal? @db.Decimal(14, 2)
+  recovered       Decimal? @db.Decimal(14, 2)
+  netLoss         Decimal? @db.Decimal(14, 2)
+  lossRate        Decimal? @db.Decimal(7, 4)
+  recoveryRate    Decimal? @db.Decimal(5, 2)
+  financialImpact Decimal? @db.Decimal(14, 2)
+
+  // ─── Vendor KPIs ─────────────────────────────────────────────────────────────
+  vendorScore          Decimal? @db.Decimal(5, 2)
+  highRiskVendorCount  Int?
+  averageTurnaroundDays Decimal? @db.Decimal(6, 2)
+  vendorLiability      Decimal? @db.Decimal(14, 2)
+
+  // ─── Laundry KPIs ────────────────────────────────────────────────────────────
+  dirtyStock           Decimal? @db.Decimal(14, 2)
+  inLaundry            Decimal? @db.Decimal(14, 2)
+  laundryAging0to3     Int?
+  laundryAging4to7     Int?
+  laundryAgingOver7    Int?
+  avgLaundryCycleDays  Decimal? @db.Decimal(6, 2)
+  delayedLaundryOrders Int?
+
+  // ─── Risk Indicators ─────────────────────────────────────────────────────────
+  stockoutRiskLevel        String? // LOW | MEDIUM | HIGH
+  vendorRiskLevel          String? // LOW | MEDIUM | HIGH
+  laundryBottleneckLevel   String? // LOW | MEDIUM | HIGH
+  eventCapacityRiskLevel   String? // LOW | MEDIUM | HIGH
+
+  // ─── Financial KPIs (placeholders) ───────────────────────────────────────────
+  inventoryValue          Decimal? @db.Decimal(14, 2)
+  monthlyConsumptionValue Decimal? @db.Decimal(14, 2)
+  costOfLosses            Decimal? @db.Decimal(14, 2)
+  costOfDamages           Decimal? @db.Decimal(14, 2)
+  recoverySavings         Decimal? @db.Decimal(14, 2)
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, snapshotDate])
+  @@index([tenantId, snapshotDate])
+}
+
+/// Daily time-series KPI values for trend charts.
+/// One row per tenant per metric per day.
+model KPITrendSnapshot {
+  id           String   @id @default(cuid())
+  tenantId     Int
+
+  snapshotDate DateTime @db.Date
+
+  /// Metric code (e.g. INVENTORY_HEALTH, NET_LOSS, VENDOR_SCORE)
+  metricCode   String
+  metricValue  Decimal  @db.Decimal(14, 4)
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@unique([tenantId, metricCode, snapshotDate])
+  @@index([tenantId, metricCode, snapshotDate])
+}
+
+/// AI-generated actionable recommendations for each tenant.
+/// Populated externally or by an AI inference job.
+model AIRecommendation {
+  id          String   @id @default(cuid())
+  tenantId    Int
+
+  /// CRITICAL | HIGH | MEDIUM | LOW
+  priority    String
+  /// REORDER | LAUNDRY | VENDOR | LOSS | CAPACITY | GENERAL
+  type        String
+
+  title       String
+  description String
+
+  payload     Json?
+
+  /// ACTIVE | DISMISSED | RESOLVED
+  status      String   @default("ACTIVE")
+
+  createdAt DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+
+  @@index([tenantId, status])
+  @@index([tenantId, priority, createdAt])
+}
+
+// -------------------------------------------------------------------------------- //
+// VENDOR BILLING & FINANCIAL
+// -------------------------------------------------------------------------------- //
+
+/// Vendor-specific washing rate contracts per apparel.
+/// Multiple rate revisions allowed; only one active rate per vendor/apparel per period.
+model LaundryVendorRate {
+  id              Int       @id @default(autoincrement())
+  tenantId        Int
+  vendorId        Int
+  apparelId       Int
+
+  washingRate     Decimal   @db.Decimal(12, 2)
+  ironingRate     Decimal?  @db.Decimal(12, 2)
+  dryCleaningRate Decimal?  @db.Decimal(12, 2)
+
+  effectiveFrom   DateTime
+  effectiveTo     DateTime?
+
+  isActive        Boolean   @default(true)
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+  deletedAt       DateTime?
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+  vendor  Vendor  @relation(fields: [vendorId], references: [id])
+  apparel Apparel @relation(fields: [apparelId], references: [id])
+
+  @@index([tenantId, vendorId])
+  @@index([tenantId, apparelId])
+  @@index([tenantId, vendorId, apparelId, effectiveFrom])
+}
+
+/// Vendor invoices generated from laundry return movements.
+model LaundryVendorInvoice {
+  id          Int       @id @default(autoincrement())
+  tenantId    Int
+  invoiceNo   String
+  vendorId    Int
+
+  fromDate    DateTime
+  toDate      DateTime
+  invoiceDate DateTime
+
+  subtotal    Decimal   @db.Decimal(12, 2)
+  taxRate     Decimal   @default(0) @db.Decimal(5, 2)
+  taxAmount   Decimal   @db.Decimal(12, 2)
+  totalAmount Decimal   @db.Decimal(12, 2)
+  paidAmount  Decimal   @default(0) @db.Decimal(12, 2)
+
+  status      String    @default("DRAFT") // DRAFT | POSTED | PARTIALLY_PAID | PAID | CANCELLED
+  remarks     String?
+
+  createdBy   Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+
+  tenant  Tenant  @relation(fields: [tenantId], references: [id])
+  vendor  Vendor  @relation(fields: [vendorId], references: [id])
+
+  items              LaundryVendorInvoiceItem[]
+  billingSources     LaundryBillingSource[]
+  paymentAllocations VendorPaymentAllocation[]
+
+  @@unique([tenantId, invoiceNo])
+  @@index([tenantId, vendorId])
+  @@index([tenantId, status])
+}
+
+/// Immutable invoice line items. Locked after invoice is posted.
+model LaundryVendorInvoiceItem {
+  id        Int     @id @default(autoincrement())
+  invoiceId Int
+  apparelId Int
+
+  quantity  Decimal @db.Decimal(12, 2)
+  rate      Decimal @db.Decimal(12, 2)
+  amount    Decimal @db.Decimal(12, 2)
+
+  remarks   String?
+
+  invoice LaundryVendorInvoice @relation(fields: [invoiceId], references: [id])
+  apparel Apparel              @relation(fields: [apparelId], references: [id])
+
+  @@index([invoiceId])
+}
+
+/// Links stock movements to invoices to prevent duplicate billing.
+/// Each movement can only be billed once.
+model LaundryBillingSource {
+  id              Int      @id @default(autoincrement())
+  tenantId        Int
+  invoiceId       Int
+  stockMovementId Int      @unique  // Prevent double-billing
+  quantity        Decimal  @db.Decimal(12, 2)
+  createdAt       DateTime @default(now())
+
+  tenant        Tenant               @relation(fields: [tenantId], references: [id])
+  invoice       LaundryVendorInvoice @relation(fields: [invoiceId], references: [id])
+  stockMovement StockMovement        @relation(fields: [stockMovementId], references: [id])
+
+  @@index([tenantId, invoiceId])
+}
+
+/// Loss/damage liability charged to vendor when lossResponsibility = LAUNDRY_VENDOR.
+model VendorLiability {
+  id               Int      @id @default(autoincrement())
+  tenantId         Int
+  vendorId         Int
+  stockMovementId  Int      @unique
+  movementTypeCode String
+  apparelId        Int
+
+  quantity         Decimal  @db.Decimal(12, 2)
+  unitCost         Decimal  @db.Decimal(12, 2)
+  amount           Decimal  @db.Decimal(12, 2)
+  settledAmount    Decimal  @default(0) @db.Decimal(12, 2)
+
+  status           String   @default("OPEN") // OPEN | PARTIALLY_SETTLED | SETTLED | WAIVED | CREDITED
+  remarks          String?
+
+  createdAt        DateTime @default(now())
+
+  tenant        Tenant        @relation(fields: [tenantId], references: [id])
+  vendor        Vendor        @relation(fields: [vendorId], references: [id])
+  stockMovement StockMovement @relation(fields: [stockMovementId], references: [id])
+  apparel       Apparel       @relation(fields: [apparelId], references: [id])
+
+  credits VendorLiabilityCredit[]
+
+  @@index([tenantId, vendorId])
+  @@index([tenantId, status])
+}
+
+/// Recovery credit applied against a vendor liability when lost items are found.
+model VendorLiabilityCredit {
+  id                  Int      @id @default(autoincrement())
+  tenantId            Int
+  vendorLiabilityId   Int
+  recoveryMovementId  Int
+
+  quantity            Decimal  @db.Decimal(12, 2)
+  unitCost            Decimal  @db.Decimal(12, 2)
+  amount              Decimal  @db.Decimal(12, 2)
+
+  createdAt           DateTime @default(now())
+
+  tenant    Tenant          @relation(fields: [tenantId], references: [id])
+  liability VendorLiability @relation(fields: [vendorLiabilityId], references: [id])
+
+  @@index([tenantId, vendorLiabilityId])
+}
+
+/// Vendor payment records.
+model VendorPayment {
+  id            Int      @id @default(autoincrement())
+  tenantId      Int
+  paymentNo     String
+  vendorId      Int
+
+  paymentDate   DateTime
+  amount        Decimal  @db.Decimal(12, 2)
+
+  paymentMethod String   // BANK_TRANSFER | CHEQUE | CASH | ONLINE
+  referenceNo   String?
+  remarks       String?
+
+  status        String   @default("DRAFT") // DRAFT | POSTED | VOID
+
+  createdBy     Int?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  tenant      Tenant                  @relation(fields: [tenantId], references: [id])
+  vendor      Vendor                  @relation(fields: [vendorId], references: [id])
+  allocations VendorPaymentAllocation[]
+
+  @@unique([tenantId, paymentNo])
+  @@index([tenantId, vendorId])
+  @@index([tenantId, status])
+}
+
+/// Allocation of payment amounts to specific invoices.
+model VendorPaymentAllocation {
+  id            Int     @id @default(autoincrement())
+  paymentId     Int
+  invoiceId     Int
+  amountApplied Decimal @db.Decimal(12, 2)
+
+  payment VendorPayment        @relation(fields: [paymentId], references: [id])
+  invoice LaundryVendorInvoice @relation(fields: [invoiceId], references: [id])
+
+  @@unique([paymentId, invoiceId])
+}
+
+/// Append-only financial sub-ledger for vendor accounting.
+/// Never update or delete rows. Balance = SUM(debit) - SUM(credit).
+model VendorLedger {
+  id              Int      @id @default(autoincrement())
+  tenantId        Int
+  vendorId        Int
+
+  transactionDate DateTime
+  transactionType String   // INVOICE | PAYMENT | LIABILITY | RECOVERY_CREDIT | ADJUSTMENT | CREDIT_NOTE | OPENING_BALANCE
+
+  referenceType   String   // INVOICE | PAYMENT | LIABILITY | CREDIT
+  referenceId     Int
+
+  debit           Decimal  @default(0) @db.Decimal(12, 2)
+  credit          Decimal  @default(0) @db.Decimal(12, 2)
+
+  remarks         String?
+
+  createdAt       DateTime @default(now())
+
+  tenant Tenant @relation(fields: [tenantId], references: [id])
+  vendor Vendor @relation(fields: [vendorId], references: [id])
+
+  @@index([tenantId, vendorId])
+  @@index([tenantId, vendorId, transactionDate])
+  @@index([tenantId, transactionType])
+}
+
+// ─── CATERING EVENT MANAGER MODULE ──────────────────────────────────────────
+
+model CateringEvent {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventNumber    String   @unique
+  name           String
+  typeId         String   @db.Uuid
+  statusId       String   @db.Uuid
+  priorityId     String   @db.Uuid
+  customerId     String   @db.Uuid
+  contactId      String   @db.Uuid
+  salesExecId    String   @db.Uuid
+  managerId      String?  @db.Uuid
+  bookingDate    DateTime
+  startDate      DateTime
+  endDate        DateTime
+  guestCount     Int
+  budgetAmount   Decimal  @db.Decimal(12, 2)
+  currency       String   @default("USD")
+  remarks        String?
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  type           CateringEventType     @relation(fields: [typeId], references: [id])
+  status         CateringEventStatus   @relation(fields: [statusId], references: [id])
+  priority       CateringEventPriority @relation(fields: [priorityId], references: [id])
+
+  functions      CateringEventFunction[]
+  venues         CateringEventVenue[]
+  assignments    CateringEventAssignment[]
+  schedules      CateringEventSchedule[]
+  calendars      CateringEventCalendar[]
+  activities     CateringEventActivity[]
+  notes          CateringEventNote[]
+  tasks          CateringEventTask[]
+  documents      CateringEventDocument[]
+  communications CateringEventCommunication[]
+  payments       CateringEventPayment[]
+  costing        CateringEventCosting?
+  budget         CateringEventBudget?
+  resources      CateringEventResource[]
+  resourceReqs   CateringEventResourceRequirement[]
+  menus          CateringEventMenu[]
+  healthScores   CateringEventHealthScore[]
+  approvals      CateringEventApproval[]
+  timeline       CateringEventTimeline[]
+  customValues   CateringEventCustomFieldValue[]
+  notifications  CateringEventNotification[]
+  auditLogs      CateringEventAuditLog[]
+
+  @@index([startDate])
+  @@index([customerId])
+  @@index([statusId])
+  @@index([branchId])
+
+  @@map("catering_events")
+}
+
+model CateringEventType {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  branchId  String   @db.Uuid
+  name      String
+  code      String
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+  deletedAt DateTime?
+  deletedBy String?  @db.Uuid
+  isDeleted Boolean  @default(false)
+  version   Int      @default(1)
+
+  events    CateringEvent[]
+
+  @@map("catering_event_types")
+}
+
+model CateringEventStatus {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  branchId  String   @db.Uuid
+  name      String
+  code      String
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+  deletedAt DateTime?
+  deletedBy String?  @db.Uuid
+  isDeleted Boolean  @default(false)
+  version   Int      @default(1)
+
+  events    CateringEvent[]
+
+  @@map("catering_event_statuses")
+}
+
+model CateringEventCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  branchId  String   @db.Uuid
+  name      String
+  code      String
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+  deletedAt DateTime?
+  deletedBy String?  @db.Uuid
+  isDeleted Boolean  @default(false)
+  version   Int      @default(1)
+
+  @@map("catering_event_categories")
+}
+
+model CateringEventPriority {
+  id        String   @id @default(uuid()) @db.Uuid
+  tenantId  String   @db.Uuid
+  companyId String   @db.Uuid
+  branchId  String   @db.Uuid
+  name      String
+  code      String
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+  deletedAt DateTime?
+  deletedBy String?  @db.Uuid
+  isDeleted Boolean  @default(false)
+  version   Int      @default(1)
+
+  events    CateringEvent[]
+
+  @@map("catering_event_priorities")
+}
+
+model CateringEventFunction {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  name           String
+  startAt        DateTime
+  endAt          DateTime
+  guestCount     Int
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+  menus          CateringEventMenu[]
+
+  @@map("catering_event_functions")
+}
+
+model CateringEventVenue {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  venueId        String   @db.Uuid
+  rentAmount     Decimal  @db.Decimal(12, 2)
+  contractSigned Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_venues")
+}
+
+model CateringEventContact {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  contactName    String
+  email          String
+  phone          String
+  role           String
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  @@map("catering_event_contacts")
+}
+
+model CateringEventAssignment {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  userId         String   @db.Uuid
+  roleCode       String
+  assignedAt     DateTime @default(now())
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_assignments")
+}
+
+model CateringEventSchedule {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  title          String
+  startAt        DateTime
+  endAt          DateTime
+  description    String?
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_schedules")
+}
+
+model CateringEventCalendar {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  calendarType   String   @default("EVENT")
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_calendars")
+}
+
+model CateringEventActivity {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  activityType   String   @default("NOTE")
+  notes          String
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_activities")
+}
+
+model CateringEventNote {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  title          String
+  content        String
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_notes")
+}
+
+model CateringEventTask {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  title          String
+  description    String?
+  priority       String   @default("MEDIUM")
+  status         String   @default("DRAFT")
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+  checklists     CateringEventTaskChecklist[]
+
+  @@map("catering_event_tasks")
+}
+
+model CateringEventTaskChecklist {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  taskId         String   @db.Uuid
+  title          String
+  isCompleted    Boolean  @default(false)
+  completedAt    DateTime?
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  task           CateringEventTask @relation(fields: [taskId], references: [id])
+
+  @@map("catering_event_task_checklists")
+}
+
+model CateringEventDocument {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  name           String
+  filePath       String
+  fileSize       Int
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_documents")
+}
+
+model CateringEventCommunication {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  channel        String
+  recipient      String
+  subject        String?
+  content        String
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_communications")
+}
+
+model CateringEventPayment {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  amount         Decimal  @db.Decimal(12, 2)
+  method         String
+  transactionId  String?
+  paidAt         DateTime @default(now())
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_payments")
+}
+
+model CateringEventCosting {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @unique @db.Uuid
+  estimatedFood  Decimal  @db.Decimal(12, 2)
+  estimatedLabor Decimal  @db.Decimal(12, 2)
+  estimatedLogistics Decimal @db.Decimal(12, 2)
+  actualFood     Decimal  @default(0) @db.Decimal(12, 2)
+  actualLabor    Decimal  @default(0) @db.Decimal(12, 2)
+  actualLogistics Decimal @default(0) @db.Decimal(12, 2)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_costings")
+}
+
+model CateringEventBudget {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @unique @db.Uuid
+  allocatedAmount Decimal @db.Decimal(12, 2)
+  spentAmount    Decimal  @default(0) @db.Decimal(12, 2)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_budgets")
+}
+
+model CateringEventResource {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  name           String
+  quantity       Int
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_resources")
+}
+
+model CateringEventResourceRequirement {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  resourceType   String
+  quantity       Int
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_resource_requirements")
+}
+
+model CateringEventMenu {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  functionId     String   @db.Uuid
+  eventId        String   @db.Uuid
+  packageVersionId String @db.Uuid
+  pricePerHead   Decimal  @db.Decimal(12, 2)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+  function       CateringEventFunction @relation(fields: [functionId], references: [id])
+
+  @@map("catering_event_menus")
+}
+
+model CateringEventHealthScore {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  score          Int
+  calculatedAt   DateTime @default(now())
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_health_scores")
+}
+
+model CateringEventApproval {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  approverId     String   @db.Uuid
+  status         String   @default("PENDING")
+  notes          String?
+  actionedAt     DateTime?
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_approvals")
+}
+
+model CateringEventTimeline {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  summary        String
+  details        String?
+  loggedAt       DateTime @default(now())
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_timelines")
+}
+
+model CateringEventTag {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  name           String
+  colorCode      String   @default("#6b7280")
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  @@map("catering_event_tags")
+}
+
+model CateringEventCustomField {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  name           String
+  fieldType      String   @default("STRING")
+  isRequired     Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  values         CateringEventCustomFieldValue[]
+
+  @@map("catering_event_custom_fields")
+}
+
+model CateringEventCustomFieldValue {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  fieldId        String   @db.Uuid
+  valueText      String
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent            @relation(fields: [eventId], references: [id])
+  field          CateringEventCustomField @relation(fields: [fieldId], references: [id])
+
+  @@map("catering_event_custom_field_values")
+}
+
+model CateringEventNotification {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  userId         String   @db.Uuid
+  channel        String   @default("IN_APP")
+  title          String
+  body           String
+  isRead         Boolean  @default(false)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_notifications")
+}
+
+model CateringEventAuditLog {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  eventId        String   @db.Uuid
+  actionType     String
+  previousState  String?  @db.Text
+  currentState   String?  @db.Text
+  changedBy      String   @db.Uuid
+  changedAt      DateTime @default(now())
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  event          CateringEvent @relation(fields: [eventId], references: [id])
+
+  @@map("catering_event_audit_logs")
+}
+
+model WorkflowDefinition {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  name           String
+  code           String   @unique
+  isActive       Boolean  @default(true)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  states         WorkflowState[]
+
+  @@map("workflow_definitions")
+}
+
+model WorkflowState {
+  id             String   @id @default(uuid()) @db.Uuid
+  tenantId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  workflowId     String   @db.Uuid
+  name           String
+  code           String
+  sortOrder      Int      @default(0)
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+  deletedAt      DateTime?
+  deletedBy      String?  @db.Uuid
+  isDeleted      Boolean  @default(false)
+  version        Int      @default(1)
+
+  workflow       WorkflowDefinition @relation(fields: [workflowId], references: [id])
+
+  @@map("workflow_states")
+}
+
+model PlatformModule {
+  id                   String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String   @unique
+  name                 String
+  description          String?
+  icon                 String?
+  sortOrder            Int      @default(0)
+  isActive             Boolean  @default(true)
+  isSystem             Boolean  @default(false)
+  metadata             Json     @default("{}") @db.JsonB
+
+  navigationGroup      String?
+  displayOrder         Int      @default(0)
+  route                String?
+  defaultPage          String?
+  color                String?
+  badge                String?
+  badgeColor           String?
+  menuVisible          Boolean  @default(true)
+  showInSearch         Boolean  @default(true)
+  showOnDashboard      Boolean  @default(true)
+  showInMobile         Boolean  @default(false)
+  isLicensed           Boolean  @default(true)
+  requiresLicense      Boolean  @default(false)
+  featureFlag          String   @default("Production")
+  moduleDependencies   Json     @default("[]") @db.JsonB
+  minimumRole          String?  @default("USER")
+  defaultPermissionSet Json     @default("[]") @db.JsonB
+  defaultLandingPage   String?
+  helpUrl              String?
+  documentationUrl     String?
+  supportEmail         String?
+
+  createdAt            DateTime @default(now())
+  createdBy            String   @db.Uuid
+  updatedAt            DateTime @updatedAt
+  updatedBy            String   @db.Uuid
+
+  entities             ConfigurationEntity[]
+  navigationItems      NavigationItem[]
+
+  @@map("platform_modules")
+}
+
+model ConfigurationEntity {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  moduleId         String   @db.Uuid
+  code             String   @unique
+  name             String
+  pluralName       String
+  description      String?
+  
+  allowCRUD        Boolean  @default(true)
+  allowImport      Boolean  @default(false)
+  allowExport      Boolean  @default(false)
+  allowWorkflow    Boolean  @default(false)
+  allowAttachments Boolean  @default(false)
+  allowAudit       Boolean  @default(true)
+  allowComments    Boolean  @default(false)
+  allowTags        Boolean  @default(false)
+  allowHierarchy   Boolean  @default(false)
+  allowSoftDelete  Boolean  @default(true)
+  
+  metadata         Json     @default("{}") @db.JsonB
+
+  createdAt        DateTime @default(now())
+  createdBy        String   @db.Uuid
+  updatedAt        DateTime @updatedAt
+  updatedBy        String   @db.Uuid
+
+  module           PlatformModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  fields           EntityFieldDefinition[]
+  views            EntityView[]
+  records          EntityRecord[]
+  lookupValues     LookupValue[]
+  permissions      EntityPermission[]
+  audits           EntityAudit[]
+  navigationItems  NavigationItem[]
+
+  @@map("configuration_entities")
+}
+
+model EntityFieldDefinition {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId      String   @db.Uuid
+  code          String
+  label         String
+  dataType      String
+  required      Boolean  @default(false)
+  unique        Boolean  @default(false)
+  indexed       Boolean  @default(false)
+  searchable    Boolean  @default(false)
+  sortable      Boolean  @default(false)
+  filterable    Boolean  @default(false)
+  defaultValue  String?
+  validation    Json?    @db.JsonB
+  uiControl     String
+  lookupEntity  String?
+  displayOrder  Int      @default(0)
+  metadata      Json     @default("{}") @db.JsonB
+
+  createdAt     DateTime @default(now())
+  createdBy     String   @db.Uuid
+  updatedAt     DateTime @updatedAt
+  updatedBy     String   @db.Uuid
+
+  entity          ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  values          EntityValue[]
+  validationRules ValidationRule[]
+
+  @@unique([entityId, code])
+  @@map("entity_field_definitions")
+}
+
+model EntityView {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId    String   @db.Uuid
+  code        String
+  name        String
+  isDefault   Boolean  @default(false)
+  columns     Json     @default("[]") @db.JsonB
+  filters     Json     @default("[]") @db.JsonB
+  sorting     Json     @default("[]") @db.JsonB
+  metadata    Json     @default("{}") @db.JsonB
+
+  createdAt   DateTime @default(now())
+  createdBy   String   @db.Uuid
+  updatedAt   DateTime @updatedAt
+  updatedBy   String   @db.Uuid
+
+  entity      ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@unique([entityId, code])
+  @@map("entity_views")
+}
+
+model EntityRecord {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId       String   @db.Uuid
+  companyId      String   @db.Uuid
+  branchId       String   @db.Uuid
+  recordNumber   String
+  status         String
+  version        Int      @default(1)
+  parentRecordId String?  @db.Uuid
+  metadata       Json     @default("{}") @db.JsonB
+
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
+  deletedBy      String?   @db.Uuid
+
+  createdAt      DateTime  @default(now())
+  createdBy      String    @db.Uuid
+  updatedAt      DateTime  @updatedAt
+  updatedBy      String    @db.Uuid
+
+  entity         ConfigurationEntity  @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  parentRecord   EntityRecord?        @relation("RecordHierarchy", fields: [parentRecordId], references: [id])
+  childRecords   EntityRecord[]       @relation("RecordHierarchy")
+  values         EntityValue[]
+
+  sourceRelationships EntityRelationship[] @relation("SourceRecord")
+  targetRelationships EntityRelationship[] @relation("TargetRecord")
+  audits              EntityAudit[]
+
+  @@map("entity_records")
+}
+
+model EntityValue {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  recordId          String   @db.Uuid
+  fieldDefinitionId String   @db.Uuid
+  valueString       String?
+  valueNumber       Float?
+  valueBoolean      Boolean?
+  valueDate         DateTime?
+  valueDateTime     DateTime?
+  valueJson         Json?    @db.JsonB
+  valueReferenceId  String?  @db.Uuid
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  record            EntityRecord          @relation(fields: [recordId], references: [id], onDelete: Cascade)
+  fieldDefinition   EntityFieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@index([recordId])
+  @@index([fieldDefinitionId])
+  @@map("entity_values")
+}
+
+model EntityRelationship {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  sourceRecordId   String   @db.Uuid
+  targetRecordId   String   @db.Uuid
+  relationshipType String
+  description      String?
+  metadata         Json     @default("{}") @db.JsonB
+
+  createdAt        DateTime @default(now())
+  createdBy        String   @db.Uuid
+  updatedAt        DateTime @updatedAt
+  updatedBy        String   @db.Uuid
+
+  sourceRecord     EntityRecord @relation("SourceRecord", fields: [sourceRecordId], references: [id], onDelete: Cascade)
+  targetRecord     EntityRecord @relation("TargetRecord", fields: [targetRecordId], references: [id], onDelete: Cascade)
+
+  @@map("entity_relationships")
+}
+
+model LookupValue {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId       String   @db.Uuid
+  code           String
+  name           String
+  displayName    String
+  sortOrder      Int      @default(0)
+  color          String?
+  icon           String?
+  parentLookupId String?  @db.Uuid
+  isDefault      Boolean  @default(false)
+  isActive       Boolean  @default(true)
+  metadata       Json     @default("{}") @db.JsonB
+
+  isDeleted      Boolean   @default(false)
+  deletedAt      DateTime?
+  deletedBy      String?   @db.Uuid
+  createdAt      DateTime  @default(now())
+  createdBy      String    @db.Uuid
+  updatedAt      DateTime  @updatedAt
+  updatedBy      String    @db.Uuid
+
+  entity         ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  parentLookup   LookupValue?        @relation("LookupHierarchy", fields: [parentLookupId], references: [id])
+  childLookups   LookupValue[]       @relation("LookupHierarchy")
+
+  @@unique([entityId, code])
+  @@map("lookup_values")
+}
+
+model ValidationRule {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fieldDefinitionId String   @db.Uuid
+  ruleType          String
+  expression        String?
+  errorMessage      String
+  sortOrder         Int      @default(0)
+  isActive          Boolean  @default(true)
+  metadata          Json     @default("{}") @db.JsonB
+
+  createdAt         DateTime @default(now())
+  createdBy         String   @db.Uuid
+  updatedAt         DateTime @updatedAt
+  updatedBy         String   @db.Uuid
+
+  fieldDefinition   EntityFieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@map("validation_rules")
+}
+
+model EntityPermission {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId       String   @db.Uuid
+  permissionCode String
+  roleCode       String
+  canCreate      Boolean  @default(false)
+  canRead        Boolean  @default(false)
+  canUpdate      Boolean  @default(false)
+  canDelete      Boolean  @default(false)
+  canApprove     Boolean  @default(false)
+  canExport      Boolean  @default(false)
+  metadata       Json     @default("{}") @db.JsonB
+
+  createdAt      DateTime @default(now())
+  createdBy      String   @db.Uuid
+  updatedAt      DateTime @updatedAt
+  updatedBy      String   @db.Uuid
+
+  entity         ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@unique([entityId, roleCode])
+  @@map("entity_permissions")
+}
+
+model EntityAudit {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId    String   @db.Uuid
+  recordId    String   @db.Uuid
+  action      String
+  oldValue    Json?    @db.JsonB
+  newValue    Json?    @db.JsonB
+  performedBy String   @db.Uuid
+  performedAt DateTime @default(now())
+  ipAddress   String?
+  userAgent   String?
+
+  entity      ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  record      EntityRecord        @relation(fields: [recordId], references: [id], onDelete: Cascade)
+
+  @@map("entity_audits")
+}
+
+// 1. NavigationGroup
+model NavigationGroup {
+  id                   String           @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code                 String           @unique
+  name                 String
+  description          String?
+  icon                 String?
+  color                String?
+  displayOrder         Int              @default(0)
+  isVisible            Boolean          @default(true)
+  isCollapsedByDefault Boolean          @default(false)
+
+  createdAt            DateTime         @default(now())
+  createdBy            String           @db.Uuid
+  updatedAt            DateTime         @updatedAt
+  updatedBy            String           @db.Uuid
+
+  items                NavigationItem[]
+
+  @@map("navigation_groups")
+}
+
+// 2. NavigationItem
+model NavigationItem {
+  id                    String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title                 String
+  parentId              String?  @db.Uuid
+  navigationGroupId     String?  @db.Uuid
+  platformModuleId      String?  @db.Uuid
+  entityId              String?  @db.Uuid
+  route                 String?
+  icon                  String?
+  displayOrder          Int      @default(0)
+  menuType              String   @default("MODULE") // e.g. MODULE, ENTITY, ROUTE, DASHBOARD, REPORT, EXTERNAL
+  target                String   @default("SAME_WINDOW")
+  openInNewTab          Boolean  @default(false)
+  visible               Boolean  @default(true)
+  mobileVisible         Boolean  @default(false)
+  customerPortalVisible Boolean  @default(false)
+  vendorPortalVisible   Boolean  @default(false)
+  favoriteAllowed       Boolean  @default(true)
+  searchable            Boolean  @default(true)
+  metadata              Json     @default("{}") @db.JsonB
+
+  createdAt             DateTime @default(now())
+  createdBy             String   @db.Uuid
+  updatedAt             DateTime @updatedAt
+  updatedBy             String   @db.Uuid
+
+  parent                NavigationItem?     @relation("ItemHierarchy", fields: [parentId], references: [id], onDelete: Cascade)
+  children              NavigationItem[]    @relation("ItemHierarchy")
+  navigationGroup       NavigationGroup?    @relation(fields: [navigationGroupId], references: [id], onDelete: SetNull)
+  platformModule        PlatformModule?     @relation(fields: [platformModuleId], references: [id], onDelete: SetNull)
+  entity                ConfigurationEntity? @relation(fields: [entityId], references: [id], onDelete: SetNull)
+
+  favorites             NavigationFavorite[]
+  quickLinks            NavigationQuickLink[]
+
+  @@map("navigation_items")
+}
+
+// 3. NavigationProfile
+model NavigationProfile {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String   @unique
+  name        String
+  description String?
+  isActive    Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  createdBy   String   @db.Uuid
+  updatedAt   DateTime @updatedAt
+  updatedBy   String   @db.Uuid
+
+  layouts     NavigationLayout[]
+
+  @@map("navigation_profiles")
+}
+
+// 4. NavigationLayout
+model NavigationLayout {
+  id                  String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  profileId           String   @db.Uuid
+  navigationStructure Json     @default("[]") @db.JsonB // Serialized groups and items array
+  isPublished         Boolean  @default(false)
+  version             Int      @default(1)
+
+  createdAt           DateTime @default(now())
+  createdBy           String   @db.Uuid
+  updatedAt           DateTime @updatedAt
+  updatedBy           String   @db.Uuid
+
+  profile             NavigationProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  @@map("navigation_layouts")
+}
+
+// 5. NavigationPermission
+model NavigationPermission {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  navigationItemId String   @db.Uuid
+  roleCode         String
+  permissionCode   String?
+
+  createdAt        DateTime @default(now())
+  createdBy        String   @db.Uuid
+  updatedAt        DateTime @updatedAt
+  updatedBy        String   @db.Uuid
+
+  @@unique([navigationItemId, roleCode])
+  @@map("navigation_permissions")
+}
+
+// 6. NavigationVersion
+model NavigationVersion {
+  id            String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  versionNumber Int
+  description   String?
+  structure     Json     @db.JsonB // Snapshotted structure
+  isPublished   Boolean  @default(false)
+
+  createdAt     DateTime @default(now())
+  createdBy     String   @db.Uuid
+
+  @@map("navigation_versions")
+}
+
+// 7. NavigationHistory
+model NavigationHistory {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  action      String   // CREATE, MOVE, DELETE, PUBLISH, RESTORE
+  details     String?
+  performedBy String   @db.Uuid
+  createdAt   DateTime @default(now())
+
+  @@map("navigation_history")
+}
+
+// 8. NavigationFavorite
+model NavigationFavorite {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId           String   @db.Uuid
+  navigationItemId String   @db.Uuid
+  displayOrder     Int      @default(0)
+  createdAt        DateTime @default(now())
+
+  item             NavigationItem @relation(fields: [navigationItemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, navigationItemId])
+  @@map("navigation_favorites")
+}
+
+// 9. NavigationQuickLink
+model NavigationQuickLink {
+  id               String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  navigationItemId String   @db.Uuid
+  displayOrder     Int      @default(0)
+  createdAt        DateTime @default(now())
+
+  item             NavigationItem @relation(fields: [navigationItemId], references: [id], onDelete: Cascade)
+
+  @@map("navigation_quick_links")
+}
+
+// 10. NavigationSearchIndex
+model NavigationSearchIndex {
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  title       String
+  route       String
+  description String?
+  keywords    String?
+  metadata    Json     @default("{}") @db.JsonB
+
+  createdAt   DateTime @default(now())
+
+  @@map("navigation_search_indices")
+}
+
+
