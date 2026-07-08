@@ -160,7 +160,8 @@ export async function POST(req: Request) {
         })
 
         // 6. Log invite link to console (until email functionality is available)
-        const activationLink = `${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/auth/activate?token=${result.inviteToken}`
+        const appUrl = process.env.REPLIT_DOMAINS ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}` : (process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:5000')
+        const activationLink = `${appUrl}/auth/activate?token=${result.inviteToken}`
 
         console.log('\n' + '='.repeat(80))
         console.log('📧 USER INVITE - Email functionality not yet implemented')

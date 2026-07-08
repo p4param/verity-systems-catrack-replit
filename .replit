@@ -1,6 +1,7 @@
 modules = ["nodejs-20", "web"]
 [agent]
 expertMode = true
+stack = "BEST_EFFORT_FALLBACK"
 
 [nix]
 channel = "stable-25_05"
@@ -9,7 +10,6 @@ channel = "stable-25_05"
 
 [userenv.shared]
 JWT_SECRET = "replit-dms-saas-jwt-secret-change-in-prod-2024"
-NEXT_PUBLIC_APP_URL = "http://0.0.0.0:5000"
 
 [workflows]
 runButton = "Project"
@@ -27,13 +27,13 @@ args = "Next.js Dev"
 name = "Next.js Dev"
 author = "agent"
 
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "npx next dev -p 5000 -H 0.0.0.0"
-waitForPort = 5000
-
 [workflows.workflow.metadata]
 outputType = "webview"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "npm run dev"
+waitForPort = 5000
 
 [[ports]]
 localPort = 5000

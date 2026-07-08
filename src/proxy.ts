@@ -23,7 +23,7 @@ function parseJwt(token: string) {
     }
 }
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const { pathname } = request.nextUrl
 
     // 1️⃣ Find if the path belongs to a privileged area
