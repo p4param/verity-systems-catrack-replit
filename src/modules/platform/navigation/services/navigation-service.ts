@@ -16,7 +16,7 @@ export class NavigationService {
 
   // Navigation Groups CRUD
   async createGroup(data: CreateNavigationGroupDto, tenantId: number, actorUserId: number) {
-    const created = await this.repository.createGroup(data);
+    const created = await this.repository.createGroup({ ...data, createdBy: data.createdBy || formatUserIdToUuid(actorUserId) });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -28,7 +28,7 @@ export class NavigationService {
   }
 
   async updateGroup(id: string, data: UpdateNavigationGroupDto, tenantId: number, actorUserId: number) {
-    const updated = await this.repository.updateGroup(id, data);
+    const updated = await this.repository.updateGroup(id, { ...data, updatedBy: data.updatedBy || formatUserIdToUuid(actorUserId) });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -78,7 +78,7 @@ export class NavigationService {
   }
 
   async updateItem(id: string, data: UpdateNavigationItemDto, tenantId: number, actorUserId: number) {
-    const updated = await this.repository.updateItem(id, data);
+    const updated = await this.repository.updateItem(id, { ...data, updatedBy: data.updatedBy || formatUserIdToUuid(actorUserId) });
     await createAuditLog({
       tenantId,
       actorUserId,
