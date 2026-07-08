@@ -1,0 +1,337 @@
+IMPLEMENTATION MODE = TRUE
+
+PRODUCTION READY = TRUE
+
+SELF REVIEW = REQUIRED
+
+========================================================
+
+MILESTONE
+
+M1
+
+Metadata Platform Foundation
+
+========================================================
+
+VERTICAL SLICE
+
+VS02.5A
+
+Platform Module Permission Mapping
+
+========================================================
+
+OBJECTIVE
+
+Redesign the "Permissions" tab inside the Edit Platform Module dialog.
+
+Remove the existing "Minimum Role Required" dropdown.
+
+Instead, integrate the existing Authorization Engine permission catalog.
+
+The administrator should be able to assign permissions to the Platform Module using the same grouped permission UI already used in Role Management.
+
+DO NOT create another permission system.
+
+Reuse the existing permission tables, repositories, APIs and services.
+
+The Platform Module should only reference permissions.
+
+Roles continue to receive permissions from the Authorization Engine.
+
+========================================================
+
+DATABASE
+
+========================================================
+
+Create a mapping table if it does not already exist.
+
+PlatformModulePermission
+
+Fields
+
+Id
+
+PlatformModuleId
+
+PermissionId
+
+PermissionPurpose
+
+DisplayOrder
+
+IsRequired
+
+Metadata
+
+PermissionPurpose values
+
+MODULE_ACCESS
+
+MENU_VISIBILITY
+
+DASHBOARD
+
+REPORTS
+
+API
+
+MOBILE
+
+CUSTOMER_PORTAL
+
+VENDOR_PORTAL
+
+SEARCH
+
+QUICK_ACTION
+
+========================================================
+
+UI
+
+========================================================
+
+Replace the existing
+
+Minimum Role Required
+
+dropdown.
+
+Create a grouped permission selector.
+
+Use the same UI style as Role Management.
+
+Example
+
+------------------------------------------------
+
+EVENT
+
+(12 / 18)
+
+☑ EVENT_MODULE_ACCESS
+
+Access Event Module
+
+☑ EVENT_DASHBOARD_VIEW
+
+View Event Dashboard
+
+☑ EVENT_CREATE
+
+Create Events
+
+☑ EVENT_UPDATE
+
+Modify Events
+
+☑ EVENT_DELETE
+
+Delete Events
+
+☑ EVENT_REPORT_VIEW
+
+Access Reports
+
+☑ EVENT_API_ACCESS
+
+Access APIs
+
+☑ EVENT_MOBILE_ACCESS
+
+Use Mobile App
+
+☑ EVENT_CUSTOMER_PORTAL_ACCESS
+
+Customer Portal
+
+☑ EVENT_VENDOR_PORTAL_ACCESS
+
+Vendor Portal
+
+------------------------------------------------
+
+Inventory
+
+(3 / 18)
+
+Audit
+
+(2 / 5)
+
+Finance
+
+...
+
+========================================================
+
+FEATURES
+
+========================================================
+
+Support
+
+Search permissions
+
+Collapse groups
+
+Expand groups
+
+Select All
+
+Unselect All
+
+Group counts
+
+Sticky group headers
+
+Keyboard navigation
+
+Virtual scrolling
+
+========================================================
+
+RIGHT PANEL
+
+========================================================
+
+Display
+
+Selected Permission Count
+
+Permission Purpose
+
+Description
+
+Permission Dependencies
+
+========================================================
+
+VALIDATION
+
+========================================================
+
+Prevent duplicate mappings.
+
+Warn if
+
+MODULE_ACCESS
+
+permission is missing.
+
+Warn if Dashboard permission exists but Module Access does not.
+
+Warn if Customer Portal permission exists but module is hidden from Customer Portal.
+
+========================================================
+
+SAVE
+
+========================================================
+
+Save only permission mappings.
+
+Do NOT modify Roles.
+
+Do NOT modify Users.
+
+Do NOT modify Authorization.
+
+========================================================
+
+RUNTIME
+
+========================================================
+
+Navigation Runtime must now determine module visibility by checking:
+
+1.
+
+Does user have the mapped MODULE_ACCESS permission?
+
+If NO
+
+Hide module.
+
+If YES
+
+Continue.
+
+2.
+
+Use additional mapped permissions
+
+Dashboard
+
+Reports
+
+Search
+
+Mobile
+
+Portal
+
+to determine available functionality.
+
+========================================================
+
+EXPECTED RESULT
+
+========================================================
+
+Platform Modules no longer depend on Roles.
+
+Platform Modules depend only on Permissions.
+
+Roles continue assigning permissions.
+
+Users inherit permissions through Roles.
+
+Navigation Runtime consumes permissions.
+
+Authorization remains the only security engine.
+
+========================================================
+
+RETURN
+
+Files Modified
+
+Files Created
+
+Database Changes
+
+Migration
+
+APIs Updated
+
+React Components Updated
+
+Build Status
+
+Lint Status
+
+Outstanding Issues
+
+========================================================
+
+SELF REVIEW
+
+□ Existing Authorization reused
+
+□ No duplicate permission system
+
+□ Role system unchanged
+
+□ Permission mapping works
+
+□ Runtime integrated
+
+□ Build passes
+
+□ Lint passes
+
+□ Production ready

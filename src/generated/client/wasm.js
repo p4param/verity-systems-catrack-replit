@@ -1605,6 +1605,16 @@ exports.Prisma.NavigationQuickLinkScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PlatformModulePermissionScalarFieldEnum = {
+  id: 'id',
+  platformModuleId: 'platformModuleId',
+  permissionId: 'permissionId',
+  permissionPurpose: 'permissionPurpose',
+  displayOrder: 'displayOrder',
+  isRequired: 'isRequired',
+  metadata: 'metadata'
+};
+
 exports.Prisma.NavigationSearchIndexScalarFieldEnum = {
   id: 'id',
   title: 'title',
@@ -1746,6 +1756,7 @@ exports.Prisma.ModelName = {
   NavigationHistory: 'NavigationHistory',
   NavigationFavorite: 'NavigationFavorite',
   NavigationQuickLink: 'NavigationQuickLink',
+  PlatformModulePermission: 'PlatformModulePermission',
   NavigationSearchIndex: 'NavigationSearchIndex'
 };
 

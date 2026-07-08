@@ -2,6 +2,7 @@ import { NavigationRepository, CreateNavigationGroupDto, UpdateNavigationGroupDt
 import { PlatformModuleRepository } from "../../configuration/repositories/platform-module-repository";
 import { createAuditLog } from "@/lib/audit";
 import { formatUserIdToUuid } from "@/lib/auth/uuid-helper";
+import { prisma } from "@/lib/prisma";
 
 function invalidateNavigationCache() {
   try {
@@ -186,6 +187,36 @@ export class NavigationService {
     const modules = await this.moduleRepository.getAll();
     const activeModuleIds = new Set(modules.filter((m) => m.isActive).map((m) => m.id));
 
+    // Fetch MODULE_ACCESS permission mappings for all platform modules
+    const moduleAccessMappings = await prisma.platformModulePermission.findMany({
+      where: { permissionPurpose: "MODULE_ACCESS" },
+      include: { permission: true }
+    });
+
+    // Build: moduleId → Set of permission codes required for MODULE_ACCESS
+    const moduleAccessMap = new Map<string, Set<string>>();
+    for (const m of moduleAccessMappings) {
+      if (!moduleAccessMap.has(m.platformModuleId)) {
+        moduleAccessMap.set(m.platformModuleId, new Set());
+      }
+      moduleAccessMap.get(m.platformModuleId)!.add(m.permission.code);
+    }
+
+    const userPermSet = new Set(userPermissions);
+
+    const canAccessModule = (moduleId: string): boolean => {
+      // SuperAdmins bypass permission checks
+      if (isSuperAdmin) return true;
+      const required = moduleAccessMap.get(moduleId);
+      // If no MODULE_ACCESS permissions are mapped, don't restrict (backwards compatible)
+      if (!required || required.size === 0) return true;
+      // User must hold at least one of the mapped MODULE_ACCESS permissions
+      for (const code of required) {
+        if (userPermSet.has(code)) return true;
+      }
+      return false;
+    };
+
     return rawTree
       .filter((g) => g.isVisible)
       .map((g) => {
@@ -195,6 +226,11 @@ export class NavigationService {
 
           // Perform active platform module check
           if (node.platformModuleId && !activeModuleIds.has(node.platformModuleId)) {
+            return null;
+          }
+
+          // Perform MODULE_ACCESS permission check
+          if (node.platformModuleId && !canAccessModule(node.platformModuleId)) {
             return null;
           }
 
