@@ -228,17 +228,32 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
     const toggleMenu = (name) => {
         setExpandedMenus(prev => {
             const isAlreadyExpanded = prev[name];
-            return isAlreadyExpanded ? {} : { [name]: true };
+            if (isAlreadyExpanded) {
+                const next = { ...prev };
+                delete next[name];
+                return next;
+            }
+            return { ...prev, [name]: true };
         });
     };
 
     // Auto-expand menu based on current pathname
     useEffect(() => {
-        const parentItem = dynamicNavItems.find(item =>
-            item.children?.some(child => isHrefActive(child.href, pathname, allNavHrefs))
-        );
-        if (parentItem) {
-            setExpandedMenus({ [parentItem.name]: true });
+        const expandForPathname = (items, acc = {}) => {
+            for (const item of items) {
+                if (item.children) {
+                    const childMatch = item.children.some(child =>
+                        child.href ? isHrefActive(child.href, pathname, allNavHrefs) : false
+                    );
+                    if (childMatch) acc[item.name] = true;
+                    expandForPathname(item.children, acc);
+                }
+            }
+            return acc;
+        };
+        const toExpand = expandForPathname(dynamicNavItems);
+        if (Object.keys(toExpand).length > 0) {
+            setExpandedMenus(prev => ({ ...prev, ...toExpand }));
         }
     }, [pathname, dynamicNavItems, allNavHrefs]);
 
