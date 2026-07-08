@@ -101,7 +101,7 @@ const isHrefActive = (href, pathname, allNavHrefs) => {
     return !hasMoreSpecificMatch;
 };
 
-function NavItem({ item, collapsed, pathname, expandedMenus, toggleMenu, onNavigate, allNavHrefs, level = 0 }) {
+function NavItem({ item, collapsed, pathname, expandedMenus, toggleMenu, onNavigate, allNavHrefs, level = 0, siblings = [] }) {
     const hasChildren = item.children && item.children.length > 0;
     const isExpanded = expandedMenus[item.name];
     const isActive = item.href ? isHrefActive(item.href, pathname, allNavHrefs) : false;
@@ -111,7 +111,7 @@ function NavItem({ item, collapsed, pathname, expandedMenus, toggleMenu, onNavig
         return (
             <>
                 <button
-                    onClick={() => toggleMenu(item.name)}
+                    onClick={() => toggleMenu(item.name, siblings)}
                     className={clsx(
                         "w-full group flex items-center justify-between px-3 py-2 rounded-md transition-all duration-200",
                         isChildActive || isExpanded
@@ -153,6 +153,7 @@ function NavItem({ item, collapsed, pathname, expandedMenus, toggleMenu, onNavig
                                 onNavigate={onNavigate}
                                 allNavHrefs={allNavHrefs}
                                 level={level + 1}
+                                siblings={item.children.map(c => c.name)}
                             />
                         ))}
                     </div>
@@ -225,7 +226,7 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
         return extractHrefs(dynamicNavItems);
     }, [dynamicNavItems]);
 
-    const toggleMenu = (name) => {
+    const toggleMenu = (name, siblingNames = []) => {
         setExpandedMenus(prev => {
             const isAlreadyExpanded = prev[name];
             if (isAlreadyExpanded) {
@@ -233,7 +234,13 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
                 delete next[name];
                 return next;
             }
-            return { ...prev, [name]: true };
+            // Keep all expanded menus, close only siblings at this level, then open this one
+            const next = { ...prev };
+            for (const sibling of siblingNames) {
+                if (sibling !== name) delete next[sibling];
+            }
+            next[name] = true;
+            return next;
         });
     };
 
@@ -320,6 +327,7 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
                         toggleMenu={toggleMenu}
                         onNavigate={handleMobileNavigate}
                         allNavHrefs={allNavHrefs}
+                        siblings={dynamicNavItems.map(i => i.name)}
                     />
                 ))}
             </nav>
