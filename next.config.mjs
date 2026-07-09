@@ -1,9 +1,12 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  allowedDevOrigins: ['*'],
+  allowedDevOrigins: [
+    '*.replit.dev',
+    '*.sisko.replit.dev',
+    '*.replit.app',
+    process.env.REPLIT_DEV_DOMAIN,
+  ].filter(Boolean),
   typescript: {
-    // Type errors are fixed in route handlers; this prevents blocking builds
-    // while in-progress. Remove once all route handlers are fully migrated.
     ignoreBuildErrors: true,
   },
   async headers() {

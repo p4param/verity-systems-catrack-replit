@@ -69,6 +69,7 @@ import {
   platformModuleSchema,
   PlatformModuleInput
 } from "@/modules/platform/configuration/validations/platform-module-validation";
+import { ModulePermissionSelector } from "@/components/platform/ModulePermissionSelector";
 
 export default function PlatformModulesPage() {
   const { user } = useAuth();
@@ -1086,26 +1087,17 @@ export default function PlatformModulesPage() {
 
               {/* TAB 4: PERMISSIONS */}
               {activeFormTab === "permissions" && (
-                <div className="space-y-4">
+                <div className="space-y-3">
                   <div>
-                    <label className="block text-xs font-semibold text-muted-foreground mb-1">MINIMUM ROLE REQUIRED</label>
-                    <select
-                      {...register("minimumRole")}
-                      className="w-full px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/20"
-                    >
-                      <option value="USER">User (Standard Access)</option>
-                      <option value="ADMIN">Admin (Administration Access)</option>
-                      <option value="SUPERADMIN">Super Admin (System Core)</option>
-                    </select>
-                  </div>
-
-                  <div>
-                    <label className="block text-xs font-semibold text-muted-foreground mb-1">DEFAULT PERMISSION SET</label>
-                    <input
-                      type="text"
-                      disabled
-                      placeholder="Inherits system roles permissions default configs"
-                      className="w-full px-3 py-2 border border-border rounded-xl text-sm bg-muted/30 focus:outline-none font-mono opacity-80"
+                    <p className="text-xs text-muted-foreground mb-3">
+                      Assign permissions from the Authorization Engine to this module. Users must hold at least one
+                      <strong> MODULE_ACCESS</strong>-purposed permission to see this module in the sidebar.
+                    </p>
+                    <ModulePermissionSelector
+                      moduleId={editingModule?.id ?? null}
+                      moduleCode={editingModule?.code}
+                      showOnDashboard={editingModule?.showOnDashboard}
+                      customerPortalVisible={editingModule?.customerPortalVisible}
                     />
                   </div>
                 </div>

@@ -127,7 +127,8 @@ model Permission {
   code        String  @unique
   description String?
 
-  rolePermissions RolePermission[]
+  rolePermissions   RolePermission[]
+  modulePermissions PlatformModulePermission[]
 }
 
 model RolePermission {
@@ -1758,8 +1759,9 @@ model PlatformModule {
   updatedAt DateTime @updatedAt
   updatedBy String   @db.Uuid
 
-  entities        ConfigurationEntity[]
-  navigationItems NavigationItem[]
+  entities          ConfigurationEntity[]
+  navigationItems   NavigationItem[]
+  modulePermissions PlatformModulePermission[]
 
   @@map("platform_modules")
 }
@@ -2184,6 +2186,22 @@ model NavigationQuickLink {
   item NavigationItem @relation(fields: [navigationItemId], references: [id], onDelete: Cascade)
 
   @@map("navigation_quick_links")
+}
+
+model PlatformModulePermission {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  platformModuleId  String  @db.Uuid
+  permissionId      Int
+  permissionPurpose String  @default("MODULE_ACCESS")
+  displayOrder      Int     @default(0)
+  isRequired        Boolean @default(false)
+  metadata          Json    @default("{}") @db.JsonB
+
+  platformModule PlatformModule @relation(fields: [platformModuleId], references: [id], onDelete: Cascade)
+  permission     Permission     @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@unique([platformModuleId, permissionId])
+  @@map("platform_module_permissions")
 }
 
 // 10. NavigationSearchIndex
