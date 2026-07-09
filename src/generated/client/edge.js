@@ -1727,7 +1727,7 @@ const config = {
       "value": "prisma-client-js"
     },
     "output": {
-      "value": "C:\\VeritySystems\\catrack\\verity-systems-catrack\\src\\generated\\client",
+      "value": "C:\\VeritySystems\\catrack\\verity-systems-catrack-replit\\src\\generated\\client",
       "fromEnvVar": null
     },
     "config": {
@@ -1745,7 +1745,7 @@ const config = {
       }
     ],
     "previewFeatures": [],
-    "sourceFilePath": "C:\\VeritySystems\\catrack\\verity-systems-catrack\\prisma\\schema.prisma",
+    "sourceFilePath": "C:\\VeritySystems\\catrack\\verity-systems-catrack-replit\\prisma\\schema.prisma",
     "isCustomOutput": true
   },
   "relativeEnvPaths": {
@@ -1759,7 +1759,7 @@ const config = {
     "db"
   ],
   "activeProvider": "postgresql",
-  "postinstall": false,
+  "postinstall": true,
   "inlineDatasources": {
     "db": {
       "url": {
