@@ -15,15 +15,13 @@ export function useMobileDashboard() {
 }
 
 export function useOfflineEvents() {
-  const [offlineEvents, setOfflineEvents] = useState<any[]>([]);
-
-  useEffect(() => {
-    // Load events from LocalStorage / IndexedDB for offline access fallback
-    const saved = localStorage.getItem("offline_events");
-    if (saved) {
-      setOfflineEvents(JSON.parse(saved));
+  const [offlineEvents, setOfflineEvents] = useState<any[]>(() => {
+    if (typeof window !== 'undefined') {
+      const saved = localStorage.getItem("offline_events");
+      if (saved) return JSON.parse(saved);
     }
-  }, []);
+    return [];
+  });
 
   const saveOfflineEvents = (events: any[]) => {
     localStorage.setItem("offline_events", JSON.stringify(events));
@@ -34,14 +32,13 @@ export function useOfflineEvents() {
 }
 
 export function useOfflineTasks() {
-  const [syncQueue, setSyncQueue] = useState<any[]>([]);
-
-  useEffect(() => {
-    const queue = localStorage.getItem("task_sync_queue");
-    if (queue) {
-      setSyncQueue(JSON.parse(queue));
+  const [syncQueue, setSyncQueue] = useState<any[]>(() => {
+    if (typeof window !== 'undefined') {
+      const queue = localStorage.getItem("task_sync_queue");
+      if (queue) return JSON.parse(queue);
     }
-  }, []);
+    return [];
+  });
 
   const addTaskToQueue = (task: any) => {
     const updated = [...syncQueue, { ...task, id: `offline-${Date.now()}`, pendingSync: true }];

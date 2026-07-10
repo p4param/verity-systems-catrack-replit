@@ -1691,8 +1691,9 @@ model WorkflowDefinition {
   updatedBy      String   @db.Uuid
   deletedAt      DateTime?
   deletedBy      String?  @db.Uuid
-  isDeleted      Boolean  @default(false)
   version        Int      @default(1)
+  status         String   @default("DRAFT")
+
 
   states         WorkflowState[]
 
@@ -1731,6 +1732,8 @@ model PlatformModule {
   sortOrder            Int      @default(0)
   isActive             Boolean  @default(true)
   isSystem             Boolean  @default(false)
+  status               String   @default("DRAFT")
+  version              Int      @default(1)
   metadata             Json     @default("{}") @db.JsonB
 
   navigationGroup      String?
@@ -1786,6 +1789,22 @@ model ConfigurationEntity {
   allowHierarchy   Boolean  @default(false)
   allowSoftDelete  Boolean  @default(true)
   
+  status           String   @default("DRAFT")
+  version          Int      @default(1)
+  isActive         Boolean  @default(true)
+  isSystem         Boolean  @default(false)
+  isCustom         Boolean  @default(true)
+  metadataLocked   Boolean  @default(false)
+
+  showInNavigation Boolean  @default(false)
+  menuGroup        String?
+  menuOrder        Int      @default(0)
+  icon             String?
+  route            String?
+
+  apiEnabled       Boolean  @default(true)
+  apiName          String?
+
   metadata         Json     @default("{}") @db.JsonB
 
   createdAt        DateTime @default(now())
@@ -1819,9 +1838,12 @@ model EntityFieldDefinition {
   filterable    Boolean  @default(false)
   defaultValue  String?
   validation    Json?    @db.JsonB
+  dataSource    String   @default("STATIC")
   uiControl     String
   lookupEntity  String?
   displayOrder  Int      @default(0)
+  status        String   @default("DRAFT")
+  version       Int      @default(1)
   metadata      Json     @default("{}") @db.JsonB
 
   createdAt     DateTime @default(now())
@@ -1832,9 +1854,43 @@ model EntityFieldDefinition {
   entity          ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
   values          EntityValue[]
   validationRules ValidationRule[]
+  options         EntityFieldOption[]
 
   @@unique([entityId, code])
   @@map("entity_field_definitions")
+}
+
+model EntityFieldOption {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fieldDefinitionId String   @db.Uuid
+  code              String
+  label             String
+  displayOrder      Int      @default(0)
+  active            Boolean  @default(true)
+  color             String?
+  icon              String?
+  isDefault         Boolean  @default(false)
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  fieldDefinition   EntityFieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@unique([fieldDefinitionId, code])
+  @@map("entity_field_options")
+}
+
+enum ViewType {
+  GRID
+  FORM
+  CARD
+  KANBAN
+  CALENDAR
+  TIMELINE
+  TREE
+  DASHBOARD
+  DETAIL
+  QUICK_CREATE
 }
 
 model EntityView {
@@ -1842,10 +1898,13 @@ model EntityView {
   entityId    String   @db.Uuid
   code        String
   name        String
+  viewType    ViewType @default(GRID)
   isDefault   Boolean  @default(false)
   columns     Json     @default("[]") @db.JsonB
   filters     Json     @default("[]") @db.JsonB
   sorting     Json     @default("[]") @db.JsonB
+  status      String   @default("DRAFT")
+  version     Int      @default(1)
   metadata    Json     @default("{}") @db.JsonB
 
   createdAt   DateTime @default(now())

@@ -1,3 +1,5 @@
+process.env.DATABASE_URL = "postgresql://user:pass@localhost:5432/db";
+
 import { EventService } from "../services/event-service";
 import { EventRepository } from "../repositories/event-repository";
 import { EventWorkflowService } from "../services/event-service";

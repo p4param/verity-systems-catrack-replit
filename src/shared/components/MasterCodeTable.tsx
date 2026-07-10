@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/auth/auth-context";
 import { Plus, Pencil, Trash2, X, Check, Loader2 } from "lucide-react";
 import { toast } from "sonner";
@@ -34,8 +34,7 @@ export default function MasterCodeTable({ title, description, apiPath, icon, cod
   const canUpdate = user?.permissions?.includes("INVENTORY_MASTER_UPDATE");
   const canDelete = user?.permissions?.includes("INVENTORY_MASTER_DELETE");
 
-  const load = async () => {
-    setLoading(true);
+  const load = useCallback(async () => {
     try {
       const data = await fetchWithAuth(apiPath);
       setItems(Array.isArray(data) ? data : []);
@@ -44,9 +43,9 @@ export default function MasterCodeTable({ title, description, apiPath, icon, cod
     } finally {
       setLoading(false);
     }
-  };
+  }, [apiPath]);
 
-  useEffect(() => { load(); }, []);
+  useEffect(() => { load(); }, [load]);
 
   const handleSave = async () => {
     if (!formData.name.trim() || !formData.code.trim()) {

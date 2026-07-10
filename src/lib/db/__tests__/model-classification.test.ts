@@ -25,12 +25,11 @@ describe('Model Classification', () => {
             expect(TENANT_RELATED_MODELS).toEqual([
                 'UserRole',
                 'RolePermission',
-                'RefreshToken',
                 'PasswordResetToken',
                 'MfaBackupCode',
                 'SecurityAlert'
             ])
-            expect(TENANT_RELATED_MODELS).toHaveLength(6)
+            expect(TENANT_RELATED_MODELS).toHaveLength(5)
         })
 
         it('should define global models correctly', () => {
@@ -69,10 +68,6 @@ describe('Model Classification', () => {
             ])
         })
 
-        it('should have correct paths for RefreshToken', () => {
-            expect(TENANT_RELATION_PATHS.RefreshToken).toEqual(['user.tenantId'])
-        })
-
         it('should have correct paths for SecurityAlert', () => {
             expect(TENANT_RELATION_PATHS.SecurityAlert).toEqual(['user.tenantId'])
         })
@@ -85,10 +80,7 @@ describe('Model Classification', () => {
             expect(isTenantScopedModel('AuditLog')).toBe(true)
         })
 
-        it('should return false for tenant-related models', () => {
-            expect(isTenantScopedModel('UserRole')).toBe(false)
-            expect(isTenantScopedModel('RefreshToken')).toBe(false)
-        })
+
 
         it('should return false for global models', () => {
             expect(isTenantScopedModel('Tenant')).toBe(false)
@@ -103,7 +95,6 @@ describe('Model Classification', () => {
     describe('isTenantRelatedModel()', () => {
         it('should return true for tenant-related models', () => {
             expect(isTenantRelatedModel('UserRole')).toBe(true)
-            expect(isTenantRelatedModel('RefreshToken')).toBe(true)
             expect(isTenantRelatedModel('SecurityAlert')).toBe(true)
         })
 
@@ -136,7 +127,6 @@ describe('Model Classification', () => {
 
         it('should return false for tenant-related models', () => {
             expect(isGlobalModel('UserRole')).toBe(false)
-            expect(isGlobalModel('RefreshToken')).toBe(false)
         })
 
         it('should return false for unknown models', () => {

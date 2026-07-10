@@ -11,7 +11,7 @@ export async function GET(req: Request) {
     
     // Fetch user permissions and roles
     const userPermissions = user.permissions || [];
-    const userRole = user.role || "USER";
+    const userRole = (user.roles && user.roles.length > 0) ? user.roles[0] : "USER";
 
     const sidebar = await service.generateSidebar(userPermissions, userRole);
     return NextResponse.json({ success: true, data: sidebar });

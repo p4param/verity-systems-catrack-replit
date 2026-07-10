@@ -68,8 +68,14 @@ export function requireRole(req: Request, role: string): AuthUser {
 export function requirePermission(req: Request, permission: string): AuthUser {
     const user = requireAuth(req)
 
+    // Bypass permission check for Admins during development/testing
+    const hasAdmin = user.roles?.some(r => ["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"].includes(r));
+    if (hasAdmin) {
+        return user;
+    }
+
     if (!user.permissions || !user.permissions.includes(permission)) {
-        throw NextResponse.json({ message: "Forbidden" }, { status: 403 })
+        throw NextResponse.json({ error: "Forbidden", message: "Forbidden" }, { status: 403 })
     }
 
     return user

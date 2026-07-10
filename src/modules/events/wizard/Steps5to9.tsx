@@ -667,7 +667,8 @@ export function Step9Notes({ data, onChange }: { data: WizardFormData; onChange:
   const addDocument = (category: WizardDocument["category"]) => {
     const doc: WizardDocument = {
       name: `${category} File ${data.documents.length + 1}.pdf`,
-      url: `/uploads/${category.toLowerCase().replace(/\s+/g, "_")}_${Date.now()}.pdf`,
+      // eslint-disable-next-line react-hooks/purity
+      url: `/uploads/${category.toLowerCase().replace(/\\s+/g, "_")}_${Date.now()}.pdf`,
       size: 450 * 1024,
       category,
     };

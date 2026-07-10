@@ -1256,8 +1256,8 @@ exports.Prisma.WorkflowDefinitionScalarFieldEnum = {
   updatedBy: 'updatedBy',
   deletedAt: 'deletedAt',
   deletedBy: 'deletedBy',
-  isDeleted: 'isDeleted',
-  version: 'version'
+  version: 'version',
+  status: 'status'
 };
 
 exports.Prisma.WorkflowStateScalarFieldEnum = {
@@ -1288,6 +1288,8 @@ exports.Prisma.PlatformModuleScalarFieldEnum = {
   sortOrder: 'sortOrder',
   isActive: 'isActive',
   isSystem: 'isSystem',
+  status: 'status',
+  version: 'version',
   metadata: 'metadata',
   navigationGroup: 'navigationGroup',
   displayOrder: 'displayOrder',
@@ -1333,6 +1335,19 @@ exports.Prisma.ConfigurationEntityScalarFieldEnum = {
   allowTags: 'allowTags',
   allowHierarchy: 'allowHierarchy',
   allowSoftDelete: 'allowSoftDelete',
+  status: 'status',
+  version: 'version',
+  isActive: 'isActive',
+  isSystem: 'isSystem',
+  isCustom: 'isCustom',
+  metadataLocked: 'metadataLocked',
+  showInNavigation: 'showInNavigation',
+  menuGroup: 'menuGroup',
+  menuOrder: 'menuOrder',
+  icon: 'icon',
+  route: 'route',
+  apiEnabled: 'apiEnabled',
+  apiName: 'apiName',
   metadata: 'metadata',
   createdAt: 'createdAt',
   createdBy: 'createdBy',
@@ -1354,9 +1369,12 @@ exports.Prisma.EntityFieldDefinitionScalarFieldEnum = {
   filterable: 'filterable',
   defaultValue: 'defaultValue',
   validation: 'validation',
+  dataSource: 'dataSource',
   uiControl: 'uiControl',
   lookupEntity: 'lookupEntity',
   displayOrder: 'displayOrder',
+  status: 'status',
+  version: 'version',
   metadata: 'metadata',
   createdAt: 'createdAt',
   createdBy: 'createdBy',
@@ -1364,15 +1382,32 @@ exports.Prisma.EntityFieldDefinitionScalarFieldEnum = {
   updatedBy: 'updatedBy'
 };
 
+exports.Prisma.EntityFieldOptionScalarFieldEnum = {
+  id: 'id',
+  fieldDefinitionId: 'fieldDefinitionId',
+  code: 'code',
+  label: 'label',
+  displayOrder: 'displayOrder',
+  active: 'active',
+  color: 'color',
+  icon: 'icon',
+  isDefault: 'isDefault',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EntityViewScalarFieldEnum = {
   id: 'id',
   entityId: 'entityId',
   code: 'code',
   name: 'name',
+  viewType: 'viewType',
   isDefault: 'isDefault',
   columns: 'columns',
   filters: 'filters',
   sorting: 'sorting',
+  status: 'status',
+  version: 'version',
   metadata: 'metadata',
   createdAt: 'createdAt',
   createdBy: 'createdBy',
@@ -1659,6 +1694,19 @@ exports.StockCondition = exports.$Enums.StockCondition = {
   DIRTY: 'DIRTY'
 };
 
+exports.ViewType = exports.$Enums.ViewType = {
+  GRID: 'GRID',
+  FORM: 'FORM',
+  CARD: 'CARD',
+  KANBAN: 'KANBAN',
+  CALENDAR: 'CALENDAR',
+  TIMELINE: 'TIMELINE',
+  TREE: 'TREE',
+  DASHBOARD: 'DASHBOARD',
+  DETAIL: 'DETAIL',
+  QUICK_CREATE: 'QUICK_CREATE'
+};
+
 exports.Prisma.ModelName = {
   Tenant: 'Tenant',
   User: 'User',
@@ -1739,6 +1787,7 @@ exports.Prisma.ModelName = {
   PlatformModule: 'PlatformModule',
   ConfigurationEntity: 'ConfigurationEntity',
   EntityFieldDefinition: 'EntityFieldDefinition',
+  EntityFieldOption: 'EntityFieldOption',
   EntityView: 'EntityView',
   EntityRecord: 'EntityRecord',
   EntityValue: 'EntityValue',

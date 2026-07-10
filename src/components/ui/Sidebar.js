@@ -260,7 +260,9 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
         };
         const toExpand = expandForPathname(dynamicNavItems);
         if (Object.keys(toExpand).length > 0) {
-            setExpandedMenus(prev => ({ ...prev, ...toExpand }));
+            queueMicrotask(() => {
+                setExpandedMenus(prev => ({ ...prev, ...toExpand }));
+            });
         }
     }, [pathname, dynamicNavItems, allNavHrefs]);
 

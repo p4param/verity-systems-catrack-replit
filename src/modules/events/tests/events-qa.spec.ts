@@ -42,7 +42,7 @@ describe("Performance SLA Verification", () => {
       name: `Corporate Mixer #${idx}`,
     }));
     
-    const query = "Mixer #4500";
+    const query = "Corporate Mixer #4500";
     const found = list.find((item) => item.name === query);
     
     const duration = Date.now() - startTime;

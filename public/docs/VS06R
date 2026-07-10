@@ -1,0 +1,121 @@
+Scope
+1. End-to-End Runtime Verification
+
+Validate the complete lifecycle:
+
+Create Module
+Create Business Entity
+Add Fields
+Design Views
+Publish
+Runtime Registration
+Navigation Generation
+Generated Grid
+Generated Form
+Create/Edit/Delete Record
+2. Navigation Review
+
+Confirm:
+
+Dynamic sidebar
+Module grouping
+Ordering
+Icons
+Breadcrumbs
+Deep linking
+3. Runtime Routing
+
+Verify:
+
+/runtime/{module}/{entity}
+/runtime/{module}/{entity}/new
+/runtime/{module}/{entity}/{id}
+
+No hardcoded routes.
+
+4. Dynamic Forms
+
+Verify:
+
+Required fields
+Default values
+Read-only fields
+Hidden fields
+Validation
+Save
+Cancel
+Error handling
+5. Dynamic Grids
+
+Verify:
+
+Sorting
+Filtering
+Search
+Pagination
+Export
+Selection
+Row actions
+6. Runtime Manifest
+
+Confirm that every published entity has a runtime descriptor consumed consistently by:
+
+Navigation
+Runtime UI
+Search
+Authorization
+7. Runtime Cache
+
+Validate:
+
+Publish refreshes affected caches only.
+No stale metadata.
+No full cache rebuild unless required.
+8. Security Review
+
+Confirm:
+
+Runtime pages enforce authorization.
+Generated actions respect permissions.
+Hidden actions are not callable directly.
+9. Performance
+
+Review:
+
+Metadata loading
+Manifest loading
+Generated forms
+Generated grids
+Query efficiency
+10. Error Handling
+
+Ensure:
+
+User-friendly validation
+Structured logging
+No unhandled runtime exceptions
+11. Production Readiness
+
+Verify:
+
+No TODOs
+No placeholder code
+No mock implementations
+TypeScript clean
+No new lint issues
+Runtime stable
+Exit Criteria
+
+VS06R is complete when an administrator can:
+
+Create a Platform Module.
+Create a Business Entity.
+Define Fields.
+Design Views.
+Publish the entity.
+See it appear automatically in the navigation.
+Open the generated runtime page.
+Create, edit, and delete records.
+Observe correct authorization, audit, and runtime behavior.
+
+At that point, the Metadata Platform (CM-001 Milestone 1) can be considered functionally complete.

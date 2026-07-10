@@ -66,7 +66,25 @@ async function main() {
         { code: 'PLATFORM_MODULE_VIEW', description: 'View platform modules and configurations' },
         { code: 'PLATFORM_MODULE_CREATE', description: 'Create platform modules' },
         { code: 'PLATFORM_MODULE_UPDATE', description: 'Update platform modules and navigation layouts' },
-        { code: 'PLATFORM_MODULE_DELETE', description: 'Delete platform modules and navigation nodes' }
+        { code: 'PLATFORM_MODULE_DELETE', description: 'Delete platform modules and navigation nodes' },
+        { code: 'PLATFORM_ENTITY_VIEW', description: 'View business entities' },
+        { code: 'PLATFORM_ENTITY_CREATE', description: 'Create business entities' },
+        { code: 'PLATFORM_ENTITY_EDIT', description: 'Edit business entities' },
+        { code: 'PLATFORM_ENTITY_DELETE', description: 'Delete business entities' },
+        { code: 'PLATFORM_ENTITY_ARCHIVE', description: 'Archive business entities' },
+        { code: 'PLATFORM_ENTITY_RESTORE', description: 'Restore business entities' },
+        { code: 'PLATFORM_ENTITY_DUPLICATE', description: 'Duplicate business entities' },
+        { code: 'PLATFORM_ENTITY_PUBLISH', description: 'Publish business entities' },
+        { code: 'PLATFORM_FIELD_VIEW', description: 'View entity fields' },
+        { code: 'PLATFORM_FIELD_CREATE', description: 'Create entity fields' },
+        { code: 'PLATFORM_FIELD_EDIT', description: 'Edit entity fields' },
+        { code: 'PLATFORM_FIELD_DELETE', description: 'Delete entity fields' },
+        { code: 'PLATFORM_FIELD_ARCHIVE', description: 'Archive entity fields' },
+        { code: 'PLATFORM_FIELD_PUBLISH', description: 'Publish entity fields' },
+        { code: 'PLATFORM_VIEW_VIEW', description: 'View entity views' },
+        { code: 'PLATFORM_VIEW_CREATE', description: 'Create entity views' },
+        { code: 'PLATFORM_VIEW_EDIT', description: 'Edit entity views' },
+        { code: 'PLATFORM_VIEW_DELETE', description: 'Delete entity views' }
     ]
 
     for (const perm of permissions) {

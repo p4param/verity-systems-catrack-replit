@@ -314,6 +314,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         restore()
+    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     return (

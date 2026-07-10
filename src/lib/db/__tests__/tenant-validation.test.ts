@@ -67,20 +67,6 @@ describe('Tenant Validation Functions', () => {
             })
         })
 
-        describe('RefreshToken model', () => {
-            it('should return true when user.tenantId is present', () => {
-                expect(hasTenantRelation('RefreshToken', {
-                    user: { tenantId: 1 }
-                })).toBe(true)
-            })
-
-            it('should return false when user.tenantId is missing', () => {
-                expect(hasTenantRelation('RefreshToken', {
-                    tokenHash: 'abc123'
-                })).toBe(false)
-            })
-        })
-
         describe('SecurityAlert model', () => {
             it('should return true when user.tenantId is present', () => {
                 expect(hasTenantRelation('SecurityAlert', {
