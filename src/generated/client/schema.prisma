@@ -1836,6 +1836,7 @@ model EntityFieldDefinition {
   filterable   Boolean @default(false)
   defaultValue String?
   validation   Json?   @db.JsonB
+  dataSource   String  @default("STATIC")
   uiControl    String
   lookupEntity String?
   displayOrder Int     @default(0)
@@ -1851,9 +1852,30 @@ model EntityFieldDefinition {
   entity          ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
   values          EntityValue[]
   validationRules ValidationRule[]
+  options         EntityFieldOption[]
 
   @@unique([entityId, code])
   @@map("entity_field_definitions")
+}
+
+model EntityFieldOption {
+  id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fieldDefinitionId String  @db.Uuid
+  code              String
+  label             String
+  displayOrder      Int     @default(0)
+  active            Boolean @default(true)
+  color             String?
+  icon              String?
+  isDefault         Boolean @default(false)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  fieldDefinition EntityFieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+
+  @@unique([fieldDefinitionId, code])
+  @@map("entity_field_options")
 }
 
 enum ViewType {
