@@ -125,6 +125,9 @@ export default function NavigationDesignerPage() {
     searchable: true,
     metadata: "{}"
   });
+  // Ref always pointing at latest itemForm — avoids stale closure in handleSaveItem
+  const itemFormRef = useRef(itemForm);
+  itemFormRef.current = itemForm;
 
   // Preview options
   const [previewDevice, setPreviewDevice] = useState<"desktop" | "tablet" | "mobile" | "customer" | "vendor">("desktop");
@@ -300,9 +303,10 @@ export default function NavigationDesignerPage() {
   const handleSaveItem = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
+      const current = itemFormRef.current;
       const payload = {
-        ...itemForm,
-        metadata: JSON.parse(itemForm.metadata || "{}")
+        ...current,
+        metadata: JSON.parse(current.metadata || "{}")
       };
 
       if (editingItem) {
