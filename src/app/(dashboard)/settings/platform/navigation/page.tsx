@@ -323,6 +323,8 @@ export default function NavigationDesignerPage() {
       }
       setItemModalOpen(false);
       setEditingItem(null);
+      setShowIconPicker(false);
+      setIconSearch("");
       refetchTree();
     } catch (err: any) {
       toast.error(err.message || "Failed to save item details");
@@ -1079,7 +1081,7 @@ export default function NavigationDesignerPage() {
                     <input
                       type="text"
                       value={itemForm.icon}
-                      onChange={(e) => setItemForm({ ...itemForm, icon: e.target.value })}
+                      onChange={(e) => { const v = e.target.value; setItemForm(prev => ({ ...prev, icon: v })); }}
                       onFocus={() => setShowIconPicker(true)}
                       placeholder="e.g. Settings"
                       className="flex-1 px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none"
@@ -1087,6 +1089,12 @@ export default function NavigationDesignerPage() {
                   </div>
                   {/* Quick-pick grid */}
                   {showIconPicker && (
+                    <>
+                      {/* Backdrop — closes picker without interfering with form save */}
+                      <div
+                        className="fixed inset-0 z-40"
+                        onMouseDown={() => { setShowIconPicker(false); setIconSearch(""); }}
+                      />
                     <div className="absolute z-50 top-full left-0 mt-1 w-72 bg-popover border border-border rounded-xl shadow-xl p-3">
                       <input
                         type="text"
@@ -1120,7 +1128,7 @@ export default function NavigationDesignerPage() {
                                 type="button"
                                 title={name}
                                 onClick={() => {
-                                  setItemForm({ ...itemForm, icon: name });
+                                  setItemForm(prev => ({ ...prev, icon: name }));
                                   setShowIconPicker(false);
                                   setIconSearch("");
                                 }}
@@ -1137,6 +1145,7 @@ export default function NavigationDesignerPage() {
                         className="mt-2 w-full text-xs text-muted-foreground hover:text-foreground text-center"
                       >Close</button>
                     </div>
+                    </>
                   )}
                 </div>
                 <div>
@@ -1199,7 +1208,7 @@ export default function NavigationDesignerPage() {
               <div className="flex justify-end gap-2 pt-3 border-t border-border">
                 <button
                   type="button"
-                  onClick={() => setItemModalOpen(false)}
+                  onClick={() => { setItemModalOpen(false); setShowIconPicker(false); setIconSearch(""); }}
                   className="px-4 py-2 border border-border rounded-xl hover:bg-muted text-sm font-semibold"
                 >
                   Cancel
