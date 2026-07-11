@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo, useEffect } from "react";
+import React, { useState, useMemo, useEffect, useRef } from "react";
+import * as LucideIcons from "lucide-react";
 import Link from "next/link";
 import {
   useNavigationTree,
@@ -86,6 +87,8 @@ export default function NavigationDesignerPage() {
   // Modals state
   const [groupModalOpen, setGroupModalOpen] = useState(false);
   const [itemModalOpen, setItemModalOpen] = useState(false);
+  const [showIconPicker, setShowIconPicker] = useState(false);
+  const [iconSearch, setIconSearch] = useState("");
   const [editingGroup, setEditingGroup] = useState<any | null>(null);
   const [editingItem, setEditingItem] = useState<any | null>(null);
 
@@ -1063,15 +1066,78 @@ export default function NavigationDesignerPage() {
               </div>
 
               <div className="grid grid-cols-2 gap-4">
-                <div>
+                <div className="relative">
                   <label className="block text-slate-400 font-bold mb-1">ICON</label>
-                  <input
-                    type="text"
-                    value={itemForm.icon}
-                    onChange={(e) => setItemForm({ ...itemForm, icon: e.target.value })}
-                    placeholder="e.g. Box"
-                    className="w-full px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none"
-                  />
+                  <div className="flex gap-2 items-center">
+                    {/* Live preview */}
+                    <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg border border-border bg-muted/40">
+                      {(() => {
+                        const Ic = (LucideIcons as any)[itemForm.icon];
+                        return Ic ? <Ic size={18} className="text-primary" /> : <HelpCircle size={18} className="text-destructive" />;
+                      })()}
+                    </div>
+                    <input
+                      type="text"
+                      value={itemForm.icon}
+                      onChange={(e) => setItemForm({ ...itemForm, icon: e.target.value })}
+                      onFocus={() => setShowIconPicker(true)}
+                      placeholder="e.g. Settings"
+                      className="flex-1 px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none"
+                    />
+                  </div>
+                  {/* Quick-pick grid */}
+                  {showIconPicker && (
+                    <div className="absolute z-50 top-full left-0 mt-1 w-72 bg-popover border border-border rounded-xl shadow-xl p-3">
+                      <input
+                        type="text"
+                        value={iconSearch}
+                        onChange={(e) => setIconSearch(e.target.value)}
+                        placeholder="Search icons…"
+                        className="w-full px-2 py-1.5 border border-border rounded-lg text-xs bg-background mb-2 focus:outline-none"
+                        autoFocus
+                      />
+                      <div className="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+                        {[
+                          "Box","Settings","Shield","Home","Users","FileText","Database",
+                          "BarChart2","Bell","Calendar","CheckCircle","Cog","Cpu","CreditCard",
+                          "Download","Edit","Eye","Filter","Flag","Folder","Globe","Grid",
+                          "HelpCircle","Inbox","Key","Layers","Link","List","Lock","LogOut",
+                          "Mail","Map","Menu","Monitor","Moon","Package","Pencil","PieChart",
+                          "Plus","Power","Printer","RefreshCw","Search","Send","Server",
+                          "Share","ShieldCheck","ShoppingCart","Sliders","Star","Sun","Tag",
+                          "Terminal","Trash2","TrendingUp","Upload","User","Wallet","Wrench",
+                          "Zap","AlertTriangle","Archive","Bookmark","Building","ChevronRight",
+                          "Clock","Cloud","Code","Columns","Command","Compass","Copy","Crop",
+                          "Activity","Award","Briefcase","Camera","Cast","Coffee","Crosshair"
+                        ]
+                          .filter(n => n.toLowerCase().includes(iconSearch.toLowerCase()))
+                          .map(name => {
+                            const Ic = (LucideIcons as any)[name];
+                            if (!Ic) return null;
+                            return (
+                              <button
+                                key={name}
+                                type="button"
+                                title={name}
+                                onClick={() => {
+                                  setItemForm({ ...itemForm, icon: name });
+                                  setShowIconPicker(false);
+                                  setIconSearch("");
+                                }}
+                                className={`p-1.5 rounded-lg flex items-center justify-center hover:bg-primary/10 transition-colors ${itemForm.icon === name ? "bg-primary/15 ring-1 ring-primary" : ""}`}
+                              >
+                                <Ic size={16} />
+                              </button>
+                            );
+                          })}
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => { setShowIconPicker(false); setIconSearch(""); }}
+                        className="mt-2 w-full text-xs text-muted-foreground hover:text-foreground text-center"
+                      >Close</button>
+                    </div>
+                  )}
                 </div>
                 <div>
                   <label className="block text-slate-400 font-bold mb-1">DISPLAY ORDER</label>
