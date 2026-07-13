@@ -10,10 +10,10 @@ import React, {
 } from "react"
 import { useRouter } from "next/navigation"
 import { handleAPIResponse } from "../api-client"
-import { AuthUser } from "./auth-types"
+import { CurrentUser } from "./auth-types"
 
-type AuthContextType = {
-    user: AuthUser | null
+interface AuthContextType {
+    user: CurrentUser | null
     accessToken: string | null
     loading: boolean
     login: (email: string, password: string) => Promise<any>
@@ -48,7 +48,7 @@ const isTokenExpired = (token: string): boolean => {
 export function AuthProvider({ children }: { children: React.ReactNode }) {
     const router = useRouter()
 
-    const [user, setUser] = useState<AuthUser | null>(null)
+    const [user, setUser] = useState<CurrentUser | null>(null)
     const [accessToken, setAccessToken] = useState<string | null>(null)
     const [loading, setLoading] = useState(true)
     const [mfaRequired, setMfaRequired] = useState(false)
@@ -60,6 +60,70 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         accessTokenRef.current = accessToken
     }, [accessToken])
+
+    // On mount, check if token exists and load user
+    useEffect(() => {
+        const token = localStorage.getItem("access_token")
+        if (token) {
+            // Verify if expired
+            if (!isTokenExpired(token)) {
+                setAccessToken(token)
+                try {
+                    const payloadBase64 = token.split(".")[1]
+                    const decoded = JSON.parse(atob(payloadBase64))
+                    setUser(new CurrentUser(decoded as any))
+                } catch (e) {
+                    localStorage.removeItem("access_token")
+                }
+            } else {
+                localStorage.removeItem("access_token")
+            }
+        }
+        setLoading(false)
+    }, [])
+
+    const handleLoginResponse = (data: any) => {
+        if (data.mfaRequired) {
+            setMfaRequired(true)
+            tempTokenRef.current = data.tempToken
+            return data
+        }
+
+        if (data.mfaSetupRequired) {
+            setMfaSetupRequired(true)
+            tempTokenRef.current = data.tempToken
+            return data
+        }
+
+        const token = data.accessToken
+        localStorage.setItem("access_token", token)
+        setAccessToken(token)
+        try {
+            const payloadBase64 = token.split(".")[1]
+            const decoded = JSON.parse(atob(payloadBase64))
+            setUser(new CurrentUser(decoded as any))
+        } catch (e) {
+            console.error("Failed to decode token", e)
+        }
+        return data
+    }
+
+    const handleMFAResponse = (data: any) => {
+        const token = data.accessToken
+        localStorage.setItem("access_token", token)
+        setAccessToken(token)
+        try {
+            const payloadBase64 = token.split(".")[1]
+            const decoded = JSON.parse(atob(payloadBase64))
+            setUser(new CurrentUser(decoded as any))
+            setMfaRequired(false)
+            setMfaSetupRequired(false)
+            tempTokenRef.current = null
+        } catch (e) {
+            console.error("Failed to decode token", e)
+        }
+        return data
+    }
 
     // Keep loading ref in sync for async functions
     const loadingRef = useRef(true)
@@ -314,7 +378,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         restore()
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
     }, [])
 
     return (

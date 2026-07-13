@@ -17,7 +17,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     ]);
 
     const mappedPermissionIds = new Set(mappings.map((m) => m.permissionId));
-    const mappingByPermId = new Map(mappings.map((m) => [m.permissionId, m]));
+    const mappingByPermId = new Map<string, any>(mappings.map((m: any) => [m.permissionId, m]));
 
     const result = allPermissions.map((p) => ({
       id: p.id,

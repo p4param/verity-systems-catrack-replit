@@ -4,23 +4,18 @@ import { recordService } from "@/modules/platform/runtime/services/record-servic
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
 
-async function getEntityManifest(moduleCode: string, entityCode: string) {
-  const entity = await prisma.configurationEntity.findFirst({
-    where: {
-      OR: [
-        { code: { equals: entityCode, mode: 'insensitive' } },
-        { route: { equals: `/runtime/${moduleCode}/${entityCode}`, mode: 'insensitive' } }
-      ]
-    },
-  });
+import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
 
-  if (!entity || !entity.metadata || typeof entity.metadata !== 'object') {
+async function getEntityManifest(moduleCode: string, entityCode: string) {
+  const artifact = await RuntimeRegistry.getActiveArtifact(moduleCode, entityCode);
+
+  if (!artifact) {
     return null;
   }
 
   return {
-    entityId: entity.id,
-    manifest: (entity.metadata as Record<string, any>).runtimeManifest as RuntimeManifest
+    entityId: artifact.entityId,
+    manifest: artifact.payload as unknown as RuntimeManifest
   };
 }
 

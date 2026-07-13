@@ -1355,6 +1355,17 @@ exports.Prisma.ConfigurationEntityScalarFieldEnum = {
   updatedBy: 'updatedBy'
 };
 
+exports.Prisma.RuntimeArtifactScalarFieldEnum = {
+  id: 'id',
+  entityId: 'entityId',
+  version: 'version',
+  status: 'status',
+  payload: 'payload',
+  generatedAt: 'generatedAt',
+  generatedBy: 'generatedBy',
+  generatorVersion: 'generatorVersion'
+};
+
 exports.Prisma.EntityFieldDefinitionScalarFieldEnum = {
   id: 'id',
   entityId: 'entityId',
@@ -1371,7 +1382,6 @@ exports.Prisma.EntityFieldDefinitionScalarFieldEnum = {
   validation: 'validation',
   dataSource: 'dataSource',
   uiControl: 'uiControl',
-  lookupEntity: 'lookupEntity',
   displayOrder: 'displayOrder',
   status: 'status',
   version: 'version',
@@ -1396,6 +1406,19 @@ exports.Prisma.EntityFieldOptionScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.EntityFieldLookupDefinitionScalarFieldEnum = {
+  id: 'id',
+  fieldDefinitionId: 'fieldDefinitionId',
+  referencedEntityId: 'referencedEntityId',
+  displayFieldId: 'displayFieldId',
+  valueFieldId: 'valueFieldId',
+  searchFieldIds: 'searchFieldIds',
+  filterConditions: 'filterConditions',
+  sortConditions: 'sortConditions',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.EntityViewScalarFieldEnum = {
   id: 'id',
   entityId: 'entityId',
@@ -1403,9 +1426,6 @@ exports.Prisma.EntityViewScalarFieldEnum = {
   name: 'name',
   viewType: 'viewType',
   isDefault: 'isDefault',
-  columns: 'columns',
-  filters: 'filters',
-  sorting: 'sorting',
   status: 'status',
   version: 'version',
   metadata: 'metadata',
@@ -1786,8 +1806,10 @@ exports.Prisma.ModelName = {
   WorkflowState: 'WorkflowState',
   PlatformModule: 'PlatformModule',
   ConfigurationEntity: 'ConfigurationEntity',
+  RuntimeArtifact: 'RuntimeArtifact',
   EntityFieldDefinition: 'EntityFieldDefinition',
   EntityFieldOption: 'EntityFieldOption',
+  EntityFieldLookupDefinition: 'EntityFieldLookupDefinition',
   EntityView: 'EntityView',
   EntityRecord: 'EntityRecord',
   EntityValue: 'EntityValue',

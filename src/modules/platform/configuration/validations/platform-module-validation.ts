@@ -19,9 +19,14 @@ export const platformModuleSchema = z.object({
   route: z.string().max(150, "Route must not exceed 150 characters").optional().nullable(),
   menuVisible: z.boolean().default(true),
   isLicensed: z.boolean().default(true),
+  requiresLicense: z.boolean().default(false),
   showOnDashboard: z.boolean().default(true),
   showInSearch: z.boolean().default(true),
   showInMobile: z.boolean().default(false),
+  color: z.string().optional().nullable(),
+  displayOrder: z.coerce.number().int().default(0),
+  featureFlag: z.string().optional().nullable(),
+  defaultPage: z.string().optional().nullable(),
   moduleDependencies: z.any().optional(),
   metadata: z
     .any()

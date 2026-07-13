@@ -7,9 +7,6 @@ export interface CreateEntityViewDto {
   name: string;
   viewType: ViewType;
   isDefault?: boolean;
-  columns?: any;
-  filters?: any;
-  sorting?: any;
   metadata?: any;
   status?: string;
   createdBy: string;
@@ -54,9 +51,6 @@ export class ViewRepository {
         name: data.name,
         viewType: data.viewType,
         isDefault: data.isDefault ?? false,
-        columns: data.columns ?? [],
-        filters: data.filters ?? [],
-        sorting: data.sorting ?? [],
         metadata: data.metadata ?? {},
         status: data.status ?? "DRAFT",
         createdBy: data.createdBy,

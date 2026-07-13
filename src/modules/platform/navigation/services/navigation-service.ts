@@ -124,11 +124,11 @@ export class NavigationService {
     const groups = await this.repository.getAllGroups();
     const items = await this.repository.getAllItems();
     const modules = await this.moduleRepository.getAll();
-    const moduleMap = new Map(modules.map((m) => [m.id, m]));
+    const moduleMap = new Map<string, any>(modules.map((m: any) => [m.id, m]));
 
     // Map items to parent-child structure
     const itemMap = new Map<string, any>();
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       let title = item.title;
       let route = item.route;
       let icon = item.icon;
@@ -150,7 +150,7 @@ export class NavigationService {
     });
 
     const rootItems: any[] = [];
-    itemMap.forEach((item) => {
+    itemMap.forEach((item: any) => {
       if (item.parentId && itemMap.has(item.parentId)) {
         itemMap.get(item.parentId).children.push(item);
       } else {
@@ -285,10 +285,10 @@ export class NavigationService {
     const modules = await this.moduleRepository.getAll();
 
     const anomalies: any[] = [];
-    const itemMap = new Map(items.map((i) => [i.id, i]));
+    const itemMap = new Map<string, any>(items.map((i: any) => [i.id, i]));
     const routesSet = new Set<string>();
 
-    items.forEach((item) => {
+    items.forEach((item: any) => {
       // 1. Missing Route check for custom ROUTE items
       if (item.menuType === "ROUTE" && !item.route) {
         anomalies.push({

@@ -15,7 +15,6 @@ export interface CreateEntityFieldDto {
   validation?: any;
   dataSource?: string;
   uiControl: string;
-  lookupEntity?: string | null;
   displayOrder?: number;
   status?: string;
   metadata?: any;
@@ -28,6 +27,14 @@ export interface CreateEntityFieldDto {
     icon?: string | null;
     isDefault?: boolean;
   }>;
+  lookupDefinition?: {
+    referencedEntityId: string;
+    displayFieldId?: string | null;
+    valueFieldId?: string | null;
+    searchFieldIds?: string[] | null;
+    filterConditions?: any | null;
+    sortConditions?: any | null;
+  } | null;
 }
 
 export interface UpdateEntityFieldDto extends Partial<Omit<CreateEntityFieldDto, "entityId" | "code" | "createdBy">> {
@@ -38,7 +45,10 @@ export class FieldRepository {
   async getAllByEntityId(entityId: string, tx: any = prisma) {
     return tx.entityFieldDefinition.findMany({
       where: { entityId },
-      include: { options: { orderBy: { displayOrder: "asc" } } },
+      include: { 
+        options: { orderBy: { displayOrder: "asc" } },
+        lookupDefinition: true
+      },
       orderBy: [{ displayOrder: "asc" }, { label: "asc" }],
     });
   }
@@ -46,19 +56,25 @@ export class FieldRepository {
   async getById(id: string, tx: any = prisma) {
     return tx.entityFieldDefinition.findUnique({
       where: { id },
-      include: { options: { orderBy: { displayOrder: "asc" } } },
+      include: { 
+        options: { orderBy: { displayOrder: "asc" } },
+        lookupDefinition: true
+      },
     });
   }
 
   async getByCode(entityId: string, code: string, tx: any = prisma) {
     return tx.entityFieldDefinition.findUnique({
       where: { entityId_code: { entityId, code } },
-      include: { options: { orderBy: { displayOrder: "asc" } } },
+      include: { 
+        options: { orderBy: { displayOrder: "asc" } },
+        lookupDefinition: true
+      },
     });
   }
 
   async create(data: CreateEntityFieldDto, tx: any = prisma) {
-    const { options, ...restData } = data;
+    const { options, lookupDefinition, ...restData } = data;
     return tx.entityFieldDefinition.create({
       data: {
         entityId: restData.entityId,
@@ -75,7 +91,6 @@ export class FieldRepository {
         validation: restData.validation ?? {},
         dataSource: restData.dataSource ?? "STATIC",
         uiControl: restData.uiControl,
-        lookupEntity: restData.lookupEntity,
         displayOrder: restData.displayOrder ?? 0,
         status: restData.status ?? "DRAFT",
         version: 1,
@@ -91,14 +106,33 @@ export class FieldRepository {
             icon: opt.icon,
             isDefault: opt.isDefault ?? false
           }))
+        } : undefined,
+        lookupDefinition: lookupDefinition ? {
+          create: {
+            referencedEntityId: lookupDefinition.referencedEntityId,
+            displayFieldId: lookupDefinition.displayFieldId,
+            valueFieldId: lookupDefinition.valueFieldId,
+            searchFieldIds: lookupDefinition.searchFieldIds ?? undefined,
+            filterConditions: lookupDefinition.filterConditions ?? undefined,
+            sortConditions: lookupDefinition.sortConditions ?? undefined,
+          }
         } : undefined
       },
-      include: { options: true }
+      include: { options: true, lookupDefinition: true }
     });
   }
 
   async update(id: string, data: UpdateEntityFieldDto, tx: any = prisma) {
-    const { updatedBy, options, ...rest } = data;
+    const { updatedBy, options, lookupDefinition, ...rest } = data;
+    
+    const existing = await tx.entityFieldDefinition.findUnique({
+      where: { id },
+      include: { lookupDefinition: true }
+    });
+
+    if (!existing) {
+      throw new Error(`Field not found: ${id}`);
+    }
     
     return tx.entityFieldDefinition.update({
       where: { id },
@@ -110,7 +144,7 @@ export class FieldRepository {
         ...(options !== undefined && {
           options: {
             deleteMany: {},
-            create: options.map(opt => ({
+            create: options.map((opt: any) => ({
               code: opt.code,
               label: opt.label,
               displayOrder: opt.displayOrder ?? 0,
@@ -119,9 +153,33 @@ export class FieldRepository {
               isDefault: opt.isDefault ?? false
             }))
           }
+        }),
+        ...(lookupDefinition !== undefined && {
+          lookupDefinition: lookupDefinition === null ? (existing.lookupDefinition ? {
+            delete: true
+          } : undefined) : {
+            upsert: {
+              create: {
+                referencedEntityId: lookupDefinition.referencedEntityId,
+                displayFieldId: lookupDefinition.displayFieldId,
+                valueFieldId: lookupDefinition.valueFieldId,
+                searchFieldIds: lookupDefinition.searchFieldIds ?? undefined,
+                filterConditions: lookupDefinition.filterConditions ?? undefined,
+                sortConditions: lookupDefinition.sortConditions ?? undefined,
+              },
+              update: {
+                referencedEntityId: lookupDefinition.referencedEntityId,
+                displayFieldId: lookupDefinition.displayFieldId,
+                valueFieldId: lookupDefinition.valueFieldId,
+                searchFieldIds: lookupDefinition.searchFieldIds ?? undefined,
+                filterConditions: lookupDefinition.filterConditions ?? undefined,
+                sortConditions: lookupDefinition.sortConditions ?? undefined,
+              }
+            }
+          }
         })
       },
-      include: { options: true }
+      include: { options: true, lookupDefinition: true }
     });
   }
 

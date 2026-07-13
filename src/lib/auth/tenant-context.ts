@@ -5,7 +5,8 @@
  * See: docs/tenant_context_design.md for design specification.
  */
 
-import { requireAuth, type AuthUser } from './auth-guard'
+import { requireAuth } from './auth-guard'
+import { type CurrentUser } from './auth-types'
 
 /**
  * Tenant context extracted from authenticated request
@@ -13,7 +14,7 @@ import { requireAuth, type AuthUser } from './auth-guard'
 export interface TenantContext {
     tenantId: number
     userId: number
-    user: AuthUser
+    user: CurrentUser
 }
 
 /**

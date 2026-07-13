@@ -187,7 +187,7 @@ export default function EntityDetailsPage() {
           </div>
         </div>
         <div className="flex items-center gap-3">
-          {!isNew && entity?.status !== "PUBLISHED" && (
+          {!isNew && (
             <button
               type="button"
               onClick={() => setPublishDialogOpen(true)}

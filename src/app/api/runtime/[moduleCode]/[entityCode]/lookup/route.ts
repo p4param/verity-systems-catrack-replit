@@ -4,6 +4,8 @@ import { recordService } from "@/modules/platform/runtime/services/record-servic
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
 
+import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
+
 export async function GET(
   req: Request,
   { params }: { params: Promise<{ moduleCode: string; entityCode: string }> }
@@ -12,23 +14,13 @@ export async function GET(
     const { moduleCode, entityCode } = await params;
     const session = requireAuth(req);
 
-    const entity = await prisma.configurationEntity.findFirst({
-      where: {
-        OR: [
-          { code: { equals: entityCode, mode: 'insensitive' } },
-          { id: entityCode }
-        ]
-      },
-    });
+    const artifact = await RuntimeRegistry.getActiveArtifact(moduleCode, entityCode);
 
-    if (!entity || !entity.metadata || typeof entity.metadata !== 'object') {
-      return NextResponse.json({ error: "Entity or manifest not found" }, { status: 404 });
-    }
-
-    const manifest = (entity.metadata as Record<string, any>).runtimeManifest as RuntimeManifest;
-    if (!manifest) {
+    if (!artifact) {
       return NextResponse.json({ error: "Runtime manifest not found." }, { status: 400 });
     }
+
+    const manifest = artifact.payload as unknown as RuntimeManifest;
 
     requirePermission(req, manifest.permissions.view);
 
@@ -36,7 +28,7 @@ export async function GET(
     const q = searchParams.get("q") || "";
     
     // Simplistic search: just get 50 records. 
-    const records = await recordService.getRecords(entity.id, manifest, { skip: 0, take: 50 });
+    const records = await recordService.getRecords(artifact.entityId, manifest, { skip: 0, take: 50 });
 
     // Identify display field. Prefer "name", "title", "code", or first TEXT field.
     let displayFieldCode = "id";

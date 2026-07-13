@@ -214,71 +214,20 @@ export class EntityService {
       throw new Error("Validation failed. Cannot publish.");
     }
 
+    const { publishService } = await import("./publish-service");
     const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    
+    // Delegate to the formal transactional Publish Pipeline
+    const result = await publishService.publishEntity(id, formattedUpdatedBy);
+    
+    await createAuditLog({
+      tenantId,
+      actorUserId,
+      action: "ENTITY_PUBLISH",
+      details: `Published Business Entity: ${entity.code} (${entity.name}) (Artifact v${result.artifactVersion})`,
+    }, prisma);
 
-    return await prisma.$transaction(async (tx) => {
-      const updatedEntity = await this.repository.updateStatus(id, "PUBLISHED", formattedUpdatedBy, tx);
-
-      // 1. Generate and persist runtime manifest
-      const manifest = await manifestGeneratorService.generateManifest(id, tx);
-      const route = manifest.route;
-
-      // 2. Runtime Registration (NavigationItem)
-      if (updatedEntity.showInNavigation) {
-        const existingNav = await tx.navigationItem.findFirst({ where: { entityId: id } });
-        
-        if (existingNav) {
-          await tx.navigationItem.update({
-            where: { id: existingNav.id },
-            data: {
-              title: updatedEntity.name,
-              route,
-              icon: updatedEntity.icon || "box",
-              updatedBy: formattedUpdatedBy
-            }
-          });
-        } else {
-          await tx.navigationItem.create({
-            data: {
-              title: updatedEntity.name,
-              route,
-              icon: updatedEntity.icon || "box",
-              visible: true,
-              entityId: id,
-              createdBy: formattedUpdatedBy,
-              updatedBy: formattedUpdatedBy,
-            }
-          });
-        }
-
-        // Runtime Registration (SearchIndex)
-        const existingSearch = await tx.navigationSearchIndex.findFirst({ where: { route } });
-        if (existingSearch) {
-          await tx.navigationSearchIndex.update({
-            where: { id: existingSearch.id },
-            data: { title: updatedEntity.name, description: updatedEntity.description }
-          });
-        } else {
-          await tx.navigationSearchIndex.create({
-            data: {
-              title: updatedEntity.name,
-              route,
-              description: updatedEntity.description || `Manage ${updatedEntity.pluralName}`,
-              keywords: updatedEntity.code,
-            }
-          });
-        }
-      }
-
-      await createAuditLog({
-        tenantId,
-        actorUserId,
-        action: "ENTITY_PUBLISH",
-        details: `Published Business Entity: ${entity.code} (${entity.name})`,
-      }, tx);
-
-      logger.info(`Entity published successfully: ${id}`, { tenantId, userId: actorUserId, entity: id });
-      return { entity: updatedEntity, validationResult };
-    });
+    logger.info(`Entity published successfully: ${id}`, { tenantId, userId: actorUserId, entity: id });
+    return { entity: { ...entity, status: "PUBLISHED" }, validationResult };
   }
 }

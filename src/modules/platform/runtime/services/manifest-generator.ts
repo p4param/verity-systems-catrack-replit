@@ -6,8 +6,6 @@ export interface RuntimeManifest {
   module: string;
   entity: string;
   route: string;
-  defaultView: string;
-  defaultForm: string;
   permissions: {
     view: string;
     create: string;
@@ -17,7 +15,20 @@ export interface RuntimeManifest {
   numberStrategy: string;
   searchEnabled: boolean;
   fields: any[];
-  views: any[];
+  presentation: {
+    version: string;
+    defaultDataViewId: string;
+    defaultDataViewCode: string;
+    defaultLayoutView: string;
+    dataViews: any[];
+    layoutViews: any[];
+    shared: any;
+  };
+  _artifact?: {
+    version: number;
+    generatedAt: string;
+    generatorVersion: string;
+  };
 }
 
 export class ManifestGeneratorService {
@@ -32,7 +43,10 @@ export class ManifestGeneratorService {
       include: {
         module: true,
         fields: {
-          include: { options: { orderBy: { displayOrder: 'asc' } } },
+          include: { 
+            options: { orderBy: { displayOrder: 'asc' } },
+            lookupDefinition: true
+          },
           orderBy: { displayOrder: 'asc' }
         },
         views: true,
@@ -48,15 +62,13 @@ export class ManifestGeneratorService {
     const route = `/runtime/${moduleCode}/${entityCode}`;
     
     // Find defaults
-    const defaultView = entity.views.find((v: any) => v.isDefault)?.code || entity.views[0]?.code || "GRID";
+    const defaultViewObj = entity.views.find((v: any) => v.isDefault) || entity.views[0] || {};
     
     // Build the manifest object according to architectural guidelines
     const manifest: RuntimeManifest = {
       module: moduleCode,
       entity: entityCode,
       route,
-      defaultView,
-      defaultForm: "MAIN", // Future: support multiple form layouts
       permissions: {
         view: `${entity.code}.View`,
         create: `${entity.code}.Create`,
@@ -66,22 +78,16 @@ export class ManifestGeneratorService {
       numberStrategy: "AUTO",
       searchEnabled: entity.allowAudit, // Or other flag if appropriate
       fields: entity.fields,
-      views: entity.views,
+      presentation: {
+        version: "1.0",
+        defaultDataViewId: defaultViewObj.id || "",
+        defaultDataViewCode: defaultViewObj.code || "GRID",
+        defaultLayoutView: "MAIN", // Placeholder for VS05B
+        dataViews: entity.views.map((v: any) => ({ ...v, category: "DATA" })),
+        layoutViews: [], // Placeholder for VS05B
+        shared: {}, // Placeholder for reusable presentation components
+      },
     };
-
-    // Store in metadata.runtimeManifest
-    const existingMetadata = entity.metadata && typeof entity.metadata === "object" ? entity.metadata : {};
-    
-    await db.configurationEntity.update({
-      where: { id: entityId },
-      data: {
-        route, // Update the actual route column as well
-        metadata: {
-          ...(existingMetadata as Record<string, any>),
-          runtimeManifest: manifest
-        }
-      }
-    });
 
     logger.info(`Generated Runtime Manifest for ${entity.code}`, { entityId, module: moduleCode });
 

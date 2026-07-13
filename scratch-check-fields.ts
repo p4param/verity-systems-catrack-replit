@@ -1,17 +1,21 @@
-import { PrismaClient } from "./src/generated/client";
-
-const prisma = new PrismaClient();
+import { prisma } from './src/lib/prisma';
 
 async function main() {
-  const entity = await prisma.configurationEntity.findFirst({
-    where: { code: 'Vehicle' },
-    include: {
-      fields: true
+  const artifact = await prisma.runtimeArtifact.findFirst({
+    where: {
+      entity: { code: 'status', module: { code: 'reference' } },
+      status: 'ACTIVE'
     }
   });
-
-  console.log("Entity Fields:");
-  console.log(JSON.stringify(entity?.fields, null, 2));
+  
+  if (!artifact) {
+    console.log("No active artifact found for STATUS");
+    return;
+  }
+  
+  const payload = artifact.payload as any;
+  const colorField = payload.fields?.find((f: any) => f.code === 'color' || f.code === 'COLOR');
+  console.log("Color field:", JSON.stringify(colorField, null, 2));
 }
 
 main().catch(console.error).finally(() => prisma.$disconnect());

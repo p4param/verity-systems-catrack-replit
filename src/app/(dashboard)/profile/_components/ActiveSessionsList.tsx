@@ -41,7 +41,7 @@ export function ActiveSessionsList() {
         if (!authLoading) {
             loadSessions();
         }
-    }, [authLoading]); // eslint-disable-line react-hooks/exhaustive-deps
+    }, [authLoading]);  
 
     const handleRevoke = async (sessionId: number) => {
         if (!confirm("Are you sure you want to revoke this session?")) return;

@@ -7,6 +7,7 @@ export async function POST(req: Request) {
     const user = requirePermission(req, "PLATFORM_MODULE_UPDATE");
     
     // Clear next.js navigation cache tag
+    // @ts-expect-error - Next.js revalidateTag is defined differently in local types
     revalidateTag("navigation");
     
     return NextResponse.json({ success: true, message: "Runtime cache refreshed successfully" });

@@ -1,4 +1,4 @@
-import { AuthUser } from "@/lib/auth/auth-guard";
+import { CurrentUser } from "@/lib/auth/auth-types";
 
 export type EventResource = {
   tenantId: string;
@@ -29,7 +29,7 @@ export const EventPermissions = {
 export type EventPermissionType = keyof typeof EventPermissions;
 
 // Row-level security: check if user owns, is assigned, or belongs to the correct branch/city
-export function checkRowLevelSecurity(user: AuthUser, resource: EventResource): boolean {
+export function checkRowLevelSecurity(user: CurrentUser, resource: EventResource): boolean {
   const userUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
   const tenantUuid = "00000000-0000-0000-0000-" + user.tenantId.toString().padStart(12, "0");
 
@@ -56,7 +56,7 @@ export function checkRowLevelSecurity(user: AuthUser, resource: EventResource): 
 }
 
 // Approval authorization limits
-export function checkApprovalAuthority(user: AuthUser, budgetAmount: number): boolean {
+export function checkApprovalAuthority(user: CurrentUser, budgetAmount: number): boolean {
   if (user.roles.includes("ADMIN") || user.roles.includes("CFO")) return true;
 
   const isDirector = user.roles.includes("DIRECTOR");
@@ -74,7 +74,7 @@ export function checkApprovalAuthority(user: AuthUser, budgetAmount: number): bo
 
 // Global checks
 export function authorizeEventAction(
-  user: AuthUser,
+  user: CurrentUser,
   permission: EventPermissionType,
   resource?: EventResource
 ): boolean {

@@ -41,10 +41,28 @@ export function RuntimeInspector({ manifest }: RuntimeInspectorProps) {
             </Button>
           </div>
           
-          <div className="flex-1 overflow-auto p-4 bg-gray-950 text-green-400 text-xs font-mono">
-            <pre className="whitespace-pre-wrap break-all">
-              {JSON.stringify(manifest, null, 2)}
-            </pre>
+          <div className="flex-1 overflow-auto bg-gray-950 text-green-400 text-xs font-mono p-4 space-y-4">
+            <div>
+              <h3 className="text-white mb-2 pb-1 border-b border-gray-800">Diagnostics & Performance</h3>
+              <p>Artifact Version: {manifest._artifact?.version || 'Unknown'}</p>
+              <p>Generator Version: {manifest._artifact?.generatorVersion || 'Unknown'}</p>
+              <p>Generated At: {manifest._artifact?.generatedAt ? new Date(manifest._artifact.generatedAt).toLocaleString() : 'Unknown'}</p>
+              <p>Page Load Time (TTI): {typeof window !== 'undefined' && window.performance.timing ? `${window.performance.timing.domInteractive - window.performance.timing.navigationStart}ms` : 'N/A'}</p>
+              <p>Generated API: `/api/runtime/${manifest.module}/${manifest.entity}`</p>
+            </div>
+            <div>
+              <h3 className="text-white mb-2 pb-1 border-b border-gray-800">Presentation Layer</h3>
+              <p>Default Data View ID: {manifest.presentation?.defaultDataViewId || 'N/A'}</p>
+              <p>Default Data View Code: {manifest.presentation?.defaultDataViewCode || 'N/A'}</p>
+              <p>Total Data Views: {manifest.presentation?.dataViews?.length || 0}</p>
+              <p>Total Layout Views: {manifest.presentation?.layoutViews?.length || 0}</p>
+            </div>
+            <div>
+              <h3 className="text-white mb-2 pb-1 border-b border-gray-800">Artifact Payload</h3>
+              <pre className="whitespace-pre-wrap break-all">
+                {JSON.stringify(manifest, null, 2)}
+              </pre>
+            </div>
           </div>
         </div>
       )}

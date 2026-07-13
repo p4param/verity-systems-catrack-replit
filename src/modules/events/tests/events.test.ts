@@ -5,7 +5,7 @@ import { EventRepository } from "../repositories/event-repository";
 import { EventWorkflowService } from "../services/event-service";
 import { NotificationService } from "../services/communication-service";
 import { checkApprovalAuthority, checkRowLevelSecurity, EventResource } from "../permissions";
-import { AuthUser } from "@/lib/auth/auth-guard";
+import { CurrentUser } from "@/lib/auth/auth-types";
 
 // Mock Data Builder
 export function buildMockEvent(overrides?: any) {
@@ -83,23 +83,63 @@ describe("Event Manager Module Tests", () => {
   });
 
   test("Approval security limits allow regional manager under threshold", () => {
-    const user: AuthUser = {
+    const user = new CurrentUser({
       sub: 1,
       tenantId: 1,
       email: "user@example.com",
       roles: ["DIRECTOR"],
-    };
+      mfaEnabled: false
+    });
     const canApprove = checkApprovalAuthority(user, 35000);
     expect(canApprove).toBe(true);
   });
 
   test("Approval security limits reject regional manager over threshold", () => {
-    const user: AuthUser = {
+    const user = new CurrentUser({
       sub: 1,
       tenantId: 1,
       email: "user@example.com",
       roles: ["EVENT_MANAGER"],
-    };
+      mfaEnabled: false
+    });
     expect(() => checkApprovalAuthority(user, 25000)).toThrow();
+  });
+
+  it("should enforce RLS based on ownership", () => {
+    const user = new CurrentUser({
+      sub: 1,
+      tenantId: 1,
+      email: "creator@test.com",
+      roles: ["User"],
+      mfaEnabled: false,
+    });
+
+    const event = {
+      tenantId: 1,
+      createdById: 1,
+      organizerId: null,
+      status: "DRAFT"
+    } as EventResource;
+
+    expect(checkRowLevelSecurity(user, event)).toBe(true);
+  });
+
+  it("should enforce RLS based on organizer role", () => {
+    const user = new CurrentUser({
+      sub: 2,
+      tenantId: 1,
+      email: "organizer@test.com",
+      roles: ["User"],
+      mfaEnabled: false,
+    });
+
+    const event = {
+      tenantId: 1,
+      createdById: 1,
+      organizerId: 2,
+      status: "DRAFT"
+    } as EventResource;
+
+    expect(checkRowLevelSecurity(user, event)).toBe(true);
   });
 });

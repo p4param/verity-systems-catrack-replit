@@ -1820,8 +1820,28 @@ model ConfigurationEntity {
   permissions      EntityPermission[]
   audits           EntityAudit[]
   navigationItems  NavigationItem[]
+  lookupDefinitionsReferenced EntityFieldLookupDefinition[]
+  artifacts        RuntimeArtifact[]
 
   @@map("configuration_entities")
+}
+
+model RuntimeArtifact {
+  id              String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId        String   @db.Uuid
+  version         Int      @default(1)
+  status          String   @default("ACTIVE") // ACTIVE, INACTIVE, ROLLED_BACK
+  payload         Json     @db.JsonB
+  
+  generatedAt     DateTime @default(now())
+  generatedBy     String?  @db.Uuid
+  generatorVersion String  @default("1.0.0")
+  
+  entity          ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+  
+  @@unique([entityId, version])
+  @@index([entityId, status])
+  @@map("runtime_artifacts")
 }
 
 model EntityFieldDefinition {
@@ -1840,7 +1860,6 @@ model EntityFieldDefinition {
   validation    Json?    @db.JsonB
   dataSource    String   @default("STATIC")
   uiControl     String
-  lookupEntity  String?
   displayOrder  Int      @default(0)
   status        String   @default("DRAFT")
   version       Int      @default(1)
@@ -1855,6 +1874,7 @@ model EntityFieldDefinition {
   values          EntityValue[]
   validationRules ValidationRule[]
   options         EntityFieldOption[]
+  lookupDefinition EntityFieldLookupDefinition?
 
   @@unique([entityId, code])
   @@map("entity_field_definitions")
@@ -1880,6 +1900,25 @@ model EntityFieldOption {
   @@map("entity_field_options")
 }
 
+model EntityFieldLookupDefinition {
+  id                String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  fieldDefinitionId String   @unique @db.Uuid
+  referencedEntityId String   @db.Uuid
+  displayFieldId    String?  @db.Uuid
+  valueFieldId      String?  @db.Uuid
+  searchFieldIds    Json?    @db.JsonB
+  filterConditions  Json?    @db.JsonB
+  sortConditions    Json?    @db.JsonB
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  fieldDefinition   EntityFieldDefinition @relation(fields: [fieldDefinitionId], references: [id], onDelete: Cascade)
+  referencedEntity  ConfigurationEntity   @relation(fields: [referencedEntityId], references: [id])
+
+  @@map("entity_field_lookup_definitions")
+}
+
 enum ViewType {
   GRID
   FORM
@@ -1900,9 +1939,6 @@ model EntityView {
   name        String
   viewType    ViewType @default(GRID)
   isDefault   Boolean  @default(false)
-  columns     Json     @default("[]") @db.JsonB
-  filters     Json     @default("[]") @db.JsonB
-  sorting     Json     @default("[]") @db.JsonB
   status      String   @default("DRAFT")
   version     Int      @default(1)
   metadata    Json     @default("{}") @db.JsonB

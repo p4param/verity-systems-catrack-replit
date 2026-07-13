@@ -132,7 +132,7 @@ export default function PlatformModulesPage() {
     setValue,
     formState: { errors }
   } = useForm<PlatformModuleInput>({
-    resolver: zodResolver(platformModuleSchema),
+    resolver: zodResolver(platformModuleSchema) as any,
     defaultValues: {
       code: "",
       name: "",
@@ -676,7 +676,7 @@ export default function PlatformModulesPage() {
 
   const defaultColDef = useMemo(() => ({
     resizable: true,
-    menuTabs: ["filterMenuTab", "generalMenuTab", "columnsMenuTab"]
+    menuTabs: ["filterMenuTab", "generalMenuTab", "columnsMenuTab"] as any[]
   }), []);
 
   const onSelectionChanged = () => {
@@ -953,7 +953,7 @@ export default function PlatformModulesPage() {
               ))}
             </div>
             
-            <form onSubmit={handleSubmit(onSubmit)} className="flex-1 overflow-y-auto p-6 space-y-4">
+            <form onSubmit={handleSubmit(onSubmit as any)} className="flex-1 overflow-y-auto p-6 space-y-4">
               
               {/* TAB 1: GENERAL */}
               {activeFormTab === "general" && (
@@ -1080,7 +1080,7 @@ export default function PlatformModulesPage() {
                       {...register("moduleDependencies")}
                       className="w-full px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono"
                     />
-                    {errors.moduleDependencies && <p className="text-xs text-destructive mt-1">{errors.moduleDependencies.message}</p>}
+                    {errors.moduleDependencies && <p className="text-xs text-destructive mt-1">{errors.moduleDependencies.message as string}</p>}
                   </div>
                 </div>
               )}
@@ -1180,7 +1180,7 @@ export default function PlatformModulesPage() {
                       {...register("defaultPage")}
                       className="w-full px-3 py-2 border border-border rounded-xl text-sm bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 font-mono"
                     />
-                    {errors.defaultPage && <p className="text-xs text-destructive mt-1">{errors.defaultPage.message}</p>}
+                    {errors.defaultPage && <p className="text-xs text-destructive mt-1">{errors.defaultPage.message as string}</p>}
                   </div>
                 </div>
               )}

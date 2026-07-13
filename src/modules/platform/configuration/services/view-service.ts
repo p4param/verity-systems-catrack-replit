@@ -39,16 +39,49 @@ export class ViewService {
           await this.repository.unsetDefaultForEntity(entityId, tx);
         }
 
+        if (validatedData.metadata) {
+          const m = validatedData.metadata;
+          const colFields = new Set<string>();
+          const sortFields = new Set<string>();
+          const searchFields = new Set<string>();
+          const groupFields = new Set<string>();
+          const displayOrders = new Set<number>();
+
+          if (m.columns) {
+            for (const col of m.columns) {
+              if (colFields.has(col.field)) throw new Error(`Duplicate column field: ${col.field}`);
+              colFields.add(col.field);
+              if (displayOrders.has(col.displayOrder)) throw new Error(`Duplicate display order: ${col.displayOrder}`);
+              displayOrders.add(col.displayOrder);
+            }
+          }
+          if (m.sorting) {
+            for (const sort of m.sorting) {
+              if (sortFields.has(sort.field)) throw new Error(`Duplicate sort field: ${sort.field}`);
+              sortFields.add(sort.field);
+            }
+          }
+          if (m.defaultSearchFields) {
+            for (const sf of m.defaultSearchFields) {
+              if (searchFields.has(sf)) throw new Error(`Duplicate search field: ${sf}`);
+              searchFields.add(sf);
+            }
+          }
+          if (m.grouping) {
+            for (const g of m.grouping) {
+              if (groupFields.has(g.field)) throw new Error(`Duplicate grouping field: ${g.field}`);
+              groupFields.add(g.field);
+            }
+          }
+        }
+
         const view = await this.repository.create({
           entityId,
           code: validatedData.code,
           name: validatedData.name,
           viewType: validatedData.viewType,
           isDefault: validatedData.isDefault,
-          columns: validatedData.columns,
-          filters: validatedData.filters,
-          sorting: validatedData.sorting,
-          metadata: validatedData.metadata,
+          metadata: validatedData.metadata || {},
           status: validatedData.status,
           createdBy: formattedCreatedBy
         }, tx);
@@ -85,8 +118,45 @@ export class ViewService {
           await this.repository.unsetDefaultForEntity(existing.entityId, tx);
         }
 
+        if (validatedData.metadata) {
+          const m = validatedData.metadata;
+          const colFields = new Set<string>();
+          const sortFields = new Set<string>();
+          const searchFields = new Set<string>();
+          const groupFields = new Set<string>();
+          const displayOrders = new Set<number>();
+
+          if (m.columns) {
+            for (const col of m.columns) {
+              if (colFields.has(col.field)) throw new Error(`Duplicate column field: ${col.field}`);
+              colFields.add(col.field);
+              if (displayOrders.has(col.displayOrder)) throw new Error(`Duplicate display order: ${col.displayOrder}`);
+              displayOrders.add(col.displayOrder);
+            }
+          }
+          if (m.sorting) {
+            for (const sort of m.sorting) {
+              if (sortFields.has(sort.field)) throw new Error(`Duplicate sort field: ${sort.field}`);
+              sortFields.add(sort.field);
+            }
+          }
+          if (m.defaultSearchFields) {
+            for (const sf of m.defaultSearchFields) {
+              if (searchFields.has(sf)) throw new Error(`Duplicate search field: ${sf}`);
+              searchFields.add(sf);
+            }
+          }
+          if (m.grouping) {
+            for (const g of m.grouping) {
+              if (groupFields.has(g.field)) throw new Error(`Duplicate grouping field: ${g.field}`);
+              groupFields.add(g.field);
+            }
+          }
+        }
+
         const updated = await this.repository.update(id, {
           ...validatedData,
+          metadata: validatedData.metadata || existing.metadata,
           updatedBy: formattedUpdatedBy
         }, tx);
 

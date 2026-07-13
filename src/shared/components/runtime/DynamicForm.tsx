@@ -16,8 +16,8 @@ interface DynamicFormProps {
   isSaving: boolean;
 }
 
-import { ControlRegistry } from "./registry/UIControlRegistry";
-
+import { ControlRegistry, DiagnosticControl } from "./registry/UIControlRegistry";
+import { FieldControlRegistry } from "@/modules/platform/configuration/registry/field-control-registry";
 export function DynamicForm({ manifest, initialData, onSubmit, isSaving }: DynamicFormProps) {
   const router = useRouter();
 
@@ -62,7 +62,9 @@ export function DynamicForm({ manifest, initialData, onSubmit, isSaving }: Dynam
     }
   }, [initialData, form]);
 
-  const formView = manifest.views.find(v => v.code === manifest.defaultForm || v.viewType === "FORM");
+  // TODO: Switch to layoutViews when ready
+  const dataViews = manifest.presentation?.dataViews || [];
+  const formView = dataViews.find(v => v.code === manifest.presentation?.defaultLayoutView || v.viewType === "FORM");
   const formLayout = formView?.columns ? (Array.isArray(formView.columns) ? formView.columns : JSON.parse(formView.columns as unknown as string)) : null;
 
   const renderFields = formLayout && formLayout.length > 0 
@@ -86,7 +88,11 @@ export function DynamicForm({ manifest, initialData, onSubmit, isSaving }: Dynam
 
             if (isHidden) return null;
 
-            const ControlComponent = ControlRegistry[field.uiControl] || ControlRegistry.DEFAULT;
+            const controlDef = FieldControlRegistry.getControl(field.uiControl);
+            const renderer = controlDef?.runtime?.renderer;
+            const ControlComponent = renderer && ControlRegistry[renderer] 
+              ? ControlRegistry[renderer] 
+              : DiagnosticControl;
 
             return (
               <FormField

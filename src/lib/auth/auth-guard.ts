@@ -1,14 +1,6 @@
 import { verifyJwt } from "./jwt"
 import { NextResponse } from "next/server"
-
-export type AuthUser = {
-    sub: number        // userId
-    tenantId: number
-    email: string
-    roles: string[]
-    permissions?: string[]
-    sid?: number
-}
+import { AuthUser, CurrentUser } from "./auth-types"
 
 /**
  * requireAuth
@@ -21,7 +13,7 @@ export type AuthUser = {
  * Any database access AFTER this point
  * MUST include tenantId explicitly.
  */
-export function requireAuth(req: Request): AuthUser {
+export function requireAuth(req: Request): CurrentUser {
     const authHeader = req.headers.get("authorization")
 
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -30,13 +22,13 @@ export function requireAuth(req: Request): AuthUser {
 
     const token = authHeader.replace("Bearer ", "").trim()
 
-    let user: AuthUser
+    let user: CurrentUser
     try {
         const decoded = verifyJwt<AuthUser>(token)
         if (!decoded) {
             throw new Error("Invalid token")
         }
-        user = decoded
+        user = new CurrentUser(decoded)
     } catch {
         throw NextResponse.json(
             { message: "Invalid or expired token" },
@@ -55,7 +47,7 @@ export function requireAuth(req: Request): AuthUser {
     return user
 }
 
-export function requireRole(req: Request, role: string): AuthUser {
+export function requireRole(req: Request, role: string): CurrentUser {
     const user = requireAuth(req)
 
     if (!user.roles?.includes(role)) {
@@ -65,7 +57,7 @@ export function requireRole(req: Request, role: string): AuthUser {
     return user
 }
 
-export function requirePermission(req: Request, permission: string): AuthUser {
+export function requirePermission(req: Request, permission: string): CurrentUser {
     const user = requireAuth(req)
 
     // Bypass permission check for Admins during development/testing

@@ -5,6 +5,7 @@ import { useFields, useDeleteField } from "@/modules/platform/configuration/hook
 import { Loader2, Plus, Edit, Trash2, ArrowUpDown } from "lucide-react";
 import { FieldDialog } from "./field-dialog";
 import { toast } from "sonner";
+import { MetadataRegistry } from "@/modules/platform/configuration/registry/metadata-registry";
 
 interface FieldsTabProps {
   entityId: string;
@@ -74,6 +75,7 @@ export function FieldsTab({ entityId }: FieldsTabProps) {
               <th className="px-4 py-3 font-semibold">Label</th>
               <th className="px-4 py-3 font-semibold">Type</th>
               <th className="px-4 py-3 font-semibold">UI Control</th>
+              <th className="px-4 py-3 font-semibold">Source</th>
               <th className="px-4 py-3 font-semibold">Flags</th>
               <th className="px-4 py-3 font-semibold text-right">Actions</th>
             </tr>
@@ -81,51 +83,58 @@ export function FieldsTab({ entityId }: FieldsTabProps) {
           <tbody className="divide-y divide-border">
             {fields.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
+                <td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">
                   No fields defined yet.
                 </td>
               </tr>
             ) : (
-              fields.map((field: any) => (
-                <tr key={field.id} className="hover:bg-muted/30">
-                  <td className="px-4 py-3">
-                    <span className="flex items-center gap-1 text-muted-foreground">
-                      <ArrowUpDown size={14} /> {field.displayOrder}
-                    </span>
-                  </td>
-                  <td className="px-4 py-3 font-mono text-xs font-semibold">{field.code}</td>
-                  <td className="px-4 py-3 font-medium">{field.label}</td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">{field.dataType}</td>
-                  <td className="px-4 py-3 text-muted-foreground text-xs">{field.uiControl}</td>
-                  <td className="px-4 py-3">
-                    <div className="flex gap-1 flex-wrap">
-                      {field.required && <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-500 text-[10px] font-bold">REQ</span>}
-                      {field.unique && <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[10px] font-bold">UNIQ</span>}
-                      {field.searchable && <span className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 text-[10px] font-bold">SRCH</span>}
-                    </div>
-                  </td>
-                  <td className="px-4 py-3 text-right">
-                    <div className="flex items-center justify-end gap-2">
-                      <button
-                        type="button"
-                        onClick={() => handleEdit(field)}
-                        className="p-1.5 text-muted-foreground hover:text-primary rounded hover:bg-muted"
-                        title="Edit Field"
-                      >
-                        <Edit size={16} />
-                      </button>
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(field.id, field.code)}
-                        className="p-1.5 text-muted-foreground hover:text-rose-500 rounded hover:bg-rose-500/10"
-                        title="Delete Field"
-                      >
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
-                </tr>
-              ))
+              fields.map((field: any) => {
+                const dataTypeLabel = MetadataRegistry.DataTypes.find(t => t.id === field.dataType)?.name || field.dataType;
+                const uiControlLabel = MetadataRegistry.UIControls.find(c => c.id === field.uiControl)?.name || field.uiControl;
+                const dataSourceLabel = MetadataRegistry.DataSources.find(s => s.id === field.dataSource)?.name || field.dataSource;
+
+                return (
+                  <tr key={field.id} className="hover:bg-muted/30">
+                    <td className="px-4 py-3">
+                      <span className="flex items-center gap-1 text-muted-foreground">
+                        <ArrowUpDown size={14} /> {field.displayOrder}
+                      </span>
+                    </td>
+                    <td className="px-4 py-3 font-mono text-xs font-semibold">{field.code}</td>
+                    <td className="px-4 py-3 font-medium">{field.label}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{dataTypeLabel}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{uiControlLabel}</td>
+                    <td className="px-4 py-3 text-muted-foreground text-xs">{dataSourceLabel}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex gap-1 flex-wrap">
+                        {field.required && <span className="px-1.5 py-0.5 rounded bg-rose-500/10 text-rose-500 text-[10px] font-bold">REQ</span>}
+                        {field.unique && <span className="px-1.5 py-0.5 rounded bg-amber-500/10 text-amber-500 text-[10px] font-bold">UNIQ</span>}
+                        {field.searchable && <span className="px-1.5 py-0.5 rounded bg-blue-500/10 text-blue-500 text-[10px] font-bold">SRCH</span>}
+                      </div>
+                    </td>
+                    <td className="px-4 py-3 text-right">
+                      <div className="flex items-center justify-end gap-2">
+                        <button
+                          type="button"
+                          onClick={() => handleEdit(field)}
+                          className="p-1.5 text-muted-foreground hover:text-primary rounded hover:bg-muted"
+                          title="Edit Field"
+                        >
+                          <Edit size={16} />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => handleDelete(field.id, field.code)}
+                          className="p-1.5 text-muted-foreground hover:text-rose-500 rounded hover:bg-rose-500/10"
+                          title="Delete Field"
+                        >
+                          <Trash2 size={16} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                );
+              })
             )}
           </tbody>
         </table>

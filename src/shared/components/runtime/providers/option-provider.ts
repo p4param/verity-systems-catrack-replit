@@ -20,7 +20,7 @@ export class StaticOptionProvider implements OptionProvider {
     }));
 
     if (query) {
-      results = results.filter(r => r.label.toLowerCase().includes(query.toLowerCase()));
+      results = results.filter((r: any) => r.label.toLowerCase().includes(query.toLowerCase()));
     }
     
     return results;
@@ -29,10 +29,11 @@ export class StaticOptionProvider implements OptionProvider {
 
 export class LookupOptionProvider implements OptionProvider {
   async fetchOptions(field: any, query?: string, fetchWithAuth?: any): Promise<OptionItem[]> {
-    if (!field.lookupEntity) return [];
+    if (!field.lookupDefinition?.referencedEntityId) return [];
     
     try {
-      const url = `/api/runtime/platform/${field.lookupEntity}/lookup${query ? `?q=${encodeURIComponent(query)}` : ''}`;
+      const referencedEntityId = field.lookupDefinition.referencedEntityId;
+      const url = `/api/runtime/platform/${referencedEntityId}/lookup${query ? `?q=${encodeURIComponent(query)}` : ''}`;
       
       let data;
       if (fetchWithAuth) {
@@ -57,11 +58,8 @@ export class LookupOptionProvider implements OptionProvider {
 }
 
 export function getOptionProvider(dataSource: string): OptionProvider {
-  switch (dataSource) {
-    case "LOOKUP":
-      return new LookupOptionProvider();
-    case "STATIC":
-    default:
-      return new StaticOptionProvider();
+  if (dataSource === "LOOKUP" || dataSource === "LOOKUP_ENTITY" || dataSource === "LOOKUP_VIEW") {
+    return new LookupOptionProvider();
   }
+  return new StaticOptionProvider();
 }

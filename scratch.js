@@ -1,16 +1,9 @@
-const { PrismaClient } = require('./src/generated/client');
-const prisma = new PrismaClient();
+const { z } = require('zod');
 
-async function main() {
-  const modules = await prisma.platformModule.findMany();
-  console.log('Total Modules:', modules.length);
-  console.log('Active Modules:', modules.filter(m => m.isActive).length);
-  
-  const groups = await prisma.navigationGroup.findMany();
-  console.log('Visible Groups:', groups.filter(g => g.isVisible).length);
-  
-  const items = await prisma.navigationItem.findMany();
-  console.log('Visible Items:', items.filter(i => i.visible).length);
-}
+const schema = z.object({
+  width: z.number().optional().nullable()
+});
 
-main().then(() => prisma.$disconnect());
+console.log('Test 1 (empty object):', schema.safeParse({}).success);
+console.log('Test 2 (null):', schema.safeParse({ width: null }).success);
+console.log('Test 3 (NaN):', schema.safeParse({ width: NaN }).success);

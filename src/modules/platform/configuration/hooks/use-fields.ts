@@ -1,22 +1,6 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { CreateFieldDto, UpdateFieldDto } from "../validations/field-validation";
-import { FieldCatalogEntry } from "../constants/field-catalog";
 import { useAuth } from "@/lib/auth/auth-context";
-
-export function useFieldCatalog() {
-  const { fetchWithAuth } = useAuth();
-  
-  return useQuery({
-    queryKey: ["platform", "field-catalog"],
-    queryFn: async () => {
-      const res = await fetchWithAuth(`/api/platform/fields/catalog`);
-      if (!res.success) {
-        throw new Error(res.error?.message || "Failed to fetch field catalog");
-      }
-      return res.data as FieldCatalogEntry[];
-    },
-  });
-}
 
 export function useFields(entityId: string) {
   const { fetchWithAuth } = useAuth();

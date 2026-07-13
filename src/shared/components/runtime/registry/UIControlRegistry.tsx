@@ -77,6 +77,7 @@ export function DateControl({ field, value, onChange, disabled }: BaseControlPro
 }
 
 export function SelectControl({ field, value, onChange, disabled }: BaseControlProps) {
+  const { fetchWithAuth } = useAuth();
   const isStatic = !field.dataSource || field.dataSource === "STATIC";
   const initialStaticOptions = isStatic ? (field.options || []).map((opt: any) => ({
     id: opt.code,
@@ -91,11 +92,11 @@ export function SelectControl({ field, value, onChange, disabled }: BaseControlP
     if (isStatic) return;
     
     const provider = getOptionProvider(field.dataSource || "STATIC");
-    provider.fetchOptions(field).then(opts => {
+    provider.fetchOptions(field, "", fetchWithAuth).then(opts => {
       setOptions(opts);
       setLoading(false);
     });
-  }, [field, isStatic]);
+  }, [field, isStatic, fetchWithAuth]);
 
   const selectedLabel = value ? (options.find(o => o.id === value || o.code === value)?.label || value) : "";
 
@@ -227,6 +228,7 @@ export function LookupControl({ field, value, onChange, disabled, recordData }: 
 }
 
 export function MultiSelectControl({ field, value, onChange, disabled }: BaseControlProps) {
+  const { fetchWithAuth } = useAuth();
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<OptionItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -235,11 +237,11 @@ export function MultiSelectControl({ field, value, onChange, disabled }: BaseCon
 
   useEffect(() => {
     const provider = getOptionProvider(field.dataSource || "STATIC");
-    provider.fetchOptions(field).then(opts => {
+    provider.fetchOptions(field, "", fetchWithAuth).then(opts => {
       setOptions(opts);
       setLoading(false);
     });
-  }, [field]);
+  }, [field, fetchWithAuth]);
 
   const handleUnselect = (item: string) => {
     onChange(selectedValues.filter((i) => i !== item));
@@ -262,8 +264,10 @@ export function MultiSelectControl({ field, value, onChange, disabled }: BaseCon
               return (
                 <Badge variant="secondary" key={val} className="mr-1 mb-1">
                   {opt ? opt.label : val}
-                  <button
-                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                  <div
+                    role="button"
+                    tabIndex={0}
+                    className="ml-1 ring-offset-background rounded-full outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 cursor-pointer"
                     onKeyDown={(e) => {
                       if (e.key === "Enter") {
                         handleUnselect(val);
@@ -273,10 +277,14 @@ export function MultiSelectControl({ field, value, onChange, disabled }: BaseCon
                       e.preventDefault();
                       e.stopPropagation();
                     }}
-                    onClick={() => handleUnselect(val)}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      e.stopPropagation();
+                      handleUnselect(val);
+                    }}
                   >
                     <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                  </button>
+                  </div>
                 </Badge>
               );
             })}
@@ -325,16 +333,64 @@ export function MultiSelectControl({ field, value, onChange, disabled }: BaseCon
   );
 }
 
-// The UI Control Registry matches uiControl strings to these React components
+export function DiagnosticControl({ field, value, onChange, disabled }: BaseControlProps) {
+  return (
+    <div className="p-3 border-2 border-dashed border-destructive/50 bg-destructive/10 text-destructive rounded-md flex items-center justify-between text-sm">
+      <div className="flex flex-col">
+        <span className="font-semibold flex items-center gap-2">
+          Renderer Not Implemented
+        </span>
+        <span className="opacity-80">
+          The control <code>{field.uiControl}</code> requires a renderer that is not registered.
+        </span>
+      </div>
+    </div>
+  );
+}
+
+// The UI Control Registry matches runtime.renderer strings to these React components
 export const ControlRegistry: Record<string, React.FC<BaseControlProps>> = {
-  TEXT_INPUT: TextControl,
-  NUMBER_INPUT: NumberControl,
-  DECIMAL_INPUT: NumberControl,
-  SWITCH: BooleanControl,
-  DATE_PICKER: DateControl,
-  SELECT: SelectControl,
-  MULTI_SELECT: MultiSelectControl,
-  LOOKUP: LookupControl,
-  // Add fallback
-  DEFAULT: TextControl,
+  // Text
+  "core.textInput": TextControl,
+  "core.textArea": TextControl, // Placeholder
+  "core.password": TextControl, // Placeholder
+  "core.emailInput": TextControl,
+  "core.phoneInput": TextControl,
+  "core.urlInput": TextControl,
+  "core.richText": TextControl, // Placeholder
+  "core.markdown": TextControl, // Placeholder
+  
+  // Number
+  "core.numberInput": NumberControl,
+  "core.decimalInput": NumberControl,
+  "core.currencyInput": NumberControl,
+  "core.percentage": NumberControl,
+
+  // Date
+  "core.datePicker": DateControl,
+  "core.timePicker": TextControl, // Placeholder
+  "core.dateTimePicker": DateControl,
+  "core.dateRange": TextControl, // Placeholder
+
+  // Selection
+  "core.checkbox": BooleanControl,
+  "core.switch": BooleanControl,
+  "core.toggle": BooleanControl, // Placeholder
+  "core.select": SelectControl,
+  "core.multiSelect": MultiSelectControl,
+  "core.radioGroup": SelectControl, // Placeholder
+  "core.checkboxGroup": MultiSelectControl, // Placeholder
+  "core.tagSelector": MultiSelectControl, // Placeholder
+
+  // Reference
+  "core.lookup": LookupControl,
+  "core.multiLookup": MultiSelectControl, // Placeholder
+
+  // Media (Intentionally omitted to trigger DiagnosticControl until built)
+  // "core.fileUpload": ...
+  // "core.imageUpload": ...
+  // "core.colorPicker": ...
+
+  // Advanced
+  "core.formula": TextControl, // Placeholder
 };

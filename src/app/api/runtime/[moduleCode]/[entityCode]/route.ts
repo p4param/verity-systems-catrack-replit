@@ -3,7 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { recordService } from "@/modules/platform/runtime/services/record-service";
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
-
+import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
 // We have to use Promise resolving for dynamic route params in Next 15+
 export async function GET(
   req: Request,
@@ -13,23 +13,13 @@ export async function GET(
     const { moduleCode, entityCode } = await params;
     const session = requireAuth(req);
 
-    const entity = await prisma.configurationEntity.findFirst({
-      where: {
-        OR: [
-          { code: { equals: entityCode, mode: 'insensitive' } },
-          { route: { equals: `/runtime/${moduleCode}/${entityCode}`, mode: 'insensitive' } }
-        ]
-      },
-    });
+    const artifact = await RuntimeRegistry.getActiveArtifact(moduleCode, entityCode);
 
-    if (!entity || !entity.metadata || typeof entity.metadata !== 'object') {
-      return NextResponse.json({ error: "Entity or manifest not found" }, { status: 404 });
-    }
-
-    const manifest = (entity.metadata as Record<string, any>).runtimeManifest as RuntimeManifest;
-    if (!manifest) {
+    if (!artifact) {
       return NextResponse.json({ error: "Runtime manifest not found. Please publish the entity." }, { status: 400 });
     }
+
+    const manifest = artifact.payload as unknown as RuntimeManifest;
 
     requirePermission(req, manifest.permissions.view);
 
@@ -40,7 +30,7 @@ export async function GET(
     
     // Pass tenant ID context if it exists in session
     // For now, mocking with session.user.id mapping if tenant info isn't available
-    const records = await recordService.getRecords(entity.id, manifest, { skip, take });
+    const records = await recordService.getRecords(artifact.entityId, manifest, { skip, take });
 
     return NextResponse.json(records);
   } catch (error: any) {
@@ -59,23 +49,13 @@ export async function POST(
     const { moduleCode, entityCode } = await params;
     const session = requireAuth(req);
 
-    const entity = await prisma.configurationEntity.findFirst({
-      where: {
-        OR: [
-          { code: { equals: entityCode, mode: 'insensitive' } },
-          { route: { equals: `/runtime/${moduleCode}/${entityCode}`, mode: 'insensitive' } }
-        ]
-      },
-    });
+    const artifact = await RuntimeRegistry.getActiveArtifact(moduleCode, entityCode);
 
-    if (!entity || !entity.metadata || typeof entity.metadata !== 'object') {
-      return NextResponse.json({ error: "Entity or manifest not found" }, { status: 404 });
+    if (!artifact) {
+      return NextResponse.json({ error: "Runtime manifest not found. Please publish the entity." }, { status: 400 });
     }
 
-    const manifest = (entity.metadata as Record<string, any>).runtimeManifest as RuntimeManifest;
-    if (!manifest) {
-      return NextResponse.json({ error: "Runtime manifest not found." }, { status: 400 });
-    }
+    const manifest = artifact.payload as unknown as RuntimeManifest;
 
     requirePermission(req, manifest.permissions.create);
 
@@ -91,7 +71,7 @@ export async function POST(
       actorUserId: session.sub, 
     };
 
-    const record = await recordService.createRecord(entity.id, manifest, body, ctx);
+    const record = await recordService.createRecord(artifact.entityId, manifest, body, ctx);
 
     return NextResponse.json(record, { status: 201 });
   } catch (error: any) {

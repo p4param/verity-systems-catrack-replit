@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { Plus, X, Loader2 } from "lucide-react";
 import { useAuth } from "@/lib/auth/auth-context";
 
@@ -23,13 +23,7 @@ export default function CreatePurchaseModal({ isOpen, onClose, onSuccess }: Crea
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
 
-    useEffect(() => {
-        if (isOpen) {
-            loadFormOptions();
-        }
-    }, [isOpen]);
-
-    const loadFormOptions = async () => {
+    async function loadFormOptions() {
         try {
             const [supps, apps] = await Promise.all([
                 fetchWithAuth("/api/inventory/suppliers?isActive=true"),
@@ -40,7 +34,13 @@ export default function CreatePurchaseModal({ isOpen, onClose, onSuccess }: Crea
         } catch (err) {
             console.error(err);
         }
-    };
+    }
+
+    useEffect(() => {
+        if (isOpen) {
+            loadFormOptions();
+        }
+    }, [isOpen]);
 
     const handleAddItem = () => {
         if (apparels.length > 0) {

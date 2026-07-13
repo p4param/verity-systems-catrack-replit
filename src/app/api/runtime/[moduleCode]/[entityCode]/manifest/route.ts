@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
 
 export async function GET(
   req: Request,
@@ -8,25 +8,23 @@ export async function GET(
   try {
     const { moduleCode, entityCode } = await params;
     
-    const entity = await prisma.configurationEntity.findFirst({
-      where: {
-        OR: [
-          { code: { equals: entityCode, mode: 'insensitive' } },
-          { route: { equals: `/runtime/${moduleCode}/${entityCode}`, mode: 'insensitive' } }
-        ]
-      },
-    });
+    const artifact = await RuntimeRegistry.getActiveArtifact(moduleCode, entityCode);
 
-    if (!entity || !entity.metadata || typeof entity.metadata !== 'object') {
-      return NextResponse.json({ error: "Manifest not found" }, { status: 404 });
+    if (!artifact) {
+      return NextResponse.json({ error: "Runtime Artifact not found. Entity may not be published." }, { status: 404 });
     }
 
-    const manifest = (entity.metadata as Record<string, any>).runtimeManifest;
-    if (!manifest) {
-      return NextResponse.json({ error: "Manifest not found. Entity may not be published." }, { status: 404 });
-    }
+    // Attach artifact diagnostic info to the response
+    const responsePayload = {
+      ...((artifact.payload as any) || {}),
+      _artifact: {
+        version: artifact.version,
+        generatedAt: artifact.generatedAt,
+        generatorVersion: artifact.generatorVersion
+      }
+    };
 
-    return NextResponse.json(manifest);
+    return NextResponse.json(responsePayload);
   } catch (error: any) {
     return NextResponse.json({ error: error.message }, { status: 400 });
   }

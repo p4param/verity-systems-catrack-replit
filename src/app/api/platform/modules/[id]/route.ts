@@ -10,12 +10,12 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
     const user = requirePermission(req, "PLATFORM_MODULE_VIEW");
     const { id } = await params;
 
-    const module = await service.getById(id);
-    if (!module) {
+    const platformModule = await service.getById(id);
+    if (!platformModule) {
       return NextResponse.json({ success: false, error: { message: "Module not found", code: "NOT_FOUND" } }, { status: 404 });
     }
 
-    return NextResponse.json({ success: true, data: module });
+    return NextResponse.json({ success: true, data: platformModule });
   } catch (e) {
     if (e instanceof Response) return e;
     const msg = e instanceof Error ? e.message : "Server error";

@@ -115,37 +115,47 @@ export class RecordService {
 
   async enrichLookupLabels(records: any[], manifest: RuntimeManifest) {
     if (!records || records.length === 0) return records;
-    const lookupFields = manifest.fields.filter(f => f.uiControl === "LOOKUP" && f.lookupEntity);
+    const lookupFields = manifest.fields.filter(f => (f.uiControl === "LOOKUP" || f.dataSource === "LOOKUP" || f.dataSource === "LOOKUP_ENTITY" || f.dataSource === "LOOKUP_VIEW") && f.lookupDefinition?.referencedEntityId);
     if (lookupFields.length === 0) return records;
 
-    const db = prisma;
+    const { RuntimeRegistry } = await import("@/shared/components/runtime/registry/RuntimeRegistry");
+
     for (const field of lookupFields) {
       const referencedIds = [...new Set(records.map(r => r[field.code]).filter(Boolean))];
       if (referencedIds.length === 0) continue;
 
-      const lookupEntity = await db.configurationEntity.findUnique({
-         where: { id: field.lookupEntity! }
-      });
-      if (!lookupEntity || !lookupEntity.metadata) continue;
+      const referencedEntityId = field.lookupDefinition!.referencedEntityId;
       
-      const lookupManifest = (lookupEntity.metadata as any)?.runtimeManifest;
-      if (!lookupManifest) continue;
+      const artifact = await RuntimeRegistry.getActiveArtifact("platform", referencedEntityId);
+      if (!artifact || !artifact.payload) continue;
+      
+      const lookupManifest = artifact.payload as any;
 
       let displayFieldCode = "id";
-      const possibleFields = ["NAME", "TITLE", "CODE", "DESCRIPTION"];
-      for (const f of possibleFields) {
-        if (lookupManifest.fields.find((mf: any) => mf.code === f)) {
-          displayFieldCode = f;
-          break;
-        }
+      if (field.lookupDefinition?.displayFieldId) {
+         // Try to find the actual code for the display field ID
+         const displayField = lookupManifest.fields.find((mf: any) => mf.id === field.lookupDefinition?.displayFieldId);
+         if (displayField) {
+             displayFieldCode = displayField.code;
+         }
       }
+      
       if (displayFieldCode === "id") {
-        const firstTextField = lookupManifest.fields.find((f: any) => f.dataType === "STRING");
-        if (firstTextField) displayFieldCode = firstTextField.code;
+          const possibleFields = ["NAME", "TITLE", "CODE", "DESCRIPTION"];
+          for (const f of possibleFields) {
+            if (lookupManifest.fields.find((mf: any) => mf.code === f)) {
+              displayFieldCode = f;
+              break;
+            }
+          }
+          if (displayFieldCode === "id") {
+            const firstTextField = lookupManifest.fields.find((f: any) => f.dataType === "STRING");
+            if (firstTextField) displayFieldCode = firstTextField.code;
+          }
       }
 
       // Avoid infinite recursion by not calling getRecords, just raw findMany
-      const referencedRecords = await recordRepository.findMany(lookupEntity.id, lookupManifest, { 
+      const referencedRecords = await recordRepository.findMany(referencedEntityId, lookupManifest, { 
         where: { id: { in: referencedIds } } 
       });
 

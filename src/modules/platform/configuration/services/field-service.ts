@@ -1,5 +1,4 @@
 import { FieldRepository } from "../repositories/field-repository";
-import { FIELD_CATALOG } from "../constants/field-catalog";
 import { CreateFieldDto, UpdateFieldDto, createFieldDtoSchema, updateFieldDtoSchema } from "../validations/field-validation";
 import { createAuditLog } from "@/lib/audit";
 import { formatUserIdToUuid } from "@/lib/auth/uuid-helper";
@@ -26,12 +25,6 @@ export class FieldService {
     
     // Validate payload
     const validatedData = createFieldDtoSchema.parse(data);
-    
-    const catalogEntry = FIELD_CATALOG.find((c) => c.type === validatedData.catalogType);
-    if (!catalogEntry) {
-      throw new Error(`Invalid catalogType: ${validatedData.catalogType}`);
-    }
-
     const formattedCreatedBy = formatUserIdToUuid(actorUserId);
 
     try {
@@ -42,23 +35,29 @@ export class FieldService {
           throw new Error(`Field with code ${validatedData.code} already exists on this entity.`);
         }
 
+        const metadata = {
+          ...(validatedData.metadata || {}),
+          validationProfile: validatedData.validationProfile,
+          formatter: validatedData.formatter,
+          behavior: validatedData.behavior
+        };
+
         const field = await this.repository.create({
           entityId,
           code: validatedData.code,
           label: validatedData.label,
-          dataType: catalogEntry.dataType,
-          uiControl: catalogEntry.defaultUIControl,
+          dataType: validatedData.dataType,
+          uiControl: validatedData.uiControl,
           required: validatedData.required,
           unique: validatedData.unique,
           searchable: validatedData.searchable,
           sortable: validatedData.sortable,
           filterable: validatedData.filterable,
           defaultValue: validatedData.defaultValue,
-          validation: validatedData.validation,
-          dataSource: validatedData.dataSource ?? "STATIC",
-          lookupEntity: validatedData.lookupEntity,
+          dataSource: validatedData.dataSource,
+          lookupDefinition: validatedData.lookupDefinition,
           displayOrder: validatedData.displayOrder,
-          metadata: validatedData.metadata,
+          metadata: metadata,
           options: validatedData.options,
           createdBy: formattedCreatedBy
         }, tx);
@@ -90,22 +89,20 @@ export class FieldService {
         const existing = await this.repository.getById(id, tx);
         if (!existing) throw new Error(`Field not found: ${id}`);
 
-        let dataType = existing.dataType;
-        let uiControl = existing.uiControl;
-        if (validatedData.catalogType) {
-          const catalogEntry = FIELD_CATALOG.find((c) => c.type === validatedData.catalogType);
-          if (catalogEntry) {
-            dataType = catalogEntry.dataType;
-            uiControl = catalogEntry.defaultUIControl;
-          }
-        }
-
-        const { catalogType, ...restData } = validatedData;
+        const metadata = {
+          ...(existing.metadata as object || {}),
+          ...(validatedData.metadata || {}),
+          ...(validatedData.validationProfile !== undefined && { validationProfile: validatedData.validationProfile }),
+          ...(validatedData.formatter !== undefined && { formatter: validatedData.formatter }),
+          ...(validatedData.behavior !== undefined && { behavior: validatedData.behavior })
+        };
+        
+        // Remove virtual fields from restData before update
+        const { validationProfile, formatter, behavior, ...restData } = validatedData;
 
         const updated = await this.repository.update(id, {
           ...restData,
-          dataType,
-          uiControl,
+          metadata: metadata,
           updatedBy: formattedUpdatedBy
         }, tx);
 
