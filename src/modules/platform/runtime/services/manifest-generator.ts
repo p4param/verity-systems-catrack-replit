@@ -174,10 +174,10 @@ export class ManifestGeneratorService {
         // System columns always present on physical tables
         const systemColumns: ColumnSpec[] = [
           { name: "id", dataType: "UUID", sqlType: "UUID", required: true, isPrimaryKey: true, isSystem: true },
-          { name: "tenant_id", dataType: "INTEGER", sqlType: "INTEGER", required: true, isPrimaryKey: false, isSystem: true },
+          { name: "tenant_id", dataType: "UUID", sqlType: "UUID", required: true, isPrimaryKey: false, isSystem: true },
           { name: "record_number", dataType: "STRING", sqlType: "VARCHAR(50)", required: false, isPrimaryKey: false, isSystem: true },
           { name: "status", dataType: "STRING", sqlType: "VARCHAR(50)", required: false, isPrimaryKey: false, isSystem: true },
-          { name: "row_version", dataType: "INTEGER", sqlType: "INTEGER", required: false, isPrimaryKey: false, isSystem: true },
+          { name: "row_version", dataType: "BIGINT", sqlType: "BIGINT", required: false, isPrimaryKey: false, isSystem: true },
           { name: "is_deleted", dataType: "BOOLEAN", sqlType: "BOOLEAN", required: true, isPrimaryKey: false, isSystem: true, defaultValue: "false" },
           { name: "deleted_at", dataType: "DATETIME", sqlType: "TIMESTAMP WITH TIME ZONE", required: false, isPrimaryKey: false, isSystem: true },
           { name: "deleted_by", dataType: "UUID", sqlType: "UUID", required: false, isPrimaryKey: false, isSystem: true },
@@ -284,3 +284,4 @@ function mapDataTypeToSql(dataType: string): string {
 }
 
 export const manifestGeneratorService = new ManifestGeneratorService();
+

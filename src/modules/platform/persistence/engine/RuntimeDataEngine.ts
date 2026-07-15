@@ -286,9 +286,10 @@ export class RuntimeDataEngine implements IPlatformEngine {
 
   // ── Query API ──────────────────────────────────────────────────────────────
 
-  async query(manifest: RuntimeManifest, q: PlatformQuery): Promise<RuntimeRecord[]> {
+  async query(manifest: RuntimeManifest, q: PlatformQuery, ctx?: PersistenceExecutionContext): Promise<RuntimeRecord[]> {
+    if (!ctx) throw new Error("Tenant context is required for runtime queries");
     // Cache check (no-op in VS05H — always misses)
-    const cacheKey = `query:${manifest.entityId}:${JSON.stringify(q)}`;
+    const cacheKey = `query:${ctx.tenantId}:${manifest.entityId}:${JSON.stringify(q)}`;
     const cached = await this.cache.get<RuntimeRecord[]>(cacheKey);
     if (cached) {
       this.stats.recordCacheHit();
@@ -296,8 +297,8 @@ export class RuntimeDataEngine implements IPlatformEngine {
     }
     this.stats.recordCacheMiss();
 
-    const repo = this.getRepository(manifest, { tenantId: "system", userId: "system" });
-    const records = await this.withTiming(() => repo.query(manifest, q));
+    const repo = this.getRepository(manifest, ctx);
+    const records = await this.withTiming(() => repo.query(manifest, q, ctx));
 
     return records;
   }
@@ -305,20 +306,24 @@ export class RuntimeDataEngine implements IPlatformEngine {
   async getById(
     manifest: RuntimeManifest,
     id: string,
-    options?: { includeDeleted?: boolean }
+    options: { includeDeleted?: boolean } | undefined,
+    ctx: PersistenceExecutionContext
   ): Promise<RuntimeRecord | null> {
-    const repo = this.getRepository(manifest, { tenantId: "system", userId: "system" });
-    return this.withTiming(() => repo.getById(manifest, id, options));
+    if (!ctx) throw new Error("Tenant context is required for runtime reads");
+    const repo = this.getRepository(manifest, ctx);
+    return this.withTiming(() => repo.getById(manifest, id, options, ctx));
   }
 
-  async count(manifest: RuntimeManifest, q: PlatformQuery): Promise<number> {
-    const repo = this.getRepository(manifest, { tenantId: "system", userId: "system" });
-    return repo.count(manifest, { where: q.where, includeDeleted: q.includeDeleted });
+  async count(manifest: RuntimeManifest, q: PlatformQuery, ctx?: PersistenceExecutionContext): Promise<number> {
+    if (!ctx) throw new Error("Tenant context is required for runtime counts");
+    const repo = this.getRepository(manifest, ctx);
+    return repo.count(manifest, { where: q.where, includeDeleted: q.includeDeleted }, ctx);
   }
 
-  async exists(manifest: RuntimeManifest, id: string): Promise<boolean> {
-    const repo = this.getRepository(manifest, { tenantId: "system", userId: "system" });
-    return repo.exists(manifest, id);
+  async exists(manifest: RuntimeManifest, id: string, ctx?: PersistenceExecutionContext): Promise<boolean> {
+    if (!ctx) throw new Error("Tenant context is required for runtime existence checks");
+    const repo = this.getRepository(manifest, ctx);
+    return repo.exists(manifest, id, ctx);
   }
 
   // ── Bulk Operations ────────────────────────────────────────────────────────
@@ -450,11 +455,13 @@ export class RuntimeDataEngine implements IPlatformEngine {
   async resolveLookupOptions(
     manifest: RuntimeManifest,
     displayColumn: string,
-    searchQuery?: string,
-    take?: number
+    searchQuery: string | undefined,
+    take: number | undefined,
+    ctx: PersistenceExecutionContext
   ): Promise<Array<{ id: string; label: string }>> {
-    const repo = this.getRepository(manifest, { tenantId: "system", userId: "system" });
-    return repo.resolveLookupOptions(manifest, displayColumn, searchQuery, take);
+    if (!ctx) throw new Error("Tenant context is required for lookup resolution");
+    const repo = this.getRepository(manifest, ctx);
+    return repo.resolveLookupOptions(manifest, displayColumn, searchQuery, take, ctx);
   }
 
   // ── Bulk Graph Operations (interface reservation) ─────────────────────────
@@ -487,4 +494,7 @@ export class RuntimeDataEngine implements IPlatformEngine {
     return _roots.map((_, i) => ({ index: i, valid: true, errors: [] }));
   }
 }
+
+
+
 

@@ -41,12 +41,15 @@ export class LogicalSchemaBuilder {
     if (tenantIsolation) {
       columns.push({
         name: "tenant_id",
-        dataType: "INTEGER",
+        dataType: "UUID",
         required: true,
         isPrimaryKey: false,
       });
     }
 
+// Runtime persistence requires these canonical system columns for every physical table.
+    columns.push({ name: "record_number", dataType: "STRING", length: 50, required: false, isPrimaryKey: false });
+    columns.push({ name: "status", dataType: "STRING", length: 50, required: true, defaultValue: "ACTIVE", isPrimaryKey: false });
     // Process fields from metadata
     const fields = entity.fields || [];
     for (const field of fields) {
@@ -255,4 +258,6 @@ export class LogicalSchemaBuilder {
     };
   }
 }
+
+
 

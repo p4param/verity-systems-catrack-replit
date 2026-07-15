@@ -32,7 +32,7 @@ export async function GET(
 
     requirePermission(req, data.manifest.permissions.view);
 
-    const record = await recordService.getRecordById(recordId, data.manifest);
+    const record = await recordService.getRecordById(recordId, data.manifest, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
     if (!record) return NextResponse.json({ error: "Record not found" }, { status: 404 });
 
     return NextResponse.json(record);
@@ -102,3 +102,4 @@ export async function DELETE(
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }
+

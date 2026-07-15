@@ -87,7 +87,7 @@ export class RecordService {
    * VS05Z: tenantId and userId are now real UUID strings. No coercion needed.
    */
   private buildCtx(
-    ctx: TenantContext & { tenantId: string; actorUserId: string },
+    ctx?: TenantContext & { tenantId: string; actorUserId: string },
     tx?: any
   ): PersistenceExecutionContext {
     return {
@@ -103,7 +103,7 @@ export class RecordService {
     entityId: string,
     manifest: RuntimeManifest,
     payload: any,
-    ctx: TenantContext & { tenantId: string; actorUserId: string }
+    ctx?: TenantContext & { tenantId: string; actorUserId: string }
   ) {
     logger.info(`[RecordService] Creating ${manifest.entity}`, { entityId, userId: ctx.actorUserId });
 
@@ -128,7 +128,7 @@ export class RecordService {
     recordId: string,
     manifest: RuntimeManifest,
     payload: any,
-    ctx: TenantContext & { tenantId: string; actorUserId: string }
+    ctx?: TenantContext & { tenantId: string; actorUserId: string }
   ) {
     logger.info(`[RecordService] Updating ${manifest.entity}/${recordId}`, { userId: ctx.actorUserId });
 
@@ -137,7 +137,7 @@ export class RecordService {
 
     // Retrieve current version for optimistic concurrency
     const persCtx = this.buildCtx(ctx);
-    const existing = await runtimeDataEngine.getById(manifest, recordId);
+    const existing = await runtimeDataEngine.getById(manifest, recordId, undefined, persCtx);
     const expectedVersion = existing?.version ?? 1;
 
     const record = await runtimeDataEngine.update(manifest, recordId, parsedPayload, expectedVersion, persCtx);
@@ -155,12 +155,12 @@ export class RecordService {
   async deleteRecord(
     recordId: string,
     manifest: RuntimeManifest,
-    ctx: TenantContext & { tenantId: string; actorUserId: string }
+    ctx?: TenantContext & { tenantId: string; actorUserId: string }
   ) {
     const persCtx = this.buildCtx(ctx);
 
     // Get the record first for the audit log
-    const existing = await runtimeDataEngine.getById(manifest, recordId);
+    const existing = await runtimeDataEngine.getById(manifest, recordId, undefined, persCtx);
     await runtimeDataEngine.delete(manifest, recordId, persCtx);
 
     await createAuditLog({
@@ -175,7 +175,8 @@ export class RecordService {
 
   // ─── Queries ─────────────────────────────────────────────────────────────
 
-  async getRecords(entityId: string, manifest: RuntimeManifest, options: any = {}) {
+  async getRecords(entityId: string, manifest: RuntimeManifest, options: any = {}, ctx?: TenantContext & { tenantId: string; actorUserId: string }) {
+    if (!ctx) throw new Error("Tenant context is required for record queries");
     const q: PlatformQuery = {
       where: options.where ? this.legacyWhereToPlatformFilters(options.where) : undefined,
       skip: options.skip ?? options.offset,
@@ -183,20 +184,25 @@ export class RecordService {
       orderBy: options.orderBy,
       includeDeleted: false,
     };
-    const records = await runtimeDataEngine.query(manifest, q);
-    return await this.enrichLookupLabels(records, manifest);
+    const records = await runtimeDataEngine.query(manifest, q, this.buildCtx(ctx));
+    return await this.enrichLookupLabels(records, manifest, ctx);
   }
 
-  async getRecordById(recordId: string, manifest: RuntimeManifest) {
-    const record = await runtimeDataEngine.getById(manifest, recordId);
+  async getRecordById(
+    recordId: string,
+    manifest: RuntimeManifest,
+    ctx?: TenantContext & { tenantId: string; actorUserId: string }
+  ) {
+    if (!ctx) throw new Error("Tenant context is required for record queries");
+    const record = await runtimeDataEngine.getById(manifest, recordId, undefined, this.buildCtx(ctx));
     if (!record) return null;
-    const enriched = await this.enrichLookupLabels([record], manifest);
+    const enriched = await this.enrichLookupLabels([record], manifest, ctx);
     return enriched[0];
   }
 
   // ─── Lookup Label Enrichment ──────────────────────────────────────────────
 
-  async enrichLookupLabels(records: any[], manifest: RuntimeManifest) {
+  async enrichLookupLabels(records: any[], manifest: RuntimeManifest, ctx?: TenantContext & { tenantId: string; actorUserId: string }) {
     if (!records || records.length === 0) return records;
 
     const lookupFields = manifest.fields.filter(
@@ -247,7 +253,8 @@ export class RecordService {
         lookupManifest,
         displayFieldCode.toLowerCase(),
         undefined,
-        1000
+        1000,
+        this.buildCtx(ctx)
       );
       const labelMap = new Map(options.map((o) => [o.id, o.label]));
 
@@ -281,3 +288,8 @@ export class RecordService {
 }
 
 export const recordService = new RecordService();
+
+
+
+
+

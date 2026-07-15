@@ -28,7 +28,7 @@ export async function GET(
     const q = searchParams.get("q") || "";
     
     // Simplistic search: just get 50 records. 
-    const records = await recordService.getRecords(artifact.entityId, manifest, { skip: 0, take: 50 });
+    const records = await recordService.getRecords(artifact.entityId, manifest, { skip: 0, take: 50 }, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
 
     // Identify display field. Prefer "name", "title", "code", or first TEXT field.
     let displayFieldCode = "id";
@@ -62,3 +62,4 @@ export async function GET(
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }
+

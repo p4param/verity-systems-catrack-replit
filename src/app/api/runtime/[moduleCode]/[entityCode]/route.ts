@@ -30,7 +30,7 @@ export async function GET(
     
     // Pass tenant ID context if it exists in session
     // For now, mocking with session.user.id mapping if tenant info isn't available
-    const records = await recordService.getRecords(artifact.entityId, manifest, { skip, take });
+    const records = await recordService.getRecords(artifact.entityId, manifest, { skip, take }, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
 
     return NextResponse.json(records);
   } catch (error: any) {
@@ -81,3 +81,4 @@ export async function POST(
     return NextResponse.json({ error: error.message }, { status: 400 });
   }
 }
+

@@ -80,11 +80,10 @@ export class SchemaPlatformEngine {
     } catch (err: any) {
       logger.warn(`Could not load previous migration logs, starting fresh: ${err.message}`);
     }
-    
+    // A missing migration record must never be treated as permission to drop an existing table.
+    // For development resets, drop the table explicitly before publishing.
     if (!prevManifest) {
-      const tableName = `${moduleCode.toLowerCase()}_${entityCode.toLowerCase()}`;
-      logger.info(`Orphaned table check: Dropping pre-existing physical table: ${tableName}`);
-      await tx.$executeRawUnsafe(`DROP TABLE IF EXISTS "public"."${tableName}" CASCADE;`);
+      logger.info(`No previous migration manifest for entity ${entityCode}; creating schema only if the table is absent.`);
     }
 
     // 4. Build Current Manifest
@@ -304,4 +303,6 @@ export class SchemaPlatformEngine {
     logger.info(`Database verification check completed successfully for all tables.`);
   }
 }
+
+
 

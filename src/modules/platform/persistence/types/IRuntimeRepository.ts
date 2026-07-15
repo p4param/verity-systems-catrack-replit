@@ -47,22 +47,26 @@ export interface IRuntimeRepository {
   getById(
     manifest: RuntimeManifest,
     id: string,
-    options?: { includeDeleted?: boolean }
+    options: { includeDeleted?: boolean } | undefined,
+    ctx: PersistenceExecutionContext
   ): Promise<RuntimeRecord | null>;
 
   query(
     manifest: RuntimeManifest,
-    q: PlatformQuery
+    q: PlatformQuery,
+    ctx: PersistenceExecutionContext
   ): Promise<RuntimeRecord[]>;
 
   count(
     manifest: RuntimeManifest,
-    q: Pick<PlatformQuery, "where" | "includeDeleted">
+    q: Pick<PlatformQuery, "where" | "includeDeleted">,
+    ctx: PersistenceExecutionContext
   ): Promise<number>;
 
   exists(
     manifest: RuntimeManifest,
-    id: string
+    id: string,
+    ctx: PersistenceExecutionContext
   ): Promise<boolean>;
 
   // ── Bulk Operations ────────────────────────────────────────────────────────
@@ -89,6 +93,9 @@ export interface IRuntimeRepository {
     manifest: RuntimeManifest,
     displayColumn: string,
     searchQuery?: string,
-    take?: number
+    take?: number,
+    ctx?: PersistenceExecutionContext
   ): Promise<Array<{ id: string; label: string }>>;
 }
+
+

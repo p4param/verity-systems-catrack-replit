@@ -47,6 +47,19 @@ export class DynamicTableRepository implements IRuntimeRepository {
   private getPolicy(manifest: RuntimeManifest): PersistencePolicy {
     return manifest.persistence!.model.policy;
   }
+  private withTenantFilter(q: PlatformQuery, tenantId: string): PlatformQuery {
+    return { ...q, where: [...(q.where ?? []), { field: "tenant_id", operator: "eq", value: tenantId }] };
+  }
+
+  private scopeMutation(cmd: { sql: string; params: any[] }, table: PersistenceTable, tenantId: string) {
+    const tenantColumn = table.columns.find((column) => column.name === "tenant_id");
+    if (!tenantColumn) return cmd;
+    const parameter = this.dialect.param(cmd.params.length + 1);
+    return {
+      sql: cmd.sql.replace(/ RETURNING \*$/, ` AND ${this.dialect.identifier(tenantColumn.name)} = ${parameter} RETURNING *`),
+      params: [...cmd.params, tenantId],
+    };
+  }
 
   /**
    * Builds the column value map for INSERT/UPDATE operations.
@@ -128,6 +141,8 @@ export class DynamicTableRepository implements IRuntimeRepository {
     const id = this.dialect.newId();
     valueMap.set("id", id);
     valueMap.set("tenant_id", ctx.tenantId);
+    valueMap.set("record_number", payload.__recordNumber ?? null);
+    valueMap.set("status", payload.__status ?? "ACTIVE");
     valueMap.set("created_by", ctx.userId);
     valueMap.set("updated_by", ctx.userId);
     valueMap.set("is_deleted", false);
@@ -162,7 +177,8 @@ export class DynamicTableRepository implements IRuntimeRepository {
     const valueMap = this.buildValueMap(manifest, payload, table);
     valueMap.set("updated_by", ctx.userId);
 
-    const cmd = SqlBuilder.buildUpdate(table, id, expectedVersion, valueMap, policy, this.dialect);
+    const baseCmd = SqlBuilder.buildUpdate(table, id, expectedVersion, valueMap, policy, this.dialect);
+    const cmd = this.scopeMutation(baseCmd, table, ctx.tenantId);
     const rows = await this.adapter.mutate<Record<string, any>>(cmd);
 
     if (!rows || rows.length === 0) {
@@ -197,8 +213,8 @@ export class DynamicTableRepository implements IRuntimeRepository {
       };
       await this.adapter.execute(cmd);
     } else {
-      const cmd = SqlBuilder.buildSoftDelete(table, id, ctx.userId, policy, this.dialect);
-      await this.adapter.mutate(cmd);
+      const baseCmd = SqlBuilder.buildSoftDelete(table, id, ctx.userId, policy, this.dialect);
+      await this.adapter.mutate(this.scopeMutation(baseCmd, table, ctx.tenantId));
     }
 
     logger.info(`[DynamicTableRepository] Deleted record ${id} from ${table.name}`);
@@ -214,8 +230,8 @@ export class DynamicTableRepository implements IRuntimeRepository {
     const table = this.getPrimaryTable(manifest);
     const policy = this.getPolicy(manifest);
 
-    const cmd = SqlBuilder.buildRestore(table, id, policy, this.dialect);
-    await this.adapter.mutate(cmd);
+    const baseCmd = SqlBuilder.buildRestore(table, id, policy, this.dialect);
+    await this.adapter.mutate(this.scopeMutation(baseCmd, table, ctx.tenantId));
     logger.info(`[DynamicTableRepository] Restored record ${id} in ${table.name}`);
   }
 
@@ -224,12 +240,13 @@ export class DynamicTableRepository implements IRuntimeRepository {
   async getById(
     manifest: RuntimeManifest,
     id: string,
-    options?: { includeDeleted?: boolean }
+    options: { includeDeleted?: boolean } | undefined,
+    ctx: PersistenceExecutionContext
   ): Promise<RuntimeRecord | null> {
     const table = this.getPrimaryTable(manifest);
     const policy = this.getPolicy(manifest);
 
-    const cmd = SqlBuilder.buildSelectById(table, id, options?.includeDeleted ?? false, policy, this.dialect);
+    const cmd = SqlBuilder.buildSelect(table, this.withTenantFilter({ where: [{ field: "id", operator: "eq", value: id }], includeDeleted: options?.includeDeleted }, ctx.tenantId), policy, this.dialect);
     const rows = await this.adapter.query<Record<string, any>>(cmd);
 
     if (!rows || rows.length === 0) return null;
@@ -240,12 +257,13 @@ export class DynamicTableRepository implements IRuntimeRepository {
 
   async query(
     manifest: RuntimeManifest,
-    q: PlatformQuery
+    q: PlatformQuery,
+    ctx: PersistenceExecutionContext
   ): Promise<RuntimeRecord[]> {
     const table = this.getPrimaryTable(manifest);
     const policy = this.getPolicy(manifest);
 
-    const cmd = SqlBuilder.buildSelect(table, q, policy, this.dialect);
+    const cmd = SqlBuilder.buildSelect(table, this.withTenantFilter(q, ctx.tenantId), policy, this.dialect);
     const rows = await this.adapter.query<Record<string, any>>(cmd);
 
     return rows.map(row => this.mapToRuntimeRecord(row, manifest));
@@ -255,23 +273,24 @@ export class DynamicTableRepository implements IRuntimeRepository {
 
   async count(
     manifest: RuntimeManifest,
-    q: Pick<PlatformQuery, "where" | "includeDeleted">
+    q: Pick<PlatformQuery, "where" | "includeDeleted">,
+    ctx: PersistenceExecutionContext
   ): Promise<number> {
     const table = this.getPrimaryTable(manifest);
     const policy = this.getPolicy(manifest);
 
-    const cmd = SqlBuilder.buildCount(table, q, policy, this.dialect);
+    const cmd = SqlBuilder.buildCount(table, this.withTenantFilter(q, ctx.tenantId), policy, this.dialect);
     const rows = await this.adapter.query<{ count: number }>(cmd);
     return rows[0]?.count ?? 0;
   }
 
   // ─── Exists ───────────────────────────────────────────────────────────────
 
-  async exists(manifest: RuntimeManifest, id: string): Promise<boolean> {
+  async exists(manifest: RuntimeManifest, id: string, ctx: PersistenceExecutionContext): Promise<boolean> {
     const table = this.getPrimaryTable(manifest);
-    const cmd = SqlBuilder.buildExists(table, id, this.dialect);
-    const rows = await this.adapter.query<{ exists: boolean }>(cmd);
-    return rows[0]?.exists ?? false;
+    const cmd = SqlBuilder.buildSelect(table, this.withTenantFilter({ select: ["id"], where: [{ field: "id", operator: "eq", value: id }], take: 1 }, ctx.tenantId), this.getPolicy(manifest), this.dialect);
+    const rows = await this.adapter.query<Record<string, any>>(cmd);
+    return rows.length > 0;
   }
 
   // ─── Bulk Insert ──────────────────────────────────────────────────────────
@@ -289,6 +308,8 @@ export class DynamicTableRepository implements IRuntimeRepository {
       const valueMap = this.buildValueMap(manifest, payload, table);
       valueMap.set("id", this.dialect.newId());
       valueMap.set("tenant_id", ctx.tenantId);
+    valueMap.set("record_number", payload.__recordNumber ?? null);
+    valueMap.set("status", payload.__status ?? "ACTIVE");
       valueMap.set("created_by", ctx.userId);
       valueMap.set("updated_by", ctx.userId);
       valueMap.set("is_deleted", false);
@@ -335,8 +356,9 @@ export class DynamicTableRepository implements IRuntimeRepository {
   async resolveLookupOptions(
     manifest: RuntimeManifest,
     displayColumn: string,
-    searchQuery?: string,
-    take?: number
+    searchQuery: string | undefined,
+    take: number | undefined,
+    ctx: PersistenceExecutionContext
   ): Promise<Array<{ id: string; label: string }>> {
     const table = this.getPrimaryTable(manifest);
     const policy = this.getPolicy(manifest);
@@ -351,7 +373,7 @@ export class DynamicTableRepository implements IRuntimeRepository {
       q.where = [{ field: displayColumn, operator: "ilike", value: `%${searchQuery}%` }];
     }
 
-    const cmd = SqlBuilder.buildSelect(table, q, policy, this.dialect);
+    const cmd = SqlBuilder.buildSelect(table, this.withTenantFilter(q, ctx.tenantId), policy, this.dialect);
     const rows = await this.adapter.query<Record<string, any>>(cmd);
 
     return rows.map(row => ({
@@ -360,3 +382,6 @@ export class DynamicTableRepository implements IRuntimeRepository {
     }));
   }
 }
+
+
+
