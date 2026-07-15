@@ -18,7 +18,11 @@ import type { IWorkflowPolicyEngine } from "../contracts/IWorkflowPolicyEngine";
 import type { IRuntimeEffectGraphBuilder } from "../contracts/IRuntimeEffectGraphBuilder";
 import type { IRuntimeEffectPlanner } from "../contracts/IRuntimeEffectPlanner";
 import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
+import type { IExecutionPipeline } from "../contracts/IExecutionPipeline";
+import type { IExecutionDiagnosticsQueryFacade } from "../contracts/IExecutionDiagnostics";
 import type { IWorkflowActionValidator } from "../contracts/IWorkflowActionValidator";
+import type { IWorkflowExecutionOrchestrator } from "../contracts/IWorkflowExecutionOrchestrator";
+import type { IWorkflowExecutorRegistry } from "../contracts/IWorkflowExecutorRegistry";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
@@ -63,7 +67,13 @@ describe("Workflow interfaces and repository", () => {
     const runtimeEffectGraphBuilder: IRuntimeEffectGraphBuilder = foundation.runtimeEffectGraphBuilder;
     const runtimeEffectPlanner: IRuntimeEffectPlanner = foundation.runtimeEffectPlanner;
     const executionPlanBuilder: IExecutionPlanBuilder = foundation.executionPlanBuilder;
+    const executionPipeline: IExecutionPipeline = foundation.executionPipeline;
+    const executionDiagnosticsQueryFacade: IExecutionDiagnosticsQueryFacade =
+      foundation.executionDiagnosticsQueryFacade;
+    const workflowExecutorRegistry: IWorkflowExecutorRegistry = foundation.workflowExecutorRegistry;
     const workflowActionValidator: IWorkflowActionValidator = foundation.workflowActionValidator;
+    const workflowExecutionOrchestrator: IWorkflowExecutionOrchestrator =
+      foundation.workflowExecutionOrchestrator;
 
     expect(engine).toBeDefined();
     expect(repository).toBeDefined();
@@ -87,11 +97,19 @@ describe("Workflow interfaces and repository", () => {
     expect(runtimeEffectGraphBuilder).toBeDefined();
     expect(runtimeEffectPlanner).toBeDefined();
     expect(executionPlanBuilder).toBeDefined();
+    expect(executionPipeline).toBeDefined();
+    expect(executionDiagnosticsQueryFacade).toBeDefined();
+    expect(workflowExecutorRegistry).toBeDefined();
     expect(workflowActionValidator).toBeDefined();
+    expect(workflowExecutionOrchestrator).toBeDefined();
     expect(engine.getParticipantResolutionEngine()).toBe(participantResolutionEngine);
     expect(engine.getActionEngine()).toBe(workflowActionEngine);
     expect(engine.getPolicyEngine()).toBe(workflowPolicyEngine);
     expect(engine.getRuntimeEffectPlanner()).toBe(runtimeEffectPlanner);
+    expect(engine.getExecutionOrchestrator()).toBeDefined();
+    expect(engine.getExecutionPipeline()).toBeDefined();
+    expect(engine.getWorkflowExecutorRegistry()).toBeDefined();
+    expect(engine.getExecutionDiagnosticsQueryFacade()).toBeDefined();
   });
 
   test("repository class is constructible and exposes persistence methods", () => {
