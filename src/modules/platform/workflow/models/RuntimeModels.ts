@@ -1,4 +1,4 @@
-import type { RuntimeContext } from "@/modules/platform/runtime/application";
+import type { RuntimeContext } from "@/modules/platform/runtime/application/models/RuntimeContext";
 import type {
   WorkflowAssignment,
   WorkflowAssignmentRuleSet,

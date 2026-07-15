@@ -11,6 +11,10 @@ import type { IParticipantResolutionEngine } from "./IParticipantResolutionEngin
 import type { IWorkflowActionEngine } from "./IWorkflowActionEngine";
 import type { IWorkflowPolicyEngine } from "./IWorkflowPolicyEngine";
 import type { IRuntimeEffectPlanner } from "./IRuntimeEffectPlanner";
+import type { IWorkflowExecutionOrchestrator } from "./IWorkflowExecutionOrchestrator";
+import type { IExecutionPipeline } from "./IExecutionPipeline";
+import type { IWorkflowExecutorRegistry } from "./IWorkflowExecutorRegistry";
+import type { IExecutionDiagnosticsQueryFacade } from "./IExecutionDiagnostics";
 
 export interface IWorkflowEngine {
   validateMetadata(snapshot: WorkflowMetadataSnapshot): Promise<WorkflowValidationResult>;
@@ -22,4 +26,8 @@ export interface IWorkflowEngine {
   getActionEngine(): IWorkflowActionEngine;
   getPolicyEngine(): IWorkflowPolicyEngine;
   getRuntimeEffectPlanner(): IRuntimeEffectPlanner;
+  getExecutionOrchestrator(): IWorkflowExecutionOrchestrator;
+  getExecutionPipeline(): IExecutionPipeline;
+  getWorkflowExecutorRegistry(): IWorkflowExecutorRegistry;
+  getExecutionDiagnosticsQueryFacade(): IExecutionDiagnosticsQueryFacade;
 }

@@ -53,5 +53,51 @@ export type {
 export type { IRuntimeEffectGraphBuilder } from "./IRuntimeEffectGraphBuilder";
 export type { IRuntimeEffectPlanner } from "./IRuntimeEffectPlanner";
 export type { IExecutionPlanBuilder } from "./IExecutionPlanBuilder";
+export type { IExecutionMapper } from "./IExecutionMapper";
+export type { IExecutionContext } from "./IExecutionContext";
+export type {
+	ExecutionCorrelation,
+	ExecutionCounters,
+	ExecutionErrors,
+	ExecutionMetricSample,
+	ExecutionPerformanceSnapshot,
+	ExecutionSummary,
+	ExecutionTimeline,
+	ExecutionTrace,
+	ExecutionTraceStatus,
+	ExecutionWarnings,
+	ExecutionDiagnosticsSamplingPolicy,
+	IExecutionDiagnosticsCollector,
+	IExecutionDiagnosticsQueryFacade,
+	IExecutionDiagnosticsSerializer,
+	IExecutionDiagnosticsSink,
+	IExecutionMetrics,
+	IExecutionObserver,
+	IExecutionTimeline,
+	IExecutionTrace,
+} from "./IExecutionDiagnostics";
+export type { IExecutionDiagnostics } from "./IExecutionDiagnostics";
+export type { IExecutionObservability } from "./IExecutionObservability";
+export type {
+	ExecutionStageResult,
+	ExecutionResultStatus,
+	IExecutionResult,
+} from "./IExecutionResult";
+export type { IExecutionStage } from "./IExecutionStage";
+export type { IExecutionPipeline } from "./IExecutionPipeline";
+export type { RuntimeOperationRequest } from "./IRuntimeOperationRequest";
+export type { RuntimeOperationResponse } from "./IRuntimeOperationResponse";
 export type { IWorkflowActionValidator } from "./IWorkflowActionValidator";
 export type { IWorkflowPlanExecutor } from "./IWorkflowPlanExecutor";
+export type {
+	IWorkflowExecutionOrchestrator,
+	WorkflowExecutionOrchestrationRequest,
+} from "./IWorkflowExecutionOrchestrator";
+export type {
+	ExecutionCapabilities,
+	ExecutionCapabilityName,
+	IWorkflowExecutor,
+	WorkflowExecutorResult,
+} from "./IWorkflowExecutor";
+export type { IRuntimeApplicationExecutor } from "./IRuntimeApplicationExecutor";
+export type { IWorkflowExecutorRegistry } from "./IWorkflowExecutorRegistry";
