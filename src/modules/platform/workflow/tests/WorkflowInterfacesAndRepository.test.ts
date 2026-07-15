@@ -11,6 +11,14 @@ import type { IStateResolver } from "../contracts/IStateResolver";
 import type { ITransitionResolver } from "../contracts/ITransitionResolver";
 import type { IWorkflowGraphBuilder } from "../contracts/IWorkflowGraphBuilder";
 import type { IWorkflowGraphValidator } from "../contracts/IWorkflowGraphValidator";
+import type { IParticipantResolutionEngine } from "../contracts/IParticipantResolutionEngine";
+import type { IWorkflowActionEngine } from "../contracts/IWorkflowActionEngine";
+import type { IWorkflowActionRegistry } from "../contracts/IWorkflowActionRegistry";
+import type { IWorkflowPolicyEngine } from "../contracts/IWorkflowPolicyEngine";
+import type { IRuntimeEffectGraphBuilder } from "../contracts/IRuntimeEffectGraphBuilder";
+import type { IRuntimeEffectPlanner } from "../contracts/IRuntimeEffectPlanner";
+import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
+import type { IWorkflowActionValidator } from "../contracts/IWorkflowActionValidator";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
@@ -47,6 +55,15 @@ describe("Workflow interfaces and repository", () => {
     const transitionResolver: ITransitionResolver = foundation.transitionResolver;
     const workflowGraphBuilder: IWorkflowGraphBuilder = foundation.workflowGraphBuilder;
     const workflowGraphValidator: IWorkflowGraphValidator = foundation.workflowGraphValidator;
+    const participantResolutionEngine: IParticipantResolutionEngine =
+      foundation.participantResolutionEngine;
+    const workflowActionRegistry: IWorkflowActionRegistry = foundation.workflowActionRegistry;
+    const workflowActionEngine: IWorkflowActionEngine = foundation.workflowActionEngine;
+    const workflowPolicyEngine: IWorkflowPolicyEngine = foundation.workflowPolicyEngine;
+    const runtimeEffectGraphBuilder: IRuntimeEffectGraphBuilder = foundation.runtimeEffectGraphBuilder;
+    const runtimeEffectPlanner: IRuntimeEffectPlanner = foundation.runtimeEffectPlanner;
+    const executionPlanBuilder: IExecutionPlanBuilder = foundation.executionPlanBuilder;
+    const workflowActionValidator: IWorkflowActionValidator = foundation.workflowActionValidator;
 
     expect(engine).toBeDefined();
     expect(repository).toBeDefined();
@@ -63,6 +80,18 @@ describe("Workflow interfaces and repository", () => {
     expect(transitionResolver).toBeDefined();
     expect(workflowGraphBuilder).toBeDefined();
     expect(workflowGraphValidator).toBeDefined();
+    expect(participantResolutionEngine).toBeDefined();
+    expect(workflowActionRegistry).toBeDefined();
+    expect(workflowActionEngine).toBeDefined();
+    expect(workflowPolicyEngine).toBeDefined();
+    expect(runtimeEffectGraphBuilder).toBeDefined();
+    expect(runtimeEffectPlanner).toBeDefined();
+    expect(executionPlanBuilder).toBeDefined();
+    expect(workflowActionValidator).toBeDefined();
+    expect(engine.getParticipantResolutionEngine()).toBe(participantResolutionEngine);
+    expect(engine.getActionEngine()).toBe(workflowActionEngine);
+    expect(engine.getPolicyEngine()).toBe(workflowPolicyEngine);
+    expect(engine.getRuntimeEffectPlanner()).toBe(runtimeEffectPlanner);
   });
 
   test("repository class is constructible and exposes persistence methods", () => {

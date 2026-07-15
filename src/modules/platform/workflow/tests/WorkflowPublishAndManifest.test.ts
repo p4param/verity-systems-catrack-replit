@@ -33,6 +33,10 @@ describe("Workflow publish and manifest", () => {
     expect(manifest.workflowDefinitionId).toBe(snapshot.definition.id);
     expect(manifest.workflowVersionId).toBe(snapshot.version.id);
     expect(manifest.validation.isValid).toBe(true);
+    expect(manifest.actionManifest.transitions.length).toBeGreaterThan(0);
+    expect(manifest.policyManifest.transitions.length).toBeGreaterThanOrEqual(0);
+    expect(manifest.runtimeEffectManifest.transitions.length).toBeGreaterThan(0);
+    expect(manifest.executionManifest.transitions.length).toBeGreaterThan(0);
   });
 
   test("publishes validated workflow snapshot", async () => {

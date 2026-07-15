@@ -81,6 +81,22 @@ describe("Workflow middleware and runtime context integration", () => {
         generatedAt: new Date(),
         generatedBy: snapshot.definition.createdBy,
         runtimeModel,
+        participantManifest: {
+          workflowVersionId: snapshot.version.id,
+          generatedAt: new Date(),
+          providerMap: {},
+          supportedParticipantTypes: [],
+        },
+        assignmentManifest: {
+          workflowVersionId: snapshot.version.id,
+          generatedAt: new Date(),
+          strategies: [],
+        },
+        resolutionManifest: {
+          workflowVersionId: snapshot.version.id,
+          generatedAt: new Date(),
+          assignments: [],
+        },
         validation: {
           isValid: true,
           errors: [],

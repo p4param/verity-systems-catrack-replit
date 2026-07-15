@@ -90,11 +90,15 @@ export function buildWorkflowSnapshot(): WorkflowMetadataSnapshot {
         workflowVersionId: versionId,
         code: "SUBMIT_ACTION",
         name: "Submit Action",
-        actionType: "WorkflowTransition",
+        actionType: "StateChange",
+        payload: {
+          targetStateCode: "SUBMITTED",
+        },
         sequence: 1,
         isEnabled: true,
       },
     ],
+    policies: [],
     assignments: [
       {
         id: assignmentId,
@@ -145,4 +149,94 @@ export function buildWorkflowSnapshot(): WorkflowMetadataSnapshot {
       },
     ],
   };
+}
+
+export function buildWorkflowSnapshotWithPolicyScopes(): WorkflowMetadataSnapshot {
+  const snapshot = buildWorkflowSnapshot();
+  const secondActionId = randomUUID();
+  const secondTransitionId = randomUUID();
+
+  snapshot.states = [
+    ...snapshot.states,
+    {
+      id: randomUUID(),
+      workflowVersionId: snapshot.version.id,
+      code: "APPROVED",
+      name: "Approved",
+      isInitial: false,
+      isTerminal: true,
+      sequence: 3,
+    },
+  ];
+
+  snapshot.actions = [
+    ...snapshot.actions,
+    {
+      id: secondActionId,
+      workflowVersionId: snapshot.version.id,
+      code: "APPROVE_ACTION",
+      name: "Approve Action",
+      actionType: "StateChange",
+      sequence: 2,
+      isEnabled: true,
+      payload: {
+        targetStateCode: "APPROVED",
+      },
+      dependsOnActionCodes: ["SUBMIT_ACTION"],
+    },
+  ];
+
+  snapshot.transitions = [
+    ...snapshot.transitions,
+    {
+      id: secondTransitionId,
+      workflowVersionId: snapshot.version.id,
+      code: "APPROVE",
+      name: "Approve",
+      sourceStateCode: "SUBMITTED",
+      destinationStateCode: "APPROVED",
+      actionCode: "APPROVE_ACTION",
+      priority: 2,
+      sequence: 2,
+      auditFlag: true,
+      rollbackFlag: false,
+    },
+  ];
+
+  snapshot.policies = [
+    {
+      id: randomUUID(),
+      workflowVersionId: snapshot.version.id,
+      code: "WF_RETRY",
+      policyType: "RetryPolicy",
+      scope: "Workflow",
+      priority: 10,
+      isEnabled: true,
+      configuration: { maxAttempts: 3, backoffSeconds: 2 },
+    },
+    {
+      id: randomUUID(),
+      workflowVersionId: snapshot.version.id,
+      code: "SUBMIT_TIMEOUT",
+      policyType: "TimeoutPolicy",
+      scope: "Transition",
+      transitionCode: "SUBMIT",
+      priority: 1,
+      isEnabled: true,
+      configuration: { timeoutSeconds: 120 },
+    },
+    {
+      id: randomUUID(),
+      workflowVersionId: snapshot.version.id,
+      code: "APPROVE_AUDIT",
+      policyType: "AuditPolicy",
+      scope: "Action",
+      actionCode: "APPROVE_ACTION",
+      priority: 3,
+      isEnabled: true,
+      configuration: { auditCode: "APPROVE_AUDIT" },
+    },
+  ];
+
+  return snapshot;
 }
