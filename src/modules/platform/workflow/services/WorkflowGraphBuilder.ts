@@ -7,7 +7,7 @@ import type {
 export class WorkflowGraphBuilder implements IWorkflowGraphBuilder {
   build(snapshot: WorkflowMetadataSnapshot): WorkflowRuntimeGraph {
     const nodes = [...snapshot.states]
-      .sort((a, b) => a.sequence - b.sequence)
+      .sort((a, b) => a.sequence - b.sequence || a.code.localeCompare(b.code))
       .map((state) => ({
         code: state.code,
         name: state.name,
@@ -21,7 +21,10 @@ export class WorkflowGraphBuilder implements IWorkflowGraphBuilder {
         if (a.priority !== b.priority) {
           return a.priority - b.priority;
         }
-        return a.sequence - b.sequence;
+        if (a.sequence !== b.sequence) {
+          return a.sequence - b.sequence;
+        }
+        return a.code.localeCompare(b.code);
       })
       .map((transition) => ({
         code: transition.code,

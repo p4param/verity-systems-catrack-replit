@@ -49,6 +49,7 @@ export class StateMachineEngine implements IStateMachineEngine {
     const issues = this.graphValidator.validate(graph);
     const stateCodes = new Set([
       "WF_MISSING_INITIAL_STATE",
+      "WF_MISSING_TERMINAL_STATE",
       "WF_MULTIPLE_INITIAL_STATES",
       "WF_ORPHAN_STATE",
       "WF_DEAD_END_STATE",
