@@ -10,6 +10,13 @@ export const RuntimeEvents = {
   OperationStarted: "OperationStarted",
   OperationCompleted: "OperationCompleted",
   OperationFailed: "OperationFailed",
+  ExecutionStarted: "ExecutionStarted",
+  ExecutionCompleted: "ExecutionCompleted",
+  ExecutionDeferred: "ExecutionDeferred",
+  ExecutionFailed: "ExecutionFailed",
+  ExecutionCancelled: "ExecutionCancelled",
+  ExecutionStageStarted: "ExecutionStageStarted",
+  ExecutionStageCompleted: "ExecutionStageCompleted",
 } as const;
 
 export type RuntimeEventType = (typeof RuntimeEvents)[keyof typeof RuntimeEvents];

@@ -24,15 +24,27 @@ import type { IWorkflowPolicyEngine } from "../contracts/IWorkflowPolicyEngine";
 import type { IRuntimeEffectGraphBuilder } from "../contracts/IRuntimeEffectGraphBuilder";
 import type { IRuntimeEffectPlanner } from "../contracts/IRuntimeEffectPlanner";
 import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
+import type { IExecutionMapper } from "../contracts/IExecutionMapper";
+import type { IExecutionPipeline } from "../contracts/IExecutionPipeline";
+import type { IExecutionDiagnosticsQueryFacade } from "../contracts/IExecutionDiagnostics";
 import type { IWorkflowActionValidator } from "../contracts/IWorkflowActionValidator";
 import type { IWorkflowPlanExecutor } from "../contracts/IWorkflowPlanExecutor";
+import type { IWorkflowExecutionOrchestrator } from "../contracts/IWorkflowExecutionOrchestrator";
+import type { IWorkflowExecutorRegistry } from "../contracts/IWorkflowExecutorRegistry";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
 import { AssignmentPlanner } from "../services/AssignmentPlanner";
 import { AssignmentStrategyEngine } from "../services/AssignmentStrategyEngine";
 import { ExecutionPlanBuilder } from "../services/ExecutionPlanBuilder";
+import { ExecutionDispatchStage } from "../services/ExecutionDispatchStage";
+import { ExecutionMapper } from "../services/ExecutionMapper";
+import { ExecutionPipeline } from "../services/ExecutionPipeline";
+import { ExecutionPlanningStage } from "../services/ExecutionPlanningStage";
+import { InMemoryExecutionDiagnosticsQueryFacade } from "../services/InMemoryExecutionDiagnosticsQueryFacade";
 import { DeferredWorkflowPlanExecutor } from "../services/DeferredWorkflowPlanExecutor";
+import { DeferredWorkflowExecutor } from "../services/DeferredWorkflowExecutor";
+import { RuntimeApplicationExecutor } from "../services/RuntimeApplicationExecutor";
 import { HierarchyResolver } from "../services/HierarchyResolver";
 import { ParticipantManifestGenerator } from "../services/ParticipantManifestGenerator";
 import { ParticipantRegistry } from "../services/ParticipantRegistry";
@@ -48,6 +60,8 @@ import { TransitionEngine } from "../services/TransitionEngine";
 import { WorkflowActionEngine } from "../services/WorkflowActionEngine";
 import { WorkflowActionRegistry } from "../services/WorkflowActionRegistry";
 import { WorkflowActionValidator } from "../services/WorkflowActionValidator";
+import { WorkflowExecutionOrchestrator } from "../services/WorkflowExecutionOrchestrator";
+import { WorkflowExecutorRegistry } from "../services/WorkflowExecutorRegistry";
 import { WorkflowEngine } from "../services/WorkflowEngine";
 import { WorkflowGraphBuilder } from "../services/WorkflowGraphBuilder";
 import { WorkflowGraphValidator } from "../services/WorkflowGraphValidator";
@@ -109,8 +123,13 @@ export interface WorkflowFoundation {
   runtimeEffectGraphBuilder: IRuntimeEffectGraphBuilder;
   runtimeEffectPlanner: IRuntimeEffectPlanner;
   executionPlanBuilder: IExecutionPlanBuilder;
+  executionMapper: IExecutionMapper;
+  executionPipeline: IExecutionPipeline;
+  executionDiagnosticsQueryFacade: IExecutionDiagnosticsQueryFacade;
+  workflowExecutorRegistry: IWorkflowExecutorRegistry;
   workflowActionValidator: IWorkflowActionValidator;
   workflowPlanExecutor: IWorkflowPlanExecutor;
+  workflowExecutionOrchestrator: IWorkflowExecutionOrchestrator;
 }
 
 export function createWorkflowFoundation(
@@ -151,8 +170,25 @@ export function createWorkflowFoundation(
   const runtimeEffectGraphBuilder = new RuntimeEffectGraphBuilder();
   const runtimeEffectPlanner = new RuntimeEffectPlanner(runtimeEffectGraphBuilder);
   const executionPlanBuilder = new ExecutionPlanBuilder();
+  const executionMapper = new ExecutionMapper();
+  const executionDiagnosticsQueryFacade = new InMemoryExecutionDiagnosticsQueryFacade();
+  const workflowExecutorRegistry = new WorkflowExecutorRegistry();
+  workflowExecutorRegistry.register(new RuntimeApplicationExecutor());
+  workflowExecutorRegistry.register(new DeferredWorkflowExecutor());
+  const executionPipeline = new ExecutionPipeline();
+  executionPipeline.registerStage(new ExecutionPlanningStage());
+  executionPipeline.registerStage(new ExecutionDispatchStage(executionMapper, workflowExecutorRegistry));
   const workflowActionValidator = new WorkflowActionValidator(workflowActionRegistry, policyProviders);
   const workflowPlanExecutor = new DeferredWorkflowPlanExecutor();
+  const workflowExecutionOrchestrator = new WorkflowExecutionOrchestrator(
+    workflowActionEngine,
+    workflowPolicyEngine,
+    runtimeEffectPlanner,
+    executionPlanBuilder,
+    executionPipeline,
+    undefined,
+    executionDiagnosticsQueryFacade
+  );
 
   const stateResolver = new StateResolver();
   const transitionResolver = new TransitionResolver();
@@ -188,7 +224,13 @@ export function createWorkflowFoundation(
     participantResolutionEngine,
     workflowActionEngine,
     workflowPolicyEngine,
-    runtimeEffectPlanner
+    runtimeEffectPlanner,
+    executionPlanBuilder,
+    workflowPlanExecutor,
+    workflowExecutorRegistry,
+    executionPipeline,
+    executionDiagnosticsQueryFacade,
+    workflowExecutionOrchestrator
   );
   const middleware = new WorkflowMiddleware(metadataProvider);
 
@@ -221,7 +263,12 @@ export function createWorkflowFoundation(
     runtimeEffectGraphBuilder,
     runtimeEffectPlanner,
     executionPlanBuilder,
+    executionMapper,
+    executionPipeline,
+    executionDiagnosticsQueryFacade,
+    workflowExecutorRegistry,
     workflowActionValidator,
     workflowPlanExecutor,
+    workflowExecutionOrchestrator,
   };
 }

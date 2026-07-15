@@ -58,6 +58,14 @@ export class AppLogger {
     this.baseLogger.debug(context || {}, msg);
   }
 
+  trace(msg: string, context?: LoggerContext) {
+    this.baseLogger.trace(context || {}, msg);
+  }
+
+  diagnostic(msg: string, context?: LoggerContext) {
+    this.baseLogger.debug(context || {}, msg);
+  }
+
   info(msg: string, context?: LoggerContext) {
     this.baseLogger.info(context || {}, msg);
   }

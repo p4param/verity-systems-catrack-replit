@@ -1,6 +1,6 @@
 import type { IWorkflowMetadataProvider } from "../contracts/IWorkflowMetadataProvider";
 import type { IWorkflowMiddleware } from "../contracts/IWorkflowMiddleware";
-import type { RuntimeMiddlewareState } from "@/modules/platform/runtime/application";
+import type { RuntimeMiddlewareState } from "@/modules/platform/runtime/application/pipeline/RuntimeMiddleware";
 
 export class WorkflowMiddleware implements IWorkflowMiddleware {
   constructor(

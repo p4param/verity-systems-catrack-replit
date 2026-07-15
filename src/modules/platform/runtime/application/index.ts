@@ -8,13 +8,6 @@ import { OperationDispatcher } from "./services/OperationDispatcher";
 import { SynchronousRuntimeEventPublisher } from "./services/SynchronousRuntimeEventPublisher";
 import type { IRuntimeApplicationEngine } from "./contracts/IRuntimeApplicationEngine";
 import { InMemoryRuntimeMetricsCollector } from "./metrics/InMemoryRuntimeMetricsCollector";
-import { createWorkflowFoundation } from "@/modules/platform/workflow";
-import type { IWorkflowEngine } from "@/modules/platform/workflow";
-import type { IParticipantResolutionEngine } from "@/modules/platform/workflow";
-import type { IWorkflowActionEngine } from "@/modules/platform/workflow";
-import type { IWorkflowPolicyEngine } from "@/modules/platform/workflow";
-import type { IRuntimeEffectPlanner } from "@/modules/platform/workflow";
-import type { IWorkflowPlanExecutor } from "@/modules/platform/workflow";
 
 const ADMIN_ROLES = new Set(["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"]);
 
@@ -99,81 +92,12 @@ export const runtimeOperationPipeline = new RuntimeOperationPipeline({
   metricsCollector: runtimeMetricsCollector,
 });
 export const runtimeApplicationEngine = new RuntimeApplicationEngine(runtimeOperationPipeline);
-export const workflowFoundation = createWorkflowFoundation();
-
-runtimeOperationPipeline.registerMiddleware(
-  {
-    id: "workflow-foundation",
-    name: "WorkflowFoundationMiddleware",
-    middleware: async (state, next) => workflowFoundation.workflowMiddleware.execute(state, next),
-    order: 405,
-    priority: 100,
-    enabled: true,
-    dependencies: ["workflow"],
-    policy: "StopOnFailure",
-  }
-);
 
 export class PlatformRuntime {
-  private workflowEngine: IWorkflowEngine | null = null;
-  private participantResolutionEngine: IParticipantResolutionEngine | null = null;
-  private workflowActionEngine: IWorkflowActionEngine | null = null;
-  private workflowPolicyEngine: IWorkflowPolicyEngine | null = null;
-  private runtimeEffectPlanner: IRuntimeEffectPlanner | null = null;
-  private workflowPlanExecutor: IWorkflowPlanExecutor | null = null;
-
   constructor(private readonly applicationEngine: IRuntimeApplicationEngine) {}
 
   getApplicationEngine(): IRuntimeApplicationEngine {
     return this.applicationEngine;
-  }
-
-  getWorkflowEngine(): IWorkflowEngine | null {
-    return this.workflowEngine;
-  }
-
-  registerWorkflowEngine(engine: IWorkflowEngine): void {
-    this.workflowEngine = engine;
-  }
-
-  getParticipantResolutionEngine(): IParticipantResolutionEngine | null {
-    return this.participantResolutionEngine;
-  }
-
-  registerParticipantResolutionEngine(engine: IParticipantResolutionEngine): void {
-    this.participantResolutionEngine = engine;
-  }
-
-  getWorkflowActionEngine(): IWorkflowActionEngine | null {
-    return this.workflowActionEngine;
-  }
-
-  registerWorkflowActionEngine(engine: IWorkflowActionEngine): void {
-    this.workflowActionEngine = engine;
-  }
-
-  getWorkflowPolicyEngine(): IWorkflowPolicyEngine | null {
-    return this.workflowPolicyEngine;
-  }
-
-  registerWorkflowPolicyEngine(engine: IWorkflowPolicyEngine): void {
-    this.workflowPolicyEngine = engine;
-  }
-
-  getRuntimeEffectPlanner(): IRuntimeEffectPlanner | null {
-    return this.runtimeEffectPlanner;
-  }
-
-  registerRuntimeEffectPlanner(planner: IRuntimeEffectPlanner): void {
-    this.runtimeEffectPlanner = planner;
-  }
-
-  getWorkflowPlanExecutor(): IWorkflowPlanExecutor | null {
-    return this.workflowPlanExecutor;
-  }
-
-  registerWorkflowPlanExecutor(executor: IWorkflowPlanExecutor): void {
-    this.workflowPlanExecutor = executor;
   }
 
   getNotificationEngine(): null {
@@ -186,12 +110,6 @@ export class PlatformRuntime {
 }
 
 export const platformRuntime = new PlatformRuntime(runtimeApplicationEngine);
-platformRuntime.registerWorkflowEngine(workflowFoundation.workflowEngine);
-platformRuntime.registerParticipantResolutionEngine(workflowFoundation.participantResolutionEngine);
-platformRuntime.registerWorkflowActionEngine(workflowFoundation.workflowActionEngine);
-platformRuntime.registerWorkflowPolicyEngine(workflowFoundation.workflowPolicyEngine);
-platformRuntime.registerRuntimeEffectPlanner(workflowFoundation.runtimeEffectPlanner);
-platformRuntime.registerWorkflowPlanExecutor(workflowFoundation.workflowPlanExecutor);
 
 export { RuntimeApplicationEngine } from "./RuntimeApplicationEngine";
 

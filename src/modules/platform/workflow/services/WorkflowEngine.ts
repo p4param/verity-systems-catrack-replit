@@ -5,6 +5,13 @@ import type { IParticipantResolutionEngine } from "../contracts/IParticipantReso
 import type { IWorkflowActionEngine } from "../contracts/IWorkflowActionEngine";
 import type { IWorkflowPolicyEngine } from "../contracts/IWorkflowPolicyEngine";
 import type { IRuntimeEffectPlanner } from "../contracts/IRuntimeEffectPlanner";
+import type { IWorkflowExecutionOrchestrator } from "../contracts/IWorkflowExecutionOrchestrator";
+import type { IWorkflowPlanExecutor } from "../contracts/IWorkflowPlanExecutor";
+import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
+import type { IExecutionMapper } from "../contracts/IExecutionMapper";
+import type { IExecutionPipeline } from "../contracts/IExecutionPipeline";
+import type { IWorkflowExecutorRegistry } from "../contracts/IWorkflowExecutorRegistry";
+import type { IExecutionDiagnosticsQueryFacade } from "../contracts/IExecutionDiagnostics";
 import type { IWorkflowPublisher } from "../contracts/IWorkflowPublisher";
 import type { IWorkflowSimulationService } from "../contracts/IWorkflowSimulationService";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
@@ -18,7 +25,18 @@ import { WorkflowActionRegistry } from "./WorkflowActionRegistry";
 import { WorkflowActionEngine } from "./WorkflowActionEngine";
 import { WorkflowPolicyEngine } from "./WorkflowPolicyEngine";
 import { RuntimeEffectPlanner } from "./RuntimeEffectPlanner";
+import { ExecutionMapper } from "./ExecutionMapper";
 import { RuntimeEffectGraphBuilder } from "./RuntimeEffectGraphBuilder";
+import { ExecutionPlanBuilder } from "./ExecutionPlanBuilder";
+import { ExecutionDispatchStage } from "./ExecutionDispatchStage";
+import { ExecutionPipeline } from "./ExecutionPipeline";
+import { ExecutionPlanningStage } from "./ExecutionPlanningStage";
+import { DeferredWorkflowPlanExecutor } from "./DeferredWorkflowPlanExecutor";
+import { DeferredWorkflowExecutor } from "./DeferredWorkflowExecutor";
+import { RuntimeApplicationExecutor } from "./RuntimeApplicationExecutor";
+import { WorkflowExecutionOrchestrator } from "./WorkflowExecutionOrchestrator";
+import { WorkflowExecutorRegistry } from "./WorkflowExecutorRegistry";
+import { InMemoryExecutionDiagnosticsQueryFacade } from "./InMemoryExecutionDiagnosticsQueryFacade";
 import { UserParticipantProvider } from "./participant-providers/UserParticipantProvider";
 import {
   ApiActionProvider,
@@ -72,6 +90,32 @@ export class WorkflowEngine implements IWorkflowEngine {
     ]),
     private readonly runtimeEffectPlanner: IRuntimeEffectPlanner = new RuntimeEffectPlanner(
       new RuntimeEffectGraphBuilder()
+    ),
+    private readonly executionPlanBuilder: IExecutionPlanBuilder = new ExecutionPlanBuilder(),
+    private readonly executionMapper: IExecutionMapper = new ExecutionMapper(),
+    private readonly planExecutor: IWorkflowPlanExecutor = new DeferredWorkflowPlanExecutor(),
+    private readonly workflowExecutorRegistry: IWorkflowExecutorRegistry = (() => {
+      const registry = new WorkflowExecutorRegistry();
+      registry.register(new RuntimeApplicationExecutor());
+      registry.register(new DeferredWorkflowExecutor());
+      return registry;
+    })(),
+    private readonly executionPipeline: IExecutionPipeline = (() => {
+      const pipeline = new ExecutionPipeline();
+      pipeline.registerStage(new ExecutionPlanningStage());
+      pipeline.registerStage(new ExecutionDispatchStage(executionMapper, workflowExecutorRegistry));
+      return pipeline;
+    })(),
+    private readonly executionDiagnosticsQueryFacade: IExecutionDiagnosticsQueryFacade =
+      new InMemoryExecutionDiagnosticsQueryFacade(),
+    private readonly executionOrchestrator: IWorkflowExecutionOrchestrator = new WorkflowExecutionOrchestrator(
+      actionEngine,
+      policyEngine,
+      runtimeEffectPlanner,
+      executionPlanBuilder,
+      executionPipeline,
+      undefined,
+      executionDiagnosticsQueryFacade
     )
   ) {}
 
@@ -109,5 +153,21 @@ export class WorkflowEngine implements IWorkflowEngine {
 
   getRuntimeEffectPlanner(): IRuntimeEffectPlanner {
     return this.runtimeEffectPlanner;
+  }
+
+  getExecutionOrchestrator(): IWorkflowExecutionOrchestrator {
+    return this.executionOrchestrator;
+  }
+
+  getExecutionPipeline(): IExecutionPipeline {
+    return this.executionPipeline;
+  }
+
+  getWorkflowExecutorRegistry(): IWorkflowExecutorRegistry {
+    return this.workflowExecutorRegistry;
+  }
+
+  getExecutionDiagnosticsQueryFacade(): IExecutionDiagnosticsQueryFacade {
+    return this.executionDiagnosticsQueryFacade;
   }
 }

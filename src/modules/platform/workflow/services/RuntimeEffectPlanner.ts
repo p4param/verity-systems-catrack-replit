@@ -65,6 +65,9 @@ export class RuntimeEffectPlanner implements IRuntimeEffectPlanner {
 
     for (const action of actionPlan.actions) {
       const policyMetadata = this.resolvePolicyMetadata(action.actionCode, action.policyMetadata, policyPlan);
+      const payload = action.payload ?? {};
+      const runtimeOperation =
+        typeof payload.runtimeOperation === "string" ? payload.runtimeOperation : undefined;
       effects.push({
         effectCode: effectCodeFor(transition.code, action.actionCode),
         effectType: action.actionType,
@@ -76,6 +79,8 @@ export class RuntimeEffectPlanner implements IRuntimeEffectPlanner {
         metadata: {
           workflowVersionId: snapshot.version.id,
           providerKey: action.providerKey,
+          ...(runtimeOperation ? { runtimeOperation } : {}),
+          payload,
         },
       });
     }
