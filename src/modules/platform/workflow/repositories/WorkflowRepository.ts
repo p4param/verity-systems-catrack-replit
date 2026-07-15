@@ -575,19 +575,34 @@ export class WorkflowRepository implements IWorkflowRepository {
   }
 
   async saveManifest(manifest: WorkflowManifest): Promise<void> {
+    const runtimeModelPayload = {
+      ...manifest.runtimeModel,
+      actionManifest: manifest.actionManifest,
+      policyManifest: manifest.policyManifest,
+      runtimeEffectManifest: manifest.runtimeEffectManifest,
+      executionManifest: manifest.executionManifest,
+    };
+
     await prisma.$executeRaw`
       INSERT INTO workflow_manifests (
         id, workflow_definition_id, workflow_version_id,
-        generated_at, generated_by, runtime_model_json, validation_json, designer_snapshot_json
+        generated_at, generated_by, runtime_model_json, validation_json,
+        participant_manifest_json, assignment_manifest_json, resolution_manifest_json,
+        designer_snapshot_json
       ) VALUES (
         ${manifest.id}, ${manifest.workflowDefinitionId}, ${manifest.workflowVersionId},
-        ${manifest.generatedAt}, ${manifest.generatedBy}, ${serialize(manifest.runtimeModel)},
-        ${serialize(manifest.validation)}, ${serialize(manifest.designerSnapshot)}
+        ${manifest.generatedAt}, ${manifest.generatedBy}, ${serialize(runtimeModelPayload)},
+        ${serialize(manifest.validation)}, ${serialize(manifest.participantManifest)},
+        ${serialize(manifest.assignmentManifest)}, ${serialize(manifest.resolutionManifest)},
+        ${serialize(manifest.designerSnapshot)}
       )
       ON CONFLICT (id) DO UPDATE SET
         generated_at = EXCLUDED.generated_at,
         generated_by = EXCLUDED.generated_by,
         runtime_model_json = EXCLUDED.runtime_model_json,
+        participant_manifest_json = EXCLUDED.participant_manifest_json,
+        assignment_manifest_json = EXCLUDED.assignment_manifest_json,
+        resolution_manifest_json = EXCLUDED.resolution_manifest_json,
         designer_snapshot_json = EXCLUDED.designer_snapshot_json,
         validation_json = EXCLUDED.validation_json
     `;
@@ -607,14 +622,52 @@ export class WorkflowRepository implements IWorkflowRepository {
     }
 
     const row = rows[0];
+    const runtimeModel = parseJson(row.runtime_model_json ?? row.snapshot_json, null);
+
     return {
       id: row.id,
       workflowDefinitionId: row.workflow_definition_id,
       workflowVersionId: row.workflow_version_id,
       generatedAt: row.generated_at,
       generatedBy: row.generated_by,
-      runtimeModel: parseJson(row.runtime_model_json ?? row.snapshot_json, null),
+      runtimeModel,
       validation: parseJson(row.validation_json, null),
+      participantManifest: parseJson(row.participant_manifest_json, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        providerMap: {},
+        supportedParticipantTypes: [],
+      }),
+      assignmentManifest: parseJson(row.assignment_manifest_json, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        strategies: [],
+      }),
+      resolutionManifest: parseJson(row.resolution_manifest_json, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        assignments: [],
+      }),
+      actionManifest: parseJson(runtimeModel?.actionManifest, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        transitions: [],
+      }),
+      policyManifest: parseJson(runtimeModel?.policyManifest, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        transitions: [],
+      }),
+      runtimeEffectManifest: parseJson(runtimeModel?.runtimeEffectManifest, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        transitions: [],
+      }),
+      executionManifest: parseJson(runtimeModel?.executionManifest, {
+        workflowVersionId,
+        generatedAt: row.generated_at,
+        transitions: [],
+      }),
       designerSnapshot: parseJson(row.designer_snapshot_json, undefined),
     } as WorkflowManifest;
   }

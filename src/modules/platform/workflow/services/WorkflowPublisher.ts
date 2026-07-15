@@ -1,4 +1,6 @@
 import type { IWorkflowManifestGenerator } from "../contracts/IWorkflowManifestGenerator";
+import type { IParticipantValidator } from "../contracts/IParticipantValidator";
+import type { IWorkflowActionValidator } from "../contracts/IWorkflowActionValidator";
 import type { IWorkflowPublisher } from "../contracts/IWorkflowPublisher";
 import type { IWorkflowRepository } from "../contracts/IWorkflowRepository";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
@@ -18,13 +20,37 @@ export class WorkflowPublisher implements IWorkflowPublisher {
     private readonly validator: IWorkflowValidator,
     private readonly manifestGenerator: IWorkflowManifestGenerator,
     private readonly normalizer: IWorkflowMetadataNormalizer = new WorkflowMetadataNormalizer(),
-    private readonly optimizer: IWorkflowMetadataOptimizer = new WorkflowMetadataOptimizer()
+    private readonly optimizer: IWorkflowMetadataOptimizer = new WorkflowMetadataOptimizer(),
+    private readonly participantValidator: IParticipantValidator | null = null,
+    private readonly actionValidator: IWorkflowActionValidator | null = null
   ) {}
 
   async publish(snapshot: WorkflowMetadataSnapshot, actorUserId: string): Promise<WorkflowPublishResult> {
     const normalizedSnapshot = await this.normalizer.normalize(snapshot);
     const optimizedSnapshot = await this.optimizer.optimize(normalizedSnapshot);
     const validation = await this.validator.validate(optimizedSnapshot);
+    const participantIssues = this.participantValidator
+      ? await this.participantValidator.validate(optimizedSnapshot)
+      : [];
+    const actionIssues = this.actionValidator
+      ? await this.actionValidator.validateSnapshot(optimizedSnapshot)
+      : [];
+    for (const issue of participantIssues) {
+      if (issue.severity === "Error") {
+        validation.errors.push(issue);
+        validation.isValid = false;
+      } else {
+        validation.warnings.push(issue);
+      }
+    }
+    for (const issue of actionIssues) {
+      if (issue.severity === "Error") {
+        validation.errors.push(issue);
+        validation.isValid = false;
+      } else {
+        validation.warnings.push(issue);
+      }
+    }
 
     const duplicateVersionIssue = await this.validateDuplicateVersion(optimizedSnapshot);
     const statusIssue = this.validatePublishableStatus(optimizedSnapshot);
