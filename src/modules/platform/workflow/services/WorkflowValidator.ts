@@ -14,6 +14,9 @@ export class WorkflowValidator implements IWorkflowValidator {
 
     this.validateStateCodes(snapshot, issues);
     this.validateInitialState(snapshot, issues);
+    this.validateTerminalState(snapshot, issues);
+    this.validateTransitionCodes(snapshot, issues);
+    this.validateVariables(snapshot, issues);
     this.validateOrphanTransitions(snapshot, issues);
     this.validateCircularTransitions(snapshot, issues);
     this.validateActions(snapshot, issues);
@@ -27,7 +30,7 @@ export class WorkflowValidator implements IWorkflowValidator {
       isValid: errors.length === 0,
       errors,
       warnings,
-      validatedAt: new Date(),
+      validatedAt: snapshot.version.updatedAt ?? snapshot.version.createdAt,
     };
   }
 
@@ -63,6 +66,48 @@ export class WorkflowValidator implements IWorkflowValidator {
         message: "Workflow contains multiple initial states.",
         severity: "Error",
       });
+    }
+  }
+
+  private validateTerminalState(snapshot: WorkflowMetadataSnapshot, issues: WorkflowValidationIssue[]): void {
+    if (!snapshot.states.some((state) => state.isTerminal)) {
+      issues.push({
+        code: "WF_MISSING_TERMINAL_STATE",
+        message: "Workflow must contain at least one terminal state.",
+        severity: "Error",
+      });
+    }
+  }
+
+  private validateTransitionCodes(snapshot: WorkflowMetadataSnapshot, issues: WorkflowValidationIssue[]): void {
+    const seen = new Set<string>();
+    for (const transition of snapshot.transitions) {
+      const key = transition.code.toUpperCase();
+      if (seen.has(key)) {
+        issues.push({
+          code: "WF_DUPLICATE_TRANSITION_CODE",
+          message: `Duplicate transition code detected: ${transition.code}`,
+          severity: "Error",
+          path: `transitions.${transition.code}`,
+        });
+      }
+      seen.add(key);
+    }
+  }
+
+  private validateVariables(snapshot: WorkflowMetadataSnapshot, issues: WorkflowValidationIssue[]): void {
+    const seen = new Set<string>();
+    for (const variable of snapshot.variables) {
+      const key = variable.code.toUpperCase();
+      if (seen.has(key)) {
+        issues.push({
+          code: "WF_DUPLICATE_VARIABLE",
+          message: `Duplicate variable code detected: ${variable.code}`,
+          severity: "Error",
+          path: `variables.${variable.code}`,
+        });
+      }
+      seen.add(key);
     }
   }
 

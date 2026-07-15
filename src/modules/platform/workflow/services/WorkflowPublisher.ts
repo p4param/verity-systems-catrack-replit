@@ -10,9 +10,32 @@ import { WorkflowMetadataOptimizer } from "./WorkflowMetadataOptimizer";
 import type { IWorkflowMetadataOptimizer } from "./WorkflowMetadataOptimizer";
 import type {
   WorkflowMetadataSnapshot,
+  WorkflowManifest,
   WorkflowPublishResult,
   WorkflowValidationIssue,
 } from "../models/WorkflowModels";
+
+function stableStringify(value: unknown): string {
+  if (value === null || value === undefined) {
+    return "null";
+  }
+
+  if (value instanceof Date) {
+    return JSON.stringify(value.toISOString());
+  }
+
+  if (typeof value === "string" || typeof value === "number" || typeof value === "boolean") {
+    return JSON.stringify(value);
+  }
+
+  if (Array.isArray(value)) {
+    return `[${value.map((item) => stableStringify(item)).join(",")}]`;
+  }
+
+  const record = value as Record<string, unknown>;
+  const keys = Object.keys(record).sort((left, right) => left.localeCompare(right));
+  return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(record[key])}`).join(",")}}`;
+}
 
 export class WorkflowPublisher implements IWorkflowPublisher {
   constructor(
@@ -64,6 +87,14 @@ export class WorkflowPublisher implements IWorkflowPublisher {
       validation.isValid = false;
     }
 
+    const existingManifest = await this.repository.getManifest(optimizedSnapshot.version.id);
+    const immutabilityIssue = this.validatePublishedVersionImmutability(optimizedSnapshot, existingManifest);
+
+    if (immutabilityIssue) {
+      validation.errors.push(immutabilityIssue);
+      validation.isValid = false;
+    }
+
     await this.repository.saveValidationReport(optimizedSnapshot.version.id, validation, actorUserId);
 
     if (!validation.isValid) {
@@ -77,14 +108,28 @@ export class WorkflowPublisher implements IWorkflowPublisher {
       };
     }
 
+    if (existingManifest && this.matchesPublishedSnapshot(optimizedSnapshot, existingManifest)) {
+      return {
+        success: true,
+        workflowDefinitionId: existingManifest.workflowDefinitionId,
+        workflowVersionId: existingManifest.workflowVersionId,
+        manifestId: existingManifest.id,
+        validation,
+        messages: ["Workflow was already published with identical metadata."],
+        publishedAt: existingManifest.generatedAt,
+      };
+    }
+
+    const publishTimestamp = optimizedSnapshot.version.publishedAt ?? validation.validatedAt;
+
     const publishSnapshot: WorkflowMetadataSnapshot = {
       ...optimizedSnapshot,
       version: {
         ...optimizedSnapshot.version,
         status: "Published",
-        publishedAt: new Date(),
+        publishedAt: publishTimestamp,
         publishedBy: actorUserId,
-        updatedAt: new Date(),
+        updatedAt: publishTimestamp,
         updatedBy: actorUserId,
       },
     };
@@ -140,5 +185,36 @@ export class WorkflowPublisher implements IWorkflowPublisher {
     }
 
     return null;
+  }
+
+  private validatePublishedVersionImmutability(
+    snapshot: WorkflowMetadataSnapshot,
+    existingManifest: WorkflowManifest | null
+  ): WorkflowValidationIssue | null {
+    if (!existingManifest) {
+      return null;
+    }
+
+    if (this.matchesPublishedSnapshot(snapshot, existingManifest)) {
+      return null;
+    }
+
+    return {
+      code: "WF_PUBLISHED_VERSION_IMMUTABLE",
+      message: `Workflow version ${snapshot.version.id} is already published and cannot be republished with different metadata.`,
+      severity: "Error",
+      path: `version.${snapshot.version.id}`,
+    };
+  }
+
+  private matchesPublishedSnapshot(
+    snapshot: WorkflowMetadataSnapshot,
+    existingManifest: WorkflowManifest
+  ): boolean {
+    if (!existingManifest.designerSnapshot) {
+      return false;
+    }
+
+    return stableStringify(existingManifest.designerSnapshot) === stableStringify(snapshot);
   }
 }

@@ -1,4 +1,3 @@
-import { randomUUID } from "crypto";
 import { StateMachineEngine } from "../services/StateMachineEngine";
 import { ParticipantManifestGenerator } from "./ParticipantManifestGenerator";
 import { WorkflowActionRegistry } from "./WorkflowActionRegistry";
@@ -59,6 +58,7 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
     validation: WorkflowValidationResult,
     actorUserId: string
   ): Promise<WorkflowManifest> {
+    const generatedAt = snapshot.version.publishedAt ?? validation.validatedAt ?? snapshot.version.updatedAt;
     const runtimeModel = await this.stateMachineEngine.buildRuntimeModel(snapshot);
     const participantManifest = await this.participantManifestGenerator.generateParticipantManifest(snapshot);
     const assignmentManifest = await this.participantManifestGenerator.generateAssignmentManifest(snapshot);
@@ -115,7 +115,7 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
 
     const actionManifest: WorkflowManifest["actionManifest"] = {
       workflowVersionId: snapshot.version.id,
-      generatedAt: new Date(),
+      generatedAt,
       transitions: transitionPlans.map((item) => ({
         transitionCode: item.transitionCode,
         actions: item.actionPlan.actions.map((action) => ({
@@ -132,7 +132,7 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
 
     const policyManifest: WorkflowManifest["policyManifest"] = {
       workflowVersionId: snapshot.version.id,
-      generatedAt: new Date(),
+      generatedAt,
       transitions: transitionPlans.map((item) => ({
         transitionCode: item.transitionCode,
         policies: item.policyPlan.policies.map((policy) => ({
@@ -148,7 +148,7 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
 
     const runtimeEffectManifest: WorkflowManifest["runtimeEffectManifest"] = {
       workflowVersionId: snapshot.version.id,
-      generatedAt: new Date(),
+      generatedAt,
       transitions: transitionPlans.map((item) => ({
         transitionCode: item.transitionCode,
         effects: item.effectResolution.effectSet.effects.map((effect) => ({
@@ -164,7 +164,7 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
 
     const executionManifest: WorkflowManifest["executionManifest"] = {
       workflowVersionId: snapshot.version.id,
-      generatedAt: new Date(),
+      generatedAt,
       transitions: transitionPlans.map((item) => ({
         transitionCode: item.transitionCode,
         orderedEffectCodes: [...item.executionPlan.orderedEffectCodes],
@@ -179,10 +179,10 @@ export class WorkflowManifestGenerator implements IWorkflowManifestGenerator {
     };
 
     return {
-      id: randomUUID(),
+      id: snapshot.version.id,
       workflowDefinitionId: snapshot.definition.id,
       workflowVersionId: snapshot.version.id,
-      generatedAt: new Date(),
+      generatedAt,
       generatedBy: actorUserId,
       runtimeModel,
       participantManifest,
