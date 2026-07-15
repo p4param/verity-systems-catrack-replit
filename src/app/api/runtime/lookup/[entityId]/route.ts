@@ -3,7 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { requireAuth } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
 import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
-import { recordRepository } from "@/modules/platform/runtime/repositories/record-repository";
+import { runtimeApplicationEngine } from "@/modules/platform/runtime/application";
+import { buildRuntimeContext } from "@/modules/platform/runtime/application/services/RuntimeContextFactory";
 
 /**
  * GET /api/runtime/lookup/[entityId]?q=...
@@ -11,9 +12,8 @@ import { recordRepository } from "@/modules/platform/runtime/repositories/record
  * Resolves lookup options by entity UUID (rather than moduleCode/entityCode).
  * Used by LookupOptionProvider when lookupDefinition.referencedEntityId is set.
  *
- * Uses recordRepository.findMany directly (bypasses recordService.getRecords)
- * to avoid triggering enrichLookupLabels → getActiveArtifact("platform", uuid)
- * recursion that crashes with "Cannot read properties of undefined (reading 'findUnique')".
+ * Uses RuntimeApplicationEngine to keep runtime persistence orchestration
+ * centralized in the application layer.
  *
  * Query params:
  *   q       - optional search query (case-insensitive partial label match)
@@ -25,7 +25,7 @@ export async function GET(
 ) {
   try {
     const { entityId } = await params;
-    requireAuth(req);
+    const session = requireAuth(req);
 
     // ── 1. Resolve entity UUID → module code + entity code ────────────────────
     const entity = await prisma.configurationEntity.findUnique({
@@ -101,13 +101,25 @@ export async function GET(
       }
     }
 
-    // ── 4. Fetch records via repository (no enrichLookupLabels to avoid recursion) ──
-    // recordRepository.findMany flattens EAV values using the manifest field map,
-    // so records come back as { id, fieldCode: value, ... } plain objects.
-    const records = await recordRepository.findMany(entity.id, manifest, {
-      skip: 0,
-      take: 100,
+    // ── 4. Fetch records via Runtime Application Engine ─────────────────────
+    const context = buildRuntimeContext({
+      manifest,
+      session,
+      operation: "Load",
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
     });
+
+    const loadResult = await runtimeApplicationEngine.load(context, { skip: 0, take: 100 });
+    if (!loadResult.success) {
+      return NextResponse.json(
+        { success: false, error: loadResult.errors[0], correlationId: loadResult.correlationId },
+        { status: 400 }
+      );
+    }
+
+    const records = Array.isArray(loadResult.record) ? loadResult.record : [];
 
     let results = records.map((record: Record<string, any>) => ({
       id: record.id as string,

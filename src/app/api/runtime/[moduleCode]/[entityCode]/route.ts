@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { recordService } from "@/modules/platform/runtime/services/record-service";
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
 import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
+import { runtimeApplicationEngine } from "@/modules/platform/runtime/application";
+import { buildRuntimeContext } from "@/modules/platform/runtime/application/services/RuntimeContextFactory";
 // We have to use Promise resolving for dynamic route params in Next 15+
 export async function GET(
   req: Request,
@@ -27,12 +27,22 @@ export async function GET(
     const { searchParams } = new URL(req.url);
     const skip = parseInt(searchParams.get("skip") || "0", 10);
     const take = parseInt(searchParams.get("take") || "50", 10);
-    
-    // Pass tenant ID context if it exists in session
-    // For now, mocking with session.user.id mapping if tenant info isn't available
-    const records = await recordService.getRecords(artifact.entityId, manifest, { skip, take }, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
 
-    return NextResponse.json(records);
+    const context = buildRuntimeContext({
+      manifest,
+      session,
+      operation: "Load",
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
+
+    const result = await runtimeApplicationEngine.load(context, { skip, take });
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
+
+    return NextResponse.json(result.record ?? []);
   } catch (error: any) {
     if (error instanceof NextResponse) {
       return error;
@@ -61,19 +71,21 @@ export async function POST(
 
     const body = await req.json();
 
-    const userUuid = `00000000-0000-0000-0000-${session.sub.toString().padStart(12, '0')}`;
+    const context = buildRuntimeContext({
+      manifest,
+      session,
+      operation: "Create",
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
 
-    const ctx = {
-      companyId: "00000000-0000-0000-0000-000000000001", // Placeholder
-      branchId: "00000000-0000-0000-0000-000000000001", // Placeholder
-      userId: userUuid,
-      tenantId: session.tenantId,
-      actorUserId: session.sub, 
-    };
+    const result = await runtimeApplicationEngine.create(context, body);
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
 
-    const record = await recordService.createRecord(artifact.entityId, manifest, body, ctx);
-
-    return NextResponse.json(record, { status: 201 });
+    return NextResponse.json(result.record, { status: 201 });
   } catch (error: any) {
     if (error instanceof NextResponse) {
       return error;

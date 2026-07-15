@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { recordService } from "@/modules/platform/runtime/services/record-service";
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
+import { runtimeApplicationEngine } from "@/modules/platform/runtime/application";
+import { buildRuntimeContext } from "@/modules/platform/runtime/application/services/RuntimeContextFactory";
 
 import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
 
@@ -32,7 +32,22 @@ export async function GET(
 
     requirePermission(req, data.manifest.permissions.view);
 
-    const record = await recordService.getRecordById(recordId, data.manifest, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
+    const context = buildRuntimeContext({
+      manifest: data.manifest,
+      session,
+      operation: "Load",
+      recordId,
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
+
+    const result = await runtimeApplicationEngine.load(context);
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
+
+    const record = result.record;
     if (!record) return NextResponse.json({ error: "Record not found" }, { status: 404 });
 
     return NextResponse.json(record);
@@ -56,18 +71,23 @@ export async function PUT(
     requirePermission(req, data.manifest.permissions.edit);
 
     const body = await req.json();
-    console.log(`[API PUT /runtime/${moduleCode}/${entityCode}/${recordId}] Body:`, body);
 
-    const ctx = {
-      companyId: "00000000-0000-0000-0000-000000000001",
-      branchId: "00000000-0000-0000-0000-000000000001",
-      userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, '0')}`,
-      tenantId: session.tenantId,
-      actorUserId: session.sub,
-    };
+    const context = buildRuntimeContext({
+      manifest: data.manifest,
+      session,
+      operation: "Save",
+      recordId,
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
 
-    const record = await recordService.updateRecord(recordId, data.manifest, body, ctx);
-    return NextResponse.json(record);
+    const result = await runtimeApplicationEngine.save(context, body);
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
+
+    return NextResponse.json(result.record);
   } catch (error: any) {
     if (error instanceof NextResponse) return error;
     return NextResponse.json({ error: error.message }, { status: 400 });
@@ -87,16 +107,22 @@ export async function DELETE(
 
     requirePermission(req, data.manifest.permissions.delete);
 
-    const ctx = {
-      companyId: "00000000-0000-0000-0000-000000000001",
-      branchId: "00000000-0000-0000-0000-000000000001",
-      userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, '0')}`,
-      tenantId: session.tenantId,
-      actorUserId: session.sub,
-    };
+    const context = buildRuntimeContext({
+      manifest: data.manifest,
+      session,
+      operation: "Delete",
+      recordId,
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
 
-    await recordService.deleteRecord(recordId, data.manifest, ctx);
-    return NextResponse.json({ success: true });
+    const result = await runtimeApplicationEngine.delete(context);
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
+
+    return NextResponse.json({ success: true, correlationId: result.correlationId });
   } catch (error: any) {
     if (error instanceof NextResponse) return error;
     return NextResponse.json({ error: error.message }, { status: 400 });

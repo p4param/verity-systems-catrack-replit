@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { recordService } from "@/modules/platform/runtime/services/record-service";
 import { requireAuth, requirePermission } from "@/lib/auth/auth-guard";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
+import { runtimeApplicationEngine } from "@/modules/platform/runtime/application";
+import { buildRuntimeContext } from "@/modules/platform/runtime/application/services/RuntimeContextFactory";
 
 import { RuntimeRegistry } from "@/shared/components/runtime/registry/RuntimeRegistry";
 
@@ -26,9 +26,22 @@ export async function GET(
 
     const { searchParams } = new URL(req.url);
     const q = searchParams.get("q") || "";
-    
-    // Simplistic search: just get 50 records. 
-    const records = await recordService.getRecords(artifact.entityId, manifest, { skip: 0, take: 50 }, { companyId: "00000000-0000-0000-0000-000000000001", branchId: "00000000-0000-0000-0000-000000000001", userId: `00000000-0000-0000-0000-${session.sub.toString().padStart(12, "0")}`, tenantId: session.tenantId, actorUserId: session.sub });
+
+    const context = buildRuntimeContext({
+      manifest,
+      session,
+      operation: "Load",
+      culture: req.headers.get("accept-language") || "en-US",
+      timezone: req.headers.get("x-timezone") || "UTC",
+      correlationId: req.headers.get("x-correlation-id") || undefined,
+    });
+
+    const result = await runtimeApplicationEngine.load(context, { skip: 0, take: 50 });
+    if (!result.success) {
+      return NextResponse.json({ error: result.errors[0], correlationId: result.correlationId }, { status: 400 });
+    }
+
+    const records = Array.isArray(result.record) ? result.record : [];
 
     // Identify display field. Prefer "name", "title", "code", or first TEXT field.
     let displayFieldCode = "id";
