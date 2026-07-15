@@ -26,11 +26,13 @@ const PROFILES = {
   smoke: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
+    "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
   ],
   developer: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
     "<rootDir>/src/modules/platform/persistence/__tests__/integration/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
+    "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
   ],
   certification: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
@@ -39,10 +41,12 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/persistence/__tests__/regression/**/*.test.ts",
     "<rootDir>/src/modules/platform/persistence/__tests__/operational/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
+    "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
   ],
   nightly: [
     "<rootDir>/src/modules/platform/persistence/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
+    "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
   ],
 };
 
@@ -81,9 +85,12 @@ module.exports = {
   collectCoverageFrom: [
     "src/modules/platform/persistence/**/*.ts",
     "src/modules/platform/runtime/application/**/*.ts",
+    "src/modules/platform/workflow/**/*.ts",
     "!src/modules/platform/persistence/__tests__/**",
     "!src/modules/platform/runtime/application/__tests__/**",
+    "!src/modules/platform/workflow/tests/**",
     "!src/modules/platform/persistence/index.ts",
     "!src/modules/platform/runtime/application/index.ts",
+    "!src/modules/platform/workflow/index.ts",
   ],
 };

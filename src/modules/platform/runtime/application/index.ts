@@ -8,6 +8,8 @@ import { OperationDispatcher } from "./services/OperationDispatcher";
 import { SynchronousRuntimeEventPublisher } from "./services/SynchronousRuntimeEventPublisher";
 import type { IRuntimeApplicationEngine } from "./contracts/IRuntimeApplicationEngine";
 import { InMemoryRuntimeMetricsCollector } from "./metrics/InMemoryRuntimeMetricsCollector";
+import { createWorkflowFoundation } from "@/modules/platform/workflow";
+import type { IWorkflowEngine } from "@/modules/platform/workflow";
 
 const ADMIN_ROLES = new Set(["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"]);
 
@@ -92,16 +94,36 @@ export const runtimeOperationPipeline = new RuntimeOperationPipeline({
   metricsCollector: runtimeMetricsCollector,
 });
 export const runtimeApplicationEngine = new RuntimeApplicationEngine(runtimeOperationPipeline);
+export const workflowFoundation = createWorkflowFoundation();
+
+runtimeOperationPipeline.registerMiddleware(
+  {
+    id: "workflow-foundation",
+    name: "WorkflowFoundationMiddleware",
+    middleware: async (state, next) => workflowFoundation.workflowMiddleware.execute(state, next),
+    order: 405,
+    priority: 100,
+    enabled: true,
+    dependencies: ["workflow"],
+    policy: "StopOnFailure",
+  }
+);
 
 export class PlatformRuntime {
+  private workflowEngine: IWorkflowEngine | null = null;
+
   constructor(private readonly applicationEngine: IRuntimeApplicationEngine) {}
 
   getApplicationEngine(): IRuntimeApplicationEngine {
     return this.applicationEngine;
   }
 
-  getWorkflowEngine(): null {
-    return null;
+  getWorkflowEngine(): IWorkflowEngine | null {
+    return this.workflowEngine;
+  }
+
+  registerWorkflowEngine(engine: IWorkflowEngine): void {
+    this.workflowEngine = engine;
   }
 
   getNotificationEngine(): null {
@@ -114,6 +136,7 @@ export class PlatformRuntime {
 }
 
 export const platformRuntime = new PlatformRuntime(runtimeApplicationEngine);
+platformRuntime.registerWorkflowEngine(workflowFoundation.workflowEngine);
 
 export { RuntimeApplicationEngine } from "./RuntimeApplicationEngine";
 

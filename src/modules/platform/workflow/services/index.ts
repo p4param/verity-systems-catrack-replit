@@ -1,1 +1,12 @@
-export {};
+export { RuntimeExpressionAdapter } from "./RuntimeExpressionAdapter";
+export { StateMachineEngine } from "./StateMachineEngine";
+export { TransitionEngine } from "./TransitionEngine";
+export { WorkflowEngine } from "./WorkflowEngine";
+export { WorkflowManifestGenerator } from "./WorkflowManifestGenerator";
+export { WorkflowMetadataNormalizer } from "./WorkflowMetadataNormalizer";
+export { WorkflowMetadataOptimizer } from "./WorkflowMetadataOptimizer";
+export { WorkflowMetadataProvider } from "./WorkflowMetadataProvider";
+export { WorkflowPublisher } from "./WorkflowPublisher";
+export { WorkflowSimulationService } from "./WorkflowSimulationService";
+export { WorkflowValidator } from "./WorkflowValidator";
+export { WorkflowVersionManager } from "./WorkflowVersionManager";

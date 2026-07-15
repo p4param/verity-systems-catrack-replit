@@ -41,7 +41,13 @@ export interface RuntimeContextInit {
   timezone?: string;
   executionMode?: RuntimeExecutionMode;
   triggerSource?: RuntimeTriggerSource;
-  workflowState?: Record<string, unknown>;
+  workflowDefinitionId?: string;
+  workflowVersionId?: string;
+  workflowInstanceId?: string;
+  workflowVariables?: Record<string, unknown>;
+  workflowAssignments?: ReadonlyArray<unknown>;
+  workflowManifest?: unknown;
+  workflowState?: Record<string, unknown> | string;
   currentRecord?: Record<string, unknown>;
   currentValues?: Record<string, unknown>;
   originalValues?: Record<string, unknown>;
@@ -94,6 +100,13 @@ export class RuntimeContext {
   readonly timezone: string;
   readonly executionMode: RuntimeExecutionMode;
   readonly triggerSource: RuntimeTriggerSource;
+  readonly workflowDefinitionId?: string;
+  readonly workflowVersionId?: string;
+  readonly workflowInstanceId?: string;
+  readonly workflowVariables: Readonly<Record<string, unknown>>;
+  readonly workflowAssignments: ReadonlyArray<unknown>;
+  readonly workflowManifest?: unknown;
+  readonly workflowStateCode?: string;
   readonly workflowState: Readonly<Record<string, unknown>>;
   readonly currentRecord: Readonly<Record<string, unknown>>;
   readonly currentValues: Readonly<Record<string, unknown>>;
@@ -135,7 +148,18 @@ export class RuntimeContext {
     this.timezone = init.timezone ?? "UTC";
     this.executionMode = init.executionMode ?? "Interactive";
     this.triggerSource = init.triggerSource ?? "API";
-    this.workflowState = Object.freeze({ ...(init.workflowState ?? {}) });
+    this.workflowDefinitionId = init.workflowDefinitionId;
+    this.workflowVersionId = init.workflowVersionId;
+    this.workflowInstanceId = init.workflowInstanceId;
+    this.workflowVariables = Object.freeze({ ...(init.workflowVariables ?? {}) });
+    this.workflowAssignments = Object.freeze([...(init.workflowAssignments ?? [])]);
+    this.workflowManifest = init.workflowManifest ? deepFreeze({ ...(init.workflowManifest as Record<string, unknown>) }) : undefined;
+    this.workflowStateCode = typeof init.workflowState === "string" ? init.workflowState : undefined;
+    this.workflowState = Object.freeze(
+      typeof init.workflowState === "object" && init.workflowState !== null
+        ? { ...init.workflowState }
+        : {}
+    );
     this.currentRecord = Object.freeze({ ...(init.currentRecord ?? {}) });
     this.currentValues = Object.freeze({ ...(init.currentValues ?? {}) });
     this.originalValues = Object.freeze({ ...(init.originalValues ?? {}) });
@@ -172,6 +196,12 @@ export class RuntimeContext {
       timezone: overrides.timezone ?? this.timezone,
       executionMode: overrides.executionMode ?? this.executionMode,
       triggerSource: overrides.triggerSource ?? this.triggerSource,
+      workflowDefinitionId: overrides.workflowDefinitionId ?? this.workflowDefinitionId,
+      workflowVersionId: overrides.workflowVersionId ?? this.workflowVersionId,
+      workflowInstanceId: overrides.workflowInstanceId ?? this.workflowInstanceId,
+      workflowVariables: overrides.workflowVariables ?? this.workflowVariables,
+      workflowAssignments: overrides.workflowAssignments ?? this.workflowAssignments,
+      workflowManifest: overrides.workflowManifest ?? this.workflowManifest,
       workflowState: overrides.workflowState ?? this.workflowState,
       currentRecord: overrides.currentRecord ?? this.currentRecord,
       currentValues: overrides.currentValues ?? this.currentValues,

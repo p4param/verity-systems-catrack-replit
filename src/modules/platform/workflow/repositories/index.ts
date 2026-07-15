@@ -1,1 +1,1 @@
-export {};
+export { WorkflowRepository } from "./WorkflowRepository";

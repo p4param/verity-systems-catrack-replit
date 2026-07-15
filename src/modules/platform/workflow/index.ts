@@ -1,5 +1,6 @@
 export * from './components';
 export * from './hooks';
+export * from './models/WorkflowModels';
 export * from './services';
 export * from './repositories';
 export * from './actions';
@@ -9,3 +10,6 @@ export * from './utils';
 export * from './constants';
 export * from './providers';
 export * from './tests';
+export * from './contracts';
+export * from './runtime/WorkflowFoundation';
+export * from './runtime/WorkflowMiddleware';
