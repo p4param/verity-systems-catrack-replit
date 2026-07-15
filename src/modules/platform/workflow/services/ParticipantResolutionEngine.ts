@@ -20,6 +20,32 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
+function normalizeParticipants<T extends { participantId: string; participantType: string; source: string; priority?: number }>(
+  participants: T[]
+): T[] {
+  const seen = new Map<string, T>();
+  for (const participant of participants) {
+    const key = `${participant.participantId}|${participant.participantType}|${participant.source}`.toUpperCase();
+    if (!seen.has(key)) {
+      seen.set(key, participant);
+    }
+  }
+
+  return [...seen.values()].sort((left, right) => {
+    const byPriority = (left.priority ?? 100) - (right.priority ?? 100);
+    if (byPriority !== 0) {
+      return byPriority;
+    }
+
+    const byType = left.participantType.localeCompare(right.participantType);
+    if (byType !== 0) {
+      return byType;
+    }
+
+    return left.participantId.localeCompare(right.participantId);
+  });
+}
+
 export class ParticipantResolutionEngine implements IParticipantResolutionEngine {
   constructor(
     private readonly registry: IParticipantRegistry,
@@ -35,16 +61,23 @@ export class ParticipantResolutionEngine implements IParticipantResolutionEngine
       throw new Error(`No participant provider registered for type ${participantType}.`);
     }
 
-    const participants = await provider.resolve(context);
+    const participants = normalizeParticipants(await provider.resolve(context));
     const eligibility = await provider.evaluateEligibility(context, participants);
-    const participantSet = provider.toParticipantSet(context.assignment.id, participants, eligibility);
+    const normalizedEligibility = {
+      ...eligibility,
+      eligibleParticipants: normalizeParticipants(eligibility.eligibleParticipants),
+      ineligibleParticipants: [...eligibility.ineligibleParticipants].sort((left, right) =>
+        left.participant.participantId.localeCompare(right.participant.participantId)
+      ),
+    };
+    const participantSet = provider.toParticipantSet(context.assignment.id, participants, normalizedEligibility);
     const strategyResult = await this.strategyEngine.resolveStrategy(context, participantSet);
     const plan = await this.planner.buildPlan(context, participantSet, strategyResult);
 
     return deepFreeze({
       assignmentId: context.assignment.id,
       participantSet,
-      eligibility,
+      eligibility: normalizedEligibility,
       strategyResult,
       diagnostics: {
         provider: provider.providerKey,

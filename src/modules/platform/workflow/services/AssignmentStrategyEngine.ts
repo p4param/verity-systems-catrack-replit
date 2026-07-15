@@ -5,6 +5,7 @@ import type {
   ParticipantSet,
   ResolvedParticipant,
 } from "../models/WorkflowModels";
+import { WORKFLOW_ASSIGNMENT_STRATEGIES } from "../models/WorkflowModels";
 
 function sortByPriority(participants: ResolvedParticipant[]): ResolvedParticipant[] {
   return [...participants].sort((a, b) => (a.priority ?? 100) - (b.priority ?? 100));
@@ -27,6 +28,9 @@ function seededRandom(seed: string): number {
 export class AssignmentStrategyEngine implements IAssignmentStrategyEngine {
   async resolveStrategy(context: AssignmentContext, participantSet: ParticipantSet): Promise<AssignmentStrategyResult> {
     const strategy = context.assignment.strategy ?? "SingleUser";
+    if (!WORKFLOW_ASSIGNMENT_STRATEGIES.includes(strategy)) {
+      throw new Error(`Invalid assignment strategy ${strategy}.`);
+    }
     const rankedParticipants = sortByPriority(participantSet.requiredParticipants);
     const strategySeed =
       context.assignment.strategySeed ??
@@ -80,14 +84,13 @@ export class AssignmentStrategyEngine implements IAssignmentStrategyEngine {
         selectedParticipants = [rankedParticipants[randomIndex]];
         break;
       }
+      case "Priority":
       case "AnyUser":
       case "RoundRobin":
       case "LeastLoaded":
       case "Manager":
       case "Hierarchy":
       case "Expression":
-      case "Weighted":
-      case "Priority":
       case "Random":
       case "Custom":
       case "SingleUser":

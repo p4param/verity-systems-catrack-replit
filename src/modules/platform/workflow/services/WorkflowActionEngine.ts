@@ -23,6 +23,10 @@ function uniqueSorted(values: readonly string[]): string[] {
   return [...new Set(values)].sort((a, b) => a.localeCompare(b));
 }
 
+function resolveGeneratedAt(context: WorkflowActionResolutionContext): Date {
+  return context.snapshot.version.publishedAt ?? context.snapshot.version.updatedAt ?? context.snapshot.version.createdAt;
+}
+
 export class WorkflowActionEngine implements IWorkflowActionEngine {
   constructor(private readonly registry: IWorkflowActionRegistry) {}
 
@@ -55,7 +59,7 @@ export class WorkflowActionEngine implements IWorkflowActionEngine {
     return deepFreeze({
       workflowVersionId: context.snapshot.version.id,
       transitionCode: context.transition.code,
-      generatedAt: new Date(),
+      generatedAt: resolveGeneratedAt(context),
       actions: resolvedActions,
       diagnostics: {
         rootActionCode: context.transition.actionCode,

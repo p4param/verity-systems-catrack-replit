@@ -6,6 +6,9 @@ export class ParticipantRegistry implements IParticipantRegistry {
   private readonly providers = new Map<WorkflowParticipantType, IParticipantProvider>();
 
   register(provider: IParticipantProvider): void {
+    if (this.providers.has(provider.participantType)) {
+      throw new Error(`Duplicate participant provider registered for type ${provider.participantType}.`);
+    }
     this.providers.set(provider.participantType, provider);
   }
 

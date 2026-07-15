@@ -7,6 +7,16 @@ export class WorkflowActionRegistry implements IWorkflowActionRegistry {
   private readonly byProviderKey = new Map<string, IWorkflowActionProvider>();
 
   register(provider: IWorkflowActionProvider): void {
+    if (this.byProviderKey.has(provider.providerKey)) {
+      throw new Error(`Duplicate action provider registered for key ${provider.providerKey}.`);
+    }
+
+    for (const actionType of provider.actionTypes) {
+      if (this.byType.has(actionType)) {
+        throw new Error(`Duplicate action provider registered for type ${actionType}.`);
+      }
+    }
+
     this.byProviderKey.set(provider.providerKey, provider);
     for (const actionType of provider.actionTypes) {
       this.byType.set(actionType, provider);

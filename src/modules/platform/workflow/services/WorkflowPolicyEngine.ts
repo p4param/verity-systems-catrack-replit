@@ -19,6 +19,10 @@ function deepFreeze<T>(value: T): T {
   return value;
 }
 
+function resolveGeneratedAt(context: WorkflowPolicyResolutionContext): Date {
+  return context.snapshot.version.publishedAt ?? context.snapshot.version.updatedAt ?? context.snapshot.version.createdAt;
+}
+
 export class WorkflowPolicyEngine implements IWorkflowPolicyEngine {
   private readonly providersByType = new Map<WorkflowProcessPolicy["policyType"], IWorkflowPolicyProvider>();
 
@@ -49,7 +53,7 @@ export class WorkflowPolicyEngine implements IWorkflowPolicyEngine {
     return deepFreeze({
       workflowVersionId: context.snapshot.version.id,
       transitionCode: context.transition.code,
-      generatedAt: new Date(),
+      generatedAt: resolveGeneratedAt(context),
       policies,
       diagnostics: {
         policyCount: policies.length,
