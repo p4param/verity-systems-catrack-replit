@@ -305,6 +305,9 @@ CREATE TABLE IF NOT EXISTS workflow_manifests (
   generated_by UUID,
   runtime_model_json JSONB NOT NULL,
   validation_json JSONB NOT NULL,
+  participant_manifest_json JSONB,
+  assignment_manifest_json JSONB,
+  resolution_manifest_json JSONB,
   designer_snapshot_json JSONB
 );
 
