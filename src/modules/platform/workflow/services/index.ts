@@ -1,7 +1,11 @@
 export { RuntimeExpressionAdapter } from "./RuntimeExpressionAdapter";
+export { StateResolver } from "./StateResolver";
 export { StateMachineEngine } from "./StateMachineEngine";
+export { TransitionResolver } from "./TransitionResolver";
 export { TransitionEngine } from "./TransitionEngine";
 export { WorkflowEngine } from "./WorkflowEngine";
+export { WorkflowGraphBuilder } from "./WorkflowGraphBuilder";
+export { WorkflowGraphValidator } from "./WorkflowGraphValidator";
 export { WorkflowManifestGenerator } from "./WorkflowManifestGenerator";
 export { WorkflowMetadataNormalizer } from "./WorkflowMetadataNormalizer";
 export { WorkflowMetadataOptimizer } from "./WorkflowMetadataOptimizer";

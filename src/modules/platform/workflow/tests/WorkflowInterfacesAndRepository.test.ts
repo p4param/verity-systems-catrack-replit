@@ -5,6 +5,12 @@ import type { IWorkflowMiddleware } from "../contracts/IWorkflowMiddleware";
 import type { IWorkflowPublisher } from "../contracts/IWorkflowPublisher";
 import type { IWorkflowRepository } from "../contracts/IWorkflowRepository";
 import type { IWorkflowSimulationService } from "../contracts/IWorkflowSimulationService";
+import type { IStateMachineEngine } from "../contracts/IStateMachineEngine";
+import type { ITransitionEngine } from "../contracts/ITransitionEngine";
+import type { IStateResolver } from "../contracts/IStateResolver";
+import type { ITransitionResolver } from "../contracts/ITransitionResolver";
+import type { IWorkflowGraphBuilder } from "../contracts/IWorkflowGraphBuilder";
+import type { IWorkflowGraphValidator } from "../contracts/IWorkflowGraphValidator";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
@@ -35,6 +41,12 @@ describe("Workflow interfaces and repository", () => {
     const middleware: IWorkflowMiddleware = foundation.workflowMiddleware;
     const versionManager: IWorkflowVersionManager = foundation.workflowVersionManager;
     const simulationService: IWorkflowSimulationService = foundation.workflowSimulationService;
+    const stateMachineEngine: IStateMachineEngine = foundation.stateMachineEngine;
+    const transitionEngine: ITransitionEngine = foundation.transitionEngine;
+    const stateResolver: IStateResolver = foundation.stateResolver;
+    const transitionResolver: ITransitionResolver = foundation.transitionResolver;
+    const workflowGraphBuilder: IWorkflowGraphBuilder = foundation.workflowGraphBuilder;
+    const workflowGraphValidator: IWorkflowGraphValidator = foundation.workflowGraphValidator;
 
     expect(engine).toBeDefined();
     expect(repository).toBeDefined();
@@ -45,6 +57,12 @@ describe("Workflow interfaces and repository", () => {
     expect(middleware).toBeDefined();
     expect(versionManager).toBeDefined();
     expect(simulationService).toBeDefined();
+    expect(stateMachineEngine).toBeDefined();
+    expect(transitionEngine).toBeDefined();
+    expect(stateResolver).toBeDefined();
+    expect(transitionResolver).toBeDefined();
+    expect(workflowGraphBuilder).toBeDefined();
+    expect(workflowGraphValidator).toBeDefined();
   });
 
   test("repository class is constructible and exposes persistence methods", () => {

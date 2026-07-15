@@ -32,7 +32,14 @@ export namespace Runtime {
   export type WorkflowNode = RuntimeModels.WorkflowNode;
   export type WorkflowEdge = RuntimeModels.WorkflowEdge;
   export type WorkflowGraph = RuntimeModels.WorkflowGraph;
+  export type WorkflowStateGraph = RuntimeModels.WorkflowStateGraph;
+  export type WorkflowTransitionGraph = RuntimeModels.WorkflowTransitionGraph;
+  export type WorkflowRuntimeGraph = RuntimeModels.WorkflowRuntimeGraph;
   export type WorkflowRuntimeModel = RuntimeModels.WorkflowRuntimeModel;
+  export type WorkflowTransitionCandidate = RuntimeModels.WorkflowTransitionCandidate;
+  export type WorkflowTransitionResolutionContext = RuntimeModels.WorkflowTransitionResolutionContext;
+  export type WorkflowTransitionResolutionResult = RuntimeModels.WorkflowTransitionResolutionResult;
+  export type WorkflowConditionEvaluationResult = RuntimeModels.WorkflowConditionEvaluationResult;
   export type WorkflowExecutionContext = RuntimeModels.WorkflowExecutionContext;
   export type WorkflowValidationResult = RuntimeModels.WorkflowValidationResult;
   export type WorkflowValidationIssue = RuntimeModels.WorkflowValidationIssue;

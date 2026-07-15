@@ -53,7 +53,7 @@ export function buildWorkflowSnapshot(): WorkflowMetadataSnapshot {
         code: "SUBMITTED",
         name: "Submitted",
         isInitial: false,
-        isTerminal: false,
+        isTerminal: true,
         sequence: 2,
       },
     ],

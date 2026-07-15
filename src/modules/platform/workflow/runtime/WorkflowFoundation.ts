@@ -7,13 +7,21 @@ import type { IWorkflowRepository } from "../contracts/IWorkflowRepository";
 import type { IWorkflowSimulationService } from "../contracts/IWorkflowSimulationService";
 import type { IStateMachineEngine } from "../contracts/IStateMachineEngine";
 import type { ITransitionEngine } from "../contracts/ITransitionEngine";
+import type { IStateResolver } from "../contracts/IStateResolver";
+import type { ITransitionResolver } from "../contracts/ITransitionResolver";
+import type { IWorkflowGraphBuilder } from "../contracts/IWorkflowGraphBuilder";
+import type { IWorkflowGraphValidator } from "../contracts/IWorkflowGraphValidator";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
 import { RuntimeExpressionAdapter } from "../services/RuntimeExpressionAdapter";
+import { StateResolver } from "../services/StateResolver";
 import { StateMachineEngine } from "../services/StateMachineEngine";
+import { TransitionResolver } from "../services/TransitionResolver";
 import { TransitionEngine } from "../services/TransitionEngine";
 import { WorkflowEngine } from "../services/WorkflowEngine";
+import { WorkflowGraphBuilder } from "../services/WorkflowGraphBuilder";
+import { WorkflowGraphValidator } from "../services/WorkflowGraphValidator";
 import { WorkflowManifestGenerator } from "../services/WorkflowManifestGenerator";
 import { WorkflowMetadataProvider } from "../services/WorkflowMetadataProvider";
 import { WorkflowMetadataNormalizer } from "../services/WorkflowMetadataNormalizer";
@@ -36,14 +44,22 @@ export interface WorkflowFoundation {
   workflowSimulationService: IWorkflowSimulationService;
   stateMachineEngine: IStateMachineEngine;
   transitionEngine: ITransitionEngine;
+  stateResolver: IStateResolver;
+  transitionResolver: ITransitionResolver;
+  workflowGraphBuilder: IWorkflowGraphBuilder;
+  workflowGraphValidator: IWorkflowGraphValidator;
 }
 
 export function createWorkflowFoundation(
   repository: IWorkflowRepository = new WorkflowRepository()
 ): WorkflowFoundation {
   const expressionAdapter = new RuntimeExpressionAdapter();
-  const stateMachineEngine = new StateMachineEngine();
-  const transitionEngine = new TransitionEngine();
+  const workflowGraphBuilder = new WorkflowGraphBuilder();
+  const workflowGraphValidator = new WorkflowGraphValidator();
+  const stateResolver = new StateResolver();
+  const transitionResolver = new TransitionResolver();
+  const stateMachineEngine = new StateMachineEngine(workflowGraphBuilder, workflowGraphValidator, stateResolver);
+  const transitionEngine = new TransitionEngine(transitionResolver, workflowGraphValidator);
   const validator = new WorkflowValidator(expressionAdapter);
   const manifestGenerator = new WorkflowManifestGenerator(stateMachineEngine);
   const publisher = new WorkflowPublisher(
@@ -77,5 +93,9 @@ export function createWorkflowFoundation(
     workflowSimulationService: simulationService,
     stateMachineEngine,
     transitionEngine,
+    stateResolver,
+    transitionResolver,
+    workflowGraphBuilder,
+    workflowGraphValidator,
   };
 }

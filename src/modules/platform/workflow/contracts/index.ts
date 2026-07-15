@@ -9,3 +9,7 @@ export type { IWorkflowVersionManager } from "./IWorkflowVersionManager";
 export type { IWorkflowSimulationService } from "./IWorkflowSimulationService";
 export type { IStateMachineEngine } from "./IStateMachineEngine";
 export type { ITransitionEngine } from "./ITransitionEngine";
+export type { IStateResolver } from "./IStateResolver";
+export type { ITransitionResolver } from "./ITransitionResolver";
+export type { IWorkflowGraphBuilder } from "./IWorkflowGraphBuilder";
+export type { IWorkflowGraphValidator } from "./IWorkflowGraphValidator";
