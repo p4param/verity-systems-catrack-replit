@@ -11,7 +11,7 @@ import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
 import type { IExecutionMapper } from "../contracts/IExecutionMapper";
 import type { IExecutionPipeline } from "../contracts/IExecutionPipeline";
 import type { IWorkflowExecutorRegistry } from "../contracts/IWorkflowExecutorRegistry";
-import type { IExecutionDiagnosticsQueryFacade } from "../contracts/IExecutionDiagnostics";
+import type { IExecutionDiagnosticsQueryFacade, IExecutionDiagnosticsSink } from "../contracts/IExecutionDiagnostics";
 import type { IWorkflowPublisher } from "../contracts/IWorkflowPublisher";
 import type { IWorkflowSimulationService } from "../contracts/IWorkflowSimulationService";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
@@ -106,7 +106,7 @@ export class WorkflowEngine implements IWorkflowEngine {
       pipeline.registerStage(new ExecutionDispatchStage(executionMapper, workflowExecutorRegistry));
       return pipeline;
     })(),
-    private readonly executionDiagnosticsQueryFacade: IExecutionDiagnosticsQueryFacade =
+    private readonly executionDiagnosticsQueryFacade: IExecutionDiagnosticsQueryFacade & IExecutionDiagnosticsSink =
       new InMemoryExecutionDiagnosticsQueryFacade(),
     private readonly executionOrchestrator: IWorkflowExecutionOrchestrator = new WorkflowExecutionOrchestrator(
       actionEngine,

@@ -49,7 +49,7 @@ async function metadataResolver(context: RuntimeContext): Promise<RuntimeContext
     );
   }
 
-  const manifest = artifact.payload as RuntimeManifest;
+  const manifest = artifact.payload as unknown as RuntimeManifest;
 
   return context.with({
     entityDefinition: manifest,

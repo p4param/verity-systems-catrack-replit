@@ -23,15 +23,15 @@ This prompt freezes the observability contract layer only. It does not add execu
 ## Diagnostics Model
 
 - `ExecutionDiagnostics` snapshot includes:
-	- `ExecutionCorrelation`
-	- `ExecutionTrace[]`
-	- `ExecutionTimeline`
-	- `ExecutionMetrics`
-	- `ExecutionCounters`
-	- `ExecutionWarnings`
-	- `ExecutionErrors`
-	- `ExecutionSummary`
-	- `ExecutionPerformanceSnapshot`
+  - `ExecutionCorrelation`
+  - `ExecutionTrace[]`
+  - `ExecutionTimeline`
+  - `ExecutionMetrics`
+  - `ExecutionCounters`
+  - `ExecutionWarnings`
+  - `ExecutionErrors`
+  - `ExecutionSummary`
+  - `ExecutionPerformanceSnapshot`
 
 All diagnostics snapshots are immutable and validation-checked.
 
@@ -159,9 +159,9 @@ Implemented sampling knobs:
 
 - In-memory diagnostics query facade is available for dashboard consumption.
 - Query surfaces:
-	- `getByExecutionId`
-	- `getByCorrelationId`
-	- `listRecent`
+  - `getByExecutionId`
+  - `getByCorrelationId`
+  - `listRecent`
 - Execution path writes snapshots passively after validation through a sink interface.
 
 ## Intended Use

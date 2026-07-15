@@ -46,11 +46,19 @@ export class ExecutionPipeline implements IExecutionPipeline {
     const dispatch = async (index: number, current: IExecutionContext): Promise<IExecutionResult> => {
       if (index >= sorted.length) {
         return {
+          success: true,
           status: "Planned",
           executionPlanId: current.executionPlan.id,
+          executionHash: current.executionHash,
+          correlationId: current.correlationId,
           executedEffectCodes: [],
           deferredEffectCodes: [...current.executionPlan.orderedEffectCodes],
+          skippedEffectCodes: [],
+          failedEffectCodes: [],
+          warnings: [],
+          runtimeOperationResults: [],
           stageResults: [],
+          executionTime: Date.now() - startedAt,
           diagnostics: {
             reason: "No execution stages registered.",
           },

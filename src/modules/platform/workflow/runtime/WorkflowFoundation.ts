@@ -226,6 +226,7 @@ export function createWorkflowFoundation(
     workflowPolicyEngine,
     runtimeEffectPlanner,
     executionPlanBuilder,
+    executionMapper,
     workflowPlanExecutor,
     workflowExecutorRegistry,
     executionPipeline,
