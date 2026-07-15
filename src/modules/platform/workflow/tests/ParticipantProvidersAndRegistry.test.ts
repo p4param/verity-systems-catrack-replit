@@ -51,6 +51,13 @@ describe("Participant providers and registry", () => {
     expect(registry.get("Group")).toBeNull();
   });
 
+  test("registry rejects duplicate participant provider registrations", () => {
+    const registry = new ParticipantRegistry();
+    registry.register(new UserParticipantProvider());
+
+    expect(() => registry.register(new UserParticipantProvider())).toThrow("Duplicate participant provider registered");
+  });
+
   test("providers resolve participants deterministically", async () => {
     const context = assignmentContext();
 

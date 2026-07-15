@@ -41,6 +41,7 @@ describe("Participant resolution and assignment planning", () => {
   test("builds deterministic participant resolution result", async () => {
     const registry = new ParticipantRegistry();
     registry.register(new RoleParticipantProvider());
+    const assignmentContext = context();
 
     const engine = new ParticipantResolutionEngine(
       registry,
@@ -48,12 +49,17 @@ describe("Participant resolution and assignment planning", () => {
       new AssignmentPlanner()
     );
 
-    const result = await engine.resolve(context() as any);
+    const result = await engine.resolve(assignmentContext as any);
 
     expect(result.assignmentId).toBeDefined();
     expect(result.participantSet.participants.length).toBe(1);
     expect(result.strategyResult.strategy).toBe("Priority");
     expect(Object.isFrozen(result)).toBe(true);
+
+    const second = await engine.resolve(assignmentContext as any);
+    expect(result.participantSet).toEqual(second.participantSet);
+    expect(result.strategyResult).toEqual(second.strategyResult);
+    expect(result.diagnostics.planId).toBe(second.diagnostics.planId);
   });
 
   test("throws when provider is missing", async () => {
@@ -115,5 +121,20 @@ describe("Participant resolution and assignment planning", () => {
     const result = await strategy.resolveStrategy(ctx as any, participantSet as any);
     expect(result.selectedParticipants).toHaveLength(1);
     expect(result.strategySeed).toBe("seed-weighted");
+  });
+
+  test("rejects invalid assignment strategy", async () => {
+    const strategy = new AssignmentStrategyEngine();
+    const ctx = context();
+    (ctx.assignment as any).strategy = "InvalidStrategy";
+
+    const participantSet = {
+      assignmentId: ctx.assignment.id,
+      participants: [],
+      requiredParticipants: [],
+      optionalParticipants: [],
+    };
+
+    await expect(strategy.resolveStrategy(ctx as any, participantSet as any)).rejects.toThrow("Invalid assignment strategy");
   });
 });

@@ -33,6 +33,13 @@ describe("Workflow action providers and registry", () => {
     expect(customProvider?.actionTypes.includes("CustomAction")).toBe(true);
   });
 
+  test("registry rejects duplicate action provider registrations", () => {
+    const registry = new WorkflowActionRegistry();
+    registry.register(new PlatformActionProvider());
+
+    expect(() => registry.register(new PlatformActionProvider())).toThrow("Duplicate action provider registered");
+  });
+
   test("providers return deterministic action planning metadata", async () => {
     const registry = buildRegistry();
     const provider = registry.getByActionType("Notification");
