@@ -5,6 +5,7 @@ import type { IExecutionStage } from "../contracts/IExecutionStage";
 import type { IWorkflowExecutor, WorkflowExecutorResult } from "../contracts/IWorkflowExecutor";
 import type { IWorkflowExecutorRegistry } from "../contracts/IWorkflowExecutorRegistry";
 import type { RuntimeOperationResponse } from "../contracts/IRuntimeOperationResponse";
+import { RuntimeApplicationExecutor } from "./RuntimeApplicationExecutor";
 
 export class ExecutionDispatchStage implements IExecutionStage {
   readonly stageId = "RuntimeExecution";
@@ -114,7 +115,7 @@ export class ExecutionDispatchStage implements IExecutionStage {
         },
       });
 
-      const result = await this.executeWithExecutor(executor, request);
+      const result = await this.executeWithExecutor(executor, request, context.runtimeApplicationEngine);
       const runtimeExecutionTime = Date.now() - runtimeStartedAt;
       runtimeDuration += runtimeExecutionTime;
 
@@ -300,8 +301,14 @@ export class ExecutionDispatchStage implements IExecutionStage {
 
   private async executeWithExecutor(
     executor: IWorkflowExecutor,
-    request: Parameters<IWorkflowExecutor["execute"]>[0]
+    request: Parameters<IWorkflowExecutor["execute"]>[0],
+    runtimeApplicationEngine?: IExecutionContext["runtimeApplicationEngine"]
   ): Promise<WorkflowExecutorResult> {
-    return executor.execute(request);
+    const resolvedExecutor =
+      executor.executorKey === "workflow.executor.runtime-application"
+        ? new RuntimeApplicationExecutor(runtimeApplicationEngine)
+        : executor;
+
+    return resolvedExecutor.execute(request);
   }
 }

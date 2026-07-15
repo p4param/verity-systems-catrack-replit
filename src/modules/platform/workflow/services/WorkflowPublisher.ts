@@ -37,6 +37,20 @@ function stableStringify(value: unknown): string {
   return `{${keys.map((key) => `${JSON.stringify(key)}:${stableStringify(record[key])}`).join(",")}}`;
 }
 
+function canonicalizeSnapshot(snapshot: WorkflowMetadataSnapshot): WorkflowMetadataSnapshot {
+  return {
+    ...snapshot,
+    version: {
+      ...snapshot.version,
+      status: "Draft",
+      publishedAt: undefined,
+      publishedBy: undefined,
+      updatedAt: snapshot.version.createdAt,
+      updatedBy: snapshot.version.createdBy,
+    },
+  };
+}
+
 export class WorkflowPublisher implements IWorkflowPublisher {
   constructor(
     private readonly repository: IWorkflowRepository,
@@ -215,6 +229,9 @@ export class WorkflowPublisher implements IWorkflowPublisher {
       return false;
     }
 
-    return stableStringify(existingManifest.designerSnapshot) === stableStringify(snapshot);
+    return (
+      stableStringify(canonicalizeSnapshot(existingManifest.designerSnapshot)) ===
+      stableStringify(canonicalizeSnapshot(snapshot))
+    );
   }
 }
