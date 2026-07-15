@@ -11,14 +11,43 @@ import type { IStateResolver } from "../contracts/IStateResolver";
 import type { ITransitionResolver } from "../contracts/ITransitionResolver";
 import type { IWorkflowGraphBuilder } from "../contracts/IWorkflowGraphBuilder";
 import type { IWorkflowGraphValidator } from "../contracts/IWorkflowGraphValidator";
+import type { IParticipantResolutionEngine } from "../contracts/IParticipantResolutionEngine";
+import type { IParticipantRegistry } from "../contracts/IParticipantRegistry";
+import type { IAssignmentStrategyEngine } from "../contracts/IAssignmentStrategyEngine";
+import type { IAssignmentPlanner } from "../contracts/IAssignmentPlanner";
+import type { IParticipantValidator } from "../contracts/IParticipantValidator";
+import type { IParticipantManifestGenerator } from "../contracts/IParticipantManifestGenerator";
+import type { IHierarchyResolver } from "../contracts/IHierarchyResolver";
+import type { IWorkflowActionRegistry } from "../contracts/IWorkflowActionRegistry";
+import type { IWorkflowActionEngine } from "../contracts/IWorkflowActionEngine";
+import type { IWorkflowPolicyEngine } from "../contracts/IWorkflowPolicyEngine";
+import type { IRuntimeEffectGraphBuilder } from "../contracts/IRuntimeEffectGraphBuilder";
+import type { IRuntimeEffectPlanner } from "../contracts/IRuntimeEffectPlanner";
+import type { IExecutionPlanBuilder } from "../contracts/IExecutionPlanBuilder";
+import type { IWorkflowActionValidator } from "../contracts/IWorkflowActionValidator";
+import type { IWorkflowPlanExecutor } from "../contracts/IWorkflowPlanExecutor";
 import type { IWorkflowValidator } from "../contracts/IWorkflowValidator";
 import type { IWorkflowVersionManager } from "../contracts/IWorkflowVersionManager";
 import { WorkflowRepository } from "../repositories/WorkflowRepository";
+import { AssignmentPlanner } from "../services/AssignmentPlanner";
+import { AssignmentStrategyEngine } from "../services/AssignmentStrategyEngine";
+import { ExecutionPlanBuilder } from "../services/ExecutionPlanBuilder";
+import { DeferredWorkflowPlanExecutor } from "../services/DeferredWorkflowPlanExecutor";
+import { HierarchyResolver } from "../services/HierarchyResolver";
+import { ParticipantManifestGenerator } from "../services/ParticipantManifestGenerator";
+import { ParticipantRegistry } from "../services/ParticipantRegistry";
+import { ParticipantResolutionEngine } from "../services/ParticipantResolutionEngine";
+import { ParticipantValidator } from "../services/ParticipantValidator";
+import { RuntimeEffectGraphBuilder } from "../services/RuntimeEffectGraphBuilder";
+import { RuntimeEffectPlanner } from "../services/RuntimeEffectPlanner";
 import { RuntimeExpressionAdapter } from "../services/RuntimeExpressionAdapter";
 import { StateResolver } from "../services/StateResolver";
 import { StateMachineEngine } from "../services/StateMachineEngine";
 import { TransitionResolver } from "../services/TransitionResolver";
 import { TransitionEngine } from "../services/TransitionEngine";
+import { WorkflowActionEngine } from "../services/WorkflowActionEngine";
+import { WorkflowActionRegistry } from "../services/WorkflowActionRegistry";
+import { WorkflowActionValidator } from "../services/WorkflowActionValidator";
 import { WorkflowEngine } from "../services/WorkflowEngine";
 import { WorkflowGraphBuilder } from "../services/WorkflowGraphBuilder";
 import { WorkflowGraphValidator } from "../services/WorkflowGraphValidator";
@@ -26,10 +55,29 @@ import { WorkflowManifestGenerator } from "../services/WorkflowManifestGenerator
 import { WorkflowMetadataProvider } from "../services/WorkflowMetadataProvider";
 import { WorkflowMetadataNormalizer } from "../services/WorkflowMetadataNormalizer";
 import { WorkflowMetadataOptimizer } from "../services/WorkflowMetadataOptimizer";
+import { WorkflowPolicyEngine } from "../services/WorkflowPolicyEngine";
 import { WorkflowPublisher } from "../services/WorkflowPublisher";
 import { WorkflowSimulationService } from "../services/WorkflowSimulationService";
 import { WorkflowValidator } from "../services/WorkflowValidator";
 import { WorkflowVersionManager } from "../services/WorkflowVersionManager";
+import {
+  ApiActionProvider,
+  CustomActionProvider,
+  DocumentActionProvider,
+  EventActionProvider,
+  NotificationActionProvider,
+  PlatformActionProvider,
+  ReportActionProvider,
+} from "../services/action-providers";
+import { GenericPolicyProvider } from "../services/policy-providers";
+import {
+  ExpressionParticipantProvider,
+  GroupParticipantProvider,
+  HierarchyParticipantProvider,
+  LookupParticipantProvider,
+  RoleParticipantProvider,
+  UserParticipantProvider,
+} from "../services/participant-providers";
 import { WorkflowMiddleware } from "./WorkflowMiddleware";
 
 export interface WorkflowFoundation {
@@ -48,6 +96,21 @@ export interface WorkflowFoundation {
   transitionResolver: ITransitionResolver;
   workflowGraphBuilder: IWorkflowGraphBuilder;
   workflowGraphValidator: IWorkflowGraphValidator;
+  participantResolutionEngine: IParticipantResolutionEngine;
+  participantRegistry: IParticipantRegistry;
+  assignmentStrategyEngine: IAssignmentStrategyEngine;
+  assignmentPlanner: IAssignmentPlanner;
+  participantValidator: IParticipantValidator;
+  participantManifestGenerator: IParticipantManifestGenerator;
+  hierarchyResolver: IHierarchyResolver;
+  workflowActionRegistry: IWorkflowActionRegistry;
+  workflowActionEngine: IWorkflowActionEngine;
+  workflowPolicyEngine: IWorkflowPolicyEngine;
+  runtimeEffectGraphBuilder: IRuntimeEffectGraphBuilder;
+  runtimeEffectPlanner: IRuntimeEffectPlanner;
+  executionPlanBuilder: IExecutionPlanBuilder;
+  workflowActionValidator: IWorkflowActionValidator;
+  workflowPlanExecutor: IWorkflowPlanExecutor;
 }
 
 export function createWorkflowFoundation(
@@ -56,18 +119,62 @@ export function createWorkflowFoundation(
   const expressionAdapter = new RuntimeExpressionAdapter();
   const workflowGraphBuilder = new WorkflowGraphBuilder();
   const workflowGraphValidator = new WorkflowGraphValidator();
+  const hierarchyResolver = new HierarchyResolver();
+  const participantRegistry = new ParticipantRegistry();
+  participantRegistry.register(new UserParticipantProvider());
+  participantRegistry.register(new RoleParticipantProvider());
+  participantRegistry.register(new GroupParticipantProvider());
+  participantRegistry.register(new ExpressionParticipantProvider());
+  participantRegistry.register(new LookupParticipantProvider());
+  participantRegistry.register(new HierarchyParticipantProvider(hierarchyResolver));
+
+  const assignmentStrategyEngine = new AssignmentStrategyEngine();
+  const assignmentPlanner = new AssignmentPlanner();
+  const participantResolutionEngine = new ParticipantResolutionEngine(
+    participantRegistry,
+    assignmentStrategyEngine,
+    assignmentPlanner
+  );
+  const participantValidator = new ParticipantValidator(participantRegistry, hierarchyResolver);
+  const participantManifestGenerator = new ParticipantManifestGenerator();
+  const workflowActionRegistry = new WorkflowActionRegistry();
+  workflowActionRegistry.register(new PlatformActionProvider());
+  workflowActionRegistry.register(new ApiActionProvider());
+  workflowActionRegistry.register(new DocumentActionProvider());
+  workflowActionRegistry.register(new ReportActionProvider());
+  workflowActionRegistry.register(new EventActionProvider());
+  workflowActionRegistry.register(new NotificationActionProvider());
+  workflowActionRegistry.register(new CustomActionProvider());
+  const policyProviders = [new GenericPolicyProvider()];
+  const workflowActionEngine = new WorkflowActionEngine(workflowActionRegistry);
+  const workflowPolicyEngine = new WorkflowPolicyEngine(policyProviders);
+  const runtimeEffectGraphBuilder = new RuntimeEffectGraphBuilder();
+  const runtimeEffectPlanner = new RuntimeEffectPlanner(runtimeEffectGraphBuilder);
+  const executionPlanBuilder = new ExecutionPlanBuilder();
+  const workflowActionValidator = new WorkflowActionValidator(workflowActionRegistry, policyProviders);
+  const workflowPlanExecutor = new DeferredWorkflowPlanExecutor();
+
   const stateResolver = new StateResolver();
   const transitionResolver = new TransitionResolver();
   const stateMachineEngine = new StateMachineEngine(workflowGraphBuilder, workflowGraphValidator, stateResolver);
   const transitionEngine = new TransitionEngine(transitionResolver, workflowGraphValidator);
   const validator = new WorkflowValidator(expressionAdapter);
-  const manifestGenerator = new WorkflowManifestGenerator(stateMachineEngine);
+  const manifestGenerator = new WorkflowManifestGenerator(
+    stateMachineEngine,
+    participantManifestGenerator,
+    workflowActionEngine,
+    workflowPolicyEngine,
+    runtimeEffectPlanner,
+    executionPlanBuilder
+  );
   const publisher = new WorkflowPublisher(
     repository,
     validator,
     manifestGenerator,
     new WorkflowMetadataNormalizer(),
-    new WorkflowMetadataOptimizer()
+    new WorkflowMetadataOptimizer(),
+    participantValidator,
+    workflowActionValidator
   );
   const metadataProvider = new WorkflowMetadataProvider(repository);
   const simulationService = new WorkflowSimulationService(transitionEngine);
@@ -77,7 +184,11 @@ export function createWorkflowFoundation(
     publisher,
     simulationService,
     stateMachineEngine,
-    transitionEngine
+    transitionEngine,
+    participantResolutionEngine,
+    workflowActionEngine,
+    workflowPolicyEngine,
+    runtimeEffectPlanner
   );
   const middleware = new WorkflowMiddleware(metadataProvider);
 
@@ -93,9 +204,24 @@ export function createWorkflowFoundation(
     workflowSimulationService: simulationService,
     stateMachineEngine,
     transitionEngine,
+    participantResolutionEngine,
     stateResolver,
     transitionResolver,
     workflowGraphBuilder,
     workflowGraphValidator,
+    participantRegistry,
+    assignmentStrategyEngine,
+    assignmentPlanner,
+    participantValidator,
+    participantManifestGenerator,
+    hierarchyResolver,
+    workflowActionRegistry,
+    workflowActionEngine,
+    workflowPolicyEngine,
+    runtimeEffectGraphBuilder,
+    runtimeEffectPlanner,
+    executionPlanBuilder,
+    workflowActionValidator,
+    workflowPlanExecutor,
   };
 }
