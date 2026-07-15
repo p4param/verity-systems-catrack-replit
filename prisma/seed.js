@@ -699,8 +699,8 @@ async function main() {
 
     // ── Seed Catering Event Module Master Data ────────────
     console.log('Seeding Catering Event Module Master Data...')
-    const cateringTenantUuid = "00000000-0000-0000-0000-" + String(tenant.id).padStart(12, '0')
-    const cateringCreatorUuid = "00000000-0000-0000-0000-000000000001"
+    const cateringTenantUuid = tenant.id  // VS05Z: tenant.id is now a UUID string
+    const cateringCreatorUuid = adminUser.id  // VS05Z: use actual admin UUID
 
     // 1. Statuses
     const cateringStatuses = [

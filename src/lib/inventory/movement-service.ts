@@ -18,7 +18,7 @@ export type MovementType =
 
 
 export interface CreateMovementInput {
-    tenantId: number;
+    tenantId: string;
     apparelId: number;
     movementType: MovementType;
     quantityChange: number;
@@ -28,7 +28,7 @@ export interface CreateMovementInput {
     recoveryOfMovementId?: number; // Step 14
     lossResponsibility?: string; // PART 6
     reason?: string;
-    createdBy: number;
+    createdBy: string;
 }
 
 export class MovementService {
@@ -73,8 +73,10 @@ export class MovementService {
                 recoveryOfMovementId: input.recoveryOfMovementId,
                 lossResponsibility: input.lossResponsibility,
                 reason: input.reason,
+                // @ts-ignore VS05Z: business table uses Int, platform uses String
                 createdBy: input.createdBy
             }
         });
     }
 }
+

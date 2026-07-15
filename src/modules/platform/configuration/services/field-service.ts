@@ -20,12 +20,12 @@ export class FieldService {
     return this.repository.getById(id);
   }
 
-  async createField(entityId: string, data: CreateFieldDto, tenantId: number, actorUserId: number) {
+  async createField(entityId: string, data: CreateFieldDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating field creation: ${data.code} for entity ${entityId}`, { tenantId, userId: actorUserId, module: "FieldService" });
     
     // Validate payload
     const validatedData = createFieldDtoSchema.parse(data);
-    const formattedCreatedBy = formatUserIdToUuid(actorUserId);
+    const formattedCreatedBy = actorUserId;
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -50,6 +50,7 @@ export class FieldService {
           uiControl: validatedData.uiControl,
           required: validatedData.required,
           unique: validatedData.unique,
+          indexed: validatedData.indexed,
           searchable: validatedData.searchable,
           sortable: validatedData.sortable,
           filterable: validatedData.filterable,
@@ -78,11 +79,11 @@ export class FieldService {
     }
   }
 
-  async updateField(id: string, data: UpdateFieldDto, tenantId: number, actorUserId: number) {
+  async updateField(id: string, data: UpdateFieldDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating field update: ${id}`, { tenantId, userId: actorUserId, module: "FieldService" });
     
     const validatedData = updateFieldDtoSchema.parse(data);
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -122,7 +123,7 @@ export class FieldService {
     }
   }
 
-  async deleteField(id: string, tenantId: number, actorUserId: number) {
+  async deleteField(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating field deletion: ${id}`, { tenantId, userId: actorUserId, module: "FieldService" });
 
     try {
@@ -148,3 +149,4 @@ export class FieldService {
     }
   }
 }
+

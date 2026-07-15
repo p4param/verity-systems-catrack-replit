@@ -16,8 +16,8 @@ export class NavigationService {
   private moduleRepository = new PlatformModuleRepository();
 
   // Navigation Groups CRUD
-  async createGroup(data: CreateNavigationGroupDto, tenantId: number, actorUserId: number) {
-    const created = await this.repository.createGroup({ ...data, createdBy: data.createdBy || formatUserIdToUuid(actorUserId) });
+  async createGroup(data: CreateNavigationGroupDto, tenantId: string, actorUserId: string) {
+    const created = await this.repository.createGroup({ ...data, createdBy: data.createdBy || actorUserId });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -28,8 +28,8 @@ export class NavigationService {
     return created;
   }
 
-  async updateGroup(id: string, data: UpdateNavigationGroupDto, tenantId: number, actorUserId: number) {
-    const updated = await this.repository.updateGroup(id, { ...data, updatedBy: formatUserIdToUuid(actorUserId) });
+  async updateGroup(id: string, data: UpdateNavigationGroupDto, tenantId: string, actorUserId: string) {
+    const updated = await this.repository.updateGroup(id, { ...data, updatedBy: actorUserId });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -40,7 +40,7 @@ export class NavigationService {
     return updated;
   }
 
-  async deleteGroup(id: string, tenantId: number, actorUserId: number) {
+  async deleteGroup(id: string, tenantId: string, actorUserId: string) {
     const deleted = await this.repository.deleteGroup(id);
     await createAuditLog({
       tenantId,
@@ -52,8 +52,8 @@ export class NavigationService {
     return deleted;
   }
 
-  async reorderGroups(orderedIds: string[], tenantId: number, actorUserId: number) {
-    const actorUuid = formatUserIdToUuid(actorUserId);
+  async reorderGroups(orderedIds: string[], tenantId: string, actorUserId: string) {
+    const actorUuid = actorUserId;
     const result = await this.repository.reorderGroups(orderedIds, actorUuid);
     await createAuditLog({
       tenantId,
@@ -66,8 +66,8 @@ export class NavigationService {
   }
 
   // Navigation Items CRUD
-  async createItem(data: CreateNavigationItemDto, tenantId: number, actorUserId: number) {
-    const created = await this.repository.createItem({ ...data, createdBy: data.createdBy || formatUserIdToUuid(actorUserId) });
+  async createItem(data: CreateNavigationItemDto, tenantId: string, actorUserId: string) {
+    const created = await this.repository.createItem({ ...data, createdBy: data.createdBy || actorUserId });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -78,8 +78,8 @@ export class NavigationService {
     return created;
   }
 
-  async updateItem(id: string, data: UpdateNavigationItemDto, tenantId: number, actorUserId: number) {
-    const updated = await this.repository.updateItem(id, { ...data, updatedBy: formatUserIdToUuid(actorUserId) });
+  async updateItem(id: string, data: UpdateNavigationItemDto, tenantId: string, actorUserId: string) {
+    const updated = await this.repository.updateItem(id, { ...data, updatedBy: actorUserId });
     await createAuditLog({
       tenantId,
       actorUserId,
@@ -90,7 +90,7 @@ export class NavigationService {
     return updated;
   }
 
-  async deleteItem(id: string, tenantId: number, actorUserId: number) {
+  async deleteItem(id: string, tenantId: string, actorUserId: string) {
     const deleted = await this.repository.deleteItem(id);
     await createAuditLog({
       tenantId,
@@ -102,8 +102,8 @@ export class NavigationService {
     return deleted;
   }
 
-  async moveItem(itemId: string, parentId: string | null, newDisplayOrder: number, tenantId: number, actorUserId: number) {
-    const actorUuid = formatUserIdToUuid(actorUserId);
+  async moveItem(itemId: string, parentId: string | null, newDisplayOrder: number, tenantId: string, actorUserId: string) {
+    const actorUuid = actorUserId;
     const updated = await this.repository.updateItem(itemId, {
       parentId: parentId,
       displayOrder: newDisplayOrder,
@@ -392,14 +392,14 @@ export class NavigationService {
   }
 
   // Publish runtime cache configuration file
-  async publishNavigation(profileId: string, actorUserId: number, tenantId: number) {
+  async publishNavigation(profileId: string, actorUserId: string, tenantId: string) {
     const validationResult = await this.validateNavigation();
     if (!validationResult.isValid) {
       throw new Error("Cannot publish navigation layout while critical configuration errors exist.");
     }
 
     const tree = await this.generateTree();
-    const actorUuid = formatUserIdToUuid(actorUserId);
+    const actorUuid = actorUserId;
 
     // Save layouts structures
     const layout = await this.repository.saveLayout(profileId, tree, true, actorUuid);
@@ -451,13 +451,13 @@ export class NavigationService {
     return this.repository.getVersions();
   }
 
-  async restoreVersion(versionId: string, actorUserId: number, tenantId: number) {
+  async restoreVersion(versionId: string, actorUserId: string, tenantId: string) {
     const targetVersion = await this.repository.getVersionById(versionId);
     if (!targetVersion) {
       throw new Error(`Version snapshot not found`);
     }
 
-    const actorUuid = formatUserIdToUuid(actorUserId);
+    const actorUuid = actorUserId;
     const structure = targetVersion.structure as any[];
 
     // Reconstruct groups & items from version structure in database
@@ -478,3 +478,4 @@ export class NavigationService {
     return { success: true, versionNumber: targetVersion.versionNumber };
   }
 }
+

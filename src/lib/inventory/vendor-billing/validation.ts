@@ -71,3 +71,4 @@ export const LossResponsibilityEnum = z.enum([
     "EVENT_TEAM",
     "UNKNOWN",
 ]);
+

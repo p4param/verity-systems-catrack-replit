@@ -12,7 +12,7 @@ import { Prisma } from "@/generated/client";
  * will be rolled back if the outer transaction fails.
  */
 export class SnapshotInvalidator {
-    static async invalidateToday(tenantId: number, tx?: Prisma.TransactionClient): Promise<void> {
+    static async invalidateToday(tenantId: string, tx?: Prisma.TransactionClient): Promise<void> {
         const db = tx ?? prisma;
         const today = new Date();
         today.setHours(0, 0, 0, 0);
@@ -22,3 +22,4 @@ export class SnapshotInvalidator {
         });
     }
 }
+

@@ -1,7 +1,7 @@
 import { prisma } from "../../prisma";
 
 interface ReportFilter {
-    tenantId: number;
+    tenantId: string;
     vendorId?: number;
     apparelId?: number;
     fromDate?: Date;
@@ -289,3 +289,4 @@ export class VendorBillingReportsService {
         })).sort((a, b) => b.netLiability - a.netLiability);
     }
 }
+

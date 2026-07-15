@@ -3,7 +3,7 @@ async function main() {
   const entity = await prisma.configurationEntity.findUnique({
     where: { id: '94725201-7c44-4d3b-b2b4-5a8663c9b6ae' }
   });
-  const manifest = entity.metadata.runtimeManifest;
+  const manifest = (entity.metadata as any).runtimeManifest;
   let displayFieldCode = "id";
   const possibleFields = ["NAME", "TITLE", "CODE", "DESCRIPTION"];
   for (const f of possibleFields) {
@@ -20,3 +20,4 @@ async function main() {
   console.log("Display Field Code for vehicle-type:", displayFieldCode);
 }
 main().finally(() => prisma.$disconnect());
+

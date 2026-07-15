@@ -1,0 +1,1895 @@
+﻿[2026-07-14 10:48:09.359 +0530] [32mINFO[39m: [36mInitiating entity creation: CERT_DEPT[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.409 +0530] [32mINFO[39m: [36mEntity created successfully: 48aa5a28-7f31-4be8-9777-62b6629d5f44[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "48aa5a28-7f31-4be8-9777-62b6629d5f44"
+[2026-07-14 10:48:09.416 +0530] [32mINFO[39m: [36mInitiating field creation: DEPT_NAME for entity 48aa5a28-7f31-4be8-9777-62b6629d5f44[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.450 +0530] [32mINFO[39m: [36mSuccessfully created field DEPT_NAME[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "a8676888-a46b-49d2-8d80-b156b35841ce"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.453 +0530] [32mINFO[39m: [36mInitiating entity publish: 48aa5a28-7f31-4be8-9777-62b6629d5f44[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "48aa5a28-7f31-4be8-9777-62b6629d5f44"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.491 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity 48aa5a28-7f31-4be8-9777-62b6629d5f44[39m
+[2026-07-14 10:48:09.474 +0530] [32mINFO[39m: [36mInitiating entity creation: POP_DEPARTMENT[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.513 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity 48aa5a28-7f31-4be8-9777-62b6629d5f44[39m
+[2026-07-14 10:48:09.525 +0530] [32mINFO[39m: [36mEntity created successfully: a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "a6f18619-4cff-4507-ac55-33a2989b88b9"
+[2026-07-14 10:48:09.535 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity HR_CERT_DEPT[39m
+[2026-07-14 10:48:09.528 +0530] [32mINFO[39m: [36mInitiating field creation: DEPT_CODE for entity a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.554 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051809-1480[39m
+[2026-07-14 10:48:09.555 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."hr_cert_dept" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "dept_name" VARCHAR(255) NOT NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_hr_cert_dept" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:09.562 +0530] [32mINFO[39m: [36mSuccessfully created field DEPT_CODE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "47b98efb-7082-4743-ab03-9f7b773f2ef3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.565 +0530] [32mINFO[39m: [36mInitiating field creation: DEPT_NAME for entity a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.582 +0530] [32mINFO[39m: [36mSuccessfully created field DEPT_NAME[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "8f97536f-9475-4eed-ae28-32a62f2859fc"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.586 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:09.620 +0530] [32mINFO[39m: [36mSuccessfully created layout DEFAULT_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "ec66bb7b-140a-4eab-888c-0c9311810ce0"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:09.575 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity 48aa5a28-7f31-4be8-9777-62b6629d5f44: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "hr_cert_dept" already exists`[39m
+[2026-07-14 10:48:09.627 +0530] [32mINFO[39m: [36mInitiating entity creation: CERT_STRESS_TEST[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.627 +0530] [32mINFO[39m: [36mInitiating entity publish: a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "a6f18619-4cff-4507-ac55-33a2989b88b9"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.647 +0530] [32mINFO[39m: [36mEntity created successfully: f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "f854eb5d-c70f-461d-af70-57abd5a1b608"
+[2026-07-14 10:48:09.650 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_1 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.667 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_1[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "19acaf0a-a8a5-48c6-b6cc-caf8fedbfe21"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.670 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_2 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.669 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+[2026-07-14 10:48:09.686 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity a6f18619-4cff-4507-ac55-33a2989b88b9[39m
+[2026-07-14 10:48:09.688 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_2[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "fbb8d169-487c-4890-a7f4-6981167aaf80"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.694 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_3 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.697 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity HR_POP_DEPARTMENT[39m
+[2026-07-14 10:48:09.712 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_3[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "235d91ff-c61f-4252-b3ce-f3282bbf6b7a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.710 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051809-8840[39m
+[2026-07-14 10:48:09.710 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."hr_pop_department" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "dept_code" VARCHAR(255) NOT NULL,
+  "dept_name" VARCHAR(255) NOT NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_hr_pop_department" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:09.716 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_4 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.742 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_4[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ba145511-ba7f-431b-af5d-5c0666d8c190"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.746 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_5 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.762 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_5[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "30f1d31d-7537-49d8-a26d-e77af96e7d21"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.766 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_6 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.758 +0530] [32mINFO[39m: [36mInitiating entity creation: DEPARTMENT[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.782 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_6[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "29380f97-63ab-4c64-acaa-dfcc3bd0c3e3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.786 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_7 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.727 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity a6f18619-4cff-4507-ac55-33a2989b88b9: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "hr_pop_department" already exists`[39m
+[2026-07-14 10:48:09.798 +0530] [32mINFO[39m: [36mInitiating entity creation: POP_CUSTOMER[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.808 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_7[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e96e3ffb-0955-4754-bd27-cb5b8e5c33c6"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.814 +0530] [32mINFO[39m: [36mEntity created successfully: 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "84396609-5b58-41d1-8813-f81c237a8e58"
+[2026-07-14 10:48:09.819 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_8 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.828 +0530] [32mINFO[39m: [36mEntity created successfully: 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "989dd6a2-24e0-4544-ad10-3a6281764216"
+[2026-07-14 10:48:09.833 +0530] [32mINFO[39m: [36mInitiating field creation: CUST_CODE for entity 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.837 +0530] [32mINFO[39m: [36mInitiating field creation: DEPT_CODE for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.846 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_8[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "9cb57efe-1040-4ed8-a2c4-55e021c2b4db"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.848 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_9 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.857 +0530] [32mINFO[39m: [36mSuccessfully created field CUST_CODE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b6609ab1-c84b-4afe-8eee-9c67b93c3d67"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.860 +0530] [32mINFO[39m: [36mInitiating field creation: CREDIT_LIMIT for entity 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.867 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_9[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "bbb9af6f-930e-4b57-abd8-3d2a6afa2cc2"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.879 +0530] [32mINFO[39m: [36mSuccessfully created field DEPT_CODE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d02f428a-c5d4-4d03-a838-b7be23a232c7"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.874 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_10 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.881 +0530] [32mINFO[39m: [36mInitiating field creation: DEPT_NAME for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.875 +0530] [32mINFO[39m: [36mSuccessfully created field CREDIT_LIMIT[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3deb4760-e682-4a5b-93cd-e69ac00ea50b"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.877 +0530] [32mINFO[39m: [36mInitiating field creation: MEMBERSHIP for entity 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.892 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_10[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0a8cc8b7-f4cf-426d-93aa-05473ec9f93e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.894 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_11 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.902 +0530] [32mINFO[39m: [36mSuccessfully created field DEPT_NAME[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "01df72eb-4e3b-4a77-bb0d-aee05470e313"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.905 +0530] [32mINFO[39m: [36mInitiating field creation: DESCRIPTION for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.903 +0530] [32mINFO[39m: [36mSuccessfully created field MEMBERSHIP[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "db1f1583-1226-471e-ab67-6cd98fc54cd4"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.911 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_11[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6159a9ab-e42f-4272-b20c-8a7beacdc713"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.905 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:09.915 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_12 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.929 +0530] [32mINFO[39m: [36mSuccessfully created field DESCRIPTION[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "cd28dbda-b9f1-4fbe-b132-aed94e736b42"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.933 +0530] [32mINFO[39m: [36mInitiating field creation: MANAGER for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.931 +0530] [32mINFO[39m: [36mSuccessfully created layout CUST_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "bfe6e5c6-3434-4f71-82ab-c63e7360df50"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:09.935 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_12[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "cfc4d8fb-0885-42a6-ac22-b975681e3ec6"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.940 +0530] [32mINFO[39m: [36mInitiating entity publish: 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "989dd6a2-24e0-4544-ad10-3a6281764216"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:09.949 +0530] [32mINFO[39m: [36mSuccessfully created field MANAGER[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3a3acdaf-2e5f-48e1-b14e-50b4b740fbc7"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.945 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_13 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.949 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+[2026-07-14 10:48:09.956 +0530] [32mINFO[39m: [36mInitiating field creation: STATUS for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.963 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_13[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "827df316-610a-4f70-b461-ab2598c27587"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.963 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity 989dd6a2-24e0-4544-ad10-3a6281764216[39m
+[2026-07-14 10:48:09.972 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_14 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.983 +0530] [32mINFO[39m: [36mSuccessfully created field STATUS[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "534862fc-4349-4a96-ba8a-f0a206532092"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.975 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity FINANCE_POP_CUSTOMER[39m
+[2026-07-14 10:48:09.981 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051809-3125[39m
+[2026-07-14 10:48:09.981 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."finance_pop_customer" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "cust_code" VARCHAR(255) NOT NULL,
+  "credit_limit" NUMERIC(14, 4) NULL,
+  "membership" VARCHAR(255) NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_finance_pop_customer" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:09.991 +0530] [32mINFO[39m: [36mInitiating field creation: CREATED_ON for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.991 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_14[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c86ed3db-5bf4-45e4-8572-ac8d8901ad3e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.993 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_15 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:09.988 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity 989dd6a2-24e0-4544-ad10-3a6281764216: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "finance_pop_customer" already exists`[39m
+[2026-07-14 10:48:09.993 +0530] [32mINFO[39m: [36mInitiating entity creation: POP_SUPPLIER[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.022 +0530] [32mINFO[39m: [36mSuccessfully created field CREATED_ON[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6c067504-e089-4ea0-85be-86224f1eb2fd"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.027 +0530] [32mINFO[39m: [36mEntity created successfully: 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "303743c6-ab2d-4cde-87f7-a1812eb985ad"
+[2026-07-14 10:48:10.032 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_15[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c608d8b3-efdb-4b06-82c7-caa52e9a1164"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.037 +0530] [32mINFO[39m: [36mInitiating field creation: SUPP_CODE for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.042 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_16 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.063 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_16[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e1b6efb5-84f5-4277-adf8-0e76ee7c2449"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.061 +0530] [32mINFO[39m: [36mSuccessfully created field SUPP_CODE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d14c4324-817d-4242-ac9f-9158a3fde934"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.066 +0530] [32mINFO[39m: [36mInitiating field creation: ONBOARD_DATE for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.048 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.073 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_17 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.084 +0530] [32mINFO[39m: [36mSuccessfully created field ONBOARD_DATE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "5249c2d0-2855-4b95-b686-b8cc1e184b16"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.089 +0530] [32mINFO[39m: [36mInitiating field creation: DESCRIPTION for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.096 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_17[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6ea61c56-2e30-4368-881f-5b771cf1699e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.104 +0530] [32mINFO[39m: [36mSuccessfully created layout MAIN_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "f0dabf55-9eb9-4f6c-a57a-a6f41d01f181"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.103 +0530] [32mINFO[39m: [36mSuccessfully created field DESCRIPTION[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "35a4c845-eb6a-4311-b6e1-d84d8218e815"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.109 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_18 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.124 +0530] [32mINFO[39m: [36mInitiating entity publish: 84396609-5b58-41d1-8813-f81c237a8e58[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "84396609-5b58-41d1-8813-f81c237a8e58"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.115 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.125 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_18[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "9926a988-c3aa-4879-968f-7307de9a077f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.131 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_19 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.139 +0530] [32mINFO[39m: [36mSuccessfully created layout SUPP_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "64864312-a989-4b14-9cb6-3d142da1ab3e"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.144 +0530] [32mINFO[39m: [36mInitiating entity publish: 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "303743c6-ab2d-4cde-87f7-a1812eb985ad"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.151 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_19[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "df9ffcde-b632-4bcc-bcb3-48911e53e460"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.154 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_20 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.159 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+[2026-07-14 10:48:10.178 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+[2026-07-14 10:48:10.178 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad[39m
+[2026-07-14 10:48:10.191 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_20[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d1cbb28c-ced3-4822-91a0-93a3a5694b2d"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.192 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity PROCUREMENT_POP_SUPPLIER[39m
+[2026-07-14 10:48:10.198 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051810-7952[39m
+[2026-07-14 10:48:10.198 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."procurement_pop_supplier" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "supp_code" VARCHAR(255) NOT NULL,
+  "onboard_date" TIMESTAMP WITH TIME ZONE NULL,
+  "description" TEXT NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_procurement_pop_supplier" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:10.198 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_21 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.205 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity 303743c6-ab2d-4cde-87f7-a1812eb985ad: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "procurement_pop_supplier" already exists`[39m
+[2026-07-14 10:48:10.208 +0530] [32mINFO[39m: [36mInitiating entity creation: POP_PURCHASE_ORDER[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.228 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity 84396609-5b58-41d1-8813-f81c237a8e58[39m
+[2026-07-14 10:48:10.225 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_21[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "57203b6e-8b60-4dfe-8748-4dca86e5d7ae"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.227 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_22 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.227 +0530] [32mINFO[39m: [36mEntity created successfully: 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "52ae0958-06f2-404b-a58d-f4ae8f783404"
+[2026-07-14 10:48:10.229 +0530] [32mINFO[39m: [36mInitiating field creation: PO_NO for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.242 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity HR_DEPARTMENT[39m
+[2026-07-14 10:48:10.245 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_22[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "775d806b-b3b1-4f7e-a82c-1235acece45c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.247 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_23 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.247 +0530] [32mINFO[39m: [36mSuccessfully created field PO_NO[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "9143f96e-41c7-44d1-9f28-0e2ea83854f9"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.257 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051810-9072[39m
+[2026-07-14 10:48:10.250 +0530] [32mINFO[39m: [36mInitiating field creation: SUPPLIER_ID for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.257 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."hr_department" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "dept_code" VARCHAR(255) NOT NULL,
+  "dept_name" VARCHAR(255) NOT NULL,
+  "description" TEXT NULL,
+  "manager" VARCHAR(255) NULL,
+  "status" VARCHAR(255) NULL,
+  "created_on" TIMESTAMP WITH TIME ZONE NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_hr_department" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:10.274 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_23[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "fd41e9ae-b818-46d4-b831-6928828f313c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.283 +0530] [32mINFO[39m: [36mSuccessfully created field SUPPLIER_ID[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "51dfd559-8d47-45aa-9cf6-5f874c3af54d"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.286 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_24 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.290 +0530] [32mINFO[39m: [36mInitiating field creation: ORDER_DATE for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.309 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_24[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6e0e5c84-eaa0-4705-98d9-0eb844d6aa39"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.311 +0530] [32mINFO[39m: [36mSuccessfully created field ORDER_DATE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d583a760-aafc-4aec-8d80-d91ffb0fe79e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.315 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_25 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.316 +0530] [32mINFO[39m: [36mInitiating field creation: TOTAL_AMOUNT for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.330 +0530] [32mINFO[39m: [36mSuccessfully created field TOTAL_AMOUNT[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d69ca892-c355-4855-a331-6248b34f599a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.332 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_25[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "2b5be650-c49e-44c1-9363-a5ca29d43627"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.336 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_26 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.334 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.287 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity 84396609-5b58-41d1-8813-f81c237a8e58: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "hr_department" already exists`[39m
+[2026-07-14 10:48:10.351 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_26[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "4be23d11-fd31-4308-a695-362769cce7fa"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.354 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_27 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.355 +0530] [32mINFO[39m: [36mSuccessfully created layout PO_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "d1712bca-332c-4759-a235-858bcdddc33a"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:10.358 +0530] [32mINFO[39m: [36mInitiating entity publish: 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "52ae0958-06f2-404b-a58d-f4ae8f783404"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.366 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+[2026-07-14 10:48:10.369 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_27[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "23637c5a-03d6-406f-9e7f-79c0a62ee239"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.372 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_28 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.380 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+[2026-07-14 10:48:10.389 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_28[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "1d7a6f9f-be2c-4f1b-81e1-eafae1a24141"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.390 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity PROCUREMENT_POP_PURCHASE_ORDER[39m
+[2026-07-14 10:48:10.392 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_29 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.395 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051810-5213[39m
+[2026-07-14 10:48:10.395 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."procurement_pop_purchase_order" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "po_no" VARCHAR(255) NOT NULL,
+  "supplier_id" UUID NOT NULL,
+  "order_date" TIMESTAMP WITH TIME ZONE NOT NULL,
+  "total_amount" NUMERIC(14, 4) NOT NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_procurement_pop_purchase_order" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:10.409 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_29[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "4c23ffd4-023d-47bf-9908-b851ff08e6f1"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.413 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_30 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.420 +0530] [32mINFO[39m: [36mRunning verification checks for logical schema manifest of entity: POP_PURCHASE_ORDER[39m
+[2026-07-14 10:48:10.428 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_30[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0054ff05-5854-4f7a-bf5c-7cefed8b79da"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.432 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_31 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.446 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_31[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "2fa4605a-c364-4053-9330-465b20a2af9d"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.450 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_32 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.459 +0530] [33mWARN[39m: [36mVerification mismatch warning: Column "po_no" type in manifest is "varchar(255)", DB type is "character varying"[39m
+[2026-07-14 10:48:10.459 +0530] [32mINFO[39m: [36mDatabase verification check completed successfully for all tables.[39m
+[2026-07-14 10:48:10.465 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_32[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0452a86b-4d25-49a4-a412-41323911a270"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.463 +0530] [32mINFO[39m: [36mSuccessfully synchronized database schema for entity POP_PURCHASE_ORDER (v1) in 79ms[39m
+[2026-07-14 10:48:10.470 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_33 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.477 +0530] [32mINFO[39m: [36mGenerated Runtime Manifest for POP_PURCHASE_ORDER[39m
+    [35mentityId[39m: "52ae0958-06f2-404b-a58d-f4ae8f783404"
+    [35mmodule[39m: "procurement"
+[2026-07-14 10:48:10.486 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_33[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "2c7bf883-0bed-46e8-89cb-32961d8bc717"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.489 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_34 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.504 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_34[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "06070f15-298d-49e8-b834-c5f236d7924c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.512 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_35 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.512 +0530] [32mINFO[39m: [36mPublish pipeline completed successfully for entity 52ae0958-06f2-404b-a58d-f4ae8f783404. New Version: 1[39m
+[2026-07-14 10:48:10.520 +0530] [32mINFO[39m: [36mEntity published successfully: 52ae0958-06f2-404b-a58d-f4ae8f783404[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "52ae0958-06f2-404b-a58d-f4ae8f783404"
+[2026-07-14 10:48:10.527 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_35[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "48946418-2255-4d66-a257-4fe0436642cd"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.531 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_36 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.552 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_36[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "faea96a1-fc07-4e21-a001-746f3ec44c8c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.556 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_37 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.576 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_37[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ce8d7c57-de7e-4e36-b961-fb7ac909a145"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.582 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_38 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.596 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_38[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "19f08f69-d1fa-462a-823d-1de8063e9c0f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.598 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_39 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.612 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_39[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "f30392bf-d957-4f97-ad3d-22e253811173"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.614 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_40 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.633 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_40[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "4930288d-3b1f-432c-aa06-2b0f6b15356b"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.626 +0530] [32mINFO[39m: [36mInitiating entity creation: PRIORITY_TEST[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.638 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_41 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.660 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_41[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6543ece4-0b4f-4278-97f3-40f677256c96"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.671 +0530] [32mINFO[39m: [36mEntity created successfully: b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "b973e5a1-2903-4a94-9c3e-ceefcd5180a3"
+[2026-07-14 10:48:10.670 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_42 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.687 +0530] [32mINFO[39m: [36mInitiating field creation: CODE for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.690 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_42[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "7a9c6974-1eb1-4933-9dda-006a1d7c7cc0"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.693 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_43 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.716 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_43[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "83930343-68e4-4828-85a2-078fbef054ab"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.726 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_44 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.745 +0530] [32mINFO[39m: [36mSuccessfully created field CODE[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "129526f8-6d40-455b-a6e9-ed9682d0db5a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.748 +0530] [32mINFO[39m: [36mInitiating field creation: NAME for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.749 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_44[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b9a59708-7aed-4b0d-a74a-ea6a234364c6"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.751 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_45 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.763 +0530] [32mINFO[39m: [36mSuccessfully created field NAME[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "5c656b69-c118-4ddc-86ef-4def184de231"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.766 +0530] [32mINFO[39m: [36mInitiating field creation: LEVEL for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.766 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_45[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "094e9feb-796c-41be-bf84-6db97576a1c8"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.769 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_46 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.782 +0530] [32mINFO[39m: [36mSuccessfully created field LEVEL[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ac3cb19d-0042-42e6-8d96-9dc11886881a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.783 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_46[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "44ebc443-0320-47bf-bc60-06e9101ca872"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.792 +0530] [32mINFO[39m: [36mInitiating entity publish: b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "b973e5a1-2903-4a94-9c3e-ceefcd5180a3"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:10.786 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_47 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.799 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_47[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3d9ede81-bb0d-4726-84d3-0fe6e77a2977"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.804 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_48 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.819 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_48[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "f6110992-9d1e-4ddf-b66c-5a7ea09f8d38"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.824 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_49 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.839 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_49[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e902534f-368e-4d27-803f-ddf5fbbf8f41"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.843 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_50 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.855 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+[2026-07-14 10:48:10.866 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_50[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "16e21c84-200e-499c-8779-261a8c45099e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.879 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3[39m
+[2026-07-14 10:48:10.873 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_51 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.891 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity CPC_TEST_MODULE_PRIORITY_TEST[39m
+[2026-07-14 10:48:10.897 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_51[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "1cd175e4-937f-4ed2-ba82-16964420269b"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.905 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051810-5910[39m
+[2026-07-14 10:48:10.906 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."cpc_test_module_priority_test" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "code" VARCHAR(255) NOT NULL,
+  "name" VARCHAR(255) NOT NULL,
+  "level" INTEGER NOT NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_cpc_test_module_priority_test" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:10.905 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_52 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.926 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_52[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "106e62c6-d567-49a3-9bf3-67d7a66ef03c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.928 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_53 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.945 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_53[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b9fedd59-e0ac-4966-91ac-20c7112d089f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.956 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_54 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.931 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity b973e5a1-2903-4a94-9c3e-ceefcd5180a3: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "cpc_test_module_priority_test" already exists`[39m
+[2026-07-14 10:48:10.980 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_54[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c27f136a-9b1e-46c1-b59e-2fbd09949b89"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:10.982 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_55 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.001 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_55[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "2e008b17-6937-4429-b655-eaea62a48570"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.007 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_56 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.024 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_56[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "94a6dd86-e812-458f-b84b-bf0625ec5d24"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.027 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_57 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.052 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_57[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "292a6cd7-9a22-44b5-b1c7-8ee8866f59c4"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.056 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_58 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.071 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_58[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0c3335a6-b01f-4f7f-93fa-cc8d0395db6a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.077 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_59 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.109 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_59[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "decfbcd7-c477-4098-8e18-dcec85066b73"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.113 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_60 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.129 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_60[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "27e48b54-6b9c-478a-b147-352c9eb435f2"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.131 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_61 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.147 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_61[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "77147dae-3158-4d59-b437-77ed072d9710"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.149 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_62 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.164 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_62[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "55587ada-08c8-4421-add5-8485d9e2b832"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.166 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_63 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.183 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_63[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "4d10d102-de4a-4167-9499-787383981427"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.190 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_64 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.205 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_64[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b7b0674b-9a0f-4a9d-b435-314b4e6ecf0f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.208 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_65 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.228 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_65[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "084fdfe8-1327-44d4-bf02-e5fb87f26e0f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.230 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_66 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.249 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_66[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "de3cecec-877d-49de-9ffe-d43d0b18150a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.252 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_67 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.284 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_67[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c9c06c73-f2d3-4134-9a02-2cfa70096718"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.289 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_68 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.316 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_68[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b5044013-6ca1-4ea6-9910-a2f3da4e4b29"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.367 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_69 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.405 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_69[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "2802ea7c-be86-4623-9718-2ae72c6f1085"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.407 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_70 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.432 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_70[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "91342723-bf2f-4420-a758-d5078a5e0d6f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.436 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_71 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.455 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_71[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ed7d4549-59fe-4b5b-b5a2-042d275b4d79"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.459 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_72 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.482 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_72[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3d727f27-9170-4540-94b9-0b17a27b2521"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.493 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_73 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.509 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_73[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6a296066-a3c6-4754-bceb-51edb2462298"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.521 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_74 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.535 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_74[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "29c27122-a298-417a-a794-d054de12b7f5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.539 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_75 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.553 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_75[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "f80eb9c8-7527-47bb-ae6d-b19b23cf75c7"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.555 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_76 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.585 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_76[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c49220b3-7f66-4306-8a1b-d55bff622eb3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.592 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_77 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.609 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_77[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "165270a8-708f-4563-ad75-73f0a48e11c4"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.618 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_78 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.631 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_78[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b2ebbd0d-4712-4e42-ab88-cbda39af86eb"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.633 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_79 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.648 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_79[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "da503e5c-ea1a-4027-b896-060c34bb049f"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.650 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_80 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.665 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_80[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "abf82602-fbe0-4479-b362-054f6dc49255"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.667 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_81 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.691 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_81[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "bdb3380a-f78d-4067-a320-e64c74f906d5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.694 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_82 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.711 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_82[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "98d57194-e0b0-43ee-a09b-5413c1ceb347"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.716 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_83 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.731 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_83[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "69d19b8f-9a96-4966-887d-f441ce843113"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.733 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_84 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.749 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_84[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6533bd4a-35d2-4551-9f25-2521a11c8d45"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.751 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_85 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.766 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_85[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ae17992a-18d4-4f19-822d-c33e85ca1a8a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.770 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_86 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.796 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_86[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ddd09b80-bf34-4a11-acad-7c2e237760cc"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.800 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_87 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.821 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_87[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ba1450b4-999c-41f4-9f6c-6e0db4a0f4c2"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.825 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_88 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.858 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_88[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e7bcce63-d317-4e17-a858-d86e8ea8e8c5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.861 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_89 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.877 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_89[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c2ec06df-b34a-47a4-8e4b-5f4163ee4e2a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.881 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_90 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.897 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_90[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "8e2fd31c-8db7-47f4-bf23-ddd4ef0c4e45"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.901 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_91 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.919 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_91[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c28e07d0-7462-4fd1-9650-5cfd5981a8f1"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.940 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_92 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.960 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_92[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "fa118f76-8186-4bd4-95f4-43757ff12ba3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.965 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_93 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.981 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_93[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "73c02215-4752-4326-8edf-6fb5270b5cc0"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:11.983 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_94 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.017 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_94[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3bfa5395-ba8d-4f24-b322-afac5f671763"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.021 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_95 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.040 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_95[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "cb04eeec-e27c-4f03-b008-ae48886558ff"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.043 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_96 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.065 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_96[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b1d7da0d-e343-49d1-8f56-891813d1d6ae"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.069 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_97 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.087 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_97[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "a3f752bc-3fa2-4e8f-a2db-f0f302fd3f46"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.093 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_98 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.109 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_98[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "8fc1d136-f8bb-4814-916d-ae49e1a4122a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.113 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_99 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.130 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_99[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ee6999cd-fb82-493d-85de-f71554b741f1"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.136 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_100 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.151 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_100[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "64892b8c-adfb-4344-9b1a-11e74746fd1e"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.157 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_101 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.170 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_101[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "28d98b12-5eb4-44b7-bd1d-a2eb91433cb5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.176 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_102 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.188 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_102[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "b812a88b-0f92-429b-8e2d-01a00e0565dd"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.194 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_103 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.206 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_103[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e6bbf1a1-34cd-4e46-9e38-45fa33be0922"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.208 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_104 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.227 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_104[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "789b9b53-a46d-44b6-afde-ab88aecfc2a5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.229 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_105 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.243 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_105[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c3968ca7-adb9-493e-9d5f-48cf4962c853"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.245 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_106 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.257 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_106[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "a9f39faa-1f62-467f-85de-006efa94d972"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.260 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_107 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.273 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_107[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d71a65bc-a034-4e84-8d8f-f786e3dac128"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.275 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_108 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.287 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_108[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "628378b9-6ab0-4554-9b49-0dc17f13f4d3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.290 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_109 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.300 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_109[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3dd3f1c8-1873-44f6-bdbd-316e853e5e06"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.303 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_110 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.314 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_110[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "f24b9e1a-0513-4276-9c25-d1a73ab3eea1"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.317 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_111 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.327 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_111[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3ebf629d-0788-4123-b64c-ecdcb597e7eb"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.331 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_112 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.342 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_112[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "351f6453-64af-4463-90c9-27c6965ddd47"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.355 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_113 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.367 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_113[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "1684f030-0ba8-45a5-a222-0f2756624a96"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.371 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_114 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.378 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_114[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e6d61bfd-59c3-4f7a-8a2e-0e27d48240de"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.379 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_115 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.392 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_115[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "3d8475f0-3abd-47a5-9a80-2ce0bde86f28"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.393 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_116 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.399 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_116[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0f0499c3-7e35-43c6-879f-c4b9ee9292e5"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.400 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_117 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.408 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_117[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c94e0844-68ae-4a52-ac5e-e8f7a0ccd322"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.409 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_118 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.418 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_118[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "03915462-4a16-410e-a4cf-55aa537303dc"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.420 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_119 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.427 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_119[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "84652ad6-366e-48bf-bb95-b1ff68cbe049"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.428 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_120 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.437 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_120[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "80ea858c-3793-40fa-bcf7-090ee2f934ac"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.483 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_121 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.501 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_121[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "0f65197f-f241-48ff-8170-a0960a741634"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.507 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_122 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.530 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_122[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e0d9745b-6925-4cf3-b150-81da437b8894"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.535 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_123 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.551 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_123[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e36f536f-d53f-4b27-b93a-b62fe9a58271"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.554 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_124 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.565 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_124[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "51d82e92-22b3-43f3-aad0-c34186f1b2b2"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.566 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_125 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.576 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_125[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c7f4ad8c-2246-4d58-9873-e885a079b0a3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.578 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_126 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.586 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_126[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "fc8b3e3b-376a-4841-a5ad-44ec0ed3b57b"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.588 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_127 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.597 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_127[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "e75f1a93-3a9d-404c-b296-4fcff7752e87"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.598 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_128 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.606 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_128[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "f1e02f6d-2a1f-4265-97f2-d730277e71fb"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.607 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_129 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.613 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_129[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "00796d4c-1585-4fce-8cb5-4126eac54e60"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.615 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_130 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.624 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_130[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "7b091134-ac9c-465a-8f34-5f53335fd9e6"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.628 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_131 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.638 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_131[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "33c1f3f2-4a1e-47ab-9daa-6f59a834f2bc"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.640 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_132 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.652 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_132[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "857aa7dd-3197-4e61-b43b-71b5af0ab7ce"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.657 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_133 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.668 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_133[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "692f78a5-6231-42aa-b3a3-11628792526c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.671 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_134 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.679 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_134[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "60753ffd-2cf9-4f71-8f90-30ef7bd0eb31"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.682 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_135 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.694 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_135[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "a8aaef8e-846c-490a-8823-8b6ec263ab62"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.698 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_136 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.710 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_136[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "d8c6f9d9-0426-40c5-88af-11cc760cb7a4"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.715 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_137 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.730 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_137[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "1987e60b-dc0b-4fff-bbdf-39ec5cf82bff"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.734 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_138 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.745 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_138[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "9ed3c704-5439-4893-bbce-f2e5a5d3606c"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.750 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_139 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.763 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_139[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "c9983404-36df-4c97-ac02-4726e73bb326"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.768 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_140 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.781 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_140[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "cca2ec32-02ac-447a-b63e-63c6cc3e7389"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.787 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_141 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.798 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_141[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "36bb3485-c258-4f7c-8cdb-bf901b3efb13"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.799 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_142 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.816 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_142[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "711d43a7-a99e-4f33-a524-7a19942eaaa3"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.817 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_143 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.829 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_143[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "21e17306-7baf-4519-ba22-cd7a84105a1d"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.830 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_144 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.839 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_144[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "ae955bc1-089d-46f8-9394-32bf173a5b8d"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.840 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_145 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.849 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_145[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "60c612b6-ab60-4eec-91eb-f229d238ddf9"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.850 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_146 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.858 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_146[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "6bf80540-7397-496c-a8b1-81ec20e2a058"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.860 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_147 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.871 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_147[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "a8102d7a-f08f-49c6-b52e-9998c3c0a4b6"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.873 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_148 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.882 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_148[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "be70cc69-b553-4456-9c6e-0e78c83f1971"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.884 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_149 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.894 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_149[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "9b21947b-ac1d-4c4e-a242-b2acf1950e9a"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.898 +0530] [32mINFO[39m: [36mInitiating field creation: FIELD_150 for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.908 +0530] [32mINFO[39m: [36mSuccessfully created field FIELD_150[39m
+    [35mtenantId[39m: 1
+    [35mfieldId[39m: "aa5cff13-f7a7-4626-8acb-e88c9b969a51"
+    [35mmodule[39m: "FieldService"
+[2026-07-14 10:48:12.914 +0530] [32mINFO[39m: [36mInitiating layout creation for entity: f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:12.964 +0530] [32mINFO[39m: [36mSuccessfully created layout STRESS_FORM[39m
+    [35mtenantId[39m: 1
+    [35mlayoutId[39m: "edd8535c-3344-44c5-9d5f-0274f79de9cc"
+    [35mmodule[39m: "LayoutService"
+[2026-07-14 10:48:12.970 +0530] [32mINFO[39m: [36mInitiating entity publish: f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mentity[39m: "f854eb5d-c70f-461d-af70-57abd5a1b608"
+    [35mmodule[39m: "EntityService"
+[2026-07-14 10:48:12.977 +0530] [32mINFO[39m: [36mStarting formal publish pipeline for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+[2026-07-14 10:48:13.001 +0530] [32mINFO[39m: [36mStarting SchemaPlatformEngine sync for entity f854eb5d-c70f-461d-af70-57abd5a1b608[39m
+[2026-07-14 10:48:13.014 +0530] [32mINFO[39m: [36mAcquired transactional advisory lock for entity HR_CERT_STRESS_TEST[39m
+[2026-07-14 10:48:13.020 +0530] [32mINFO[39m: [36mApplying DDL migrations for migration: CM002-20260714051813-8345[39m
+[2026-07-14 10:48:13.020 +0530] [32mINFO[39m: [36mExecuting DDL statement:
+CREATE TABLE "public"."hr_cert_stress_test" (
+  "id" UUID NOT NULL,
+  "tenant_id" INTEGER NOT NULL,
+  "field_1" VARCHAR(255) NOT NULL,
+  "field_10" VARCHAR(255) NOT NULL,
+  "field_100" VARCHAR(255) NULL,
+  "field_101" NUMERIC(14, 4) NULL,
+  "field_102" BOOLEAN NULL,
+  "field_103" VARCHAR(255) NULL,
+  "field_104" NUMERIC(14, 4) NULL,
+  "field_105" BOOLEAN NULL,
+  "field_106" VARCHAR(255) NULL,
+  "field_107" NUMERIC(14, 4) NULL,
+  "field_108" BOOLEAN NULL,
+  "field_109" VARCHAR(255) NULL,
+  "field_11" NUMERIC(14, 4) NULL,
+  "field_110" NUMERIC(14, 4) NULL,
+  "field_111" BOOLEAN NULL,
+  "field_112" VARCHAR(255) NULL,
+  "field_113" NUMERIC(14, 4) NULL,
+  "field_114" BOOLEAN NULL,
+  "field_115" VARCHAR(255) NULL,
+  "field_116" NUMERIC(14, 4) NULL,
+  "field_117" BOOLEAN NULL,
+  "field_118" VARCHAR(255) NULL,
+  "field_119" NUMERIC(14, 4) NULL,
+  "field_12" BOOLEAN NULL,
+  "field_120" BOOLEAN NULL,
+  "field_121" VARCHAR(255) NULL,
+  "field_122" NUMERIC(14, 4) NULL,
+  "field_123" BOOLEAN NULL,
+  "field_124" VARCHAR(255) NULL,
+  "field_125" NUMERIC(14, 4) NULL,
+  "field_126" BOOLEAN NULL,
+  "field_127" VARCHAR(255) NULL,
+  "field_128" NUMERIC(14, 4) NULL,
+  "field_129" BOOLEAN NULL,
+  "field_13" VARCHAR(255) NULL,
+  "field_130" VARCHAR(255) NULL,
+  "field_131" NUMERIC(14, 4) NULL,
+  "field_132" BOOLEAN NULL,
+  "field_133" VARCHAR(255) NULL,
+  "field_134" NUMERIC(14, 4) NULL,
+  "field_135" BOOLEAN NULL,
+  "field_136" VARCHAR(255) NULL,
+  "field_137" NUMERIC(14, 4) NULL,
+  "field_138" BOOLEAN NULL,
+  "field_139" VARCHAR(255) NULL,
+  "field_14" NUMERIC(14, 4) NULL,
+  "field_140" NUMERIC(14, 4) NULL,
+  "field_141" BOOLEAN NULL,
+  "field_142" VARCHAR(255) NULL,
+  "field_143" NUMERIC(14, 4) NULL,
+  "field_144" BOOLEAN NULL,
+  "field_145" VARCHAR(255) NULL,
+  "field_146" NUMERIC(14, 4) NULL,
+  "field_147" BOOLEAN NULL,
+  "field_148" VARCHAR(255) NULL,
+  "field_149" NUMERIC(14, 4) NULL,
+  "field_15" BOOLEAN NULL,
+  "field_150" BOOLEAN NULL,
+  "field_16" VARCHAR(255) NULL,
+  "field_17" NUMERIC(14, 4) NULL,
+  "field_18" BOOLEAN NULL,
+  "field_19" VARCHAR(255) NULL,
+  "field_2" NUMERIC(14, 4) NOT NULL,
+  "field_20" NUMERIC(14, 4) NULL,
+  "field_21" BOOLEAN NULL,
+  "field_22" VARCHAR(255) NULL,
+  "field_23" NUMERIC(14, 4) NULL,
+  "field_24" BOOLEAN NULL,
+  "field_25" VARCHAR(255) NULL,
+  "field_26" NUMERIC(14, 4) NULL,
+  "field_27" BOOLEAN NULL,
+  "field_28" VARCHAR(255) NULL,
+  "field_29" NUMERIC(14, 4) NULL,
+  "field_3" BOOLEAN NOT NULL,
+  "field_30" BOOLEAN NULL,
+  "field_31" VARCHAR(255) NULL,
+  "field_32" NUMERIC(14, 4) NULL,
+  "field_33" BOOLEAN NULL,
+  "field_34" VARCHAR(255) NULL,
+  "field_35" NUMERIC(14, 4) NULL,
+  "field_36" BOOLEAN NULL,
+  "field_37" VARCHAR(255) NULL,
+  "field_38" NUMERIC(14, 4) NULL,
+  "field_39" BOOLEAN NULL,
+  "field_4" VARCHAR(255) NOT NULL,
+  "field_40" VARCHAR(255) NULL,
+  "field_41" NUMERIC(14, 4) NULL,
+  "field_42" BOOLEAN NULL,
+  "field_43" VARCHAR(255) NULL,
+  "field_44" NUMERIC(14, 4) NULL,
+  "field_45" BOOLEAN NULL,
+  "field_46" VARCHAR(255) NULL,
+  "field_47" NUMERIC(14, 4) NULL,
+  "field_48" BOOLEAN NULL,
+  "field_49" VARCHAR(255) NULL,
+  "field_5" NUMERIC(14, 4) NOT NULL,
+  "field_50" NUMERIC(14, 4) NULL,
+  "field_51" BOOLEAN NULL,
+  "field_52" VARCHAR(255) NULL,
+  "field_53" NUMERIC(14, 4) NULL,
+  "field_54" BOOLEAN NULL,
+  "field_55" VARCHAR(255) NULL,
+  "field_56" NUMERIC(14, 4) NULL,
+  "field_57" BOOLEAN NULL,
+  "field_58" VARCHAR(255) NULL,
+  "field_59" NUMERIC(14, 4) NULL,
+  "field_6" BOOLEAN NOT NULL,
+  "field_60" BOOLEAN NULL,
+  "field_61" VARCHAR(255) NULL,
+  "field_62" NUMERIC(14, 4) NULL,
+  "field_63" BOOLEAN NULL,
+  "field_64" VARCHAR(255) NULL,
+  "field_65" NUMERIC(14, 4) NULL,
+  "field_66" BOOLEAN NULL,
+  "field_67" VARCHAR(255) NULL,
+  "field_68" NUMERIC(14, 4) NULL,
+  "field_69" BOOLEAN NULL,
+  "field_7" VARCHAR(255) NOT NULL,
+  "field_70" VARCHAR(255) NULL,
+  "field_71" NUMERIC(14, 4) NULL,
+  "field_72" BOOLEAN NULL,
+  "field_73" VARCHAR(255) NULL,
+  "field_74" NUMERIC(14, 4) NULL,
+  "field_75" BOOLEAN NULL,
+  "field_76" VARCHAR(255) NULL,
+  "field_77" NUMERIC(14, 4) NULL,
+  "field_78" BOOLEAN NULL,
+  "field_79" VARCHAR(255) NULL,
+  "field_8" NUMERIC(14, 4) NOT NULL,
+  "field_80" NUMERIC(14, 4) NULL,
+  "field_81" BOOLEAN NULL,
+  "field_82" VARCHAR(255) NULL,
+  "field_83" NUMERIC(14, 4) NULL,
+  "field_84" BOOLEAN NULL,
+  "field_85" VARCHAR(255) NULL,
+  "field_86" NUMERIC(14, 4) NULL,
+  "field_87" BOOLEAN NULL,
+  "field_88" VARCHAR(255) NULL,
+  "field_89" NUMERIC(14, 4) NULL,
+  "field_9" BOOLEAN NOT NULL,
+  "field_90" BOOLEAN NULL,
+  "field_91" VARCHAR(255) NULL,
+  "field_92" NUMERIC(14, 4) NULL,
+  "field_93" BOOLEAN NULL,
+  "field_94" VARCHAR(255) NULL,
+  "field_95" NUMERIC(14, 4) NULL,
+  "field_96" BOOLEAN NULL,
+  "field_97" VARCHAR(255) NULL,
+  "field_98" NUMERIC(14, 4) NULL,
+  "field_99" BOOLEAN NULL,
+  "created_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "created_by" UUID NULL,
+  "updated_at" TIMESTAMP WITH TIME ZONE NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  "updated_by" UUID NULL,
+  "is_deleted" BOOLEAN NOT NULL DEFAULT false,
+  "deleted_at" TIMESTAMP WITH TIME ZONE NULL,
+  "deleted_by" UUID NULL,
+  "row_version" BIGINT NOT NULL DEFAULT 1,
+  CONSTRAINT "pk_hr_cert_stress_test" PRIMARY KEY ("id")
+);[39m
+[2026-07-14 10:48:13.024 +0530] [31mERROR[39m: [36mPublish pipeline failed for entity f854eb5d-c70f-461d-af70-57abd5a1b608: 
+Invalid `prisma.$executeRawUnsafe()` invocation:
+
+
+Raw query failed. Code: `42P07`. Message: `ERROR: relation "hr_cert_stress_test" already exists`[39m
+[2026-07-14 10:48:15.401 +0530] [32mINFO[39m: [36mInitiating entity creation: DB_TEST_ENT[39m
+    [35mtenantId[39m: 1
+    [35muserId[39m: 1
+    [35mmodule[39m: "EntityService"

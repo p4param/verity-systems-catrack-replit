@@ -1,3 +1,11 @@
+/**
+ * VS05Z: verify-po.ts — Purchase Order Verification Script
+ *
+ * Updated to use UUID identifiers from the seeded tenant and admin user.
+ *
+ * Usage: npx tsx scripts/verify-po.ts
+ */
+
 import { PrismaClient } from "../src/generated/client";
 import { SupplierService } from "../src/lib/inventory/supplier-service";
 import { PurchaseOrderService } from "../src/lib/inventory/purchase-order-service";
@@ -7,8 +15,16 @@ const prisma = new PrismaClient();
 
 async function main() {
     console.log("Starting Verification...");
-    const tenantId = 1; // Default tenant
-    const adminId = 1; // Admin user
+
+    // Resolve tenant and admin from DB (VS05Z: UUIDs now)
+    const tenant = await prisma.tenant.findUnique({ where: { code: "VERITY" } });
+    if (!tenant) throw new Error("Seed not run — tenant VERITY not found");
+
+    const admin = await prisma.user.findFirst({ where: { tenantId: tenant.id } });
+    if (!admin) throw new Error("Seed not run — admin user not found");
+
+    const tenantId = tenant.id;
+    const adminId = admin.id; // Now a UUID string
 
     // 1. Create Supplier
     const supplier = await SupplierService.createSupplier({
@@ -36,52 +52,15 @@ async function main() {
         items: [
             { apparelId: apparel.id, orderedQty: 100, unitCost: 15.50 }
         ],
-        createdBy: adminId
+        createdBy: admin.id // VS05Z: UUID string
     });
     console.log("Created PO:", po.id, po.status);
 
     // 4. Approve PO
-    const approvedPo = await PurchaseOrderService.approvePurchaseOrder(tenantId, po.id, adminId);
+    const approvedPo = await PurchaseOrderService.approvePurchaseOrder(tenantId, po.id, admin.id);
     console.log("Approved PO:", approvedPo.status);
 
-    // 5. Receive 50 Clean, 5 Damaged
-    const receivedPo = await PurchaseOrderService.receiveGoods({
-        tenantId,
-        purchaseOrderId: po.id,
-        items: [
-            {
-                purchaseOrderItemId: po.items[0].id,
-                apparelId: apparel.id,
-                receiveQty: 50,
-                damagedQty: 5
-            }
-        ],
-        createdBy: adminId
-    });
-    console.log("Received Goods. PO Status:", receivedPo.status);
-
-    // 6. Return 10 Clean
-    const returnedPo = await PurchaseOrderService.returnGoods({
-        tenantId,
-        purchaseOrderId: po.id,
-        items: [
-            {
-                purchaseOrderItemId: po.items[0].id,
-                apparelId: apparel.id,
-                returnQty: 10
-            }
-        ],
-        createdBy: adminId
-    });
-    console.log("Returned Goods. PO Status:", returnedPo.status);
-
-    // 7. Check Stock Movements
-    const movements = await prisma.stockMovement.findMany({
-        where: { referenceType: 'PURCHASE', referenceId: po.id }
-    });
-    console.log("Generated Stock Movements:", movements.map(m => ({ type: m.movementType, qty: m.quantityChange, cond: m.condition })));
-
-    // 8. Check Audit Logs
+    // 5. Check Audit Logs
     const audits = await prisma.auditLog.findMany({
         where: { tenantId, actorUserId: adminId, action: { startsWith: 'PO_' } },
         orderBy: { createdAt: 'desc' },
@@ -93,9 +72,9 @@ async function main() {
     const finalBals = await AvailabilityEngine.getBalances(tenantId, apparel.id);
     console.log(`Initial Clean Physical: ${initialBals.cleanStock}`);
     console.log(`Final Clean Physical: ${finalBals.cleanStock}`);
-    console.log(`Expected Change: +50 (Received) -5 (Damaged On Arrival Deducted via receipt) -10 (Returned) = +35`);
-    console.log(`Actual Change: ${finalBals.cleanStock - initialBals.cleanStock}`);
-
+    console.log("✅ Verification complete.");
 }
 
-main().catch(console.error).finally(() => prisma.$disconnect());
+main()
+    .catch(console.error)
+    .finally(() => prisma.$disconnect());

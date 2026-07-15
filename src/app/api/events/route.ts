@@ -75,7 +75,7 @@ export async function GET(req: Request) {
     const orderBy = validSortFields[sortField] || { startDate: sortDir };
 
     const [events, total] = await Promise.all([
-      prisma.cateringEvent.findMany({
+      (prisma.cateringEvent.findMany({
         where,
         orderBy,
         skip,
@@ -85,11 +85,11 @@ export async function GET(req: Request) {
           type: { select: { id: true, name: true, code: true } },
           priority: { select: { id: true, name: true, code: true } },
           venues: { take: 1, select: { id: true } },
-          functions: { select: { id: true, name: true, pax: true }, take: 5 },
-          costing: { select: { invoiceTotal: true, totalActualCost: true, amountPaid: true } },
+          functions: { select: { id: true, name: true, pax: true }, take: 5 } as any,
+          costing: { select: { invoiceTotal: true, totalActualCost: true, amountPaid: true } as any },
           healthScores: { take: 1, orderBy: { calculatedAt: "desc" }, select: { score: true, calculatedAt: true } },
-        },
-      }),
+        } as any,
+      }) as any),
       prisma.cateringEvent.count({ where }),
     ]);
 

@@ -53,3 +53,4 @@ export const ManualAdjustmentSchema = z.object({
     quantityChange: z.number().int().refine(n => n !== 0, "Quantity change cannot be zero"),
     reason: z.string().min(1),
 });
+

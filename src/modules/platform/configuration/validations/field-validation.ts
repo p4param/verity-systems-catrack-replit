@@ -9,12 +9,30 @@ const validFormatters = MetadataRegistry.Formatters.map((f) => f.id) as [string,
 const validBehaviors = MetadataRegistry.Behaviors.map((b) => b.id) as [string, ...string[]];
 
 export const lookupDefinitionSchema = z.object({
+  // ─── Core reference ────────────────────────────────────────────────────────
+  /** UUID of the referenced entity (used by LookupOptionProvider → /api/runtime/lookup/[entityId]) */
   referencedEntityId: z.string().uuid(),
+  /** Entity code string (used by LogicalSchemaBuilder for FK naming) */
+  referencedEntityCode: z.string().optional().nullable(),
+  /** Module code string (used by LogicalSchemaBuilder for cross-module FKs) */
+  referencedModuleCode: z.string().optional().nullable(),
+
+  // ─── Display configuration ──────────────────────────────────────────────────
+  /** UUID of the field to use as display label (overrides auto-detection) */
   displayFieldId: z.string().uuid().optional().nullable(),
+  /** Code of the field to use as display label (sent as ?display= param) */
+  displayFieldCode: z.string().optional().nullable(),
+  /** UUID of the field to store as the actual value */
   valueFieldId: z.string().uuid().optional().nullable(),
+
+  // ─── LOOKUP_VIEW specific ───────────────────────────────────────────────────
+  /** View code to restrict options to a specific entity view (sent as ?view= param) */
+  viewCode: z.string().optional().nullable(),
+
+  // ─── Advanced ───────────────────────────────────────────────────────────────
   searchFieldIds: z.array(z.string().uuid()).optional().nullable(),
   filterConditions: z.any().optional().nullable(),
-  sortConditions: z.any().optional().nullable()
+  sortConditions: z.any().optional().nullable(),
 });
 
 import { FieldControlRegistry } from "../registry/field-control-registry";
@@ -32,6 +50,7 @@ const baseCreateFieldSchema = z.object({
   // Base flags
   required: z.boolean().default(false),
   unique: z.boolean().default(false),
+  indexed: z.boolean().default(false),
   searchable: z.boolean().default(false),
   sortable: z.boolean().default(false),
   filterable: z.boolean().default(false),

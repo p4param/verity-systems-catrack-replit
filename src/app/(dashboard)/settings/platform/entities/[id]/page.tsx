@@ -18,6 +18,7 @@ import { entitySchema } from "@/modules/platform/configuration/validations/entit
 import { PublishDialog } from "../components/publish-dialog";
 import { FieldsTab } from "../components/fields-tab";
 import { ViewsTab } from "../components/views-tab";
+import { LayoutViewsTab } from "../components/layout-views-tab";
 
 export default function EntityDetailsPage() {
   const { id } = useParams();
@@ -151,7 +152,8 @@ export default function EntityDetailsPage() {
   const tabs = [
     { id: "general", label: "General" },
     ...(!isNew ? [{ id: "fields", label: "Fields" }] : []),
-    ...(!isNew ? [{ id: "views", label: "Views" }] : []),
+    ...(!isNew ? [{ id: "views", label: "Data Views" }] : []),
+    ...(!isNew ? [{ id: "layouts", label: "Layout Views" }] : []),
     { id: "navigation", label: "Navigation" },
     { id: "runtime", label: "Runtime" },
     { id: "api", label: "API" },
@@ -418,6 +420,10 @@ export default function EntityDetailsPage() {
               
               {activeTab === "views" && !isNew && (
                 <ViewsTab entityId={id as string} />
+              )}
+
+              {activeTab === "layouts" && !isNew && (
+                <LayoutViewsTab entityId={id as string} />
               )}
             </form>
           ) : (

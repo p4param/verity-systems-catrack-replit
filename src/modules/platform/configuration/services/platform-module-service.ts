@@ -41,7 +41,7 @@ export class PlatformModuleService {
     return this.repository.getByCode(code);
   }
 
-  async create(data: CreateModuleDto, tenantId: number, actorUserId: number) {
+  async create(data: CreateModuleDto, tenantId: string, actorUserId: string) {
     const existing = await this.repository.getByCode(data.code);
     if (existing) {
       throw new Error(`Module with code ${data.code} already exists`);
@@ -76,8 +76,8 @@ export class PlatformModuleService {
             displayOrder: count,
             menuType: "PAGE",
             visible: true,
-            createdBy: formatUserIdToUuid(actorUserId),
-            updatedBy: formatUserIdToUuid(actorUserId)
+            createdBy: actorUserId,
+            updatedBy: actorUserId
           }
         });
       }
@@ -94,7 +94,7 @@ export class PlatformModuleService {
     return platformModule;
   }
 
-  async update(id: string, data: UpdateModuleDto, tenantId: number, actorUserId: number) {
+  async update(id: string, data: UpdateModuleDto, tenantId: string, actorUserId: string) {
     const existing = await this.repository.getById(id);
     if (!existing) {
       throw new Error(`Module not found`);
@@ -127,7 +127,7 @@ export class PlatformModuleService {
               route: platformModule.route || existingItem.route,
               icon: platformModule.icon || existingItem.icon,
               title: platformModule.name || existingItem.title,
-              updatedBy: formatUserIdToUuid(actorUserId)
+              updatedBy: actorUserId
             }
           });
         } else {
@@ -144,8 +144,8 @@ export class PlatformModuleService {
               displayOrder: count,
               menuType: "PAGE",
               visible: true,
-              createdBy: formatUserIdToUuid(actorUserId),
-              updatedBy: formatUserIdToUuid(actorUserId)
+              createdBy: actorUserId,
+              updatedBy: actorUserId
             }
           });
         }
@@ -169,7 +169,7 @@ export class PlatformModuleService {
     return platformModule;
   }
 
-  async delete(id: string, tenantId: number, actorUserId: number) {
+  async delete(id: string, tenantId: string, actorUserId: string) {
     const existing = await this.repository.getById(id);
     if (!existing) {
       throw new Error(`Module not found`);
@@ -196,7 +196,7 @@ export class PlatformModuleService {
     return existing;
   }
 
-  async toggleActive(id: string, tenantId: number, actorUserId: number) {
+  async toggleActive(id: string, tenantId: string, actorUserId: string) {
     const existing = await this.repository.getById(id);
     if (!existing) {
       throw new Error(`Module not found`);
@@ -245,7 +245,7 @@ export class PlatformModuleService {
 
     const updated = await this.repository.update(id, {
       isActive: !existing.isActive,
-      updatedBy: formatUserIdToUuid(actorUserId),
+      updatedBy: actorUserId,
     });
 
     await createAuditLog({
@@ -259,12 +259,12 @@ export class PlatformModuleService {
     return updated;
   }
 
-  async reorder(orderedIds: string[], tenantId: number, actorUserId: number) {
+  async reorder(orderedIds: string[], tenantId: string, actorUserId: string) {
     for (let i = 0; i < orderedIds.length; i++) {
       await this.repository.update(orderedIds[i], {
         displayOrder: i,
         sortOrder: i,
-        updatedBy: formatUserIdToUuid(actorUserId)
+        updatedBy: actorUserId
       });
     }
 
@@ -501,7 +501,7 @@ export class PlatformModuleService {
       }));
   }
 
-  async cloneModule(id: string, newCode: string, tenantId: number, actorUserId: number) {
+  async cloneModule(id: string, newCode: string, tenantId: string, actorUserId: string) {
     const existing = await this.repository.getById(id);
     if (!existing) {
       throw new Error(`Module to clone not found`);
@@ -542,7 +542,7 @@ export class PlatformModuleService {
       helpUrl: existing.helpUrl || undefined,
       documentationUrl: existing.documentationUrl || undefined,
       supportEmail: existing.supportEmail || undefined,
-      createdBy: formatUserIdToUuid(actorUserId)
+      createdBy: actorUserId
     });
 
     await createAuditLog({
@@ -556,7 +556,7 @@ export class PlatformModuleService {
     return cloned;
   }
 
-  async publishRuntime(tenantId: number, actorUserId: number) {
+  async publishRuntime(tenantId: string, actorUserId: string) {
     const allModules = await this.repository.getAll();
     const validationResult = await this.validateDependencies();
 
@@ -593,3 +593,5 @@ export class PlatformModuleService {
     };
   }
 }
+
+

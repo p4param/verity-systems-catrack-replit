@@ -320,7 +320,7 @@ export function FieldDialog({ open, onOpenChange, entityId, fieldId, initialData
 
                   {isLookup && (
                     <div className="border border-border rounded-lg p-4 bg-muted/20">
-                      <LookupConfigurator form={{ register, control, watch, formState: { errors } } as any} />
+                      <LookupConfigurator form={{ register, control, watch, setValue, formState: { errors } } as any} />
                     </div>
                   )}
 
@@ -648,35 +648,93 @@ function FieldOptionsManager({ form }: { form: any }) {
 }
 
 
+
 function LookupConfigurator({ form }: { form: any }) {
-  const { register, watch, formState: { errors } } = form;
+  const { watch, setValue, formState: { errors } } = form;
   const { data: entities = [] } = useEntities();
   const referencedEntityId = watch("lookupDefinition.referencedEntityId");
+
+  // Auto-populate entityCode + moduleCode when entity selection changes
+  const handleEntityChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedId = e.target.value;
+    setValue("lookupDefinition.referencedEntityId", selectedId);
+    
+    if (selectedId) {
+      const selectedEntity = (entities as any[]).find((en: any) => en.id === selectedId);
+      if (selectedEntity) {
+        setValue("lookupDefinition.referencedEntityCode", selectedEntity.code || null);
+        setValue("lookupDefinition.referencedModuleCode", selectedEntity.module?.code || selectedEntity.moduleCode || null);
+      }
+    } else {
+      setValue("lookupDefinition.referencedEntityCode", null);
+      setValue("lookupDefinition.referencedModuleCode", null);
+      setValue("lookupDefinition.viewCode", null);
+    }
+  };
+
+  // Get views for the selected entity (stored on entity.views if included)
+  const selectedEntity = (entities as any[]).find((en: any) => en.id === referencedEntityId);
+  const availableViews: any[] = selectedEntity?.views || [];
 
   return (
     <div className="space-y-4">
       <h4 className="text-sm font-semibold">Lookup Configuration</h4>
       
+      {/* Target Entity */}
       <div>
-        <label className="block text-xs font-bold text-muted-foreground mb-1">Target Entity</label>
+        <label className="block text-xs font-bold text-muted-foreground mb-1">
+          Target Entity <span className="text-rose-500">*</span>
+        </label>
         <select
-          {...register("lookupDefinition.referencedEntityId")}
-          className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm"
+          value={referencedEntityId || ""}
+          onChange={handleEntityChange}
+          className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
         >
-          <option value="">-- Select an entity --</option>
-          {entities.map((e: any) => (
-            <option key={e.id} value={e.id}>{e.name}</option>
+          <option value="">— Select an entity —</option>
+          {(entities as any[]).map((e: any) => (
+            <option key={e.id} value={e.id}>{e.name} ({e.code})</option>
           ))}
         </select>
         {errors.lookupDefinition?.referencedEntityId && (
           <p className="text-rose-500 text-xs mt-1">{errors.lookupDefinition.referencedEntityId.message as string}</p>
         )}
+        {(entities as any[]).length === 0 && (
+          <p className="text-amber-500 text-xs mt-1">No entities found. Create and publish an entity first.</p>
+        )}
       </div>
 
-      <div className="p-3 border rounded-lg border-primary/20 bg-primary/5 text-sm text-primary">
-        <p className="font-semibold mb-1">Future Enhancement</p>
-        <p className="text-muted-foreground">In a future release, you will be able to select specific Display Fields, Value Fields, and Filter Conditions for this lookup.</p>
-      </div>
+      {/* Lookup View (optional — for LOOKUP_VIEW data source) */}
+      {referencedEntityId && (
+        <div>
+          <label className="block text-xs font-bold text-muted-foreground mb-1">
+            Lookup View <span className="text-muted-foreground font-normal">(optional)</span>
+          </label>
+          {availableViews.length > 0 ? (
+            <select
+              value={watch("lookupDefinition.viewCode") || ""}
+              onChange={(e) => setValue("lookupDefinition.viewCode", e.target.value || null)}
+              className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+            >
+              <option value="">— All records (no view filter) —</option>
+              {availableViews.map((v: any) => (
+                <option key={v.id} value={v.code}>{v.name}</option>
+              ))}
+            </select>
+          ) : (
+            <div className="px-3 py-2 border border-border rounded-lg text-xs text-muted-foreground bg-muted/20">
+              No views available for this entity. Records will be fetched without view filtering.
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Info panel when nothing selected */}
+      {!referencedEntityId && (
+        <div className="p-3 border rounded-lg border-primary/20 bg-primary/5 text-sm text-primary">
+          <p className="font-semibold mb-1">Lookup Configuration</p>
+          <p className="text-muted-foreground text-xs">Select a Target Entity to configure this lookup field. The runtime will fetch records from that entity and display them as selectable options.</p>
+        </div>
+      )}
     </div>
   );
 }

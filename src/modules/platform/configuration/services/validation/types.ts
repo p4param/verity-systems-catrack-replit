@@ -19,3 +19,4 @@ export interface EntityValidator {
   description: string;
   validate(entity: ConfigurationEntity, prisma: PrismaClient | any): Promise<ValidationMessage[]>;
 }
+

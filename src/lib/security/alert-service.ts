@@ -134,7 +134,7 @@ export class AlertService {
         }
     }
 
-    private static async checkLoginAnomaly(log: AuditLog, userId: number): Promise<AlertPayload | null> {
+    private static async checkLoginAnomaly(log: AuditLog, userId: string): Promise<AlertPayload | null> {
         // Tenant-Safe Query
         const previousLoginFromIp = await prisma.auditLog.findFirst({
             where: {
@@ -159,7 +159,7 @@ export class AlertService {
         return null;
     }
 
-    private static async createAlert(tenantId: number, userEmail: string, userId: number, payload: AlertPayload, sourceLog: AuditLog) {
+    private static async createAlert(tenantId: string, userEmail: string, userId: string, payload: AlertPayload, sourceLog: AuditLog) {
         const metadata = {
             ...payload.metadata,
             sourceLogId: sourceLog.id,
@@ -192,3 +192,4 @@ export class AlertService {
         });
     }
 }
+

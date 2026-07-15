@@ -1,6 +1,6 @@
 import { prisma } from "@/lib/prisma"
 
-export async function getUserPermissions(userId: number, tenantId: number) {
+export async function getUserPermissions(userId: string, tenantId: string) {
     const roles = await prisma.userRole.findMany({
         where: {
             userId,

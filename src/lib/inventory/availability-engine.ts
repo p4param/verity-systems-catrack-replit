@@ -6,7 +6,7 @@ export class AvailabilityEngine {
      * Calculates the current inventory balance components for a specific apparel.
      * All values are derived dynamically from the ledger (StockMovement) and current reservations.
      */
-    static async getBalances(tenantId: number, apparelId: number, tx?: Prisma.TransactionClient) {
+    static async getBalances(tenantId: string, apparelId: number, tx?: Prisma.TransactionClient) {
         const db = tx || prisma;
 
         // 1. Condition-aware Physical Stock
@@ -56,7 +56,7 @@ export class AvailabilityEngine {
         };
     }
 
-    static async getBulkBalances(tenantId: number, tx?: Prisma.TransactionClient) {
+    static async getBulkBalances(tenantId: string, tx?: Prisma.TransactionClient) {
         const db = tx || prisma;
 
         // 1. Physical Stock per apparel and condition
@@ -150,3 +150,4 @@ export class AvailabilityEngine {
         return results;
     }
 }
+

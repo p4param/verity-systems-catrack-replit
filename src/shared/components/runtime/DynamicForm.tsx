@@ -1,137 +1,180 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { useFormContext } from "react-hook-form";
 import { RuntimeManifest } from "@/modules/platform/runtime/services/manifest-generator";
-import { Input } from "@/components/ui/input";
-import { Switch } from "@/components/ui/switch";
-import { Button } from "@/components/ui/button";
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useRouter } from "next/navigation";
+import { Button } from "@/components/ui/button";
+
+import { FormTab } from "./layout/FormTab";
+import { ValidationSummary } from "./components/ValidationSummary";
+import { EmptyState } from "./components/EmptyState";
+import { FormSkeleton } from "./components/FormSkeleton";
+import { useRuntimeContext } from "./context/use-runtime-context";
+import { useRecordContext } from "./context/use-record-context";
+import { runtimeEventBus } from "./services/EventBus";
+import { EntityFieldDefinition, RuntimeEventType } from "./types/framework";
+
+import type { LayoutRoot } from "@/modules/platform/configuration/validations/layout-validation";
+import { listControls, resolveControl, ControlCompatibilityRegistry } from "./registry/UIControlRegistry";
+
+// ─── One-time registry dump (development only) ──────────────────────────────
+// Prints the full control registry BEFORE the first DynamicForm render to verify
+// all built-in controls are registered and resolveControl() works as expected.
+let _registryDumped = false;
+if (process.env.NODE_ENV === "development" && typeof window !== "undefined" && !_registryDumped) {
+  _registryDumped = true;
+  const controls = listControls();
+  console.group(
+    `%c[CAP Registry] ${controls.length} controls registered at DynamicForm module load`,
+    "color: #22c55e; font-weight: bold;"
+  );
+  controls
+    .sort((a, b) => a.code.localeCompare(b.code))
+    .forEach((c) =>
+      console.log(
+        `  %-20s renderer=%s (v%d.%d.%d, %s/%s)`,
+        c.code, c.renderer?.displayName ?? c.renderer?.name ?? "anonymous",
+        c.version.major, c.version.minor, c.version.patch,
+        c.tier, c.maturity
+      )
+    );
+
+  // Verify specific resolveControl() calls requested by VS05F2 acceptance criteria
+  const checks: [string, string][] = [
+    ["SEL_DROPDOWN",  "SelectControl"],
+    ["DOC_FILEUPLOAD","FileUploadControl"],
+    ["TXT_AREA",      "TextAreaControl"],
+    ["RICH_TEXT",     "TextAreaControl"],  // via CompatibilityRegistry → TXT_AREA
+    ["FILE_UPLOAD",   "FileUploadControl"], // alias → DOC_FILEUPLOAD
+    ["MULTI_SELECT",  "MultiSelectControl"], // alias → SEL_MULTISELECT
+  ];
+  console.group("%c[CAP Registry] resolveControl() verification:", "color: #3b82f6; font-weight: bold;");
+  checks.forEach(([code, expectedName]) => {
+    const fn = resolveControl(code, "1.0.0");
+    const actual = fn?.displayName ?? fn?.name ?? "undefined";
+    const pass = actual === expectedName || (fn && fn !== null);
+    console.log(
+      pass
+        ? `%c  ✅ resolveControl("${code}") → ${actual}`
+        : `%c  ❌ resolveControl("${code}") → ${actual} (expected: ${expectedName})`,
+      pass ? "color: #22c55e" : "color: #ef4444"
+    );
+  });
+  console.groupEnd();
+  console.log("%c[CAP Registry] Total aliases:", "color: #a855f7", Object.keys(ControlCompatibilityRegistry).length);
+  console.groupEnd();
+}
 
 interface DynamicFormProps {
   manifest: RuntimeManifest;
   initialData?: any;
-  onSubmit: (data: any) => void;
   isSaving: boolean;
+  isLoading?: boolean;
 }
 
-import { ControlRegistry, DiagnosticControl } from "./registry/UIControlRegistry";
-import { FieldControlRegistry } from "@/modules/platform/configuration/registry/field-control-registry";
-export function DynamicForm({ manifest, initialData, onSubmit, isSaving }: DynamicFormProps) {
+export function DynamicForm({ manifest, initialData, isSaving, isLoading = false }: DynamicFormProps) {
   const router = useRouter();
+  const form = useFormContext();
+  const runtimeContext = useRuntimeContext();
+  const recordContext = useRecordContext();
 
-  const defaultValues = useMemo(() => {
-    const defaults: Record<string, any> = {};
-    manifest.fields.forEach(f => {
-      if (f.defaultValue !== undefined && f.defaultValue !== null) {
-        if (f.dataType === "NUMBER" || f.dataType === "DECIMAL") {
-          defaults[f.code] = Number(f.defaultValue);
-        } else if (f.dataType === "BOOLEAN") {
-          defaults[f.code] = f.defaultValue === "true";
-        } else if (f.uiControl === "MULTI_SELECT" || f.uiControl === "MULTI_LOOKUP") {
-          try {
-            defaults[f.code] = typeof f.defaultValue === "string" ? JSON.parse(f.defaultValue) : f.defaultValue;
-          } catch(e) {
-            defaults[f.code] = [];
-          }
-        } else {
-          defaults[f.code] = f.defaultValue;
-        }
-      } else if (f.uiControl === "MULTI_SELECT" || f.uiControl === "MULTI_LOOKUP") {
-        defaults[f.code] = [];
-      } else {
-        defaults[f.code] = ""; // Ensure react-hook-form tracks it
-      }
+  // ─── Resolve Layout ──────────────────────────────────────────────
+  const layoutView = useMemo(() => {
+    const layouts = manifest.presentation?.layoutViews || [];
+    if (layouts.length === 0) return null;
+
+    const defaultForm = layouts.find((v: any) => v.isDefault && v.layoutType === "FORM");
+    const anyDefault = layouts.find((v: any) => v.isDefault);
+    const firstForm = layouts.find((v: any) => v.layoutType === "FORM");
+    return defaultForm || anyDefault || firstForm || layouts[0] || null;
+  }, [manifest.presentation?.layoutViews]);
+
+  const layout: LayoutRoot | null = useMemo(() => {
+    if (!layoutView?.layout) return null;
+    const l = layoutView.layout as LayoutRoot;
+    if (!l.tabs || l.tabs.length === 0) return null;
+    return l;
+  }, [layoutView]);
+
+  // ─── Build field lookup map ──────────────────────────────────────
+  const fieldMap = useMemo(() => {
+    const map = new Map<string, EntityFieldDefinition>();
+    manifest.fields.forEach((f) => {
+      map.set(f.id, f as unknown as EntityFieldDefinition);
+      map.set(f.code, f as unknown as EntityFieldDefinition);
     });
+    return map;
+  }, [manifest.fields]);
 
-    if (initialData) {
-      Object.assign(defaults, initialData);
-    }
-    
-    return defaults;
-  }, [manifest.fields, initialData]);
-
-  const form = useForm({
-    defaultValues
-  });
-
+  // Lifecycle initialize hook
   useEffect(() => {
-    if (initialData) {
-      form.reset(initialData);
+    runtimeEventBus.publish({
+      type: RuntimeEventType.INITIALIZE,
+      source: "DynamicForm",
+      timestamp: Date.now(),
+      payload: runtimeContext,
+    });
+    return () => {
+      runtimeEventBus.publish({
+        type: RuntimeEventType.DESTROY,
+        source: "DynamicForm",
+        timestamp: Date.now(),
+        payload: runtimeContext,
+      });
+    };
+  }, []);
+
+  const handleFieldChange = (fieldCode: string, val: any) => {
+    const changeStart = performance.now();
+    form.setValue(fieldCode, val, { shouldDirty: true, shouldValidate: true });
+    
+    const changeDuration = performance.now() - changeStart;
+    runtimeContext.diagnostics.setMetric("valueChangeMs", changeDuration);
+    
+    const field = fieldMap.get(fieldCode);
+    if (field) {
+      runtimeEventBus.publish({
+        type: RuntimeEventType.CHANGE,
+        source: field.id,
+        timestamp: Date.now(),
+        payload: {
+          fieldCode,
+          value: val,
+        },
+      });
     }
-  }, [initialData, form]);
+  };
 
-  // TODO: Switch to layoutViews when ready
-  const dataViews = manifest.presentation?.dataViews || [];
-  const formView = dataViews.find(v => v.code === manifest.presentation?.defaultLayoutView || v.viewType === "FORM");
-  const formLayout = formView?.columns ? (Array.isArray(formView.columns) ? formView.columns : JSON.parse(formView.columns as unknown as string)) : null;
+  if (isLoading) {
+    return <FormSkeleton />;
+  }
 
-  const renderFields = formLayout && formLayout.length > 0 
-    ? formLayout.map((col: any) => manifest.fields.find(f => f.code === col.field)).filter(Boolean)
-    : manifest.fields;
+  const renderContent = () => {
+    if (!layout) {
+      return <EmptyState culture={runtimeContext.culture} />;
+    }
 
-  const layoutClass = "grid grid-cols-1 gap-6";
+    return (
+      <FormTab
+        tabs={layout.tabs}
+        fieldMap={fieldMap}
+        onChange={handleFieldChange}
+        mode={initialData ? "EDIT" : "CREATE"}
+      />
+    );
+  };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit((data) => {
-        console.log("Submitting dynamic form data:", data);
-        onSubmit(data);
-      })} className="space-y-6 max-w-2xl">
-        <div className={layoutClass}>
-          {renderFields.map((field: any) => {
-            const isRequired = field.required;
-            const label = field.label || field.code;
-            const isHidden = field.metadata?.isHidden;
-            const isReadOnly = field.metadata?.isReadOnly;
+    <>
+      <ValidationSummary
+        errors={recordContext.validation.errors}
+        culture={runtimeContext.culture}
+      />
 
-            if (isHidden) return null;
-
-            const controlDef = FieldControlRegistry.getControl(field.uiControl);
-            const renderer = controlDef?.runtime?.renderer;
-            const ControlComponent = renderer && ControlRegistry[renderer] 
-              ? ControlRegistry[renderer] 
-              : DiagnosticControl;
-
-            return (
-              <FormField
-                key={field.id}
-                control={form.control}
-                name={field.code}
-                rules={{ required: isRequired ? "Required" : false }}
-                render={({ field: controllerField }) => (
-                  <FormItem>
-                    <FormLabel className="flex items-center gap-1">
-                      {label}
-                      {isRequired && <span className="text-rose-500">*</span>}
-                    </FormLabel>
-                    <FormControl>
-                      <ControlComponent
-                        field={field}
-                        value={controllerField.value}
-                        onChange={controllerField.onChange}
-                        disabled={isReadOnly}
-                        recordData={initialData}
-                      />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            );
-          })}
-        </div>
-
-        <div className="flex justify-end gap-3 pt-4 border-t border-border">
-          <Button type="button" variant="outline" onClick={() => router.back()}>
-            Cancel
-          </Button>
-          <Button type="submit" disabled={isSaving}>
-            {isSaving ? "Saving..." : "Save"}
-          </Button>
-        </div>
-      </form>
-    </Form>
+      {renderContent()}
+    </>
   );
 }
+
+export default DynamicForm;

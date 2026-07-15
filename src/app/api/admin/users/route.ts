@@ -122,7 +122,7 @@ export async function POST(req: Request) {
 
             // Assign initial roles
             await tx.userRole.createMany({
-                data: roleIds.map((roleId: number) => ({
+                data: roleIds.map((roleId: string) => ({
                     userId: newUser.id,
                     roleId: roleId,
                     assignedBy: admin.sub

@@ -3,12 +3,12 @@ import { MovementService } from "./movement-service";
 import { SnapshotInvalidator } from "./dashboard/snapshot-invalidator";
 
 export interface RecoveryInput {
-    tenantId: number;
+    tenantId: string;
     movementId: number; // The original MISSING or DAMAGE movement
     quantity: number;
     condition: 'CLEAN' | 'DIRTY';
     reason: string;
-    userId: number;
+    userId: string;
 }
 
 export class RecoveryService {
@@ -70,7 +70,7 @@ export class RecoveryService {
     /**
      * Gets accounting for a specific scope (Apparel, Event, or Laundry Order).
      */
-    static async getNetLossReport(tenantId: number, options: {
+    static async getNetLossReport(tenantId: string, options: {
         apparelId?: number,
         referenceType?: 'EVENT' | 'LAUNDRY',
         referenceId?: number
@@ -103,3 +103,4 @@ export class RecoveryService {
         };
     }
 }
+

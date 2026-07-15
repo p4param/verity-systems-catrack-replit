@@ -13,16 +13,17 @@ export async function POST(req: Request) {
     const where: any = { tenantId: tenantUuid, isDeleted: false };
     if (ids && ids.length > 0) where.id = { in: ids };
 
-    const events = await prisma.cateringEvent.findMany({
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const events = (await prisma.cateringEvent.findMany({
       where,
       include: {
         status: { select: { name: true } },
         type: { select: { name: true } },
         priority: { select: { name: true } },
-        costing: { select: { invoiceTotal: true, amountPaid: true } },
-      },
+        costing: { select: { invoiceTotal: true, amountPaid: true } as any },
+      } as any,
       orderBy: { startDate: "desc" },
-    });
+    })) as any[];
 
     if (format === "csv") {
       const headers = [

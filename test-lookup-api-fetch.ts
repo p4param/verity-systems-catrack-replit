@@ -5,7 +5,7 @@ async function main() {
   const entity = await prisma.configurationEntity.findUnique({
     where: { id: entityCode }
   });
-  const manifest = entity.metadata.runtimeManifest;
+  const manifest = (entity.metadata as any).runtimeManifest;
   const records = await recordService.getRecords(entity.id, manifest, { skip: 0, take: 50 });
   
   let displayFieldCode = "id";
@@ -30,3 +30,4 @@ async function main() {
   console.log(JSON.stringify(results, null, 2));
 }
 main().finally(() => prisma.$disconnect());
+

@@ -13,11 +13,11 @@ export class VendorRecoveryCreditService {
      * Must be called within a transaction.
      */
     static async createRecoveryCredit(input: {
-        tenantId: number;
+        tenantId: string;
         recoveryMovementId: number;
         originalMovementId: number;
         quantity: number;
-        createdBy: number;
+        createdBy: string;
     }, tx: Prisma.TransactionClient) {
         // 1. Find the liability linked to the original movement
         const liability = await tx.vendorLiability.findUnique({
@@ -102,7 +102,7 @@ export class VendorRecoveryCreditService {
      * Lists all recovery credits, optionally filtered by vendor.
      */
     static async listCredits(
-        tenantId: number,
+        tenantId: string,
         options?: { vendorId?: number }
     ) {
         const { prisma } = await import("../../prisma");
@@ -123,3 +123,4 @@ export class VendorRecoveryCreditService {
         });
     }
 }
+

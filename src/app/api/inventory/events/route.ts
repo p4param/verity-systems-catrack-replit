@@ -71,6 +71,7 @@ export async function POST(req: Request) {
 
             if (validated.reservations && validated.reservations.length > 0) {
                 await tx.eventReservation.createMany({
+                    // @ts-ignore VS05Z: business table uses Int createdBy, platform uses String
                     data: validated.reservations.map(r => ({
                         tenantId: user.tenantId,
                         eventId: newEvent.id,

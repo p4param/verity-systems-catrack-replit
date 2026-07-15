@@ -11,7 +11,7 @@ export class VendorLedgerService {
      */
     static async appendEntry(
         data: {
-            tenantId: number;
+            tenantId: string;
             vendorId: number;
             transactionDate: Date;
             transactionType: string;
@@ -43,7 +43,7 @@ export class VendorLedgerService {
      * Outstanding = SUM(debit) - SUM(credit)
      */
     static async getBalance(
-        tenantId: number,
+        tenantId: string,
         vendorId: number,
         tx?: Prisma.TransactionClient
     ): Promise<number> {
@@ -63,7 +63,7 @@ export class VendorLedgerService {
      * Gets all ledger entries for a vendor within a date range.
      */
     static async getEntries(
-        tenantId: number,
+        tenantId: string,
         vendorId: number,
         options?: { fromDate?: Date; toDate?: Date },
         tx?: Prisma.TransactionClient
@@ -83,3 +83,4 @@ export class VendorLedgerService {
         });
     }
 }
+

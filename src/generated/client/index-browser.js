@@ -1435,6 +1435,23 @@ exports.Prisma.EntityViewScalarFieldEnum = {
   updatedBy: 'updatedBy'
 };
 
+exports.Prisma.EntityLayoutViewScalarFieldEnum = {
+  id: 'id',
+  entityId: 'entityId',
+  code: 'code',
+  name: 'name',
+  description: 'description',
+  layoutType: 'layoutType',
+  isDefault: 'isDefault',
+  status: 'status',
+  version: 'version',
+  layout: 'layout',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy'
+};
+
 exports.Prisma.EntityRecordScalarFieldEnum = {
   id: 'id',
   entityId: 'entityId',
@@ -1680,6 +1697,14 @@ exports.Prisma.NavigationSearchIndexScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PlatformRecordSequenceScalarFieldEnum = {
+  id: 'id',
+  entityId: 'entityId',
+  prefix: 'prefix',
+  lastValue: 'lastValue',
+  updatedAt: 'updatedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1725,6 +1750,15 @@ exports.ViewType = exports.$Enums.ViewType = {
   DASHBOARD: 'DASHBOARD',
   DETAIL: 'DETAIL',
   QUICK_CREATE: 'QUICK_CREATE'
+};
+
+exports.LayoutType = exports.$Enums.LayoutType = {
+  FORM: 'FORM',
+  DETAIL: 'DETAIL',
+  QUICK_CREATE: 'QUICK_CREATE',
+  WIZARD: 'WIZARD',
+  MOBILE: 'MOBILE',
+  PRINT: 'PRINT'
 };
 
 exports.Prisma.ModelName = {
@@ -1811,6 +1845,7 @@ exports.Prisma.ModelName = {
   EntityFieldOption: 'EntityFieldOption',
   EntityFieldLookupDefinition: 'EntityFieldLookupDefinition',
   EntityView: 'EntityView',
+  EntityLayoutView: 'EntityLayoutView',
   EntityRecord: 'EntityRecord',
   EntityValue: 'EntityValue',
   EntityRelationship: 'EntityRelationship',
@@ -1828,7 +1863,8 @@ exports.Prisma.ModelName = {
   NavigationFavorite: 'NavigationFavorite',
   NavigationQuickLink: 'NavigationQuickLink',
   PlatformModulePermission: 'PlatformModulePermission',
-  NavigationSearchIndex: 'NavigationSearchIndex'
+  NavigationSearchIndex: 'NavigationSearchIndex',
+  PlatformRecordSequence: 'PlatformRecordSequence'
 };
 
 /**

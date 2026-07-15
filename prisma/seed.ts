@@ -1,151 +1,186 @@
 /**
- * @deprecated LEGACY — Event specific master seeding.
- * This is superseded by the Core Master Data Engine (MDE) seed.
+ * VS05Z Platform Seed
+ *
+ * Creates the minimum required data to boot the CAP platform after
+ * a force-reset. All identifiers are UUID (gen_random_uuid()).
+ *
+ * Run: npx prisma db seed
+ *   or: npx ts-node prisma/seed.ts
  */
+
 import { PrismaClient } from "../src/generated/client";
+import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  const companyId = "2444c125-9ef1-4bdf-87f5-8d5cb5b2632b";
-  const branchId = "6475a34e-4f7f-4318-ae7f-0b32ee7c2a4c";
-  const tenantId = "8ee8a6c8-5dc6-4113-8898-0c67f4c54093";
-  const creatorId = "3673f1d8-04ff-44e2-a05e-8557b447814b";
+  console.log("🌱 VS05Z Platform Seed starting...");
 
-  console.log("Seeding Catering Event Manager Module...");
+  // ── 1. Default Tenant ──────────────────────────────────────────────────────
+  const tenant = await prisma.tenant.upsert({
+    where: { code: "VERITY" },
+    update: {},
+    create: {
+      code: "VERITY",
+      name: "Verity Systems",
+      isActive: true,
+    },
+  });
+  console.log(`✅ Tenant: ${tenant.name} [${tenant.id}]`);
 
-  // 1. Event Statuses
-  const statuses = [
-    { code: "INQUIRY", name: "Inquiry" },
-    { code: "TENTATIVE", name: "Tentative Booking" },
-    { code: "QUOTATION", name: "Quotation" },
-    { code: "NEGOTIATION", name: "Negotiation" },
-    { code: "CONFIRMED", name: "Confirmed" },
-    { code: "PLANNING", name: "Planning" },
-    { code: "PRODUCTION", name: "Production" },
-    { code: "DISPATCH", name: "Dispatch" },
-    { code: "EXECUTION", name: "Execution" },
-    { code: "SETTLEMENT", name: "Settlement" },
-    { code: "COMPLETED", name: "Completed" },
-    { code: "ARCHIVED", name: "Archived" },
+  // ── 2. Default Permissions ─────────────────────────────────────────────────
+  const permissionCodes = [
+    "PLATFORM_ADMIN",
+    "USER_READ",
+    "USER_WRITE",
+    "ROLE_READ",
+    "ROLE_WRITE",
+    "PERMISSION_READ",
+    "PERMISSION_WRITE",
+    "MODULE_READ",
+    "MODULE_WRITE",
+    "ENTITY_READ",
+    "ENTITY_WRITE",
+    "RECORD_READ",
+    "RECORD_WRITE",
+    "RECORD_DELETE",
+    "AUDIT_READ",
+    "SETTINGS_READ",
+    "SETTINGS_WRITE",
   ];
 
-  for (const status of statuses) {
-    await prisma.cateringEventStatus.upsert({
-      where: { id: "00000000-0000-0000-0000-000000000000" }, // Mock unique target
-      create: {
-        tenantId,
-        companyId,
-        branchId,
-        code: status.code,
-        name: status.name,
-        createdBy: creatorId,
-        updatedBy: creatorId,
-      },
+  const permissions: Record<string, { id: string; code: string }> = {};
+  for (const code of permissionCodes) {
+    const perm = await prisma.permission.upsert({
+      where: { code },
       update: {},
+      create: { code, description: code.replace(/_/g, " ") },
     });
+    permissions[code] = perm;
   }
+  console.log(`✅ Permissions: ${permissionCodes.length} created`);
 
-  // 2. Event Priorities
-  const priorities = [
-    { code: "LOW", name: "Low" },
-    { code: "MEDIUM", name: "Medium" },
-    { code: "HIGH", name: "High" },
-  ];
+  // ── 3. Default Roles ───────────────────────────────────────────────────────
+  const superAdminRole = await prisma.role.upsert({
+    where: { tenantId_name: { tenantId: tenant.id, name: "SUPER_ADMIN" } },
+    update: {},
+    create: {
+      tenantId: tenant.id,
+      name: "SUPER_ADMIN",
+      description: "Full platform access",
+      isSystem: true,
+      isActive: true,
+    },
+  });
 
-  for (const priority of priorities) {
-    await prisma.cateringEventPriority.upsert({
-      where: { id: "00000000-0000-0000-0000-000000000000" },
-      create: {
-        tenantId,
-        companyId,
-        branchId,
-        code: priority.code,
-        name: priority.name,
-        createdBy: creatorId,
-        updatedBy: creatorId,
-      },
+  const adminRole = await prisma.role.upsert({
+    where: { tenantId_name: { tenantId: tenant.id, name: "ADMIN" } },
+    update: {},
+    create: {
+      tenantId: tenant.id,
+      name: "ADMIN",
+      description: "Administrative access",
+      isSystem: true,
+      isActive: true,
+    },
+  });
+
+  const userRole = await prisma.role.upsert({
+    where: { tenantId_name: { tenantId: tenant.id, name: "USER" } },
+    update: {},
+    create: {
+      tenantId: tenant.id,
+      name: "USER",
+      description: "Standard user access",
+      isSystem: true,
+      isActive: true,
+    },
+  });
+  console.log(`✅ Roles: SUPER_ADMIN, ADMIN, USER`);
+
+  // ── 4. Role-Permission Assignments ────────────────────────────────────────
+  // SUPER_ADMIN gets ALL permissions
+  for (const perm of Object.values(permissions)) {
+    await prisma.rolePermission.upsert({
+      where: { roleId_permissionId: { roleId: superAdminRole.id, permissionId: perm.id } },
       update: {},
+      create: { roleId: superAdminRole.id, permissionId: perm.id },
     });
   }
 
-  // 3. Event Types
-  const types = [
-    { code: "WEDDING", name: "Wedding" },
-    { code: "RECEPTION", name: "Reception" },
-    { code: "ENGAGEMENT", name: "Engagement" },
-    { code: "BIRTHDAY", name: "Birthday" },
-    { code: "CORPORATE", name: "Corporate Event" },
-    { code: "CONFERENCE", name: "Conference" },
-    { code: "EXHIBITION", name: "Exhibition" },
-    { code: "RELIGIOUS", name: "Religious Event" },
+  // ADMIN gets read/write but not PERMISSION_WRITE or PLATFORM_ADMIN
+  const adminPermCodes = [
+    "USER_READ", "USER_WRITE", "ROLE_READ",
+    "MODULE_READ", "ENTITY_READ", "ENTITY_WRITE",
+    "RECORD_READ", "RECORD_WRITE", "RECORD_DELETE",
+    "AUDIT_READ", "SETTINGS_READ",
   ];
-
-  for (const type of types) {
-    await prisma.cateringEventType.upsert({
-      where: { id: "00000000-0000-0000-0000-000000000000" },
-      create: {
-        tenantId,
-        companyId,
-        branchId,
-        code: type.code,
-        name: type.name,
-        createdBy: creatorId,
-        updatedBy: creatorId,
-      },
-      update: {},
-    });
+  for (const code of adminPermCodes) {
+    if (permissions[code]) {
+      await prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId: adminRole.id, permissionId: permissions[code].id } },
+        update: {},
+        create: { roleId: adminRole.id, permissionId: permissions[code].id },
+      });
+    }
   }
 
-  // 4. Platform Modules
-  const modules = [
-    { code: "CRM", name: "CRM", description: "Customer Relationship Management", icon: "Users", sortOrder: 10 },
-    { code: "EVENT", name: "Event Management", description: "Catering Event Management", icon: "Calendar", sortOrder: 20 },
-    { code: "QUOTATION", name: "Quotation", description: "Quotations and Estimates", icon: "FileText", sortOrder: 30 },
-    { code: "PRODUCTION", name: "Production", description: "Event Production Management", icon: "Sliders", sortOrder: 40 },
-    { code: "KITCHEN", name: "Kitchen", description: "Kitchen and Menu Operations", icon: "ChefHat", sortOrder: 50 },
-    { code: "INVENTORY", name: "Inventory", description: "Inventory and Stock Control", icon: "Box", sortOrder: 60 },
-    { code: "PROCUREMENT", name: "Procurement", description: "Purchasing and Suppliers", icon: "ShoppingBag", sortOrder: 70 },
-    { code: "LAUNDRY", name: "Laundry", description: "Laundry Operations and Vendor Billing", icon: "Shirt", sortOrder: 80 },
-    { code: "FLEET", name: "Fleet", description: "Logistics and Fleet Operations", icon: "Truck", sortOrder: 90 },
-    { code: "FINANCE", name: "Finance", description: "General Ledger and Cash Flow", icon: "DollarSign", sortOrder: 100 },
-    { code: "HR", name: "HR", description: "Human Resources and Staffing", icon: "Users2", sortOrder: 110 },
-    { code: "ADMINISTRATION", name: "Administration", description: "Security, Audits, Roles and Users", icon: "Shield", sortOrder: 120 },
-    { code: "REPORTING", name: "Reporting", description: "BI and Reports Engine", icon: "BarChart3", sortOrder: 130 },
-    { code: "CUSTOMER_PORTAL", name: "Customer Portal", description: "External Portal for Customers", icon: "Globe", sortOrder: 140 },
-    { code: "VENDOR_PORTAL", name: "Vendor Portal", description: "External Portal for Vendors", icon: "Globe2", sortOrder: 150 },
-  ];
-
-  for (const mod of modules) {
-    await prisma.platformModule.upsert({
-      where: { code: mod.code },
-      update: {
-        name: mod.name,
-        description: mod.description,
-        icon: mod.icon,
-        sortOrder: mod.sortOrder,
-        updatedBy: creatorId,
-      },
-      create: {
-        code: mod.code,
-        name: mod.name,
-        description: mod.description,
-        icon: mod.icon,
-        sortOrder: mod.sortOrder,
-        isActive: true,
-        isSystem: true,
-        createdBy: creatorId,
-        updatedBy: creatorId,
-      },
-    });
+  // USER gets read-only
+  const userPermCodes = ["RECORD_READ", "ENTITY_READ", "MODULE_READ"];
+  for (const code of userPermCodes) {
+    if (permissions[code]) {
+      await prisma.rolePermission.upsert({
+        where: { roleId_permissionId: { roleId: userRole.id, permissionId: permissions[code].id } },
+        update: {},
+        create: { roleId: userRole.id, permissionId: permissions[code].id },
+      });
+    }
   }
+  console.log(`✅ Role-Permission assignments created`);
 
-  console.log("Seeding completed successfully.");
+  // ── 5. Admin User ──────────────────────────────────────────────────────────
+  const adminPasswordHash = await bcrypt.hash("Admin@1234", 12);
+
+  const adminUser = await prisma.user.upsert({
+    where: { tenantId_email: { tenantId: tenant.id, email: "admin@verity.com" } },
+    update: {},
+    create: {
+      tenantId: tenant.id,
+      fullName: "Platform Administrator",
+      email: "admin@verity.com",
+      passwordHash: adminPasswordHash,
+      status: "ACTIVE",
+      isActive: true,
+      isLocked: false,
+      mfaEnabled: false,
+      mfaSetupRequired: false,
+    },
+  });
+  console.log(`✅ Admin User: ${adminUser.email} [${adminUser.id}]`);
+
+  // ── 6. Assign SUPER_ADMIN role to admin user ───────────────────────────────
+  await prisma.userRole.upsert({
+    where: { userId_roleId: { userId: adminUser.id, roleId: superAdminRole.id } },
+    update: {},
+    create: {
+      userId: adminUser.id,
+      roleId: superAdminRole.id,
+    },
+  });
+  console.log(`✅ Admin user assigned SUPER_ADMIN role`);
+
+  // ── 7. Summary ─────────────────────────────────────────────────────────────
+  console.log("\n🎉 VS05Z Seed complete.");
+  console.log(`   Tenant:   ${tenant.code} (${tenant.id})`);
+  console.log(`   Admin:    ${adminUser.email} / Admin@1234`);
+  console.log(`   Roles:    SUPER_ADMIN, ADMIN, USER`);
+  console.log(`   Perms:    ${permissionCodes.length}`);
+  console.log("\n   ⚠️  Change the admin password on first login.\n");
 }
 
 main()
   .catch((e) => {
-    console.error(e);
+    console.error("❌ Seed failed:", e);
     process.exit(1);
   })
   .finally(async () => {

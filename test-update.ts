@@ -5,14 +5,14 @@ async function main() {
   const entity = await prisma.configurationEntity.findUnique({
     where: { id: '7ef861a1-8d80-45bc-a5e5-7545bd4a3a72' }
   });
-  const manifest = entity.metadata.runtimeManifest;
+  const manifest = (entity.metadata as any).runtimeManifest;
   
   const ctx = {
     companyId: "00000000-0000-0000-0000-000000000001",
     branchId: "00000000-0000-0000-0000-000000000001",
     userId: `00000000-0000-0000-0000-000000000001`,
-    tenantId: 1,
-    actorUserId: 1,
+    tenantId: "system",
+    actorUserId: "system",
   };
 
   const record = await recordService.updateRecord(
@@ -25,3 +25,4 @@ async function main() {
 }
 
 main().finally(() => prisma.$disconnect());
+

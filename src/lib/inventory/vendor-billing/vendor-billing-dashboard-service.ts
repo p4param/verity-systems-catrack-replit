@@ -4,7 +4,7 @@ import { prisma } from "../../prisma";
  * Dashboard KPIs for vendor billing module.
  */
 export class VendorBillingDashboardService {
-    static async getKPIs(tenantId: number) {
+    static async getKPIs(tenantId: string) {
         const now = new Date();
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
         const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
@@ -124,3 +124,4 @@ export class VendorBillingDashboardService {
         };
     }
 }
+

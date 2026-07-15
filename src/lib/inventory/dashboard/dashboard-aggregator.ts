@@ -30,7 +30,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 1: Inventory Summary ────────────────────────────────────────
 
-    static async computeInventorySummary(tenantId: number): Promise<InventorySummaryDTO> {
+    static async computeInventorySummary(tenantId: string): Promise<InventorySummaryDTO> {
         // Aggregate stock by condition, excluding MISSING/DAMAGE audit entries
         const stockGroups = await prisma.stockMovement.groupBy({
             by: ["condition"],
@@ -88,7 +88,7 @@ export class DashboardAggregatorService {
     // ─── Section 2: Inventory Health Score ───────────────────────────────────
 
     static async computeInventoryHealth(
-        tenantId: number,
+        tenantId: string,
         summary?: InventorySummaryDTO
     ): Promise<InventoryHealthDTO & {
         rawScores: {
@@ -232,7 +232,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 3: Demand Forecast ──────────────────────────────────────────
 
-    static async computeDemandForecast(tenantId: number): Promise<DemandForecastDTO> {
+    static async computeDemandForecast(tenantId: string): Promise<DemandForecastDTO> {
         // Placeholder — returns mock/zero until ML/AI module exists
         return {
             predictedDemand30Days: 0,
@@ -245,7 +245,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 4: Event KPIs ───────────────────────────────────────────────
 
-    static async computeEventMetrics(tenantId: number): Promise<EventMetricsDTO> {
+    static async computeEventMetrics(tenantId: string): Promise<EventMetricsDTO> {
         const now = new Date();
         const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
         const monthEnd = new Date(now.getFullYear(), now.getMonth() + 1, 0, 23, 59, 59);
@@ -284,7 +284,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 5: Loss & Recovery ──────────────────────────────────────────
 
-    static async computeLossMetrics(tenantId: number): Promise<LossMetricsDTO> {
+    static async computeLossMetrics(tenantId: string): Promise<LossMetricsDTO> {
         const [lossData, recoveryData, allotmentData] = await Promise.all([
             prisma.stockMovement.aggregate({
                 where: {
@@ -329,7 +329,7 @@ export class DashboardAggregatorService {
     // ─── Section 6: Vendor KPIs ──────────────────────────────────────────────
 
     static async computeVendorMetrics(
-        tenantId: number,
+        tenantId: string,
         riskThreshold = 50
     ): Promise<VendorMetricsDTO> {
         const vendors = await prisma.vendor.findMany({
@@ -405,7 +405,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 7: Laundry KPIs ─────────────────────────────────────────────
 
-    static async computeLaundryMetrics(tenantId: number): Promise<LaundryMetricsDTO> {
+    static async computeLaundryMetrics(tenantId: string): Promise<LaundryMetricsDTO> {
         const now = new Date();
 
         // Dirty stock count (via stock ledger)
@@ -476,7 +476,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 8: Asset Utilization ────────────────────────────────────────
 
-    static async computeUtilizationMetrics(tenantId: number): Promise<UtilizationMetricsDTO> {
+    static async computeUtilizationMetrics(tenantId: string): Promise<UtilizationMetricsDTO> {
         const apparels = await prisma.apparel.findMany({
             where: { tenantId, isActive: true },
             include: { category: true },
@@ -541,7 +541,7 @@ export class DashboardAggregatorService {
     // ─── Section 9: Risk Dashboard ───────────────────────────────────────────
 
     static async computeRiskMetrics(
-        tenantId: number,
+        tenantId: string,
         summary?: InventorySummaryDTO,
         laundry?: LaundryMetricsDTO
     ): Promise<RiskMetricsDTO> {
@@ -597,7 +597,7 @@ export class DashboardAggregatorService {
 
     // ─── Section 10: Financial KPIs (Placeholders) ───────────────────────────
 
-    static async computeFinancialMetrics(tenantId: number): Promise<FinancialMetricsDTO> {
+    static async computeFinancialMetrics(tenantId: string): Promise<FinancialMetricsDTO> {
         return {
             inventoryValue: 0,
             monthlyConsumptionValue: 0,
@@ -614,7 +614,7 @@ export class DashboardAggregatorService {
      * Runs all KPI computations in parallel and returns the full snapshot payload.
      * This is called once nightly by the snapshot job.
      */
-    static async computeAll(tenantId: number) {
+    static async computeAll(tenantId: string) {
         const [summary, eventMetrics, lossMetrics, vendorMetrics, laundryMetrics, utilizationMetrics, financialMetrics] =
             await Promise.all([
                 this.computeInventorySummary(tenantId),
@@ -646,3 +646,4 @@ export class DashboardAggregatorService {
         };
     }
 }
+

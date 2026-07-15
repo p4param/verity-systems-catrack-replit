@@ -22,7 +22,7 @@ export class EventService {
      * Stage 2: Event Allotment
      * Physically removes CLEAN items from the warehouse for an event.
      */
-    static async allotItems(tenantId: number, eventId: number, items: EventAllotmentItem[], userId: number) {
+    static async allotItems(tenantId: string, eventId: number, items: EventAllotmentItem[], userId: string) {
         return await prisma.$transaction(async (tx) => {
             // Fetch tenant settings
             const settings = await tx.inventorySettings.findUnique({
@@ -76,7 +76,7 @@ export class EventService {
      * Stage 3 & 4: Event Completion & Reconciliation
      * Processes returned items as DIRTY and records loss/damage.
      */
-    static async reconcileEvent(tenantId: number, eventId: number, results: EventReconciliationItem[], userId: number) {
+    static async reconcileEvent(tenantId: string, eventId: number, results: EventReconciliationItem[], userId: string) {
         return await prisma.$transaction(async (tx) => {
             for (const res of results) {
                 // Validation: Returned + Lost + Damaged = Allotted Qty
@@ -146,3 +146,4 @@ export class EventService {
         });
     }
 }
+

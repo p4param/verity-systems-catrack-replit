@@ -5,27 +5,27 @@ import { formatUserIdToUuid } from "@/lib/auth/uuid-helper";
 
 const service = new PlatformModuleService();
 
-export async function createPlatformModule(data: any, tenantId: number, actorUserId: number) {
+export async function createPlatformModule(data: any, tenantId: string, actorUserId: string) {
   return service.create(data, tenantId, actorUserId);
 }
 
-export async function updatePlatformModule(id: string, data: any, tenantId: number, actorUserId: number) {
+export async function updatePlatformModule(id: string, data: any, tenantId: string, actorUserId: string) {
   return service.update(id, data, tenantId, actorUserId);
 }
 
-export async function deletePlatformModule(id: string, tenantId: number, actorUserId: number) {
+export async function deletePlatformModule(id: string, tenantId: string, actorUserId: string) {
   return service.delete(id, tenantId, actorUserId);
 }
 
-export async function togglePlatformModule(id: string, tenantId: number, actorUserId: number) {
+export async function togglePlatformModule(id: string, tenantId: string, actorUserId: string) {
   return service.toggleActive(id, tenantId, actorUserId);
 }
 
-export async function toggleModule(id: string, tenantId: number, actorUserId: number) {
+export async function toggleModule(id: string, tenantId: string, actorUserId: string) {
   return service.toggleActive(id, tenantId, actorUserId);
 }
 
-export async function reorderModules(orderedIds: string[], tenantId: number, actorUserId: number) {
+export async function reorderModules(orderedIds: string[], tenantId: string, actorUserId: string) {
   return service.reorder(orderedIds, tenantId, actorUserId);
 }
 
@@ -37,15 +37,15 @@ export async function refreshRuntime() {
   return { success: true };
 }
 
-export async function clonePlatformModule(id: string, newCode: string, tenantId: number, actorUserId: number) {
+export async function clonePlatformModule(id: string, newCode: string, tenantId: string, actorUserId: string) {
   return service.cloneModule(id, newCode, tenantId, actorUserId);
 }
 
-export async function publishPlatformRuntime(tenantId: number, actorUserId: number) {
+export async function publishPlatformRuntime(tenantId: string, actorUserId: string) {
   return service.publishRuntime(tenantId, actorUserId);
 }
 
-export async function importPlatformModules(modulesList: any[], tenantId: number, actorUserId: number) {
+export async function importPlatformModules(modulesList: any[], tenantId: string, actorUserId: string) {
   const userSub = formatUserIdToUuid(actorUserId);
   const results = [];
   for (const data of modulesList) {

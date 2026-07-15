@@ -11,7 +11,7 @@ export class VendorRateService {
      * Creates a new rate contract. Validates no overlapping active rate exists.
      */
     static async createRate(input: {
-        tenantId: number;
+        tenantId: string;
         vendorId: number;
         apparelId: number;
         washingRate: number;
@@ -19,7 +19,7 @@ export class VendorRateService {
         dryCleaningRate?: number;
         effectiveFrom: Date;
         effectiveTo?: Date;
-        createdBy: number;
+        createdBy: string;
     }) {
         return await prisma.$transaction(async (tx) => {
             // Validate no overlapping active rate
@@ -79,7 +79,7 @@ export class VendorRateService {
      * Gets the effective rate for a vendor/apparel combination on a specific date.
      */
     static async getActiveRate(
-        tenantId: number,
+        tenantId: string,
         vendorId: number,
         apparelId: number,
         date: Date,
@@ -108,7 +108,7 @@ export class VendorRateService {
      * Lists rates with optional filters.
      */
     static async listRates(
-        tenantId: number,
+        tenantId: string,
         options?: { vendorId?: number; apparelId?: number; activeOnly?: boolean }
     ) {
         const where: any = { tenantId, deletedAt: null };
@@ -126,7 +126,7 @@ export class VendorRateService {
     /**
      * Deactivates a rate (soft delete via isActive flag).
      */
-    static async deactivateRate(tenantId: number, rateId: number, userId: number) {
+    static async deactivateRate(tenantId: string, rateId: number, userId: string) {
         return await prisma.$transaction(async (tx) => {
             const rate = await tx.laundryVendorRate.findUniqueOrThrow({
                 where: { id: rateId, tenantId },
@@ -151,10 +151,11 @@ export class VendorRateService {
     /**
      * Gets a single rate by ID.
      */
-    static async getRate(tenantId: number, rateId: number) {
+    static async getRate(tenantId: string, rateId: number) {
         return await prisma.laundryVendorRate.findUnique({
             where: { id: rateId, tenantId },
             include: { vendor: true, apparel: true },
         });
     }
 }
+

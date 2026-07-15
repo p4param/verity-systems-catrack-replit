@@ -9,7 +9,7 @@ export class VendorStatementService {
      * Generates a vendor statement with opening balance, transactions, and closing balance.
      */
     static async getStatement(
-        tenantId: number,
+        tenantId: string,
         vendorId: number,
         options?: { fromDate?: Date; toDate?: Date }
     ) {
@@ -73,7 +73,7 @@ export class VendorStatementService {
      * Generates an aging report across all vendors (or for a specific vendor).
      * Buckets: 0-30, 31-60, 61-90, 90+ days.
      */
-    static async getAgingReport(tenantId: number, vendorId?: number) {
+    static async getAgingReport(tenantId: string, vendorId?: number) {
         const where: any = {
             tenantId,
             status: { in: ["POSTED", "PARTIALLY_PAID"] },
@@ -192,3 +192,4 @@ export class VendorStatementService {
         return { vendors, totals };
     }
 }
+

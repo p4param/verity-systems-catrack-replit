@@ -7,20 +7,10 @@ export async function GET(
     { params }: { params: Promise<{ id: string }> }
 ) {
     try {
-
         const currentUser = await requirePermission(req, "USER_VIEW");
-        const adminId = currentUser.sub;
         const tenantId = currentUser.tenantId;
+        const { id: targetUserId } = await params;
 
-        const { id: targetUserIdStr } = await params;
-        const targetUserId = parseInt(targetUserIdStr);
-
-        if (isNaN(targetUserId)) {
-            return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
-        }
-
-
-        // 2. Tenant Check
         const targetUser = await prisma.user.findFirst({
             where: { id: targetUserId, tenantId }
         });
@@ -29,7 +19,6 @@ export async function GET(
             return NextResponse.json({ error: "User not found" }, { status: 404 });
         }
 
-        // 3. Fetch Sessions
         const sessions = await prisma.refreshToken.findMany({
             where: { userId: targetUserId },
             select: {
@@ -41,13 +30,13 @@ export async function GET(
                 expiresAt: true,
                 revokedAt: true
             },
-            orderBy: { createdAt: 'desc' },
-            take: 20 // Limit to recent 20
+            orderBy: { createdAt: "desc" },
+            take: 20
         });
 
         const formattedSessions = sessions.map(s => ({
             ...s,
-            status: s.revokedAt ? 'REVOKED' : (new Date(s.expiresAt) < new Date() ? 'EXPIRED' : 'ACTIVE')
+            status: s.revokedAt ? "REVOKED" : (new Date(s.expiresAt) < new Date() ? "EXPIRED" : "ACTIVE")
         }));
 
         return NextResponse.json({ sessions: formattedSessions });

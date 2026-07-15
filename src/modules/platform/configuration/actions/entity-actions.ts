@@ -11,7 +11,7 @@ function invalidateCache() {
   } catch {}
 }
 
-export async function createEntity(data: any, tenantId: number, actorUserId: number) {
+export async function createEntity(data: any, tenantId: string, actorUserId: string) {
   try {
     const result = await service.create(data, tenantId, actorUserId);
     invalidateCache();
@@ -21,7 +21,7 @@ export async function createEntity(data: any, tenantId: number, actorUserId: num
   }
 }
 
-export async function updateEntity(id: string, data: any, tenantId: number, actorUserId: number) {
+export async function updateEntity(id: string, data: any, tenantId: string, actorUserId: string) {
   try {
     const result = await service.update(id, data, tenantId, actorUserId);
     invalidateCache();
@@ -31,7 +31,7 @@ export async function updateEntity(id: string, data: any, tenantId: number, acto
   }
 }
 
-export async function deleteEntity(id: string, tenantId: number, actorUserId: number) {
+export async function deleteEntity(id: string, tenantId: string, actorUserId: string) {
   try {
     const result = await service.delete(id, tenantId, actorUserId);
     invalidateCache();
@@ -41,7 +41,7 @@ export async function deleteEntity(id: string, tenantId: number, actorUserId: nu
   }
 }
 
-export async function archiveEntity(id: string, tenantId: number, actorUserId: number) {
+export async function archiveEntity(id: string, tenantId: string, actorUserId: string) {
   try {
     const result = await service.archive(id, tenantId, actorUserId);
     invalidateCache();
@@ -51,7 +51,7 @@ export async function archiveEntity(id: string, tenantId: number, actorUserId: n
   }
 }
 
-export async function restoreEntity(id: string, tenantId: number, actorUserId: number) {
+export async function restoreEntity(id: string, tenantId: string, actorUserId: string) {
   try {
     const result = await service.restore(id, tenantId, actorUserId);
     invalidateCache();
@@ -61,7 +61,7 @@ export async function restoreEntity(id: string, tenantId: number, actorUserId: n
   }
 }
 
-export async function duplicateEntity(id: string, tenantId: number, actorUserId: number) {
+export async function duplicateEntity(id: string, tenantId: string, actorUserId: string) {
   try {
     const result = await service.duplicate(id, tenantId, actorUserId);
     invalidateCache();

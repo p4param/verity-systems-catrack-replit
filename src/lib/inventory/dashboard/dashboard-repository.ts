@@ -18,7 +18,7 @@ export class DashboardRepository {
      * Retrieve the most recent DashboardSnapshot for a tenant.
      * Returns null if no snapshot has been generated yet.
      */
-    static async getLatestSnapshot(tenantId: number) {
+    static async getLatestSnapshot(tenantId: string) {
         return prisma.dashboardSnapshot.findFirst({
             where: { tenantId },
             orderBy: { snapshotDate: "desc" },
@@ -28,7 +28,7 @@ export class DashboardRepository {
     /**
      * Retrieve snapshot for a specific date.
      */
-    static async getSnapshotByDate(tenantId: number, date: Date) {
+    static async getSnapshotByDate(tenantId: string, date: Date) {
         const dateOnly = new Date(date);
         dateOnly.setHours(0, 0, 0, 0);
 
@@ -47,7 +47,7 @@ export class DashboardRepository {
      * Called by DashboardSnapshotJob after computing all KPIs.
      */
     static async upsertSnapshot(
-        tenantId: number,
+        tenantId: string,
         snapshotDate: Date,
         data: Omit<Prisma.DashboardSnapshotCreateInput, 'tenant' | 'snapshotDate'>
     ) {
@@ -73,7 +73,7 @@ export class DashboardRepository {
      * Returns grouped by metricCode with sorted data points.
      */
     static async getTrends(
-        tenantId: number,
+        tenantId: string,
         fromDate: Date,
         toDate: Date,
         metricCodes?: string[]
@@ -122,7 +122,7 @@ export class DashboardRepository {
      * Upsert a KPI trend row (idempotent).
      */
     static async upsertTrend(
-        tenantId: number,
+        tenantId: string,
         snapshotDate: Date,
         metricCode: string,
         metricValue: number
@@ -154,7 +154,7 @@ export class DashboardRepository {
      * Retrieve active AI recommendations, ordered by priority then recency.
      */
     static async getActiveRecommendations(
-        tenantId: number,
+        tenantId: string,
         limit = 10
     ): Promise<AIRecommendationDTO[]> {
         const PRIORITY_ORDER: Record<string, number> = {
@@ -199,3 +199,4 @@ export class DashboardRepository {
         }));
     }
 }
+

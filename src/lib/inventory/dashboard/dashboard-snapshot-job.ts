@@ -21,10 +21,10 @@ export class DashboardSnapshotJob {
     /**
      * Run the snapshot job for a specific tenant.
      */
-    static async run(tenantId: number): Promise<{
+    static async run(tenantId: string): Promise<{
         success: boolean;
         snapshotDate: string;
-        tenantId: number;
+        tenantId: string;
         durationMs: number;
     }> {
         const startTime = Date.now();
@@ -141,7 +141,7 @@ export class DashboardSnapshotJob {
      */
     static async runForAllTenants(): Promise<{
         processed: number;
-        errors: { tenantId: number; error: string }[];
+        errors: { tenantId: string; error: string }[];
         durationMs: number;
     }> {
         const startTime = Date.now();
@@ -150,7 +150,7 @@ export class DashboardSnapshotJob {
             select: { id: true },
         });
 
-        const errors: { tenantId: number; error: string }[] = [];
+        const errors: { tenantId: string; error: string }[] = [];
         let processed = 0;
 
         for (const tenant of tenants) {
@@ -171,3 +171,4 @@ export class DashboardSnapshotJob {
         };
     }
 }
+

@@ -1,18 +1,15 @@
-export function formatUserIdToUuid(userId: number | string): string {
-  const idStr = String(userId).trim();
-  
-  // UUID validation regex
-  const uuidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-  if (uuidRegex.test(idStr)) {
-    return idStr;
-  }
-  
-  const num = parseInt(idStr, 10);
-  if (isNaN(num)) {
-    return "00000000-0000-0000-0000-000000000000";
-  }
-  
-  // Pad the hexadecimal representation of the number to 12 chars
-  const hex = num.toString(16).padStart(12, "0");
-  return `00000000-0000-0000-0000-${hex}`;
+/**
+ * UUID Helper — Auth Layer
+ *
+ * VS05Z: User.id is now a real UUID (String @db.Uuid via gen_random_uuid()).
+ * This function is now a simple identity passthrough for UUID strings.
+ *
+ * Kept for backward compatibility with code that imported it, but no longer
+ * performs any integer-to-UUID conversion. The workaround is permanently gone.
+ *
+ * @deprecated The numeric-to-UUID mapping is no longer needed.
+ *             Code that calls this can now pass actorUserId directly.
+ */
+export function formatUserIdToUuid(userId: string): string {
+  return userId;
 }

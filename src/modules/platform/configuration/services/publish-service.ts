@@ -2,6 +2,10 @@ import { prisma } from "@/lib/prisma";
 import { Prisma } from "@/generated/client";
 import { logger } from "@/lib/logger";
 import { manifestGeneratorService, RuntimeManifest } from "../../runtime/services/manifest-generator";
+import { validateLayoutForPublish, LayoutRootSchema } from "../validations/layout-validation";
+
+import { SchemaPlatformEngine } from "./SchemaPlatformEngine";
+import type { MigrationManifest } from "./SchemaPlatformTypes";
 
 export interface PublishResult {
   success: boolean;
@@ -11,42 +15,72 @@ export interface PublishResult {
 
 export class PublishService {
   /**
-   * Executes the 9-stage transactional Publish Pipeline for an entity.
+   * Executes the 9-stage Publish Pipeline for an entity.
+   *
+   * Architecture note — WHY syncSchema runs OUTSIDE the Prisma $transaction:
+   *
+   * PostgreSQL DDL (CREATE TABLE, ALTER TABLE, CREATE INDEX) causes an implicit
+   * COMMIT. When DDL is run inside a Prisma $transaction via $executeRawUnsafe,
+   * any DDL error leaves the transaction in state 25P02 ("current transaction is
+   * aborted") and all subsequent DML queries in the same transaction are rejected.
+   *
+   * Fix: DDL phase runs first via an independent db connection (outside tx).
+   * If DDL succeeds, the DML phase runs inside a clean Prisma $transaction.
+   * If DDL fails, the DML transaction is never started — no 25P02 possible.
    */
   async publishEntity(entityId: string, publishedByUserId?: string): Promise<PublishResult> {
     logger.info(`Starting formal publish pipeline for entity ${entityId}`);
-    const generatorVersion = "1.0.0"; // Increment if pipeline changes
+    const generatorVersion = "1.0.0";
 
     try {
+      // ─── PHASE 1: DDL (runs OUTSIDE Prisma transaction) ─────────────────────
+      // syncSchema uses $executeRawUnsafe for DDL. DDL must not run inside a
+      // Prisma $transaction to avoid the 25P02 aborted-transaction error.
+      const schemaPlatformEngine = new SchemaPlatformEngine();
+      try {
+        await schemaPlatformEngine.syncSchemaOutsideTransaction(entityId, 1);
+        logger.info(`DDL phase complete for entity ${entityId}.`);
+      } catch (ddlError: any) {
+        logger.error(`DDL phase failed for entity ${entityId}: ${ddlError.message}`);
+        throw ddlError; // Abort publish — no DML transaction started
+      }
+
+      // ─── PHASE 2: DML (Prisma $transaction — no DDL inside) ─────────────────
       const result = await prisma.$transaction(async (tx) => {
         // 1. Metadata Validation
         const entity = await tx.configurationEntity.findUnique({
           where: { id: entityId },
-          include: { module: true, fields: true, views: true }
+          include: { module: true, fields: true, views: true, layoutViews: true }
         });
 
         if (!entity) throw new Error("Entity not found");
         if (entity.status !== "DRAFT" && entity.status !== "PUBLISHED") {
-            throw new Error(`Cannot publish entity in status: ${entity.status}`);
+          throw new Error(`Cannot publish entity in status: ${entity.status}`);
         }
-        
-        // 2. Dependency Validation
-        // (Ensure lookups point to valid entities. In real system, this would scan entity.fields for lookup definitions)
-        
-        // 3. Permission Validation
-        // In this step we could generate standard permissions if they don't exist.
-        // For CPC-001, permissions are dynamically enforced via claims.
+
+        // 2.5 Layout Validation
+        const validFieldIds = entity.fields.map((f: any) => f.id);
+        for (const layoutView of (entity as any).layoutViews || []) {
+          try {
+            const layoutRoot = LayoutRootSchema.parse(layoutView.layout);
+            const result = validateLayoutForPublish(layoutRoot, validFieldIds);
+            if (!result.valid) {
+              logger.warn(`Layout "${layoutView.code}" has validation warnings:`, { errors: result.errors });
+            }
+          } catch (parseErr: any) {
+            logger.warn(`Layout "${layoutView.code}" has invalid structure: ${parseErr.message}`);
+          }
+        }
 
         // 4. Runtime Artifact Generation
         const artifactPayload = await manifestGeneratorService.generateManifest(entityId, tx);
-        
+
         // 5. Navigation Generation
-        // Inject route into configuration entity for runtime registry to pick up
         const route = `/runtime/${entity.module.code.toLowerCase()}/${entity.code.toLowerCase()}`;
-        
+
         if (entity.showInNavigation) {
           const existingNav = await tx.navigationItem.findFirst({ where: { entityId: entityId } });
-          
+
           if (existingNav) {
             await tx.navigationItem.update({
               where: { id: existingNav.id },
@@ -71,9 +105,8 @@ export class PublishService {
             });
           }
         }
-        
+
         // 6. Runtime Index Registration
-        // Mark entity for search indexing if not already
         const existingSearch = await tx.navigationSearchIndex.findFirst({ where: { route } });
         if (existingSearch) {
           await tx.navigationSearchIndex.update({
@@ -90,23 +123,20 @@ export class PublishService {
             }
           });
         }
-        
+
         // 7 & 8. Cache Refresh & Version Increment
-        // Find current active version
         const currentActive = await tx.runtimeArtifact.findFirst({
           where: { entityId, status: "ACTIVE" },
-          orderBy: { version: 'desc' }
+          orderBy: { version: "desc" }
         });
-        
+
         const nextVersion = currentActive ? currentActive.version + 1 : 1;
-        
-        // Mark old artifacts as inactive
+
         await tx.runtimeArtifact.updateMany({
           where: { entityId, status: "ACTIVE" },
           data: { status: "INACTIVE" }
         });
-        
-        // Insert new artifact
+
         const newArtifact = await tx.runtimeArtifact.create({
           data: {
             entityId,
@@ -121,8 +151,8 @@ export class PublishService {
         // Update entity status and route
         await tx.configurationEntity.update({
           where: { id: entityId },
-          data: { 
-            status: "PUBLISHED", 
+          data: {
+            status: "PUBLISHED",
             route,
             version: { increment: 1 }
           }
@@ -145,3 +175,4 @@ export class PublishService {
 }
 
 export const publishService = new PublishService();
+

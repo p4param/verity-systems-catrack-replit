@@ -439,16 +439,16 @@ export default function EntitiesListPage() {
           There are no business entities matching your criteria. Create your first entity to get started.
         </p>
         {canCreate && (
-          <Link
-            href="/settings/platform/entities/new"
+          <button
+            onClick={() => router.push("/settings/platform/entities/new")}
             className="bg-primary text-primary-foreground px-4 py-2 rounded-xl text-sm font-semibold flex items-center gap-2 hover:bg-primary/90 transition-colors cursor-pointer"
           >
             <Plus size={16} /> Create First Entity
-          </Link>
+          </button>
         )}
       </div>
     );
-  }, [canCreate]);
+  }, [canCreate, router]);
 
   return (
     <div className="space-y-6">

@@ -14,7 +14,7 @@ export class VendorReportService {
      * Vendor Stock Exposure Report
      * Aggregates LaundryOrderItem data by Vendor and Apparel
      */
-    static async getStockExposure(tenantId: number, filter: ReportFilter) {
+    static async getStockExposure(tenantId: string, filter: ReportFilter) {
         const where: any = {
             laundryOrder: {
                 tenantId,
@@ -62,7 +62,7 @@ export class VendorReportService {
     /**
      * Vendor Performance Scorecard
      */
-    static async getPerformanceScorecard(tenantId: number, filter: ReportFilter) {
+    static async getPerformanceScorecard(tenantId: string, filter: ReportFilter) {
         const exposure = await this.getStockExposure(tenantId, filter);
 
         // Group by Vendor for scorecard
@@ -107,7 +107,7 @@ export class VendorReportService {
             const refId = (recovery as any).referenceId;
             const vendorName = refId ? orderToVendorMap.get(refId) : undefined;
             if (vendorName && scorecard[vendorName]) {
-                scorecard[vendorName].totalRecovered += Number(recovery.quantity || 0);
+                scorecard[vendorName].totalRecovered += Number((recovery as any).quantity || 0);
             }
         }
 
@@ -121,7 +121,7 @@ export class VendorReportService {
     /**
      * Laundry Aging Report
      */
-    static async getLaundryAging(tenantId: number, filter: ReportFilter) {
+    static async getLaundryAging(tenantId: string, filter: ReportFilter) {
         const orders = await prisma.laundryOrder.findMany({
             where: {
                 tenantId,
@@ -157,7 +157,7 @@ export class VendorReportService {
     /**
      * Vendor Liability Report (Financial)
      */
-    static async getVendorLiability(tenantId: number, filter: ReportFilter) {
+    static async getVendorLiability(tenantId: string, filter: ReportFilter) {
         const exposure = await this.getStockExposure(tenantId, filter);
 
         // Fetch apparel unit values
@@ -181,7 +181,7 @@ export class VendorReportService {
     /**
      * Laundry Order Reconciliation
      */
-    static async getReconciliationReport(tenantId: number, filter: ReportFilter) {
+    static async getReconciliationReport(tenantId: string, filter: ReportFilter) {
         const orders = await prisma.laundryOrder.findMany({
             where: {
                 tenantId,
@@ -202,3 +202,4 @@ export class VendorReportService {
         }));
     }
 }
+

@@ -30,7 +30,7 @@ export class DashboardService {
      * Returns the full executive dashboard response.
      * Reads from snapshot for <300ms performance.
      */
-    static async getExecutiveDashboard(tenantId: number): Promise<ExecutiveDashboardResponse> {
+    static async getExecutiveDashboard(tenantId: string): Promise<ExecutiveDashboardResponse> {
         const snapshot = await DashboardRepository.getLatestSnapshot(tenantId);
 
         // ─── Fast path: snapshot exists ───────────────────────────────────────
@@ -177,7 +177,7 @@ export class DashboardService {
      * Returns trend data for a date range.
      */
     static async getTrends(
-        tenantId: number,
+        tenantId: string,
         fromDate: Date,
         toDate: Date
     ): Promise<TrendsResponse> {
@@ -189,3 +189,4 @@ export class DashboardService {
         };
     }
 }
+

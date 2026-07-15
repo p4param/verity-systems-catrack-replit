@@ -11,36 +11,18 @@ export async function GET(
         const user = requireAuth(req)
         await requirePermission(req, "ROLE_VIEW")
 
-        const { id } = await params
-        const userId = Number(id)
+        const { id: userId } = await params
 
-        if (isNaN(userId)) {
-            return NextResponse.json(
-                { message: "Invalid User ID" },
-                { status: 400 }
-            )
-        }
-
-        // Verify target user exists in admin's tenant
         const targetUser = await prisma.user.findFirst({
-            where: {
-                id: userId,
-                tenantId: user.tenantId
-            }
+            where: { id: userId, tenantId: user.tenantId }
         })
 
         if (!targetUser) {
-            return NextResponse.json(
-                { message: "User not found in your tenant" },
-                { status: 404 }
-            )
+            return NextResponse.json({ message: "User not found in your tenant" }, { status: 404 })
         }
 
         const userRoles = await prisma.userRole.findMany({
-            where: {
-                userId,
-                user: { tenantId: user.tenantId }  // Explicit tenant scoping
-            },
+            where: { userId },
             include: { role: true }
         })
 
@@ -66,60 +48,30 @@ export async function PUT(
         const admin = requireAuth(req)
         await requirePermission(req, "ROLE_ASSIGN")
 
-        const { id } = await params
-        const userId = Number(id)
+        const { id: userId } = await params
 
-        if (isNaN(userId)) {
-            return NextResponse.json(
-                { message: "Invalid User ID" },
-                { status: 400 }
-            )
-        }
-
-        // Verify target user exists in admin's tenant
         const targetUser = await prisma.user.findFirst({
-            where: {
-                id: userId,
-                tenantId: admin.tenantId
-            }
+            where: { id: userId, tenantId: admin.tenantId }
         })
 
         if (!targetUser) {
-            return NextResponse.json(
-                { message: "User not found in your tenant" },
-                { status: 404 }
-            )
+            return NextResponse.json({ message: "User not found in your tenant" }, { status: 404 })
         }
 
         const { roleIds } = await req.json()
 
         if (!Array.isArray(roleIds)) {
-            return NextResponse.json(
-                { message: "Invalid payload: roleIds must be an array" },
-                { status: 400 }
-            )
+            return NextResponse.json({ message: "Invalid payload: roleIds must be an array" }, { status: 400 })
         }
 
-        // Prevent self-lockout
         if (admin.sub === userId) {
-            return NextResponse.json(
-                { message: "Cannot modify your own roles" },
-                { status: 400 }
-            )
+            return NextResponse.json({ message: "Cannot modify your own roles" }, { status: 400 })
         }
 
         await prisma.$transaction([
-            prisma.userRole.deleteMany({
-                where: {
-                    userId,
-                    user: { tenantId: admin.tenantId }  // Explicit tenant scoping
-                }
-            }),
+            prisma.userRole.deleteMany({ where: { userId } }),
             prisma.userRole.createMany({
-                data: roleIds.map((rid: number) => ({
-                    userId,
-                    roleId: rid
-                }))
+                data: roleIds.map((rid: string) => ({ userId, roleId: rid }))
             })
         ])
 

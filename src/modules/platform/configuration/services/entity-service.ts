@@ -33,11 +33,11 @@ export class EntityService {
    * Creates a new Business Entity.
    * Executes within a transaction to guarantee Audit Log creation.
    */
-  async create(data: CreateEntityDto, tenantId: number, actorUserId: number) {
+  async create(data: CreateEntityDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity creation: ${data.code}`, { tenantId, userId: actorUserId, module: "EntityService" });
     await this.validationService.validateForCreate(data);
     
-    const formattedCreatedBy = formatUserIdToUuid(actorUserId);
+    const formattedCreatedBy = actorUserId;
     const entityData = { ...data, createdBy: formattedCreatedBy };
 
     try {
@@ -74,11 +74,11 @@ export class EntityService {
    * Updates an existing Business Entity.
    * Executes within a transaction.
    */
-  async update(id: string, data: UpdateEntityDto, tenantId: number, actorUserId: number) {
+  async update(id: string, data: UpdateEntityDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity update: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
     await this.validationService.validateForUpdate(id, data);
     
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
     const updateData = { ...data, updatedBy: formattedUpdatedBy };
 
     return await prisma.$transaction(async (tx) => {
@@ -100,7 +100,7 @@ export class EntityService {
    * Hard deletes a Business Entity.
    * Executes within a transaction.
    */
-  async delete(id: string, tenantId: number, actorUserId: number) {
+  async delete(id: string, tenantId: string, actorUserId: string) {
     logger.warn(`Initiating entity hard delete: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
     await this.validationService.validateForDelete(id);
 
@@ -125,10 +125,10 @@ export class EntityService {
    * Soft deletes (archives) a Business Entity.
    * Executes within a transaction.
    */
-  async archive(id: string, tenantId: number, actorUserId: number) {
+  async archive(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity archive: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
     await this.validationService.validateForArchive(id);
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
     
     return await prisma.$transaction(async (tx) => {
       const entity = await this.repository.updateStatus(id, "ARCHIVED", formattedUpdatedBy, tx); 
@@ -149,9 +149,9 @@ export class EntityService {
    * Restores an archived Business Entity to DRAFT status.
    * Executes within a transaction.
    */
-  async restore(id: string, tenantId: number, actorUserId: number) {
+  async restore(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity restore: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
 
     return await prisma.$transaction(async (tx) => {
       const existing = await this.repository.getById(id, false, tx);
@@ -176,10 +176,10 @@ export class EntityService {
   /**
    * Duplicates an existing Business Entity.
    */
-  async duplicate(id: string, tenantId: number, actorUserId: number) {
+  async duplicate(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity duplicate: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
     // Duplicate service manages its own transaction logic if any
-    const formattedUser = formatUserIdToUuid(actorUserId);
+    const formattedUser = actorUserId;
     const entity = await this.duplicateService.duplicate(id, formattedUser);
     
     await createAuditLog({
@@ -203,7 +203,7 @@ export class EntityService {
    * Publishes an entity, synchronizes navigation, and registers search indices.
    * Executes within a robust transaction.
    */
-  async publish(id: string, tenantId: number, actorUserId: number) {
+  async publish(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity publish: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
     const entity = await this.repository.getById(id, false);
     if (!entity) throw new Error("Entity not found.");
@@ -215,7 +215,7 @@ export class EntityService {
     }
 
     const { publishService } = await import("./publish-service");
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
     
     // Delegate to the formal transactional Publish Pipeline
     const result = await publishService.publishEntity(id, formattedUpdatedBy);
@@ -231,3 +231,4 @@ export class EntityService {
     return { entity: { ...entity, status: "PUBLISHED" }, validationResult };
   }
 }
+

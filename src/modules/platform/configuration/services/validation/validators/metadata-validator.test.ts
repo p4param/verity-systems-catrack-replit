@@ -95,3 +95,4 @@ describe("MetadataValidator", () => {
     expect(result).toContainEqual(expect.objectContaining({ level: "INFO", code: "MISSING_DESCRIPTION" }));
   });
 });
+

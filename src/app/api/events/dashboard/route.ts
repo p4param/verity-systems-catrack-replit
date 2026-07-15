@@ -24,10 +24,11 @@ export async function GET(req: Request) {
       prisma.cateringEvent.count({ where }),
       prisma.cateringEvent.count({ where: { ...where, startDate: { gte: todayStart, lte: todayEnd } } }),
       prisma.cateringEvent.count({ where: { ...where, startDate: { gt: todayEnd } } }),
-      prisma.cateringEvent.findMany({
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      (prisma.cateringEvent.findMany({
         where,
-        include: { costing: { select: { invoiceTotal: true, amountPaid: true } } },
-      }),
+        include: { costing: { select: { invoiceTotal: true, amountPaid: true } as any } },
+      }) as any),
     ]);
 
     let revenueThisMonth = 0;

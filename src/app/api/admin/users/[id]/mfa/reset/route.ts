@@ -17,12 +17,7 @@ export async function POST(
         const userPayload = requireAuth(req);
         const adminId = userPayload.sub;
         const tenantId = userPayload.tenantId;
-        const { id: targetUserIdStr } = await params;
-        const targetUserId = parseInt(targetUserIdStr);
-
-        if (isNaN(targetUserId)) {
-            return NextResponse.json({ error: "Invalid user ID" }, { status: 400 });
-        }
+        const { id: targetUserId } = await params;
 
         // 1. Permission Check
         // Need "users.manage" or similar. Since we don't have granular permissions fully enforced yet,

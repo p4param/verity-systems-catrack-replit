@@ -244,8 +244,8 @@ export default function NavigationDesignerPage() {
           itemId: item.id,
           parentId: prevSibling.id,
           displayOrder: 0,
-          tenantId: user?.tenantId || 1,
-          actorUserId: user?.id || 1
+          tenantId: user?.tenantId || "",
+          actorUserId: user?.id || ""
         });
         toast.success(`Indented item "${item.title}" under "${prevSibling.title}"`);
         refetchTree();
@@ -263,8 +263,8 @@ export default function NavigationDesignerPage() {
         itemId: item.id,
         parentId: null,
         displayOrder: parentNode ? parentNode.displayOrder + 1 : 0,
-        tenantId: user?.tenantId || 1,
-        actorUserId: user?.id || 1
+        tenantId: user?.tenantId || "",
+        actorUserId: user?.id || ""
       });
       toast.success(`Outdented item "${item.title}" to root level`);
       refetchTree();
@@ -280,15 +280,15 @@ export default function NavigationDesignerPage() {
         await updateGroupMutation.mutateAsync({
           id: editingGroup.id,
           data: groupForm,
-          tenantId: user?.tenantId || 1,
-          actorUserId: user?.id || 1
+          tenantId: user?.tenantId || "",
+          actorUserId: user?.id || ""
         });
         toast.success("Group settings updated successfully");
       } else {
         await createGroupMutation.mutateAsync({
           data: groupForm,
-          tenantId: user?.tenantId || 1,
-          actorUserId: user?.id || 1
+          tenantId: user?.tenantId || "",
+          actorUserId: user?.id || ""
         });
         toast.success("Group created successfully");
       }
@@ -313,15 +313,15 @@ export default function NavigationDesignerPage() {
         await updateItemMutation.mutateAsync({
           id: editingItem.id,
           data: payload,
-          tenantId: user?.tenantId || 1,
-          actorUserId: user?.id || 1
+          tenantId: user?.tenantId || "",
+          actorUserId: user?.id || ""
         });
         toast.success("Item settings updated successfully");
       } else {
         await createItemMutation.mutateAsync({
           data: payload,
-          tenantId: user?.tenantId || 1,
-          actorUserId: user?.id || 1
+          tenantId: user?.tenantId || "",
+          actorUserId: user?.id || ""
         });
         toast.success("Item created successfully");
       }
@@ -340,8 +340,8 @@ export default function NavigationDesignerPage() {
     try {
       await publishMutation.mutateAsync({
         profileId: selectedProfileId,
-        tenantId: user?.tenantId || 1,
-        actorUserId: user?.id || 1
+        tenantId: user?.tenantId || "",
+        actorUserId: user?.id || ""
       });
       toast.success("Navigation cache published successfully!");
       refetchVersions();
@@ -356,8 +356,8 @@ export default function NavigationDesignerPage() {
     try {
       await restoreVersionMutation.mutateAsync({
         versionId,
-        tenantId: user?.tenantId || 1,
-        actorUserId: user?.id || 1
+        tenantId: user?.tenantId || "",
+        actorUserId: user?.id || ""
       });
       toast.success("Restored layout structure version snapshot!");
       refetchTree();
@@ -763,14 +763,14 @@ export default function NavigationDesignerPage() {
                         if (nodeType === "GROUP") {
                           await deleteGroupMutation.mutateAsync({
                             id: selectedNode.id,
-                            tenantId: user?.tenantId || 1,
-                            actorUserId: user?.id || 1
+                            tenantId: user?.tenantId || "",
+                            actorUserId: user?.id || ""
                           });
                         } else {
                           await deleteItemMutation.mutateAsync({
                             id: selectedNode.id,
-                            tenantId: user?.tenantId || 1,
-                            actorUserId: user?.id || 1
+                            tenantId: user?.tenantId || "",
+                            actorUserId: user?.id || ""
                           });
                         }
                         toast.success("Deleted node successfully");
@@ -1231,3 +1231,4 @@ export default function NavigationDesignerPage() {
     </div>
   );
 }
+

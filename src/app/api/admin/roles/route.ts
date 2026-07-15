@@ -86,7 +86,7 @@ export async function POST(req: Request) {
                 name: name,
                 rolePermissions: {
                     createMany: {
-                        data: permissionIds.map((id: number) => ({
+                        data: permissionIds.map((id: string) => ({
                             permissionId: id
                         }))
                     }

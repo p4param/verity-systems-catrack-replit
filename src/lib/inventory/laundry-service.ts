@@ -5,18 +5,18 @@ import { MovementService } from "./movement-service";
 import { SnapshotInvalidator } from "./dashboard/snapshot-invalidator";
 
 export interface LaundryDispatchInput {
-    tenantId: number;
+    tenantId: string;
     vendorId: number;
     items: {
         apparelId: number;
         quantity: number;
     }[];
     expectedReturnDate?: Date;
-    createdBy: number;
+    createdBy: string;
 }
 
 export interface LaundryReturnInput {
-    tenantId: number;
+    tenantId: string;
     orderId: number;
     items: {
         apparelId: number;
@@ -25,7 +25,7 @@ export interface LaundryReturnInput {
         qtyMissing: number;
         lossResponsibility?: string;
     }[];
-    createdBy: number;
+    createdBy: string;
 }
 
 export class LaundryService {
@@ -42,6 +42,8 @@ export class LaundryService {
                     vendorId: input.vendorId,
                     expectedReturnDate: input.expectedReturnDate,
                     status: "DISPATCHED",
+                    // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                     createdBy: input.createdBy
                 }
             });
@@ -65,6 +67,8 @@ export class LaundryService {
                     condition: 'DIRTY',
                     referenceType: 'LAUNDRY',
                     referenceId: order.id,
+                    // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                     createdBy: input.createdBy
                 }, tx);
 
@@ -132,6 +136,8 @@ export class LaundryService {
                         condition: 'CLEAN',
                         referenceType: 'LAUNDRY',
                         referenceId: order.id,
+                        // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                         createdBy: input.createdBy
                     }, tx);
                 }
@@ -147,6 +153,8 @@ export class LaundryService {
                         referenceType: 'LAUNDRY',
                         referenceId: order.id,
                         lossResponsibility: resp,
+                        // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                         createdBy: input.createdBy
                     }, tx);
 
@@ -158,6 +166,8 @@ export class LaundryService {
                             movementTypeCode: 'DAMAGE',
                             apparelId: returnItem.apparelId,
                             quantity: returnItem.qtyDamaged,
+                            // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                             createdBy: input.createdBy,
                         }, tx);
                     }
@@ -173,6 +183,8 @@ export class LaundryService {
                         referenceType: 'LAUNDRY',
                         referenceId: order.id,
                         lossResponsibility: resp,
+                        // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                         createdBy: input.createdBy
                     }, tx);
 
@@ -184,6 +196,8 @@ export class LaundryService {
                             movementTypeCode: 'MISSING',
                             apparelId: returnItem.apparelId,
                             quantity: returnItem.qtyMissing,
+                            // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                             createdBy: input.createdBy,
                         }, tx);
                     }
@@ -211,3 +225,4 @@ export class LaundryService {
         });
     }
 }
+

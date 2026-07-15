@@ -42,7 +42,7 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
     const { id } = await params;
     const body = await req.json();
 
-    const permissionIds: number[] = body.permissionIds ?? [];
+    const permissionIds: string[] = body.permissionIds ?? [];
 
     await prisma.$transaction([
       prisma.platformModulePermission.deleteMany({ where: { platformModuleId: id } }),

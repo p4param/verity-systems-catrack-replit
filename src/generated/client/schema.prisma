@@ -10,7 +10,7 @@ datasource db {
 }
 
 model Tenant {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   code      String   @unique
   name      String
   isActive  Boolean  @default(true)
@@ -53,11 +53,13 @@ model Tenant {
   vendorLiabilityCredits VendorLiabilityCredit[]
   vendorPayments         VendorPayment[]
   vendorLedgerEntries    VendorLedger[]
+
+  @@map("tenants")
 }
 
 model User {
-  id           Int     @id @default(autoincrement())
-  tenantId     Int
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String  @db.Uuid
   fullName     String
   email        String
   passwordHash String?
@@ -72,9 +74,9 @@ model User {
 
   lastLoginAt DateTime?
   createdAt   DateTime  @default(now())
-  createdBy   Int?
-  updatedAt   DateTime?
-  updatedBy   Int?
+  createdBy   String?   @db.Uuid
+  updatedAt   DateTime  @updatedAt
+  updatedBy   String?   @db.Uuid
 
   tenant Tenant @relation(fields: [tenantId], references: [id])
 
@@ -90,11 +92,12 @@ model User {
   invites        UserInvite[]
 
   @@unique([tenantId, email])
+  @@map("users")
 }
 
 model Role {
-  id          Int      @id @default(autoincrement())
-  tenantId    Int
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String   @db.Uuid
   name        String
   description String?
   isSystem    Boolean  @default(false)
@@ -108,42 +111,47 @@ model Role {
   userRoles       UserRole[]
 
   @@unique([tenantId, name])
+  @@map("roles")
 }
 
 model UserRole {
-  userId     Int
-  roleId     Int
+  userId     String   @db.Uuid
+  roleId     String   @db.Uuid
   assignedAt DateTime @default(now())
-  assignedBy Int?
+  assignedBy String?  @db.Uuid
 
   user User @relation(fields: [userId], references: [id])
   role Role @relation(fields: [roleId], references: [id])
 
   @@id([userId, roleId])
+  @@map("user_roles")
 }
 
 model Permission {
-  id          Int     @id @default(autoincrement())
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   code        String  @unique
   description String?
 
   rolePermissions   RolePermission[]
   modulePermissions PlatformModulePermission[]
+
+  @@map("permissions")
 }
 
 model RolePermission {
-  roleId       Int
-  permissionId Int
+  roleId       String @db.Uuid
+  permissionId String @db.Uuid
 
   role       Role       @relation(fields: [roleId], references: [id])
   permission Permission @relation(fields: [permissionId], references: [id])
 
   @@id([roleId, permissionId])
+  @@map("role_permissions")
 }
 
 model PasswordResetToken {
-  id        Int       @id @default(autoincrement())
-  userId    Int
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String    @db.Uuid
   tokenHash String
   expiresAt DateTime
   usedAt    DateTime?
@@ -152,21 +160,23 @@ model PasswordResetToken {
   user User @relation(fields: [userId], references: [id])
 
   @@index([tokenHash])
+  @@map("password_reset_tokens")
 }
 
 model PasswordResetRequest {
-  id          Int      @id @default(autoincrement())
+  id          String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   email       String
   ipAddress   String
   requestedAt DateTime @default(now())
 
   @@index([email, requestedAt])
   @@index([ipAddress, requestedAt])
+  @@map("password_reset_requests")
 }
 
 model MfaBackupCode {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
   codeHash  String
   used      Boolean  @default(false)
   createdAt DateTime @default(now())
@@ -174,11 +184,12 @@ model MfaBackupCode {
   user User @relation(fields: [userId], references: [id])
 
   @@index([userId])
+  @@map("mfa_backup_codes")
 }
 
 model RefreshToken {
-  id          Int     @id @default(autoincrement())
-  userId      Int
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId      String  @db.Uuid
   tokenHash   String
   mfaVerified Boolean @default(false)
 
@@ -196,13 +207,14 @@ model RefreshToken {
   user User @relation(fields: [userId], references: [id])
 
   @@index([tokenHash])
+  @@map("refresh_tokens")
 }
 
 model AuditLog {
-  id           Int  @id @default(autoincrement())
-  tenantId     Int
-  actorUserId  Int?
-  targetUserId Int?
+  id           String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId     String  @db.Uuid
+  actorUserId  String? @db.Uuid
+  targetUserId String? @db.Uuid
 
   action    String
   details   String?
@@ -218,11 +230,12 @@ model AuditLog {
   @@index([actorUserId])
   @@index([targetUserId])
   @@index([action])
+  @@map("audit_logs")
 }
 
 model SecurityAlert {
-  id        Int      @id @default(autoincrement())
-  userId    Int
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  userId    String   @db.Uuid
   type      String
   title     String
   message   String
@@ -235,15 +248,16 @@ model SecurityAlert {
 
   @@index([userId])
   @@index([isRead])
+  @@map("security_alerts")
 }
 
 model UserInvite {
-  id        String    @id @default(cuid())
-  tenantId  Int
+  id        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId  String    @db.Uuid
   email     String
   tokenHash String
   expiresAt DateTime
-  createdBy Int
+  createdBy String    @db.Uuid
   usedAt    DateTime?
   createdAt DateTime  @default(now())
 
@@ -252,11 +266,12 @@ model UserInvite {
 
   @@index([tokenHash])
   @@index([tenantId, email])
+  @@map("user_invites")
 }
 
 model Category {
   id        Int      @id @default(autoincrement())
-  tenantId  Int
+  tenantId  String   @db.Uuid
   name      String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
@@ -269,11 +284,11 @@ model Category {
 
 model Vendor {
   id           Int      @id @default(autoincrement())
-  tenantId     Int
+  tenantId     String   @db.Uuid
   name         String
   contactInfo  String?
   taxId        String?
-  paymentTerms String? // e.g. "NET30", "NET60"
+  paymentTerms String?
   creditLimit  Decimal? @db.Decimal(12, 2)
   isActive     Boolean  @default(true)
   createdAt    DateTime @default(now())
@@ -292,7 +307,7 @@ model Vendor {
 
 model Apparel {
   id            Int      @id @default(autoincrement())
-  tenantId      Int
+  tenantId      String   @db.Uuid
   categoryId    Int
   name          String
   unit          String
@@ -318,7 +333,7 @@ model Apparel {
 
 model StockMovement {
   id                   Int            @id @default(autoincrement())
-  tenantId             Int
+  tenantId             String         @db.Uuid
   apparelId            Int
   movementType         String
   quantityChange       Int
@@ -327,7 +342,7 @@ model StockMovement {
   reason               String?
   condition            StockCondition @default(CLEAN)
   recoveryOfMovementId Int?
-  lossResponsibility   String? // CUSTOMER | LAUNDRY_VENDOR | COMPANY | EVENT_TEAM | UNKNOWN
+  lossResponsibility   String?
   createdAt            DateTime       @default(now())
   createdBy            Int
 
@@ -346,7 +361,7 @@ model StockMovement {
 
 model Event {
   id        Int      @id @default(autoincrement())
-  tenantId  Int
+  tenantId  String   @db.Uuid
   name      String
   eventDate DateTime
   status    String   @default("DRAFT")
@@ -358,7 +373,7 @@ model Event {
 
 model EventReservation {
   id          Int      @id @default(autoincrement())
-  tenantId    Int
+  tenantId    String   @db.Uuid
   eventId     Int
   apparelId   Int
   reservedQty Int
@@ -376,7 +391,7 @@ model EventReservation {
 
 model LaundryOrder {
   id                 Int       @id @default(autoincrement())
-  tenantId           Int
+  tenantId           String    @db.Uuid
   vendorId           Int
   dispatchDate       DateTime  @default(now())
   expectedReturnDate DateTime?
@@ -418,13 +433,13 @@ enum StockCondition {
 
 model MovementType {
   id                 Int      @id @default(autoincrement())
-  tenantId           Int
-  code               String // e.g., PURCHASE_RECEIVE, EVENT_RETURN, LAUNDRY_DISPATCH
-  direction          String // IN, OUT, TRANSFER
+  tenantId           String   @db.Uuid
+  code               String
+  direction          String
   affectsClean       Boolean  @default(false)
   affectsDirty       Boolean  @default(false)
   isRecoveryType     Boolean  @default(false)
-  isSystemControlled Boolean  @default(false) // System masters cannot be deleted/edited by UI
+  isSystemControlled Boolean  @default(false)
   isActive           Boolean  @default(true)
   createdAt          DateTime @default(now())
 
@@ -435,10 +450,10 @@ model MovementType {
 
 model ReasonCode {
   id               Int      @id @default(autoincrement())
-  tenantId         Int
-  code             String // e.g., DAMAGED_ON_ARRIVAL, STOCK_TAKE_LOSS
+  tenantId         String   @db.Uuid
+  code             String
   description      String
-  appliesTo        String // EVENT, LAUNDRY, ADJUSTMENT
+  appliesTo        String
   requiresApproval Boolean  @default(false)
   isActive         Boolean  @default(true)
   createdAt        DateTime @default(now())
@@ -450,8 +465,8 @@ model ReasonCode {
 
 model StockConditionMaster {
   id          Int      @id @default(autoincrement())
-  tenantId    Int
-  code        String // CLEAN, DIRTY, DAMAGED
+  tenantId    String   @db.Uuid
+  code        String
   description String
   isActive    Boolean  @default(true)
   createdAt   DateTime @default(now())
@@ -463,8 +478,8 @@ model StockConditionMaster {
 
 model UnitOfMeasure {
   id               Int      @id @default(autoincrement())
-  tenantId         Int
-  code             String // PCS, SET, KG, PAIR
+  tenantId         String   @db.Uuid
+  code             String
   description      String
   conversionFactor Decimal  @default(1.0) @db.Decimal(10, 4)
   isActive         Boolean  @default(true)
@@ -477,9 +492,9 @@ model UnitOfMeasure {
 
 model Location {
   id        Int      @id @default(autoincrement())
-  tenantId  Int
+  tenantId  String   @db.Uuid
   name      String
-  type      String // WAREHOUSE, TRANSIT, EVENT_SITE
+  type      String
   isActive  Boolean  @default(true)
   createdAt DateTime @default(now())
 
@@ -490,8 +505,8 @@ model Location {
 
 model DocumentNumbering {
   id              Int      @id @default(autoincrement())
-  tenantId        Int
-  entityType      String // PO, EVENT, LAUNDRY
+  tenantId        String   @db.Uuid
+  entityType      String
   prefix          String
   currentSequence Int      @default(0)
   resetYearly     Boolean  @default(false)
@@ -506,14 +521,14 @@ model DocumentNumbering {
 
 model InventorySettings {
   id                         Int      @id @default(autoincrement())
-  tenantId                   Int      @unique
+  tenantId                   String   @unique @db.Uuid
   allowNegativeStock         Boolean  @default(false)
   requireApprovalForRecovery Boolean  @default(true)
-  defaultLaundrySLA          Int      @default(7) // Days
+  defaultLaundrySLA          Int      @default(7)
   enableMultiLocation        Boolean  @default(false)
   enableValuation            Boolean  @default(false)
   currencySymbol             String   @default("$") @db.VarChar(5)
-  defaultTaxRate             Decimal  @default(0) @db.Decimal(5, 2) // Global tax % for vendor invoices
+  defaultTaxRate             Decimal  @default(0) @db.Decimal(5, 2)
   updatedAt                  DateTime @updatedAt
 
   tenant Tenant @relation(fields: [tenantId], references: [id])
@@ -521,7 +536,7 @@ model InventorySettings {
 
 model Supplier {
   id           Int      @id @default(autoincrement())
-  tenantId     Int
+  tenantId     String   @db.Uuid
   name         String
   contactInfo  String?
   taxId        String?
@@ -539,7 +554,7 @@ model Supplier {
 
 model PurchaseOrder {
   id           Int       @id @default(autoincrement())
-  tenantId     Int
+  tenantId     String    @db.Uuid
   supplierId   Int
   poNumber     String
   status       String    @default("DRAFT")
@@ -581,7 +596,7 @@ model PurchaseOrderItem {
 /// Populated by DashboardSnapshotJob. Dashboard API reads exclusively from this table.
 model DashboardSnapshot {
   id       String @id @default(cuid())
-  tenantId Int
+  tenantId String @db.Uuid
 
   snapshotDate DateTime @db.Date
 
@@ -660,11 +675,10 @@ model DashboardSnapshot {
 /// One row per tenant per metric per day.
 model KPITrendSnapshot {
   id       String @id @default(cuid())
-  tenantId Int
+  tenantId String @db.Uuid
 
   snapshotDate DateTime @db.Date
 
-  /// Metric code (e.g. INVENTORY_HEALTH, NET_LOSS, VENDOR_SCORE)
   metricCode  String
   metricValue Decimal @db.Decimal(14, 4)
 
@@ -680,11 +694,9 @@ model KPITrendSnapshot {
 /// Populated externally or by an AI inference job.
 model AIRecommendation {
   id       String @id @default(cuid())
-  tenantId Int
+  tenantId String @db.Uuid
 
-  /// CRITICAL | HIGH | MEDIUM | LOW
   priority String
-  /// REORDER | LAUNDRY | VENDOR | LOSS | CAPACITY | GENERAL
   type     String
 
   title       String
@@ -692,7 +704,6 @@ model AIRecommendation {
 
   payload Json?
 
-  /// ACTIVE | DISMISSED | RESOLVED
   status String @default("ACTIVE")
 
   createdAt DateTime @default(now())
@@ -710,8 +721,8 @@ model AIRecommendation {
 /// Vendor-specific washing rate contracts per apparel.
 /// Multiple rate revisions allowed; only one active rate per vendor/apparel per period.
 model LaundryVendorRate {
-  id        Int @id @default(autoincrement())
-  tenantId  Int
+  id        Int    @id @default(autoincrement())
+  tenantId  String @db.Uuid
   vendorId  Int
   apparelId Int
 
@@ -740,7 +751,7 @@ model LaundryVendorRate {
 /// Vendor invoices generated from laundry return movements.
 model LaundryVendorInvoice {
   id        Int    @id @default(autoincrement())
-  tenantId  Int
+  tenantId  String @db.Uuid
   invoiceNo String
   vendorId  Int
 
@@ -796,7 +807,7 @@ model LaundryVendorInvoiceItem {
 /// Each movement can only be billed once.
 model LaundryBillingSource {
   id              Int      @id @default(autoincrement())
-  tenantId        Int
+  tenantId        String   @db.Uuid
   invoiceId       Int
   stockMovementId Int      @unique // Prevent double-billing
   quantity        Decimal  @db.Decimal(12, 2)
@@ -812,7 +823,7 @@ model LaundryBillingSource {
 /// Loss/damage liability charged to vendor when lossResponsibility = LAUNDRY_VENDOR.
 model VendorLiability {
   id               Int    @id @default(autoincrement())
-  tenantId         Int
+  tenantId         String @db.Uuid
   vendorId         Int
   stockMovementId  Int    @unique
   movementTypeCode String
@@ -841,8 +852,8 @@ model VendorLiability {
 
 /// Recovery credit applied against a vendor liability when lost items are found.
 model VendorLiabilityCredit {
-  id                 Int @id @default(autoincrement())
-  tenantId           Int
+  id                 Int    @id @default(autoincrement())
+  tenantId           String @db.Uuid
   vendorLiabilityId  Int
   recoveryMovementId Int
 
@@ -861,7 +872,7 @@ model VendorLiabilityCredit {
 /// Vendor payment records.
 model VendorPayment {
   id        Int    @id @default(autoincrement())
-  tenantId  Int
+  tenantId  String @db.Uuid
   paymentNo String
   vendorId  Int
 
@@ -903,8 +914,8 @@ model VendorPaymentAllocation {
 /// Append-only financial sub-ledger for vendor accounting.
 /// Never update or delete rows. Balance = SUM(debit) - SUM(credit).
 model VendorLedger {
-  id       Int @id @default(autoincrement())
-  tenantId Int
+  id       Int    @id @default(autoincrement())
+  tenantId String @db.Uuid
   vendorId Int
 
   transactionDate DateTime
@@ -1820,6 +1831,7 @@ model ConfigurationEntity {
   navigationItems             NavigationItem[]
   lookupDefinitionsReferenced EntityFieldLookupDefinition[]
   artifacts                   RuntimeArtifact[]
+  layoutViews                 EntityLayoutView[]
 
   @@map("configuration_entities")
 }
@@ -1930,6 +1942,15 @@ enum ViewType {
   QUICK_CREATE
 }
 
+enum LayoutType {
+  FORM
+  DETAIL
+  QUICK_CREATE
+  WIZARD
+  MOBILE
+  PRINT
+}
+
 model EntityView {
   id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   entityId  String   @db.Uuid
@@ -1950,6 +1971,30 @@ model EntityView {
 
   @@unique([entityId, code])
   @@map("entity_views")
+}
+
+model EntityLayoutView {
+  id          String     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId    String     @db.Uuid
+  code        String
+  name        String
+  description String?
+  layoutType  LayoutType @default(FORM)
+  isDefault   Boolean    @default(false)
+  status      String     @default("DRAFT")
+  version     Int        @default(1)
+  layout      Json       @default("{}") @db.JsonB
+
+  createdAt DateTime @default(now())
+  createdBy String   @db.Uuid
+  updatedAt DateTime @updatedAt
+  updatedBy String   @db.Uuid
+
+  entity ConfigurationEntity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@unique([entityId, code])
+  @@index([entityId, layoutType])
+  @@map("entity_layout_views")
 }
 
 model EntityRecord {
@@ -2285,7 +2330,7 @@ model NavigationQuickLink {
 model PlatformModulePermission {
   id                String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
   platformModuleId  String  @db.Uuid
-  permissionId      Int
+  permissionId      String  @db.Uuid
   permissionPurpose String  @default("MODULE_ACCESS")
   displayOrder      Int     @default(0)
   isRequired        Boolean @default(false)
@@ -2310,4 +2355,27 @@ model NavigationSearchIndex {
   createdAt DateTime @default(now())
 
   @@map("navigation_search_indices")
+}
+
+// ─── CM-003 Runtime Data Engine / CM-004 Number Series Engine ──────────────────
+//
+// NOTE: platform_migrations is intentionally NOT added here.
+//       It is owned exclusively by SchemaPlatformEngine (CM-002) via raw DDL.
+//       Adding it to Prisma would create dual ownership and potential conflicts.
+
+/// Tracks per-entity sequence counters for the CM-004 Number Series Engine.
+/// Used by PlatformNumberSeriesEngine (VS05H stub) to generate collision-free
+/// record numbers (e.g., DEP-000001, INC-000042, PO-000001).
+///
+/// Thread safety: upsert + increment is atomic in PostgreSQL.
+///
+/// This table is created via standard prisma migrate dev.
+model PlatformRecordSequence {
+  id        String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  entityId  String   @unique @map("entity_id") @db.Uuid
+  prefix    String   @db.VarChar(10)
+  lastValue Int      @default(0) @map("last_value")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("platform_record_sequences")
 }

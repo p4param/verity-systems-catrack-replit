@@ -1,25 +1,31 @@
 import { PrismaClient } from "../generated/client";
 import { createTenantMiddleware } from "./db/tenant-middleware";
 
-const globalForPrisma = global as unknown as { prisma: any };
+const globalForPrisma = global as unknown as { prisma: PrismaClient };
 
-// Force re-initialization if the existing client is stale (missing new models)
-if (globalForPrisma.prisma && !globalForPrisma.prisma.apparel) {
-    console.warn("⚠️ Stale Prisma Client detected (missing apparel model). Forcing re-initialization...");
-    globalForPrisma.prisma = undefined;
+// Force re-initialization if the existing client is stale (missing new models).
+// Update this check whenever a new model is added to the Prisma schema.
+// The check should reference the MOST RECENTLY ADDED model so hot-reload
+// always picks up the updated generated client.
+if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).platformRecordSequence) {
+    console.warn("⚠️ Stale Prisma Client detected (missing platformRecordSequence model). Forcing re-initialization...");
+    (globalForPrisma.prisma as any) = undefined;
 }
 
-export const prisma =
-    globalForPrisma.prisma ||
-    new PrismaClient({
+function createPrismaClient(): PrismaClient {
+    const client = new PrismaClient({
         log: ["query"],
     });
+    // Register tenant enforcement middleware only on fresh instances.
+    // Calling $use on the cached global would stack middleware on every hot-reload.
+    // Configuration is read from environment variables (see .env.example)
+    // Default: DISABLED (safe for production)
+    client.$use(createTenantMiddleware());
+    return client;
+}
 
-// Register tenant enforcement middleware
-// Configuration is read from environment variables (see .env.example)
-// Default: DISABLED (safe for production)
-// To enable logging: Set TENANT_ENFORCEMENT_ENABLED=true and TENANT_ENFORCEMENT_MODE=log_only
-// See: docs/tenant_enforcement_rollout.md for activation plan
-prisma.$use(createTenantMiddleware());
+export const prisma: PrismaClient =
+    globalForPrisma.prisma ?? createPrismaClient();
 
 if (process.env.NODE_ENV !== "production") globalForPrisma.prisma = prisma;
+

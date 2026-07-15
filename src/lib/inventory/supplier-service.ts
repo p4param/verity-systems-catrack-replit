@@ -2,7 +2,7 @@ import { prisma } from "../prisma";
 import { Prisma } from "../../generated/client";
 
 export interface CreateSupplierInput {
-    tenantId: number;
+    tenantId: string;
     name: string;
     contactInfo?: string;
     isActive?: boolean;
@@ -10,7 +10,7 @@ export interface CreateSupplierInput {
 
 export interface UpdateSupplierInput {
     id: number;
-    tenantId: number;
+    tenantId: string;
     name?: string;
     contactInfo?: string;
     isActive?: boolean;
@@ -51,7 +51,7 @@ export class SupplierService {
     /**
      * Gets a single supplier.
      */
-    static async getSupplier(tenantId: number, id: number) {
+    static async getSupplier(tenantId: string, id: number) {
         return await prisma.supplier.findUnique({
             where: {
                 id,
@@ -63,7 +63,7 @@ export class SupplierService {
     /**
      * Gets a list of suppliers for a tenant.
      */
-    static async listSuppliers(tenantId: number, options?: { isActive?: boolean }) {
+    static async listSuppliers(tenantId: string, options?: { isActive?: boolean }) {
         const where: Prisma.SupplierWhereInput = { tenantId };
         if (options?.isActive !== undefined) {
             where.isActive = options.isActive;
@@ -78,7 +78,7 @@ export class SupplierService {
     /**
      * Deletes (or deactivates) a supplier.
      */
-    static async deleteSupplier(tenantId: number, id: number) {
+    static async deleteSupplier(tenantId: string, id: number) {
         // Typically we soft-delete if there are linked purchase orders
         const usageCount = await prisma.purchaseOrder.count({
             where: { supplierId: id, tenantId }
@@ -98,3 +98,4 @@ export class SupplierService {
         });
     }
 }
+

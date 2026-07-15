@@ -40,7 +40,7 @@ export async function POST(req: Request) {
 
         if (body.tenantId !== undefined) {
             // Single tenant run
-            const result = await DashboardSnapshotJob.run(body.tenantId);
+            const result = await DashboardSnapshotJob.run(String(body.tenantId));
             return NextResponse.json({ success: true, result });
         } else {
             // All tenants run

@@ -4,14 +4,14 @@ async function main() {
   const entity = await prisma.configurationEntity.findUnique({
     where: { id: '7ef861a1-8d80-45bc-a5e5-7545bd4a3a72' } // Vehicle entity
   });
-  const manifest = entity.metadata.runtimeManifest;
+  const manifest = (entity.metadata as any).runtimeManifest;
   
   const ctx = {
     companyId: "00000000-0000-0000-0000-000000000001",
     branchId: "00000000-0000-0000-0000-000000000001",
     userId: "00000000-0000-0000-0000-000000000000",
-    tenantId: 1,
-    actorUserId: 1,
+    tenantId: "system",
+    actorUserId: "system",
   };
   
   // Try to update to EV Scooty (a212a848-3087-450d-9940-f02e49bf8be6)
@@ -27,3 +27,4 @@ async function main() {
   console.log("New Record State:", record);
 }
 main().finally(() => prisma.$disconnect());
+

@@ -29,29 +29,44 @@ export class StaticOptionProvider implements OptionProvider {
 
 export class LookupOptionProvider implements OptionProvider {
   async fetchOptions(field: any, query?: string, fetchWithAuth?: any): Promise<OptionItem[]> {
-    if (!field.lookupDefinition?.referencedEntityId) return [];
-    
+    const lookupDef = field.lookupDefinition;
+    if (!lookupDef?.referencedEntityId) return [];
+
     try {
-      const referencedEntityId = field.lookupDefinition.referencedEntityId;
-      const url = `/api/runtime/platform/${referencedEntityId}/lookup${query ? `?q=${encodeURIComponent(query)}` : ''}`;
-      
-      let data;
+      const referencedEntityId = lookupDef.referencedEntityId;
+
+      // Build URL: use the entity-UUID route which resolves moduleCode/entityCode internally.
+      // ?q= for search, ?display= for display field override, ?view= for view-scoped lookup
+      const params = new URLSearchParams();
+      if (query) params.set("q", query);
+      if (lookupDef.viewCode) params.set("view", lookupDef.viewCode);
+      if (lookupDef.displayFieldCode) params.set("display", lookupDef.displayFieldCode);
+
+      const url = `/api/runtime/lookup/${referencedEntityId}${params.size > 0 ? `?${params.toString()}` : ""}`;
+
+      let raw: any;
       if (fetchWithAuth) {
-        data = await fetchWithAuth(url);
+        raw = await fetchWithAuth(url);
       } else {
         const res = await fetch(url);
         if (!res.ok) {
           const text = await res.text();
-          console.error("Lookup fetch failed:", res.status, text);
-          throw new Error("Failed to fetch lookup data");
+          console.error("[LookupOptionProvider] HTTP error:", res.status, text);
+          throw new Error(`Lookup fetch failed: HTTP ${res.status}`);
         }
-        data = await res.json();
+        raw = await res.json();
       }
-      
-      // Since fetchWithAuth might return the array directly if it doesn't wrap it, let's handle both
-      return Array.isArray(data) ? data : (data?.data || []);
+
+      // Unwrap { success: true, data: [...] } envelope OR plain array
+      if (Array.isArray(raw)) return raw;
+      if (raw?.data && Array.isArray(raw.data)) return raw.data;
+      if (raw?.success === false) {
+        console.error("[LookupOptionProvider] API error:", raw.error);
+        return [];
+      }
+      return [];
     } catch (error) {
-      console.error("Lookup error:", error);
+      console.error("[LookupOptionProvider] Failed to fetch options for field:", field.code, error);
       return [];
     }
   }

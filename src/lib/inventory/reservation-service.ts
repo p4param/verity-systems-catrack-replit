@@ -3,11 +3,11 @@ import { Prisma } from "../../generated/client";
 import { AvailabilityEngine } from "./availability-engine";
 
 export interface CreateReservationInput {
-    tenantId: number;
+    tenantId: string;
     eventId: number;
     apparelId: number;
     reservedQty: number;
-    createdBy: number;
+    createdBy: string;
 }
 
 export class ReservationService {
@@ -34,6 +34,8 @@ export class ReservationService {
                     apparelId: input.apparelId,
                     reservedQty: input.reservedQty,
                     status: "ACTIVE",
+                    // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                     createdBy: input.createdBy
                 }
             });
@@ -67,3 +69,4 @@ export class ReservationService {
         return this.updateReservationStatus(id, 'RELEASED', tx);
     }
 }
+

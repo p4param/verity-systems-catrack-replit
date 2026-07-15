@@ -14,14 +14,7 @@ export async function POST(
 
         // 2. Get user ID from params
         const { id } = await params
-        const userId = parseInt(id)
-
-        if (isNaN(userId)) {
-            return NextResponse.json(
-                { message: "Invalid user ID" },
-                { status: 400 }
-            )
-        }
+        const userId = id // VS05Z: UUID string
 
         // 3. Verify user exists and belongs to admin's tenant
         // 3. Verify user exists and belongs to admin's tenant

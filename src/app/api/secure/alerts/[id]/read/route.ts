@@ -8,12 +8,7 @@ export async function POST(
 ) {
     try {
         const user = await requireAuth(req);
-        const { id } = await params;
-        const alertId = parseInt(id);
-
-        if (isNaN(alertId)) {
-            return NextResponse.json({ error: "Invalid ID" }, { status: 400 });
-        }
+        const { id: alertId } = await params;
 
         const count = await prisma.securityAlert.count({
             where: {

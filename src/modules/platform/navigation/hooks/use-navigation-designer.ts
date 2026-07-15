@@ -51,7 +51,7 @@ export function useSidebar() {
 export function usePublishNavigation() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ profileId, tenantId, actorUserId }: { profileId: string; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ profileId, tenantId, actorUserId }: { profileId: string; tenantId: string; actorUserId: string }) => {
       return publishNavigation(profileId, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -66,7 +66,7 @@ export function usePublishNavigation() {
 export function useCreateGroup() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ data, tenantId, actorUserId }: { data: any; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ data, tenantId, actorUserId }: { data: any; tenantId: string; actorUserId: string }) => {
       return saveNavigationGroup(data, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -78,7 +78,7 @@ export function useCreateGroup() {
 export function useUpdateGroup() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, data, tenantId, actorUserId }: { id: string; data: any; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ id, data, tenantId, actorUserId }: { id: string; data: any; tenantId: string; actorUserId: string }) => {
       return updateNavigationGroup(id, data, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -90,7 +90,7 @@ export function useUpdateGroup() {
 export function useDeleteGroup() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, tenantId, actorUserId }: { id: string; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ id, tenantId, actorUserId }: { id: string; tenantId: string; actorUserId: string }) => {
       return deleteNavigationGroup(id, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -102,7 +102,7 @@ export function useDeleteGroup() {
 export function useCreateItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ data, tenantId, actorUserId }: { data: any; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ data, tenantId, actorUserId }: { data: any; tenantId: string; actorUserId: string }) => {
       return saveNavigationItem(data, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -114,7 +114,7 @@ export function useCreateItem() {
 export function useUpdateItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, data, tenantId, actorUserId }: { id: string; data: any; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ id, data, tenantId, actorUserId }: { id: string; data: any; tenantId: string; actorUserId: string }) => {
       return updateNavigationItem(id, data, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -126,7 +126,7 @@ export function useUpdateItem() {
 export function useDeleteItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ id, tenantId, actorUserId }: { id: string; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ id, tenantId, actorUserId }: { id: string; tenantId: string; actorUserId: string }) => {
       return deleteNavigationItem(id, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -138,7 +138,7 @@ export function useDeleteItem() {
 export function useMoveNavigationItem() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ itemId, parentId, displayOrder, tenantId, actorUserId }: { itemId: string; parentId: string | null; displayOrder: number; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ itemId, parentId, displayOrder, tenantId, actorUserId }: { itemId: string; parentId: string | null; displayOrder: number; tenantId: string; actorUserId: string }) => {
       return moveNavigation(itemId, parentId, displayOrder, tenantId, actorUserId);
     },
     onSuccess: () => {
@@ -159,7 +159,7 @@ export function useNavigationVersions() {
 export function useRestoreVersion() {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: async ({ versionId, tenantId, actorUserId }: { versionId: string; tenantId: number; actorUserId: number }) => {
+    mutationFn: async ({ versionId, tenantId, actorUserId }: { versionId: string; tenantId: string; actorUserId: string }) => {
       return restoreNavigationVersion(versionId, tenantId, actorUserId);
     },
     onSuccess: () => {

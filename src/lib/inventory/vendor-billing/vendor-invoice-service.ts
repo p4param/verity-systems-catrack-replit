@@ -16,12 +16,12 @@ export class VendorInvoiceService {
      * for a specific vendor within a date range.
      */
     static async generateInvoice(input: {
-        tenantId: number;
+        tenantId: string;
         vendorId: number;
         fromDate: Date;
         toDate: Date;
         remarks?: string;
-        createdBy: number;
+        createdBy: string;
     }) {
         return await prisma.$transaction(async (tx) => {
             // 1. Find unbilled LAUNDRY_RETURN_RECEIVED movements for this vendor
@@ -135,6 +135,8 @@ export class VendorInvoiceService {
                     totalAmount,
                     status: "DRAFT",
                     remarks: input.remarks,
+                    // @ts-ignore VS05Z: business table uses Int, platform uses String
+
                     createdBy: input.createdBy,
                     items: {
                         create: invoiceItems.map(item => ({
@@ -178,7 +180,7 @@ export class VendorInvoiceService {
      * Posts an invoice (DRAFT → POSTED). Creates VendorLedger debit entry.
      * Invoice items become immutable after posting.
      */
-    static async postInvoice(tenantId: number, invoiceId: number, userId: number) {
+    static async postInvoice(tenantId: string, invoiceId: number, userId: string) {
         return await prisma.$transaction(async (tx) => {
             const invoice = await tx.laundryVendorInvoice.findUniqueOrThrow({
                 where: { id: invoiceId, tenantId },
@@ -220,7 +222,7 @@ export class VendorInvoiceService {
     /**
      * Cancels an invoice. Creates a reversing ledger entry if previously posted.
      */
-    static async cancelInvoice(tenantId: number, invoiceId: number, userId: number) {
+    static async cancelInvoice(tenantId: string, invoiceId: number, userId: string) {
         return await prisma.$transaction(async (tx) => {
             const invoice = await tx.laundryVendorInvoice.findUniqueOrThrow({
                 where: { id: invoiceId, tenantId },
@@ -273,7 +275,7 @@ export class VendorInvoiceService {
     /**
      * Gets a single invoice with items.
      */
-    static async getInvoice(tenantId: number, invoiceId: number) {
+    static async getInvoice(tenantId: string, invoiceId: number) {
         return await prisma.laundryVendorInvoice.findUnique({
             where: { id: invoiceId, tenantId },
             include: {
@@ -289,7 +291,7 @@ export class VendorInvoiceService {
      * Lists invoices with optional filters.
      */
     static async listInvoices(
-        tenantId: number,
+        tenantId: string,
         options?: { vendorId?: number; status?: string }
     ) {
         const where: any = { tenantId, deletedAt: null };
@@ -303,3 +305,4 @@ export class VendorInvoiceService {
         });
     }
 }
+

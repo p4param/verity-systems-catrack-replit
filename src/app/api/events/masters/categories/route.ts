@@ -22,9 +22,7 @@ const DEPRECATION_HEADER = {
   "X-Migration-Target": "/api/masters/categories?module=EVENT&key=EVENT_CATEGORY",
 };
 
-function tenantUuid(tenantId: number) {
-  return "00000000-0000-0000-0000-" + tenantId.toString().padStart(12, "0");
-}
+function tenantUuid(tenantId: string) { return tenantId; }
 function systemUuid() { return "00000000-0000-0000-0000-000000000001"; }
 
 export async function GET(req: Request) {

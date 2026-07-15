@@ -14,13 +14,13 @@ export class VendorLiabilityService {
      * Called automatically from laundry-service when lossResponsibility === 'LAUNDRY_VENDOR'.
      */
     static async createLiability(input: {
-        tenantId: number;
+        tenantId: string;
         vendorId: number;
         stockMovementId: number;
         movementTypeCode: string;
         apparelId: number;
         quantity: number;
-        createdBy: number;
+        createdBy: string;
     }, tx: Prisma.TransactionClient) {
         // Get apparel unit value for cost calculation
         const apparel = await tx.apparel.findUniqueOrThrow({
@@ -70,7 +70,7 @@ export class VendorLiabilityService {
     /**
      * Waives a liability (OPEN → WAIVED). Creates reversing ledger entry.
      */
-    static async waiveLiability(tenantId: number, liabilityId: number, remarks: string, userId: number) {
+    static async waiveLiability(tenantId: string, liabilityId: number, remarks: string, userId: string) {
         return await prisma.$transaction(async (tx) => {
             const liability = await tx.vendorLiability.findUniqueOrThrow({
                 where: { id: liabilityId, tenantId },
@@ -118,7 +118,7 @@ export class VendorLiabilityService {
     /**
      * Gets a single liability by ID.
      */
-    static async getLiability(tenantId: number, liabilityId: number) {
+    static async getLiability(tenantId: string, liabilityId: number) {
         return await prisma.vendorLiability.findUnique({
             where: { id: liabilityId, tenantId },
             include: {
@@ -134,7 +134,7 @@ export class VendorLiabilityService {
      * Lists liabilities with optional filters.
      */
     static async listLiabilities(
-        tenantId: number,
+        tenantId: string,
         options?: { vendorId?: number; status?: string }
     ) {
         const where: any = { tenantId };
@@ -148,3 +148,4 @@ export class VendorLiabilityService {
         });
     }
 }
+

@@ -1,9 +1,13 @@
-const { z } = require('zod');
+const { PrismaClient } = require('./src/generated/client');
+const prisma = new PrismaClient();
 
-const schema = z.object({
-  width: z.number().optional().nullable()
-});
-
-console.log('Test 1 (empty object):', schema.safeParse({}).success);
-console.log('Test 2 (null):', schema.safeParse({ width: null }).success);
-console.log('Test 3 (NaN):', schema.safeParse({ width: NaN }).success);
+prisma.configurationEntity.findFirst({
+  where: { code: 'status', module: { code: 'reference' } },
+  include: { fields: { include: { lookupDefinition: true } }, module: true }
+}).then(e => {
+  if (!e) { console.log('Entity not found'); return; }
+  console.log('Entity:', e.code, '| Module:', e.module.code);
+  e.fields.forEach(f => {
+    console.log(' Field:', f.code, '| dataType:', f.dataType, '| uiControl:', f.uiControl, '| dataSource:', f.dataSource, '| hasLookup:', !!f.lookupDefinition);
+  });
+}).catch(e => console.error('Error:', e.message)).finally(() => prisma.$disconnect());

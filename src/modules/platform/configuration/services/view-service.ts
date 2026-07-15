@@ -20,11 +20,11 @@ export class ViewService {
     return this.repository.getById(id);
   }
 
-  async createView(entityId: string, data: CreateViewDto, tenantId: number, actorUserId: number) {
+  async createView(entityId: string, data: CreateViewDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating view creation for entity: ${entityId}`, { tenantId, userId: actorUserId, module: "ViewService" });
 
     const validatedData = createViewDtoSchema.parse(data);
-    const formattedCreatedBy = formatUserIdToUuid(actorUserId);
+    const formattedCreatedBy = actorUserId;
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -102,11 +102,11 @@ export class ViewService {
     }
   }
 
-  async updateView(id: string, data: UpdateViewDto, tenantId: number, actorUserId: number) {
+  async updateView(id: string, data: UpdateViewDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating view update: ${id}`, { tenantId, userId: actorUserId, module: "ViewService" });
     
     const validatedData = updateViewDtoSchema.parse(data);
-    const formattedUpdatedBy = formatUserIdToUuid(actorUserId);
+    const formattedUpdatedBy = actorUserId;
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -176,7 +176,7 @@ export class ViewService {
     }
   }
 
-  async deleteView(id: string, tenantId: number, actorUserId: number) {
+  async deleteView(id: string, tenantId: string, actorUserId: string) {
     logger.info(`Initiating view deletion: ${id}`, { tenantId, userId: actorUserId, module: "ViewService" });
 
     try {
@@ -202,3 +202,5 @@ export class ViewService {
     }
   }
 }
+
+

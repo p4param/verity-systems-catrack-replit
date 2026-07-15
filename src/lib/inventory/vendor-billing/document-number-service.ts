@@ -11,7 +11,7 @@ export class DocumentNumberService {
      * Must be called inside a Prisma transaction to ensure atomicity.
      */
     static async getNextNumber(
-        tenantId: number,
+        tenantId: string,
         entityType: string,
         tx: Prisma.TransactionClient
     ): Promise<string> {
@@ -48,3 +48,4 @@ export class DocumentNumberService {
         return `${doc.prefix}-${paddedSequence}`;
     }
 }
+

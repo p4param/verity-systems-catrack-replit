@@ -10,17 +10,26 @@ const TabsContext = React.createContext<{
 
 export function Tabs({
   defaultValue,
+  value: controlledValue,
+  onValueChange: controlledOnValueChange,
   className,
   children,
   ...props
 }: {
-  defaultValue: string
+  defaultValue?: string
+  value?: string
+  onValueChange?: (val: string) => void
   className?: string
   children: React.ReactNode
 }) {
-  const [value, setValue] = React.useState(defaultValue)
+  const [internalValue, setInternalValue] = React.useState(defaultValue ?? "")
+  const isControlled = controlledValue !== undefined
+  const value = isControlled ? controlledValue : internalValue
+  const onValueChange = isControlled
+    ? (controlledOnValueChange ?? (() => {}))
+    : (val: string) => { setInternalValue(val); controlledOnValueChange?.(val); }
   return (
-    <TabsContext.Provider value={{ value, onValueChange: setValue }}>
+    <TabsContext.Provider value={{ value, onValueChange }}>
       <div className={clsx("w-full", className)} {...props}>
         {children}
       </div>

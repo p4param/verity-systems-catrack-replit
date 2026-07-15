@@ -3,8 +3,6 @@ import { requireAuth } from "@/lib/auth/auth-guard"
 import { requirePermission } from "@/lib/auth/permission-guard"
 import { NextResponse } from "next/server"
 
-// ... imports
-
 export async function GET(
     req: Request,
     { params }: { params: Promise<{ id: string }> }
@@ -14,7 +12,7 @@ export async function GET(
 
         const { id } = await params
         const role = await prisma.role.findUnique({
-            where: { id: Number(id) },
+            where: { id },
             include: {
                 rolePermissions: {
                     include: { permission: true }
@@ -47,36 +45,28 @@ export async function PUT(
 ) {
     try {
         requireAuth(req)
-        await requirePermission(req, "ROLE_CREATE") // Re-use create permission or update if distinct
+        await requirePermission(req, "ROLE_CREATE")
 
         const { name, permissionIds } = await req.json()
 
         if (!name || !Array.isArray(permissionIds)) {
-            return NextResponse.json(
-                { message: "Invalid payload" },
-                { status: 400 }
-            )
+            return NextResponse.json({ message: "Invalid payload" }, { status: 400 })
         }
 
-        const { id: paramsId } = await params
-        const id = Number(paramsId)
+        const { id } = await params
 
-        // Transaction to update role and permissions
         const updatedRole = await prisma.$transaction(async (tx) => {
-            // 1. Update name
             await tx.role.update({
                 where: { id },
                 data: { name }
             })
 
-            // 2. Delete existing permissions
             await tx.rolePermission.deleteMany({
                 where: { roleId: id }
             })
 
-            // 3. Add new permissions
             await tx.rolePermission.createMany({
-                data: permissionIds.map((pid: number) => ({
+                data: permissionIds.map((pid: string) => ({
                     roleId: id,
                     permissionId: pid
                 }))
@@ -104,15 +94,12 @@ export async function DELETE(
         await requirePermission(req, "ROLE_DELETE")
 
         const { id } = await params
-        const role = await prisma.role.findUnique({
-            where: { id: Number(id) }
-        })
+        const role = await prisma.role.findUnique({ where: { id } })
 
         if (!role) {
             return NextResponse.json({ message: "Role not found" }, { status: 404 })
         }
 
-        // @ts-ignore
         if (role.isSystem) {
             return NextResponse.json(
                 { message: "System roles cannot be deleted" },
@@ -120,9 +107,7 @@ export async function DELETE(
             )
         }
 
-        await prisma.role.delete({
-            where: { id: role.id }
-        })
+        await prisma.role.delete({ where: { id: role.id } })
 
         return NextResponse.json({ message: "Role deleted" })
     } catch (error) {

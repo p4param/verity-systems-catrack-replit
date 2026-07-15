@@ -1,35 +1,35 @@
 /**
  * Tenant Context Helper
- * 
+ *
  * Provides utilities for extracting and validating tenant context from requests.
- * See: docs/tenant_context_design.md for design specification.
+ *
+ * VS05Z: tenantId and userId are now UUID strings. All numeric coercions removed.
  */
 
 import { requireAuth } from './auth-guard'
 import { type CurrentUser } from './auth-types'
 
 /**
- * Tenant context extracted from authenticated request
+ * Tenant context extracted from an authenticated request.
+ * VS05Z: Both identifiers are UUID strings.
  */
 export interface TenantContext {
-    tenantId: number
-    userId: number
+    tenantId: string
+    userId: string
     user: CurrentUser
 }
 
 /**
- * Extract and validate tenant context from request
- * 
+ * Extract and validate tenant context from request.
+ *
  * @param req - The HTTP request
- * @returns Validated tenant context
- * @throws Error if tenant context is missing or invalid
+ * @returns Validated tenant context with UUID identifiers
+ * @throws Response if tenant context is missing or invalid
  */
 export function requireTenantContext(req: Request): TenantContext {
-    // Get authenticated user
     const user = requireAuth(req)
 
-    // Validate tenantId exists and is valid
-    if (!user.tenantId || user.tenantId <= 0) {
+    if (!user.tenantId) {
         throw new Response(
             JSON.stringify({
                 message: 'Invalid tenant context',
@@ -48,14 +48,13 @@ export function requireTenantContext(req: Request): TenantContext {
 }
 
 /**
- * Validate that a tenantId is valid for background jobs
- * 
- * @param tenantId - The tenant ID to validate
+ * Validate that a tenantId UUID is present (for background jobs).
+ *
+ * @param tenantId - UUID string of the tenant
  * @param jobName - Name of the background job (for error messages)
- * @throws Error if tenantId is invalid
  */
-export function validateTenantId(tenantId: number, jobName: string): void {
-    if (!tenantId || tenantId <= 0) {
+export function validateTenantId(tenantId: string, jobName: string): void {
+    if (!tenantId) {
         throw new Error(
             `BACKGROUND_JOB_MISSING_TENANT: ${jobName} requires explicit tenantId parameter`
         )
@@ -63,16 +62,15 @@ export function validateTenantId(tenantId: number, jobName: string): void {
 }
 
 /**
- * Validate that a user belongs to a specific tenant
- * 
- * @param userId - The user ID
- * @param tenantId - The expected tenant ID
+ * Validate that a user belongs to a specific tenant.
+ *
+ * @param userId - UUID of the user
+ * @param tenantId - UUID of the expected tenant
  * @param prisma - Prisma client instance
- * @throws Error if user doesn't belong to tenant
  */
 export async function validateUserBelongsToTenant(
-    userId: number,
-    tenantId: number,
+    userId: string,
+    tenantId: string,
     prisma: any
 ): Promise<void> {
     const user = await prisma.user.findFirst({

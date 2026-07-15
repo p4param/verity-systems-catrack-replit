@@ -17,7 +17,7 @@ export async function POST(req: Request) {
         }
 
         // Verify temp token
-        const decoded = verifyJwt<{ sub: number; purpose: string }>(tempToken);
+        const decoded = verifyJwt<{ sub: string; purpose: string }>(tempToken);
         if (!decoded || decoded.purpose !== "mfa_pending") {
             return NextResponse.json({ error: "Invalid or expired session" }, { status: 401 });
         }

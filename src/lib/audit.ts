@@ -2,9 +2,9 @@ import { prisma } from "./prisma";
 import { AlertService } from "./security/alert-service";
 
 interface AuditLogParams {
-    tenantId: number;
-    actorUserId?: number;
-    targetUserId?: number;
+    tenantId: string;
+    actorUserId?: string;
+    targetUserId?: string;
     action: string;
     details?: string;
     ipAddress?: string;

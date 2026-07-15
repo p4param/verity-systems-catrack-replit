@@ -7,3 +7,4 @@ async function main() {
   console.log(JSON.stringify(record, null, 2));
 }
 main().finally(() => prisma.$disconnect());
+
