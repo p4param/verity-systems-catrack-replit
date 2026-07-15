@@ -1,7 +1,9 @@
 import type { RuntimeContext } from "../models/RuntimeContext";
 import type { RuntimeOperationResult } from "../models/RuntimeOperationResult";
 import type {
+  MiddlewareExecutionPolicy,
   RuntimeMiddleware,
+  RuntimeMiddlewareRegistration,
   RuntimeOperationAction,
   RuntimeRule,
   RuntimeValidator,
@@ -15,7 +17,17 @@ export interface IRuntimeOperationPipeline {
     input?: TInput
   ): Promise<RuntimeOperationResult<TRecord>>;
 
-  registerMiddleware(name: string, middleware: RuntimeMiddleware): void;
+  registerMiddleware(
+    nameOrRegistration: string | RuntimeMiddlewareRegistration,
+    middleware?: RuntimeMiddleware,
+    options?: {
+      order?: number;
+      priority?: number;
+      enabled?: boolean;
+      dependencies?: string[];
+      policy?: MiddlewareExecutionPolicy;
+    }
+  ): void;
   registerAction(operation: RuntimeOperation, action: RuntimeOperationAction): void;
   registerValidator(name: string, validator: RuntimeValidator): void;
   registerRule(name: string, rule: RuntimeRule): void;

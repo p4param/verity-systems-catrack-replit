@@ -4,6 +4,8 @@ import { SynchronousRuntimeEventPublisher } from "../services/SynchronousRuntime
 import { RuntimeOperationPipeline } from "../pipeline/RuntimeOperationPipeline";
 import { OperationDispatcher } from "../services/OperationDispatcher";
 import type { IRuntimeRecordService } from "../contracts/IRuntimeRecordService";
+import { MiddlewareExecutionPolicy } from "../pipeline/RuntimeMiddleware";
+import type { IRuntimeMetricsCollector } from "../metrics/RuntimeMetrics";
 
 function buildContext(operation: RuntimeContext["operation"], recordId?: string): RuntimeContext {
   return RuntimeContext.create({
@@ -172,5 +174,91 @@ describe("RuntimeOperationPipeline", () => {
 
     expect(result.success).toBe(true);
     expect((result.record as any).id).toBe("submit-1");
+  });
+
+  test("executes registered middleware by order and priority", async () => {
+    const recordService = recordServiceMock();
+    const pipeline = new RuntimeOperationPipeline({
+      metadataResolver: async (ctx) => ctx,
+      permissionResolver: async () => undefined,
+      recordService,
+      operationDispatcher: new OperationDispatcher(recordService),
+      eventPublisher: new SynchronousRuntimeEventPublisher(),
+    });
+
+    const calls: string[] = [];
+    pipeline.registerMiddleware("m1", async (_state, next) => { calls.push("m1"); await next(); }, { order: 2000, priority: 5 });
+    pipeline.registerMiddleware("m2", async (_state, next) => { calls.push("m2"); await next(); }, { order: 1500, priority: 5 });
+    pipeline.registerMiddleware("m3", async (_state, next) => { calls.push("m3"); await next(); }, { order: 2000, priority: 10 });
+
+    const result = await pipeline.execute(buildContext("Create"), { NAME: "Ordered" });
+
+    expect(result.success).toBe(true);
+    expect(calls).toEqual(["m2", "m3", "m1"]);
+  });
+
+  test("runs AlwaysRun middleware after StopOnFailure error", async () => {
+    const recordService = recordServiceMock();
+    const pipeline = new RuntimeOperationPipeline({
+      metadataResolver: async (ctx) => ctx,
+      permissionResolver: async () => undefined,
+      recordService,
+      operationDispatcher: new OperationDispatcher(recordService),
+      eventPublisher: new SynchronousRuntimeEventPublisher(),
+    });
+
+    const alwaysRun = jest.fn(async () => undefined);
+
+    pipeline.registerMiddleware(
+      "fatal",
+      async () => {
+        throw new Error("Validation: forced failure");
+      },
+      { order: 10, policy: MiddlewareExecutionPolicy.StopOnFailure }
+    );
+
+    pipeline.registerMiddleware(
+      "always",
+      async (_state, next) => {
+        alwaysRun();
+        await next();
+      },
+      { order: 9999, policy: MiddlewareExecutionPolicy.AlwaysRun }
+    );
+
+    const result = await pipeline.execute(buildContext("Create"), { NAME: "Fails" });
+
+    expect(result.success).toBe(false);
+    expect(alwaysRun).toHaveBeenCalledTimes(1);
+    expect(result.validationErrors.length).toBeGreaterThanOrEqual(1);
+  });
+
+  test("records runtime metrics", async () => {
+    const recordService = recordServiceMock();
+    const metrics: IRuntimeMetricsCollector = {
+      record: jest.fn(),
+      snapshot: jest.fn(() => ({
+        operationCount: 0,
+        averageExecutionTime: 0,
+        failureRate: 0,
+        validationFailures: 0,
+        averageWorkflowTime: 0,
+        averagePersistenceTime: 0,
+      })),
+    };
+
+    const pipeline = new RuntimeOperationPipeline({
+      metadataResolver: async (ctx) => ctx,
+      permissionResolver: async () => undefined,
+      recordService,
+      operationDispatcher: new OperationDispatcher(recordService),
+      eventPublisher: new SynchronousRuntimeEventPublisher(),
+      metricsCollector: metrics,
+    });
+
+    const result = await pipeline.execute(buildContext("Create"), { NAME: "Metrics" });
+
+    expect(result.success).toBe(true);
+    expect(metrics.record).toHaveBeenCalledTimes(1);
   });
 });

@@ -15,6 +15,10 @@ VS06A-R introduces architecture refinements without replacing the VS06A foundati
 - Runtime operation set frozen with workflow/document/integration operations.
 - RuntimeTransaction scope introduced per execution.
 - PlatformRuntime service registry introduced for engine discovery.
+- Middleware ordering made metadata-driven (`order`, `priority`, `enabled`, `dependencies`).
+- Middleware execution policies introduced (`Continue`, `StopOnFailure`, `ContinueOnWarning`, `AlwaysRun`).
+- Named built-in middleware package introduced (Authorization, License, Validation, Business Rules, Workflow, Persistence, Notification, Audit).
+- Lightweight runtime metrics collector introduced for operation count, average execution, failure rate, validation failures, workflow time, and persistence time.
 
 ## Purpose
 
@@ -117,6 +121,16 @@ Middleware and plug-in registration APIs:
 - `registerValidator(name, validator)`
 - `registerRule(name, rule)`
 - `registerWorkflow(name, workflow)`
+
+Middleware metadata contract includes:
+
+- `id`
+- `name`
+- `order`
+- `priority`
+- `enabled`
+- `dependencies`
+- `policy`
 
 ## Runtime Events
 

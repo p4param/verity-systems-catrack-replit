@@ -5,6 +5,27 @@ import type { RuntimeRecord } from "@/modules/platform/persistence";
 import type { RuntimeOperationPlan } from "../services/OperationDispatcher";
 import type { RuntimeTransaction } from "../models/RuntimeTransaction";
 
+export const MiddlewareExecutionPolicy = {
+  Continue: "Continue",
+  StopOnFailure: "StopOnFailure",
+  ContinueOnWarning: "ContinueOnWarning",
+  AlwaysRun: "AlwaysRun",
+} as const;
+
+export type MiddlewareExecutionPolicy =
+  (typeof MiddlewareExecutionPolicy)[keyof typeof MiddlewareExecutionPolicy];
+
+export interface RuntimeMiddlewareRegistration {
+  id: string;
+  name: string;
+  middleware: RuntimeMiddleware;
+  order: number;
+  priority: number;
+  enabled: boolean;
+  dependencies: string[];
+  policy: MiddlewareExecutionPolicy;
+}
+
 export interface RuntimeMiddlewareState {
   context: RuntimeContext;
   input?: unknown;
@@ -13,6 +34,11 @@ export interface RuntimeMiddlewareState {
   persisted?: RuntimeRecord | RuntimeRecord[] | null;
   transaction: RuntimeTransaction;
   diagnostics: RuntimeExecutionDiagnostics;
+  warnings: string[];
+  nonFatalErrors: string[];
+  flags: {
+    persistenceSucceeded: boolean;
+  };
   result?: RuntimeOperationResult<unknown>;
 }
 

@@ -1,23 +1,27 @@
-import type { RuntimeRecord } from "@/modules/platform/persistence";
 import type { IRuntimeEventPublisher } from "../contracts/IRuntimeEventPublisher";
 import type { IRuntimeOperationPipeline } from "../contracts/IRuntimeOperationPipeline";
 import type { IRuntimeRecordService } from "../contracts/IRuntimeRecordService";
 import { RuntimeEvents, type RuntimeEventType } from "../events/RuntimeEvents";
+import { createBuiltInMiddlewares } from "../middleware/BuiltInMiddlewares";
 import type { RuntimeContext } from "../models/RuntimeContext";
 import type {
   RuntimeExecutionDiagnostics,
   RuntimeOperationResult,
 } from "../models/RuntimeOperationResult";
 import { RuntimeTransaction } from "../models/RuntimeTransaction";
+import { InMemoryRuntimeMetricsCollector } from "../metrics/InMemoryRuntimeMetricsCollector";
+import type { IRuntimeMetricsCollector } from "../metrics/RuntimeMetrics";
 import { OperationDispatcher } from "../services/OperationDispatcher";
-import type {
-  RuntimeActionRegistry,
-  RuntimeMiddleware,
-  RuntimeMiddlewareState,
-  RuntimeOperationAction,
-  RuntimeRule,
-  RuntimeValidator,
-  RuntimeWorkflow,
+import {
+  MiddlewareExecutionPolicy,
+  type RuntimeActionRegistry,
+  type RuntimeMiddleware,
+  type RuntimeMiddlewareRegistration,
+  type RuntimeMiddlewareState,
+  type RuntimeOperationAction,
+  type RuntimeRule,
+  type RuntimeValidator,
+  type RuntimeWorkflow,
 } from "./RuntimeMiddleware";
 
 export type RuntimeMetadataResolver = (context: RuntimeContext) => Promise<RuntimeContext>;
@@ -29,10 +33,11 @@ interface RuntimeOperationPipelineDependencies {
   recordService: IRuntimeRecordService;
   operationDispatcher: OperationDispatcher;
   eventPublisher: IRuntimeEventPublisher;
+  metricsCollector?: IRuntimeMetricsCollector;
 }
 
 export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
-  private readonly customMiddlewares: Array<{ name: string; middleware: RuntimeMiddleware }> = [];
+  private readonly middlewareRegistry = new Map<string, RuntimeMiddlewareRegistration>();
   private readonly validators = new Map<string, RuntimeValidator>();
   private readonly rules = new Map<string, RuntimeRule>();
   private readonly workflows = new Map<string, RuntimeWorkflow>();
@@ -40,20 +45,68 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
 
   private readonly metadataResolver: RuntimeMetadataResolver;
   private readonly permissionResolver: RuntimePermissionResolver;
-  private readonly recordService: IRuntimeRecordService;
   private readonly operationDispatcher: OperationDispatcher;
   private readonly eventPublisher: IRuntimeEventPublisher;
+  private readonly metricsCollector: IRuntimeMetricsCollector;
 
   constructor(dependencies: RuntimeOperationPipelineDependencies) {
     this.metadataResolver = dependencies.metadataResolver;
     this.permissionResolver = dependencies.permissionResolver;
-    this.recordService = dependencies.recordService;
     this.operationDispatcher = dependencies.operationDispatcher;
     this.eventPublisher = dependencies.eventPublisher;
+    this.metricsCollector = dependencies.metricsCollector ?? new InMemoryRuntimeMetricsCollector();
+
+    const builtIns = createBuiltInMiddlewares({
+      metadataResolver: this.metadataResolver,
+      permissionResolver: this.permissionResolver,
+      recordService: dependencies.recordService,
+      operationDispatcher: this.operationDispatcher,
+      eventPublisher: this.eventPublisher,
+      validators: this.validators,
+      rules: this.rules,
+      workflows: this.workflows,
+      actionRegistry: this.actionRegistry,
+      beforeEventFor: this.beforeEventFor,
+      afterEventFor: this.afterEventFor,
+      recordId: this.recordId,
+    });
+
+    for (const registration of builtIns) {
+      this.middlewareRegistry.set(registration.id, registration);
+    }
   }
 
-  registerMiddleware(name: string, middleware: RuntimeMiddleware): void {
-    this.customMiddlewares.push({ name, middleware });
+  registerMiddleware(
+    nameOrRegistration: string | RuntimeMiddlewareRegistration,
+    middleware?: RuntimeMiddleware,
+    options?: {
+      order?: number;
+      priority?: number;
+      enabled?: boolean;
+      dependencies?: string[];
+      policy?: MiddlewareExecutionPolicy;
+    }
+  ): void {
+    if (typeof nameOrRegistration === "string") {
+      if (!middleware) {
+        throw new Error("Middleware function is required when registration name is provided.");
+      }
+
+      this.middlewareRegistry.set(nameOrRegistration, {
+        id: nameOrRegistration,
+        name: nameOrRegistration,
+        middleware,
+        order: options?.order ?? 1000,
+        priority: options?.priority ?? 100,
+        enabled: options?.enabled ?? true,
+        dependencies: options?.dependencies ?? [],
+        policy: options?.policy ?? MiddlewareExecutionPolicy.StopOnFailure,
+      });
+
+      return;
+    }
+
+    this.middlewareRegistry.set(nameOrRegistration.id, nameOrRegistration);
   }
 
   registerAction(operation: RuntimeContext["operation"], action: RuntimeOperationAction): void {
@@ -77,8 +130,8 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
     input?: TInput
   ): Promise<RuntimeOperationResult<TRecord>> {
     const startedAt = Date.now();
-
     const transaction = context.transaction ?? RuntimeTransaction.create({ id: context.transactionId });
+
     const state: RuntimeMiddlewareState = {
       context: context.with({
         transaction,
@@ -87,6 +140,9 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
       input,
       transaction,
       diagnostics: this.createDiagnostics(),
+      warnings: [],
+      nonFatalErrors: [],
+      flags: { persistenceSucceeded: false },
     };
 
     try {
@@ -98,7 +154,7 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
         timestamp: new Date(),
       });
 
-      await this.runMiddlewareChain(state);
+      await this.runOrderedMiddlewares(state);
 
       const executionTime = Date.now() - startedAt;
       state.diagnostics.pipelineTime = executionTime;
@@ -113,14 +169,14 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
         metadata: { executionTime, diagnostics: state.diagnostics },
       });
 
-      return {
+      const result: RuntimeOperationResult<TRecord> = {
         success: true,
         messages: [],
-        warnings: [],
-        errors: [],
-        validationErrors: [],
-        businessRuleErrors: [],
-        workflowErrors: [],
+        warnings: state.warnings,
+        errors: state.nonFatalErrors,
+        validationErrors: this.categorizeErrors(state.nonFatalErrors, "Validation"),
+        businessRuleErrors: this.categorizeErrors(state.nonFatalErrors, "BusinessRule"),
+        workflowErrors: this.categorizeErrors(state.nonFatalErrors, "Workflow"),
         recordId: this.recordId(state.persisted, state.context.recordId) ?? null,
         affectedRows: this.affectedRows(state.persisted),
         correlationId: state.context.correlationId,
@@ -135,15 +191,21 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
         diagnostics: state.diagnostics,
         record: state.persisted as TRecord,
       };
+
+      this.metricsCollector.record({
+        operation: result.operation,
+        success: true,
+        executionTime: result.executionTime,
+        diagnostics: result.diagnostics,
+        validationErrorCount: result.validationErrors.length,
+      });
+
+      return result;
     } catch (error) {
       const executionTime = Date.now() - startedAt;
       const message = error instanceof Error ? error.message : "Unknown runtime operation failure.";
       state.diagnostics.pipelineTime = executionTime;
       state.diagnostics.totalTime = executionTime;
-
-      const validationErrors = this.categorizeErrors(message, "Validation");
-      const businessRuleErrors = this.categorizeErrors(message, "BusinessRule");
-      const workflowErrors = this.categorizeErrors(message, "Workflow");
 
       await this.eventPublisher.publish({
         type: RuntimeEvents.OperationFailed,
@@ -155,14 +217,15 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
         metadata: { executionTime, diagnostics: state.diagnostics },
       });
 
-      return {
+      const errors = [...state.nonFatalErrors, message];
+      const result: RuntimeOperationResult<TRecord> = {
         success: false,
         messages: [],
-        warnings: [],
-        errors: [message],
-        validationErrors,
-        businessRuleErrors,
-        workflowErrors,
+        warnings: state.warnings,
+        errors,
+        validationErrors: this.categorizeErrors(errors, "Validation"),
+        businessRuleErrors: this.categorizeErrors(errors, "BusinessRule"),
+        workflowErrors: this.categorizeErrors(errors, "Workflow"),
         recordId: state.context.recordId ?? null,
         affectedRows: 0,
         correlationId: state.context.correlationId,
@@ -176,6 +239,92 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
         },
         diagnostics: state.diagnostics,
       };
+
+      this.metricsCollector.record({
+        operation: result.operation,
+        success: false,
+        executionTime: result.executionTime,
+        diagnostics: result.diagnostics,
+        validationErrorCount: result.validationErrors.length,
+      });
+
+      return result;
+    }
+  }
+
+  private async runOrderedMiddlewares(state: RuntimeMiddlewareState): Promise<void> {
+    const registrations = [...this.middlewareRegistry.values()]
+      .filter((item) => item.enabled)
+      .sort((a, b) => {
+        if (a.order !== b.order) {
+          return a.order - b.order;
+        }
+        if (a.priority !== b.priority) {
+          return b.priority - a.priority;
+        }
+        return a.name.localeCompare(b.name);
+      });
+
+    const executed = new Set<string>();
+    let fatalError: Error | null = null;
+
+    for (const registration of registrations) {
+      if (fatalError && registration.policy !== MiddlewareExecutionPolicy.AlwaysRun) {
+        continue;
+      }
+
+      const missingDeps = registration.dependencies.filter((dependency) => !executed.has(dependency));
+      if (missingDeps.length > 0) {
+        const dependencyError = `Middleware ${registration.name} missing dependencies: ${missingDeps.join(", ")}.`;
+        this.handlePolicyError(registration, dependencyError, state, (err) => {
+          if (!fatalError) {
+            fatalError = err;
+          }
+        });
+        continue;
+      }
+
+      const startedAt = Date.now();
+      try {
+        await registration.middleware(state, async () => undefined);
+        executed.add(registration.id);
+      } catch (error) {
+        const message = error instanceof Error ? error.message : `Middleware ${registration.name} failed.`;
+        this.handlePolicyError(registration, message, state, (err) => {
+          if (!fatalError) {
+            fatalError = err;
+          }
+        });
+      } finally {
+        state.diagnostics.middleware[registration.name] = Date.now() - startedAt;
+      }
+    }
+
+    if (fatalError) {
+      throw fatalError;
+    }
+  }
+
+  private handlePolicyError(
+    registration: RuntimeMiddlewareRegistration,
+    message: string,
+    state: RuntimeMiddlewareState,
+    setFatal: (error: Error) => void
+  ): void {
+    switch (registration.policy) {
+      case MiddlewareExecutionPolicy.StopOnFailure:
+        setFatal(new Error(message));
+        break;
+      case MiddlewareExecutionPolicy.Continue:
+        state.nonFatalErrors.push(message);
+        break;
+      case MiddlewareExecutionPolicy.ContinueOnWarning:
+      case MiddlewareExecutionPolicy.AlwaysRun:
+        state.warnings.push(message);
+        break;
+      default:
+        setFatal(new Error(message));
+        break;
     }
   }
 
@@ -193,169 +342,6 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
       totalTime: 0,
       middleware: {},
     };
-  }
-
-  private async runMiddlewareChain(state: RuntimeMiddlewareState): Promise<void> {
-    const middlewares = [
-      ...this.defaultMiddlewares(),
-      ...this.customMiddlewares,
-    ];
-
-    let index = -1;
-    const dispatch = async (cursor: number): Promise<void> => {
-      if (cursor <= index) {
-        throw new Error("Runtime middleware invoked next() multiple times.");
-      }
-
-      index = cursor;
-      const registration = middlewares[cursor];
-      if (!registration) {
-        return;
-      }
-
-      const startedAt = Date.now();
-      await registration.middleware(state, () => dispatch(cursor + 1));
-      const elapsed = Date.now() - startedAt;
-      state.diagnostics.middleware[registration.name] = elapsed;
-    };
-
-    await dispatch(0);
-  }
-
-  private defaultMiddlewares(): Array<{ name: string; middleware: RuntimeMiddleware }> {
-    return [
-      {
-        name: "LoadMetadata",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          state.context = await this.metadataResolver(state.context);
-          state.diagnostics.metadataTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "Authorization",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          await this.permissionResolver(state.context);
-          state.diagnostics.authorizationTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "Validation",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          for (const validator of this.validators.values()) {
-            await validator(state);
-          }
-          state.diagnostics.validationTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "BusinessRules",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          for (const rule of this.rules.values()) {
-            await rule(state);
-          }
-          state.diagnostics.businessRulesTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "Workflow",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          for (const workflow of this.workflows.values()) {
-            await workflow(state);
-          }
-          state.diagnostics.workflowTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "LoadRecord",
-        middleware: async (state, next) => {
-          state.loadedRecord = await this.loadRecordIfNeeded(state.context);
-          await next();
-        },
-      },
-      {
-        name: "PublishBeforeEvent",
-        middleware: async (state, next) => {
-          const beforeEvent = this.beforeEventFor(state.context.operation);
-          if (beforeEvent) {
-            await this.eventPublisher.publish({
-              type: beforeEvent,
-              correlationId: state.context.correlationId,
-              operation: state.context.operation,
-              recordId: state.context.recordId ?? state.loadedRecord?.id,
-              timestamp: new Date(),
-            });
-          }
-          await next();
-        },
-      },
-      {
-        name: "Persistence",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          state.plan = this.operationDispatcher.buildPlan(state.context, state.input, state.loadedRecord);
-          const action = this.actionRegistry.get(state.context.operation);
-          state.persisted = action
-            ? await action(state)
-            : await this.operationDispatcher.persist(state.context, state.plan);
-          state.diagnostics.persistenceTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "Notification",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          state.diagnostics.notificationTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "Audit",
-        middleware: async (state, next) => {
-          const started = Date.now();
-          state.diagnostics.auditTime += Date.now() - started;
-          await next();
-        },
-      },
-      {
-        name: "PublishAfterEvent",
-        middleware: async (state, next) => {
-          const afterEvent = this.afterEventFor(state.context.operation);
-          if (afterEvent) {
-            await this.eventPublisher.publish({
-              type: afterEvent,
-              correlationId: state.context.correlationId,
-              operation: state.context.operation,
-              recordId: this.recordId(state.persisted, state.context.recordId),
-              timestamp: new Date(),
-            });
-          }
-          await next();
-        },
-      },
-    ];
-  }
-
-  private async loadRecordIfNeeded(context: RuntimeContext): Promise<RuntimeRecord | null> {
-    if (!context.recordId) {
-      return null;
-    }
-
-    if (context.operation === "Create" || context.operation === "Import") {
-      return null;
-    }
-
-    return this.recordService.load(context);
   }
 
   private beforeEventFor(operation: RuntimeContext["operation"]): RuntimeEventType | null {
@@ -415,7 +401,7 @@ export class RuntimeOperationPipeline implements IRuntimeOperationPipeline {
     return 1;
   }
 
-  private categorizeErrors(message: string, prefix: string): string[] {
-    return message.startsWith(`${prefix}:`) ? [message] : [];
+  private categorizeErrors(errors: string[], prefix: string): string[] {
+    return errors.filter((message) => message.startsWith(`${prefix}:`));
   }
 }

@@ -7,6 +7,7 @@ import { RuntimeRecordService } from "./services/RuntimeRecordService";
 import { OperationDispatcher } from "./services/OperationDispatcher";
 import { SynchronousRuntimeEventPublisher } from "./services/SynchronousRuntimeEventPublisher";
 import type { IRuntimeApplicationEngine } from "./contracts/IRuntimeApplicationEngine";
+import { InMemoryRuntimeMetricsCollector } from "./metrics/InMemoryRuntimeMetricsCollector";
 
 const ADMIN_ROLES = new Set(["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"]);
 
@@ -81,12 +82,14 @@ async function permissionResolver(context: RuntimeContext): Promise<void> {
 export const runtimeEventPublisher = new SynchronousRuntimeEventPublisher();
 export const runtimeRecordService = new RuntimeRecordService();
 export const operationDispatcher = new OperationDispatcher(runtimeRecordService);
+export const runtimeMetricsCollector = new InMemoryRuntimeMetricsCollector();
 export const runtimeOperationPipeline = new RuntimeOperationPipeline({
   metadataResolver,
   permissionResolver,
   recordService: runtimeRecordService,
   operationDispatcher,
   eventPublisher: runtimeEventPublisher,
+  metricsCollector: runtimeMetricsCollector,
 });
 export const runtimeApplicationEngine = new RuntimeApplicationEngine(runtimeOperationPipeline);
 
@@ -128,11 +131,20 @@ export { RuntimeContext } from "./models/RuntimeContext";
 export { RuntimeTransaction } from "./models/RuntimeTransaction";
 
 export type {
+  MiddlewareExecutionPolicy,
   RuntimeActionRegistry,
   RuntimeMiddleware,
+  RuntimeMiddlewareRegistration,
   RuntimeMiddlewareState,
   RuntimeOperationAction,
   RuntimeRule,
   RuntimeValidator,
   RuntimeWorkflow,
 } from "./pipeline/RuntimeMiddleware";
+
+export { InMemoryRuntimeMetricsCollector } from "./metrics/InMemoryRuntimeMetricsCollector";
+export type {
+  IRuntimeMetricsCollector,
+  RuntimeMetricsRecord,
+  RuntimeMetricsSnapshot,
+} from "./metrics/RuntimeMetrics";
