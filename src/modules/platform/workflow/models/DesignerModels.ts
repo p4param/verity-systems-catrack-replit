@@ -19,6 +19,96 @@ export const WORKFLOW_VARIABLE_DATA_TYPES = [
 
 export type WorkflowVariableDataType = (typeof WORKFLOW_VARIABLE_DATA_TYPES)[number];
 
+export const WORKFLOW_PARTICIPANT_TYPES = [
+  "User",
+  "Role",
+  "Group",
+  "Department",
+  "BusinessUnit",
+  "Manager",
+  "Supervisor",
+  "RecordOwner",
+  "RecordCreator",
+  "Requester",
+  "ApproverChain",
+  "Expression",
+  "Lookup",
+  "OrganizationHierarchy",
+  "ExternalProvider",
+  "CustomProvider",
+] as const;
+
+export type WorkflowParticipantType = (typeof WORKFLOW_PARTICIPANT_TYPES)[number];
+
+export const WORKFLOW_ASSIGNMENT_STRATEGIES = [
+  "SingleUser",
+  "AllUsers",
+  "AnyUser",
+  "RoundRobin",
+  "LeastLoaded",
+  "Manager",
+  "Hierarchy",
+  "Expression",
+  "Weighted",
+  "Priority",
+  "Random",
+  "Custom",
+] as const;
+
+export type WorkflowAssignmentStrategy = (typeof WORKFLOW_ASSIGNMENT_STRATEGIES)[number];
+
+export const WORKFLOW_ACTION_TYPES = [
+  "StateChange",
+  "CreateRecord",
+  "UpdateRecord",
+  "DeleteRecord",
+  "CallAPI",
+  "InvokePlatformService",
+  "GenerateDocument",
+  "GenerateReport",
+  "RaiseEvent",
+  "Notification",
+  "Audit",
+  "Log",
+  "Wait",
+  "Delay",
+  "Timer",
+  "Expression",
+  "Script",
+  "CustomAction",
+] as const;
+
+export type WorkflowActionType = (typeof WORKFLOW_ACTION_TYPES)[number];
+
+export const WORKFLOW_POLICY_TYPES = [
+  "RetryPolicy",
+  "CompensationPolicy",
+  "TimeoutPolicy",
+  "EscalationPolicy",
+  "ConcurrencyPolicy",
+  "TransactionPolicy",
+  "FailurePolicy",
+  "NotificationPolicy",
+  "AuditPolicy",
+  "SecurityPolicy",
+  "CachingPolicy",
+  "CustomPolicy",
+] as const;
+
+export type WorkflowPolicyType = (typeof WORKFLOW_POLICY_TYPES)[number];
+
+export interface WorkflowAssignmentRuleSet {
+  requiredParticipants?: boolean;
+  optionalParticipants?: boolean;
+  minimumApprovers?: number;
+  maximumApprovers?: number;
+  parallelParticipants?: boolean;
+  sequentialParticipants?: boolean;
+  exclusiveParticipants?: boolean;
+  dynamicParticipants?: boolean;
+  customRules?: Record<string, unknown>;
+}
+
 export interface WorkflowDefinition {
   id: string;
   tenantId: string;
@@ -128,10 +218,32 @@ export interface WorkflowAction {
   workflowVersionId: string;
   code: string;
   name: string;
-  actionType: string;
+  actionType: WorkflowActionType;
+  providerKey?: string;
   payload?: Record<string, unknown>;
+  dependsOnActionCodes?: string[];
+  policyCodes?: string[];
+  priority?: number;
+  parallelMode?: "Parallel" | "Exclusive" | "Sequential";
+  compensationActionCode?: string;
+  retryPolicy?: WorkflowTransitionRetryPolicy;
+  timeoutSeconds?: number;
+  rollbackOnFailure?: boolean;
   sequence: number;
   isEnabled: boolean;
+}
+
+export interface WorkflowProcessPolicy {
+  id: string;
+  workflowVersionId: string;
+  code: string;
+  policyType: WorkflowPolicyType;
+  scope: "Workflow" | "Transition" | "Action";
+  transitionCode?: string;
+  actionCode?: string;
+  priority: number;
+  isEnabled: boolean;
+  configuration?: Record<string, unknown>;
 }
 
 export type WorkflowAssignmentType =
@@ -147,6 +259,14 @@ export interface WorkflowAssignment {
   workflowVersionId: string;
   code: string;
   assignmentType: WorkflowAssignmentType;
+  participantType?: WorkflowParticipantType;
+  strategy?: WorkflowAssignmentStrategy;
+  strategySeed?: string;
+  strategyWeights?: Record<string, number>;
+  priority?: number;
+  escalationTargetId?: string;
+  delegationMode?: "None" | "Allowed" | "Required";
+  ruleSet?: WorkflowAssignmentRuleSet;
   targetId?: string;
   expressionId?: string;
   lookupKey?: string;
@@ -295,6 +415,7 @@ export interface WorkflowMetadataSnapshot {
   conditions: WorkflowCondition[];
   rules: WorkflowRule[];
   actions: WorkflowAction[];
+  policies?: WorkflowProcessPolicy[];
   assignments: WorkflowAssignment[];
   approvers: WorkflowApprover[];
   notifications: WorkflowNotification[];
