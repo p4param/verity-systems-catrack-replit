@@ -1,0 +1,299 @@
+# EWP-002 — Implement PlatformApplicationPackage
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-002 – PlatformApplicationPackage
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **PlatformApplicationPackage** aggregate exactly as defined by the approved CAP architecture.
+
+A PlatformApplicationPackage represents an immutable, versioned deployment artifact for a PlatformApplication.
+
+It is the unit that is installed into a Tenant Workspace.
+
+The Runtime Engine executes PlatformApplicationPackages—not PlatformApplications.
+
+---
+
+# Inputs
+
+Implementation shall comply with:
+
+* ES-001 Database Standards
+
+* ES-008 Architecture & Domain Modeling
+
+* ES-009 Data Ownership & Persistence
+
+* ES-010 Platform Naming & Namespace
+
+* ADR-008-001 through ADR-008-011
+
+* DDS-101A
+
+* CC-002
+
+---
+
+# Scope
+
+Implement only the PlatformApplicationPackage aggregate.
+
+---
+
+## Domain
+
+Implement:
+
+* Aggregate Root
+* Version validation
+* Publish lifecycle
+* Package immutability
+
+---
+
+## Persistence
+
+Implement:
+
+* Prisma model
+* Migration
+* Repository interface
+* Repository implementation
+
+---
+
+## Application Layer
+
+Implement these capabilities:
+
+* Create Package
+* Publish Package
+* Deprecate Package
+* Archive Package
+* Get Package by Id
+* Get Package by Version
+* List Packages
+* List Packages by Application
+* Get Latest Published Package
+
+---
+
+## Validation
+
+Validate:
+
+* Version uniqueness per PlatformApplication
+* Valid semantic version format
+* Immutable after publication
+* Application existence
+* Publish eligibility
+
+---
+
+## Testing
+
+Implement:
+
+* Unit tests
+* Repository tests
+* PostgreSQL integration tests
+
+---
+
+# Explicit Exclusions
+
+Do NOT implement:
+
+* WorkspaceInstallation
+* Tenant
+* TenantWorkspace
+* Licensing
+* Subscription
+* Runtime execution
+* Manifest generation
+* Marketplace
+* Billing
+
+---
+
+# Domain Rules
+
+A package:
+
+* Belongs to exactly one PlatformApplication.
+* Has exactly one semantic version.
+* Is immutable after publication.
+* Cannot change its version after creation.
+* Cannot move to another PlatformApplication.
+* Cannot be physically deleted.
+
+---
+
+# Lifecycle
+
+Supported lifecycle:
+
+```text
+Draft
+
+↓
+
+Published
+
+↓
+
+Deprecated
+
+↓
+
+Archived
+```
+
+Lifecycle transitions must be centralized.
+
+---
+
+# Audit Requirements
+
+Implement standard CAP audit support:
+
+* CreatedBy
+* CreatedOn
+* ModifiedBy
+* ModifiedOn
+* DeletedBy
+* DeletedOn
+* IsDeleted
+
+Soft delete only.
+
+---
+
+# Repository Requirements
+
+Implement:
+
+* Create
+* Publish
+* Deprecate
+* Archive
+* Get By Id
+* Get Latest Published
+* Get By Version
+* List By Application
+* Exists Version
+
+Repositories contain persistence only.
+
+---
+
+# Service Requirements
+
+Coordinate:
+
+* Version validation
+* Lifecycle validation
+* Repository interaction
+
+No persistence logic in the service.
+
+---
+
+# Database Requirements
+
+Implement:
+
+* Prisma model
+* Migration
+* Foreign key to PlatformApplication
+* Unique constraint on (ApplicationId, Version)
+* Indexes for:
+
+  * ApplicationId
+  * Status
+  * Version
+
+---
+
+# Integration Tests
+
+Verify:
+
+* Create package
+* Duplicate version rejection
+* Publish
+* Deprecate
+* Archive
+* Immutable after publication
+* Get latest published
+* Version lookup
+* Soft delete
+* Optimistic concurrency
+
+Execute against PostgreSQL/Prisma.
+
+---
+
+# Deliverables
+
+Produce:
+
+* Prisma schema updates
+* Migration
+* Aggregate
+* Repository
+* Repository interface
+* Service
+* Validation
+* Unit tests
+* Integration tests
+* Documentation
+
+---
+
+# Acceptance Criteria
+
+Complete only when:
+
+* Aggregate implemented
+* Migration succeeds
+* Repository tests pass
+* Integration tests pass
+* Version uniqueness enforced
+* Published packages immutable
+* Audit fields implemented
+* Soft delete implemented
+* No TODOs
+* No placeholders
+* No unrelated changes
+
+---
+
+# Output Format
+
+Provide:
+
+* Summary
+* Files Created
+* Files Modified
+* Database Changes
+* Migration
+* Tests
+* Architecture Compliance
+* Capability Coverage
+* Deferred Items
+* Ready for Review
+
+---
+
+# Definition of Done
+
+The work package is complete only when all acceptance criteria are satisfied and the implementation is production-ready.

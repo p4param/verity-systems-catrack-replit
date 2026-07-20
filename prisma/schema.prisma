@@ -600,14 +600,14 @@ model DashboardSnapshot {
 
   snapshotDate DateTime @db.Date
 
-  // ─── Inventory Summary ───────────────────────────────────────────────────────
+  // â”€â”€â”€ Inventory Summary â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   totalPhysicalInventory Decimal? @db.Decimal(14, 2)
   availableInventory     Decimal? @db.Decimal(14, 2)
   reservedInventory      Decimal? @db.Decimal(14, 2)
   dirtyInventory         Decimal? @db.Decimal(14, 2)
   inLaundryInventory     Decimal? @db.Decimal(14, 2)
 
-  // ─── Inventory Health Score (0-100) ──────────────────────────────────────────
+  // â”€â”€â”€ Inventory Health Score (0-100) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   inventoryHealth        Decimal? @db.Decimal(5, 2)
   availabilityScore      Decimal? @db.Decimal(5, 2)
   stockoutRiskScore      Decimal? @db.Decimal(5, 2)
@@ -615,19 +615,19 @@ model DashboardSnapshot {
   lossRatioScore         Decimal? @db.Decimal(5, 2)
   agingScore             Decimal? @db.Decimal(5, 2)
 
-  // ─── Demand Forecast (placeholders) ──────────────────────────────────────────
+  // â”€â”€â”€ Demand Forecast (placeholders) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   predictedDemand30Days       Decimal? @db.Decimal(14, 2)
   forecastAccuracy            Decimal? @db.Decimal(5, 2)
   predictedPurchaseRequirement Decimal? @db.Decimal(14, 2)
   stockoutRisk                String?  // LOW | MEDIUM | HIGH
 
-  // ─── Event KPIs ──────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Event KPIs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   upcomingEvents              Int?
   eventsThisMonth             Int?
   eventCompletionRate         Decimal? @db.Decimal(5, 2)
   eventsPendingReconciliation Int?
 
-  // ─── Loss & Recovery ─────────────────────────────────────────────────────────
+  // â”€â”€â”€ Loss & Recovery â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   grossLoss       Decimal? @db.Decimal(14, 2)
   recovered       Decimal? @db.Decimal(14, 2)
   netLoss         Decimal? @db.Decimal(14, 2)
@@ -635,13 +635,13 @@ model DashboardSnapshot {
   recoveryRate    Decimal? @db.Decimal(5, 2)
   financialImpact Decimal? @db.Decimal(14, 2)
 
-  // ─── Vendor KPIs ─────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Vendor KPIs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   vendorScore          Decimal? @db.Decimal(5, 2)
   highRiskVendorCount  Int?
   averageTurnaroundDays Decimal? @db.Decimal(6, 2)
   vendorLiability      Decimal? @db.Decimal(14, 2)
 
-  // ─── Laundry KPIs ────────────────────────────────────────────────────────────
+  // â”€â”€â”€ Laundry KPIs â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   dirtyStock           Decimal? @db.Decimal(14, 2)
   inLaundry            Decimal? @db.Decimal(14, 2)
   laundryAging0to3     Int?
@@ -650,13 +650,13 @@ model DashboardSnapshot {
   avgLaundryCycleDays  Decimal? @db.Decimal(6, 2)
   delayedLaundryOrders Int?
 
-  // ─── Risk Indicators ─────────────────────────────────────────────────────────
+  // â”€â”€â”€ Risk Indicators â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   stockoutRiskLevel        String? // LOW | MEDIUM | HIGH
   vendorRiskLevel          String? // LOW | MEDIUM | HIGH
   laundryBottleneckLevel   String? // LOW | MEDIUM | HIGH
   eventCapacityRiskLevel   String? // LOW | MEDIUM | HIGH
 
-  // ─── Financial KPIs (placeholders) ───────────────────────────────────────────
+  // â”€â”€â”€ Financial KPIs (placeholders) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
   inventoryValue          Decimal? @db.Decimal(14, 2)
   monthlyConsumptionValue Decimal? @db.Decimal(14, 2)
   costOfLosses            Decimal? @db.Decimal(14, 2)
@@ -939,7 +939,7 @@ model VendorLedger {
   @@index([tenantId, transactionType])
 }
 
-// ─── CATERING EVENT MANAGER MODULE ──────────────────────────────────────────
+// â”€â”€â”€ CATERING EVENT MANAGER MODULE â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 model CateringEvent {
   id             String   @id @default(uuid()) @db.Uuid
@@ -2360,7 +2360,7 @@ model NavigationSearchIndex {
   @@map("navigation_search_indices")
 }
 
-// ─── CM-003 Runtime Data Engine / CM-004 Number Series Engine ──────────────────
+// â”€â”€â”€ CM-003 Runtime Data Engine / CM-004 Number Series Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
 // NOTE: platform_migrations is intentionally NOT added here.
 //       It is owned exclusively by SchemaPlatformEngine (CM-002) via raw DDL.
@@ -2383,16 +2383,16 @@ model PlatformRecordSequence {
   @@map("platform_record_sequences")
 }
 
-// ─── VS08A: License, Subscription & Tenant Management Engine ─────────────────
+// â”€â”€â”€ VS08A: License, Subscription & Tenant Management Engine â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 //
-// PlatformApplication — platform catalog of business applications.
+// PlatformApplication â€” platform catalog of business applications.
 // This aggregate represents the definition of an application that can be
 // licensed, installed, and managed on the platform (e.g. Catering ERP, HSE).
 //
 // Domain rules:
 //   - code is immutable and globally unique (normalized to UPPER_CASE)
 //   - name is globally unique
-//   - status lifecycle: Draft → Published → Deprecated → Retired
+//   - status lifecycle: Draft â†’ Published â†’ Deprecated â†’ Retired
 //   - retired applications cannot be modified
 //   - no tenant, workspace, licensing, or installation references
 
@@ -2424,5 +2424,61 @@ model PlatformApplication {
   @@index([status], map: "idx_platform_applications_status")
   @@index([category], map: "idx_platform_applications_category")
   @@index([isDeleted], map: "idx_platform_applications_is_deleted")
+  // VS08A EWP-002: back-relation (Prisma type-level only; no DB column)
+  packages PlatformApplicationPackage[]
+
   @@map("platform_applications")
+}
+
+// ─── VS08A EWP-002: PlatformApplicationPackage ────────────────────────────────
+//
+// PlatformApplicationPackage — versioned, immutable deployment artifact.
+// Belongs to exactly one PlatformApplication.
+// Version follows SemVer 2.0.0 (ADR-008-012).
+// Immutable after publication (ES-009 §6, CC-002).
+//
+// Domain rules:
+//   - packageVersion is immutable after creation (stored as package_version)
+//   - (applicationId, packageVersion) is unique — version scoped per application
+//   - lifecycle: Draft → Published → Deprecated → Archived (no shortcuts)
+//   - Archived is a terminal state
+//   - No tenant, workspace, or installation references
+
+model PlatformApplicationPackage {
+  id            String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  applicationId String    @db.Uuid @map("application_id")
+
+  // SemVer 2.0.0 string — validated in domain layer; stored verbatim (ADR-008-012)
+  // Prisma field name: semVer; DB column: package_version
+  // Domain record field: packageVersion (translated by repository toRecord())
+  semVer        String    @map("package_version")
+
+  displayName   String    @map("display_name")
+  description   String?   @map("description")
+  releaseNotes  String?   @map("release_notes")
+
+  // Lifecycle: Draft | Published | Deprecated | Archived
+  status        String    @default("Draft") @map("status")
+
+  // ES-001 mandatory audit columns
+  createdAt     DateTime  @default(now()) @map("created_at")
+  createdBy     String?   @db.Uuid @map("created_by")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+  updatedBy     String?   @db.Uuid @map("updated_by")
+  isDeleted     Boolean   @default(false) @map("is_deleted")
+  deletedAt     DateTime? @map("deleted_at")
+  deletedBy     String?   @db.Uuid @map("deleted_by")
+
+  // ES-001 optimistic concurrency counter
+  version       BigInt    @default(1) @map("version")
+
+  // Relation to PlatformApplication
+  application   PlatformApplication @relation(fields: [applicationId], references: [id])
+
+  @@unique([applicationId, semVer], map: "platform_application_packages_app_version_unique")
+  @@index([applicationId], map: "idx_platform_application_packages_application_id")
+  @@index([status], map: "idx_platform_application_packages_status")
+  @@index([semVer], map: "idx_platform_application_packages_package_version")
+  @@index([isDeleted], map: "idx_platform_application_packages_is_deleted")
+  @@map("platform_application_packages")
 }

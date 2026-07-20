@@ -1725,6 +1725,24 @@ exports.Prisma.PlatformApplicationScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.PlatformApplicationPackageScalarFieldEnum = {
+  id: 'id',
+  applicationId: 'applicationId',
+  semVer: 'semVer',
+  displayName: 'displayName',
+  description: 'description',
+  releaseNotes: 'releaseNotes',
+  status: 'status',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1885,7 +1903,8 @@ exports.Prisma.ModelName = {
   PlatformModulePermission: 'PlatformModulePermission',
   NavigationSearchIndex: 'NavigationSearchIndex',
   PlatformRecordSequence: 'PlatformRecordSequence',
-  PlatformApplication: 'PlatformApplication'
+  PlatformApplication: 'PlatformApplication',
+  PlatformApplicationPackage: 'PlatformApplicationPackage'
 };
 
 /**
