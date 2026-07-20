@@ -1777,6 +1777,22 @@ exports.Prisma.TenantWorkspaceScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.WorkspaceInstallationScalarFieldEnum = {
+  id: 'id',
+  workspaceId: 'workspaceId',
+  packageId: 'packageId',
+  status: 'status',
+  installedAt: 'installedAt',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1939,7 +1955,8 @@ exports.Prisma.ModelName = {
   PlatformRecordSequence: 'PlatformRecordSequence',
   PlatformApplication: 'PlatformApplication',
   PlatformApplicationPackage: 'PlatformApplicationPackage',
-  TenantWorkspace: 'TenantWorkspace'
+  TenantWorkspace: 'TenantWorkspace',
+  WorkspaceInstallation: 'WorkspaceInstallation'
 };
 
 /**

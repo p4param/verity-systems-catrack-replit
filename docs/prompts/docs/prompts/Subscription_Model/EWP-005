@@ -1,0 +1,376 @@
+# EWP-005 — WorkspaceInstallation
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-005 – WorkspaceInstallation
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **WorkspaceInstallation** aggregate exactly as defined by the approved CAP architecture.
+
+The WorkspaceInstallation aggregate establishes the runtime deployment relationship between the **Platform Catalog** and the **Tenant Domain** by installing a published PlatformApplicationPackage into a TenantWorkspace.
+
+WorkspaceInstallation is the runtime anchor for every deployed business application.
+
+---
+
+# Inputs
+
+Implementation shall comply with:
+
+* ES-001 Database Standards
+
+* ES-008 Architecture & Domain Modeling
+
+* ES-009 Data Ownership & Persistence
+
+* ES-010 Platform Naming & Namespace
+
+* ADR-008-001 through ADR-008-015
+
+* DDS-101A
+
+* CC-005
+
+---
+
+# Scope
+
+Implement only the **WorkspaceInstallation** aggregate.
+
+---
+
+# Domain
+
+Implement:
+
+* Aggregate Root
+* Installation lifecycle
+* Workspace association
+* Package association
+* Domain validation
+
+---
+
+# Persistence
+
+Implement:
+
+* Prisma model
+* Database migration
+* Repository interface
+* Repository implementation
+
+---
+
+# Application Layer
+
+Implement:
+
+* Install Package
+* Suspend Installation
+* Resume Installation
+* Uninstall Installation
+* Get Installation by Id
+* Get Installation by Workspace
+* Get Installation by Package
+* List Workspace Installations
+
+---
+
+# Validation
+
+Validate:
+
+* Tenant exists.
+* Tenant is Active.
+* Workspace exists.
+* Workspace belongs to Tenant.
+* Workspace is Active.
+* PlatformApplicationPackage exists.
+* Package status is Published.
+* Package is not already installed in the Workspace.
+* Installation lifecycle transitions are valid.
+
+---
+
+# Domain Rules
+
+A WorkspaceInstallation:
+
+* Belongs to exactly one TenantWorkspace.
+* References exactly one PlatformApplicationPackage.
+* Cannot change its Workspace after creation.
+* Cannot change its installed Package after creation.
+* Cannot be duplicated for the same Workspace and Package.
+* Cannot be hard deleted.
+* Supports optimistic concurrency.
+
+---
+
+# Lifecycle
+
+Supported lifecycle:
+
+```text
+Installing
+        │
+        ▼
+Installed
+   ▲    │
+   │    ▼
+Suspended
+        │
+        ▼
+Uninstalled
+```
+
+Valid transitions:
+
+| From       | To          |
+| ---------- | ----------- |
+| Installing | Installed   |
+| Installed  | Suspended   |
+| Suspended  | Installed   |
+| Installed  | Uninstalled |
+| Suspended  | Uninstalled |
+
+`Uninstalled` is a terminal state.
+
+---
+
+# Persistence Requirements
+
+Implement:
+
+* `WorkspaceInstallation` Prisma model
+* UUID primary key
+* Foreign key to `TenantWorkspace`
+* Foreign key to `PlatformApplicationPackage`
+* Audit columns per ES-001
+* `version BIGINT` optimistic concurrency
+* Soft delete support
+
+---
+
+# Database Constraints
+
+Implement:
+
+Unique constraints:
+
+* `(workspace_id, application_package_id)`
+
+Indexes:
+
+* workspace_id
+* application_package_id
+* status
+* is_deleted
+
+Foreign Keys:
+
+* `workspace_id → tenant_workspaces(id)` (`ON DELETE RESTRICT`, `ON UPDATE RESTRICT`)
+* `application_package_id → platform_application_packages(id)` (`ON DELETE RESTRICT`, `ON UPDATE RESTRICT`)
+
+---
+
+# Repository Requirements
+
+Implement:
+
+* Install
+* Suspend
+* Resume
+* Uninstall
+* GetById
+* GetByWorkspace
+* GetByPackage
+* ListByWorkspace
+* ExistsInstallation
+
+Repository responsibilities:
+
+* Persistence only.
+* No lifecycle rules.
+* No business validation.
+
+---
+
+# Service Requirements
+
+Implement:
+
+* InstallPackage
+* SuspendInstallation
+* ResumeInstallation
+* UninstallPackage
+* GetInstallation
+* ListWorkspaceInstallations
+
+Service responsibilities:
+
+* Validate domain rules.
+* Validate lifecycle.
+* Validate installation prerequisites.
+* Coordinate repository operations.
+
+No SQL or persistence logic.
+
+---
+
+# Testing
+
+Implement:
+
+## Unit Tests
+
+Verify:
+
+* Aggregate creation
+* Reconstitution
+* Lifecycle transitions
+* Invalid lifecycle transitions
+* Installation validation
+* Duplicate installation rejection
+* Immutable associations
+* Error mapping
+* Service orchestration
+
+## Repository Tests
+
+Verify:
+
+* CRUD operations
+* Concurrency handling
+* Soft delete
+* Duplicate constraint translation
+
+## PostgreSQL Integration Tests
+
+Verify:
+
+* Workspace FK enforcement
+* Package FK enforcement
+* Package Published prerequisite
+* Workspace Active prerequisite
+* Tenant Active prerequisite
+* Duplicate installation rejection
+* Optimistic concurrency
+* Lifecycle persistence
+* Soft delete filtering
+* Repository queries
+
+---
+
+# Explicit Exclusions
+
+Do **NOT** implement:
+
+* Package upgrades
+* Rollback
+* Licensing
+* Subscription
+* Feature flags
+* Runtime execution
+* Manifest generation
+* Health monitoring
+* Usage tracking
+* Marketplace
+* Billing
+
+---
+
+# Deferred Architecture
+
+The following capabilities are intentionally deferred:
+
+* Installation upgrades
+* Package rollback
+* Installation history
+* Installation health
+* Installation telemetry
+* Installation synchronization
+* Blue/Green deployment
+* Canary deployment
+
+---
+
+# Deliverables
+
+Produce:
+
+* Prisma schema updates
+* Migration
+* Aggregate
+* Repository interface
+* Repository implementation
+* Service interface
+* Service implementation
+* Validation
+* Unit tests
+* Repository tests
+* PostgreSQL integration tests
+* Technical documentation
+
+---
+
+# Output Format
+
+Provide:
+
+* Summary
+* Files Created
+* Files Modified
+* Database Changes
+* Migration Summary
+* Test Results
+* Architecture Compliance
+* Capability Coverage
+* Deferred Items
+* Ready for Compliance Review
+
+---
+
+# Acceptance Criteria
+
+The work package is complete only when:
+
+* Aggregate implemented.
+* Migration succeeds.
+* Repository implemented.
+* Service implemented.
+* Lifecycle enforced.
+* Installation prerequisites validated.
+* Audit fields implemented.
+* Optimistic concurrency implemented.
+* Soft delete implemented.
+* Unit tests pass.
+* Repository tests pass.
+* PostgreSQL integration tests pass.
+* No architecture violations.
+* No TODO comments.
+* No placeholder implementations.
+
+---
+
+# Definition of Done
+
+The work package is considered complete only after:
+
+1. Implementation completed.
+2. Compliance Report generated.
+3. Review Package generated.
+4. Implementation Review approved.
+5. Certification completed.
+6. Freeze approved.
+7. Git tag created.
+8. Architecture documentation updated.
+
+Only after successful certification may implementation begin on **EWP-006 – TenantMembership**.

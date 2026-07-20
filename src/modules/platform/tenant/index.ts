@@ -1,5 +1,5 @@
 // VS08A: Tenant module barrel
-// Public exports for Tenant and TenantWorkspace aggregates (VS08A Tenant Foundation)
+// Public exports for Tenant, TenantWorkspace, and WorkspaceInstallation aggregates (VS08A Tenant Foundation)
 
 // ─── Tenant (EWP-003) ─────────────────────────────────────────────────────────
 
@@ -70,3 +70,41 @@ export type { ITenantWorkspaceService } from "./contracts/ITenantWorkspaceServic
 
 export { TenantWorkspaceRepository } from "./repositories/TenantWorkspaceRepository";
 export { TenantWorkspaceService } from "./services/TenantWorkspaceService";
+
+// ─── WorkspaceInstallation (EWP-005) ──────────────────────────────────────────
+
+export type {
+  WorkspaceInstallationRecord,
+  WorkspaceInstallationStatus,
+  InstallPackageCommand,
+  CompleteInstallationCommand,
+  SuspendInstallationCommand,
+  ResumeInstallationCommand,
+  UninstallInstallationCommand,
+  ListWorkspaceInstallationsQuery,
+} from "./models/WorkspaceInstallationModels";
+export { WORKSPACE_INSTALLATION_STATUS } from "./models/WorkspaceInstallationModels";
+
+export { WorkspaceInstallation } from "./domain/WorkspaceInstallation";
+export { WorkspaceInstallationLifecycle } from "./domain/WorkspaceInstallationLifecycle";
+export { WorkspaceInstallationValidator } from "./domain/WorkspaceInstallationValidator";
+export {
+  InstallationNotFoundError,
+  DuplicateWorkspaceInstallationError,
+  InstallationWorkspaceNotFoundError,
+  InstallationPackageNotFoundError,
+  InstallationPackageNotPublishedError,
+  InstallationWorkspaceNotActiveError,
+  InstallationTenantNotActiveError,
+  UninstalledInstallationImmutableError,
+  WorkspaceInstallationAssociationImmutableError,
+  InvalidInstallationLifecycleTransitionError,
+  WorkspaceInstallationConcurrencyError,
+  WorkspaceInstallationValidationError,
+} from "./domain/WorkspaceInstallationErrors";
+
+export type { IWorkspaceInstallationRepository } from "./contracts/IWorkspaceInstallationRepository";
+export type { IWorkspaceInstallationService } from "./contracts/IWorkspaceInstallationService";
+
+export { WorkspaceInstallationRepository } from "./repositories/WorkspaceInstallationRepository";
+export { WorkspaceInstallationService } from "./services/WorkspaceInstallationService";

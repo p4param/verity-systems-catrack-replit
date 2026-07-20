@@ -2502,6 +2502,8 @@ model PlatformApplicationPackage {
   // Relation to PlatformApplication
   application PlatformApplication @relation(fields: [applicationId], references: [id])
 
+  installations WorkspaceInstallation[]
+
   @@unique([applicationId, semVer], map: "platform_application_packages_app_version_unique")
   @@index([applicationId], map: "idx_platform_application_packages_application_id")
   @@index([status], map: "idx_platform_application_packages_status")
@@ -2552,6 +2554,8 @@ model TenantWorkspace {
   // Relation to Tenant with explicit referential actions
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
+  installations WorkspaceInstallation[]
+
   @@unique([tenantId, code], map: "tenant_workspaces_tenant_code_unique")
   @@unique([tenantId, name], map: "tenant_workspaces_tenant_name_unique")
   @@index([tenantId], map: "idx_tenant_workspaces_tenant_id")
@@ -2559,4 +2563,51 @@ model TenantWorkspace {
   @@index([status], map: "idx_tenant_workspaces_status")
   @@index([isDeleted], map: "idx_tenant_workspaces_is_deleted")
   @@map("tenant_workspaces")
+}
+
+// ─── VS08A EWP-005: WorkspaceInstallation ───────────────────────────────────
+//
+// WorkspaceInstallation — runtime deployment relationship between Platform Catalog
+// (PlatformApplicationPackage) and Tenant Workspace (TenantWorkspace).
+// Runtime anchor for deployed business applications (ADR-008-015).
+//
+// Domain rules:
+//   - belongs to 1 TenantWorkspace (workspaceId immutable)
+//   - references 1 PlatformApplicationPackage (packageId immutable)
+//   - (workspaceId, packageId) composite unique (package installed once per workspace)
+//   - status lifecycle: Installing → Installed ↔ Suspended → Uninstalled
+//   - Uninstalled is a terminal state (cannot be reinstalled or modified)
+//   - soft delete only
+
+model WorkspaceInstallation {
+  id          String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspaceId String @map("workspace_id") @db.Uuid
+  packageId   String @map("application_package_id") @db.Uuid
+
+  // Lifecycle: Installing | Installed | Suspended | Uninstalled
+  status      String    @default("Installing") @map("status")
+  installedAt DateTime? @map("installed_at")
+
+  // ES-001 mandatory audit columns
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // ES-001 optimistic concurrency counter
+  version BigInt @default(1) @map("version")
+
+  // Relations with explicit referential actions
+  workspace TenantWorkspace            @relation(fields: [workspaceId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  package   PlatformApplicationPackage @relation(fields: [packageId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([workspaceId, packageId], map: "workspace_installations_workspace_package_unique")
+  @@index([workspaceId], map: "idx_workspace_installations_workspace_id")
+  @@index([packageId], map: "idx_workspace_installations_package_id")
+  @@index([status], map: "idx_workspace_installations_status")
+  @@index([isDeleted], map: "idx_workspace_installations_is_deleted")
+  @@map("workspace_installations")
 }

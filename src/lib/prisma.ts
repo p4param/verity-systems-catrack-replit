@@ -7,9 +7,10 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 // Update this check whenever a new model is added to the Prisma schema.
 // The check should reference the MOST RECENTLY ADDED model so hot-reload
 // always picks up the updated generated client.
-// VS08A EWP-004: Updated to check for tenantWorkspace (most recent model).
-if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).tenantWorkspace) {
-    console.warn("⚠️ Stale Prisma Client detected (missing tenantWorkspace model). Forcing re-initialization...");
+// VS08A EWP-005: Updated to check for workspaceInstallation (most recent model).
+if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).workspaceInstallation) {
+    console.warn("⚠️ Stale Prisma Client detected (missing workspaceInstallation model). Forcing re-initialization...");
+
 
 
 

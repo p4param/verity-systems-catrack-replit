@@ -3,3 +3,5 @@ export type { ITenantRepository, TenantMetadataUpdate } from "./ITenantRepositor
 export type { ITenantService } from "./ITenantService";
 export type { ITenantWorkspaceRepository, WorkspaceMetadataUpdate } from "./ITenantWorkspaceRepository";
 export type { ITenantWorkspaceService } from "./ITenantWorkspaceService";
+export type { IWorkspaceInstallationRepository } from "./IWorkspaceInstallationRepository";
+export type { IWorkspaceInstallationService } from "./IWorkspaceInstallationService";
