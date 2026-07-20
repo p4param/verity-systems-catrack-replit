@@ -2379,3 +2379,47 @@ model PlatformRecordSequence {
 
   @@map("platform_record_sequences")
 }
+
+// ─── VS08A: License, Subscription & Tenant Management Engine ─────────────────
+//
+// PlatformApplication — platform catalog of business applications.
+// This aggregate represents the definition of an application that can be
+// licensed, installed, and managed on the platform (e.g. Catering ERP, HSE).
+//
+// Domain rules:
+//   - code is immutable and globally unique (normalized to UPPER_CASE)
+//   - name is globally unique
+//   - status lifecycle: Draft → Published → Deprecated → Retired
+//   - retired applications cannot be modified
+//   - no tenant, workspace, licensing, or installation references
+
+model PlatformApplication {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  code        String  @unique @map("code")
+  name        String  @unique @map("name")
+  displayName String  @map("display_name")
+  description String? @map("description")
+  category    String  @map("category")
+  iconUrl     String? @map("icon_url")
+  websiteUrl  String? @map("website_url")
+
+  // Lifecycle: Draft | Published | Deprecated | Retired
+  status String @default("Draft") @map("status")
+
+  // ES-001 mandatory audit columns
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // ES-001 optimistic concurrency
+  version BigInt @default(1) @map("version")
+
+  @@index([status], map: "idx_platform_applications_status")
+  @@index([category], map: "idx_platform_applications_category")
+  @@index([isDeleted], map: "idx_platform_applications_is_deleted")
+  @@map("platform_applications")
+}

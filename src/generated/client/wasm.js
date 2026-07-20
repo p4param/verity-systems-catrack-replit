@@ -1705,6 +1705,26 @@ exports.Prisma.PlatformRecordSequenceScalarFieldEnum = {
   updatedAt: 'updatedAt'
 };
 
+exports.Prisma.PlatformApplicationScalarFieldEnum = {
+  id: 'id',
+  code: 'code',
+  name: 'name',
+  displayName: 'displayName',
+  description: 'description',
+  category: 'category',
+  iconUrl: 'iconUrl',
+  websiteUrl: 'websiteUrl',
+  status: 'status',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1864,7 +1884,8 @@ exports.Prisma.ModelName = {
   NavigationQuickLink: 'NavigationQuickLink',
   PlatformModulePermission: 'PlatformModulePermission',
   NavigationSearchIndex: 'NavigationSearchIndex',
-  PlatformRecordSequence: 'PlatformRecordSequence'
+  PlatformRecordSequence: 'PlatformRecordSequence',
+  PlatformApplication: 'PlatformApplication'
 };
 
 /**

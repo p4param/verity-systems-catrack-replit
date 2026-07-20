@@ -1,0 +1,308 @@
+# EWP-001 — Implement PlatformApplication
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-001 – PlatformApplication
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **PlatformApplication** aggregate exactly as defined by the approved CAP architecture.
+
+This work package establishes the platform's catalog of business applications (e.g. Catering ERP, HSE, CRM, HRMS) and provides the foundation upon which application packages, installations, licensing, and marketplace capabilities will be built.
+
+This work package implements **only the PlatformApplication aggregate**.
+
+---
+
+# Inputs
+
+The implementation must comply with the following approved documents:
+
+* ES-001 Database Standards
+
+* ES-008 Architecture & Domain Modeling Standard
+
+* ES-009 Data Ownership & Persistence Standard
+
+* ES-010 Platform Naming & Namespace Standard
+
+* ADR-008-001 through ADR-008-011
+
+* DDS-101A Database Design Specification
+
+* CC-001 PlatformApplication
+
+---
+
+# Scope
+
+Implement the complete PlatformApplication aggregate including:
+
+## Domain
+
+* PlatformApplication aggregate root
+* Domain validation
+* Lifecycle rules
+
+## Persistence
+
+* Prisma model
+* Database migration
+* Repository interface
+* Repository implementation
+
+## Application Layer
+
+Implement the following capabilities:
+
+* Register Platform Application
+* Update Platform Application Metadata
+* Retire Platform Application
+* Get Platform Application by Code
+* Get Platform Application by Id
+* List Platform Applications
+* Search Platform Applications
+* Filter by Category
+* Filter by Status
+
+## Validation
+
+Implement validation for:
+
+* Unique Application Code
+* Unique Application Name
+* Required fields
+* Lifecycle transitions
+
+## Testing
+
+Implement:
+
+* Unit tests
+* Repository tests
+* Integration tests
+
+---
+
+# Explicit Exclusions
+
+Do **NOT** implement:
+
+* PlatformApplicationPackage
+* Platform Registry service
+* WorkspaceInstallation
+* Tenant
+* TenantWorkspace
+* Membership
+* Licensing
+* Subscription
+* Billing
+* Marketplace
+* Runtime Integration
+* Authorization Rules
+* Publish Pipeline
+* Manifest Generation
+
+If additional functionality appears necessary, document it under **Deferred Items** rather than implementing it.
+
+---
+
+# Domain Rules
+
+The implementation must enforce the following rules:
+
+* Application Code is immutable.
+* Application Code is globally unique.
+* Application Name is globally unique.
+* Display metadata may be updated.
+* Retired applications cannot be modified except by approved lifecycle operations.
+* PlatformApplication never references Tenant or Workspace.
+* PlatformApplication never contains licensing information.
+* PlatformApplication never contains installation information.
+
+---
+
+# Lifecycle
+
+Supported lifecycle:
+
+* Draft
+* Published
+* Deprecated
+* Retired
+
+Lifecycle validation must be centralized within the domain layer.
+
+---
+
+# Audit Requirements
+
+Implement standard CAP audit support:
+
+* CreatedBy
+* CreatedOn
+* ModifiedBy
+* ModifiedOn
+* DeletedBy
+* DeletedOn
+* IsDeleted
+
+Hard delete is not permitted.
+
+---
+
+# Repository Requirements
+
+Implement repository operations for:
+
+* Create
+* Update Metadata
+* Retire
+* Get By Id
+* Get By Code
+* List
+* Search
+* Exists By Code
+* Exists By Name
+
+Repositories must contain persistence logic only.
+
+Business validation belongs in the service/domain layer.
+
+---
+
+# Service Requirements
+
+Implement an application service that coordinates:
+
+* Validation
+* Lifecycle enforcement
+* Repository interaction
+
+The service must not contain persistence details.
+
+---
+
+# Database Requirements
+
+Implement:
+
+* Prisma model
+* Migration
+* Unique constraints
+* Required indexes
+* Soft delete support
+
+Do not introduce tables outside the approved scope.
+
+---
+
+# Testing Requirements
+
+Minimum coverage:
+
+* Domain validation
+* Repository operations
+* Service operations
+* Duplicate code validation
+* Duplicate name validation
+* Lifecycle transitions
+* Soft delete behavior
+* Search operations
+
+All tests must pass.
+
+---
+
+# Deliverables
+
+Produce:
+
+* Prisma schema updates
+* Migration files
+* Domain model
+* Repository interface
+* Repository implementation
+* Service layer
+* Validation layer
+* Unit tests
+* Integration tests
+* Technical documentation
+
+---
+
+# Acceptance Criteria
+
+The work package is complete only when:
+
+* PlatformApplication aggregate implemented.
+* Database migration succeeds.
+* Prisma validation succeeds.
+* Repository tests pass.
+* Integration tests pass.
+* Lifecycle validation implemented.
+* Soft delete implemented.
+* Audit fields implemented.
+* No architecture violations.
+* No TODO comments.
+* No placeholder implementations.
+* No mock implementations.
+* No unrelated changes.
+
+---
+
+# Output Format
+
+At completion provide:
+
+## Summary
+
+Brief implementation overview.
+
+## Files Created
+
+List all new files.
+
+## Files Modified
+
+List all modified files.
+
+## Database Changes
+
+List schema changes and migrations.
+
+## Tests
+
+List tests added and execution results.
+
+## Architecture Compliance
+
+Percentage and explanation.
+
+## Capability Coverage
+
+Percentage and explanation.
+
+## Deferred Items
+
+Anything intentionally left for future work packages.
+
+## Known Issues
+
+Any implementation concerns.
+
+## Ready for Review
+
+Yes / No
+
+---
+
+# Definition of Done
+
+This Engineering Work Package is complete only when every acceptance criterion has been satisfied and the implementation is fully production-ready without requiring manual completion or follow-up work.

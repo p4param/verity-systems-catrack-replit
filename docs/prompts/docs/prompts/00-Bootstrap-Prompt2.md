@@ -12,6 +12,8 @@ You are NOT allowed to redesign the platform.
 Engineering Principles
 ====================================================
 
+If a referenced governing document is missing, stop and report the missing document. Do not substitute the EWP as the governing authority unless the user explicitly authorizes that exception.
+
 Follow all Engineering Standards (ES).
 
 Follow all Architecture Decision Records (ADR).
