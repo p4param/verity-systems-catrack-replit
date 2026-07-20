@@ -1,0 +1,157 @@
+# CC-004 — TenantWorkspace
+
+**Status:** Approved
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Aggregate Root:** TenantWorkspace
+
+**Bounded Context:** Tenant Management
+
+---
+
+# 1. Objective
+
+Implement the **TenantWorkspace** aggregate.
+
+A TenantWorkspace represents an isolated operational workspace owned by a Tenant.
+
+---
+
+# 2. Responsibilities
+
+The aggregate manages:
+
+* Workspace identity
+* Workspace lifecycle
+* Tenant association
+* Workspace defaults
+
+It does **not** manage:
+
+* Application installation
+* Membership
+* Licensing
+* Subscription
+* Billing
+* Runtime execution
+
+---
+
+# 3. Capability Matrix
+
+| Capability                | Included |
+| ------------------------- | -------- |
+| Create Workspace          | ✅        |
+| Update Workspace Metadata | ✅        |
+| Activate Workspace        | ✅        |
+| Suspend Workspace         | ✅        |
+| Archive Workspace         | ✅        |
+| Get Workspace by Id       | ✅        |
+| Get Workspace by Code     | ✅        |
+| List Workspaces by Tenant | ✅        |
+| Validate Workspace Code   | ✅        |
+
+---
+
+# 4. Business Attributes
+
+## Identity
+
+* WorkspaceId
+* TenantId
+* WorkspaceCode
+* WorkspaceName
+
+## Presentation
+
+* DisplayName
+* Description
+
+## Defaults
+
+* TimeZone
+* Culture
+* Currency
+
+## Lifecycle
+
+* Provisioning
+* Active
+* Suspended
+* Archived
+
+## Audit
+
+Standard ES-001 audit fields.
+
+---
+
+# 5. Relationships
+
+```text
+Tenant
+    │
+    │ 1
+    ▼
+TenantWorkspace
+```
+
+A Tenant owns many TenantWorkspaces.
+
+A TenantWorkspace belongs to exactly one Tenant.
+
+---
+
+# 6. Business Rules
+
+* Tenant must exist.
+* WorkspaceCode is unique within the owning Tenant.
+* WorkspaceName is unique within the owning Tenant.
+* WorkspaceCode is immutable.
+* Archived workspaces cannot be modified.
+* Workspaces cannot move between Tenants.
+* Workspaces cannot be hard deleted.
+
+---
+
+# 7. Non-Functional Requirements
+
+* Soft delete.
+* Full audit support.
+* Optimistic concurrency.
+* Repository pattern.
+* PostgreSQL integration tests.
+
+---
+
+# 8. Acceptance Criteria
+
+Complete only when:
+
+* Aggregate implemented.
+* Lifecycle enforced.
+* Repository implemented.
+* Service implemented.
+* Migration succeeds.
+* Unit tests pass.
+* Integration tests pass.
+* Architecture compliance verified.
+* No TODOs or placeholder implementations.
+
+---
+
+# 9. Deliverables
+
+* Prisma model
+* Migration
+* Aggregate
+* Repository
+* Repository interface
+* Service
+* Validation
+* Unit tests
+* Integration tests
+* Technical documentation

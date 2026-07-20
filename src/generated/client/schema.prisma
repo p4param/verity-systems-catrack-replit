@@ -79,6 +79,8 @@ model Tenant {
   vendorPayments         VendorPayment[]
   vendorLedgerEntries    VendorLedger[]
 
+  workspaces TenantWorkspace[]
+
   @@index([code], map: "idx_tenants_code")
   @@index([name], map: "idx_tenants_name")
   @@index([status], map: "idx_tenants_status")
@@ -2506,4 +2508,55 @@ model PlatformApplicationPackage {
   @@index([semVer], map: "idx_platform_application_packages_package_version")
   @@index([isDeleted], map: "idx_platform_application_packages_is_deleted")
   @@map("platform_application_packages")
+}
+
+// ─── VS08A EWP-004: TenantWorkspace ──────────────────────────────────────────
+//
+// TenantWorkspace — isolated operational workspace owned by a Tenant.
+// Aggregate Root for TenantWorkspace operational boundary (ADR-008-014).
+//
+// Domain rules:
+//   - code is immutable and unique within owning Tenant (tenant_id, code)
+//   - name is unique within owning Tenant (tenant_id, name)
+//   - belongs to exactly one Tenant (cannot move between tenants)
+//   - status lifecycle: Provisioning → Active ↔ Suspended → Archived
+//   - Archived is a terminal state (cannot be reactivated or modified)
+//   - soft delete only
+
+model TenantWorkspace {
+  id          String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId    String  @map("tenant_id") @db.Uuid
+  code        String  @map("code")
+  name        String  @map("name")
+  displayName String  @map("display_name")
+  description String? @map("description")
+  timeZone    String  @default("UTC") @map("time_zone")
+  culture     String  @default("en-US") @map("culture")
+  currency    String  @default("USD") @map("currency")
+
+  // Lifecycle: Provisioning | Active | Suspended | Archived
+  status String @default("Provisioning") @map("status")
+
+  // ES-001 mandatory audit columns
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // ES-001 optimistic concurrency counter
+  version BigInt @default(1) @map("version")
+
+  // Relation to Tenant with explicit referential actions
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([tenantId, code], map: "tenant_workspaces_tenant_code_unique")
+  @@unique([tenantId, name], map: "tenant_workspaces_tenant_name_unique")
+  @@index([tenantId], map: "idx_tenant_workspaces_tenant_id")
+  @@index([code], map: "idx_tenant_workspaces_code")
+  @@index([status], map: "idx_tenant_workspaces_status")
+  @@index([isDeleted], map: "idx_tenant_workspaces_is_deleted")
+  @@map("tenant_workspaces")
 }

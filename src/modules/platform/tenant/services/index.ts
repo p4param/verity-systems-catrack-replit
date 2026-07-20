@@ -1,2 +1,3 @@
 // VS08A: Tenant services barrel
 export { TenantService } from "./TenantService";
+export { TenantWorkspaceService } from "./TenantWorkspaceService";
