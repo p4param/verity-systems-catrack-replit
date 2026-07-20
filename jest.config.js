@@ -27,17 +27,20 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
-    // VS08A: PlatformApplication aggregate — unit tests only (no DB required)
+    // VS08A: Catalog & Tenant aggregates — unit tests only (no DB required)
     "<rootDir>/src/modules/platform/catalog/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
   ],
   developer: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
     "<rootDir>/src/modules/platform/persistence/__tests__/integration/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
-    // VS08A: PlatformApplication aggregate — unit + integration tests
+    // VS08A: Catalog & Tenant aggregates — unit + integration tests
     "<rootDir>/src/modules/platform/catalog/tests/*.test.ts",
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
   ],
   certification: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
@@ -47,17 +50,21 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/persistence/__tests__/operational/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
-    // VS08A: PlatformApplication aggregate — unit + integration tests
+    // VS08A: Catalog & Tenant aggregates — unit + integration tests
     "<rootDir>/src/modules/platform/catalog/tests/*.test.ts",
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
   ],
   nightly: [
     "<rootDir>/src/modules/platform/persistence/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/runtime/application/__tests__/**/*.test.ts",
     "<rootDir>/src/modules/platform/workflow/tests/**/*.test.ts",
-    // VS08A: PlatformApplication aggregate — unit + integration tests
+    // VS08A: Catalog & Tenant aggregates — unit + integration tests
     "<rootDir>/src/modules/platform/catalog/tests/*.test.ts",
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
   ],
 };
 

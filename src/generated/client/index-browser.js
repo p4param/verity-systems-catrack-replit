@@ -126,8 +126,21 @@ exports.Prisma.TenantScalarFieldEnum = {
   id: 'id',
   code: 'code',
   name: 'name',
-  isActive: 'isActive',
-  createdAt: 'createdAt'
+  displayName: 'displayName',
+  description: 'description',
+  logoUrl: 'logoUrl',
+  defaultTimeZone: 'defaultTimeZone',
+  defaultCulture: 'defaultCulture',
+  defaultCurrency: 'defaultCurrency',
+  status: 'status',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
 };
 
 exports.Prisma.UserScalarFieldEnum = {

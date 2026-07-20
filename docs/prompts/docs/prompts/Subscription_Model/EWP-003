@@ -1,0 +1,169 @@
+# EWP-003 — Tenant
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-003 – Tenant
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **Tenant** aggregate exactly as defined by the approved CAP architecture.
+
+The Tenant aggregate establishes the primary commercial and security boundary of the platform.
+
+---
+
+# Inputs
+
+Implementation shall comply with:
+
+* ES-001 Database Standards
+
+* ES-008 Architecture & Domain Modeling
+
+* ES-009 Data Ownership & Persistence
+
+* ES-010 Platform Naming & Namespace
+
+* ADR-008-001 through ADR-008-013
+
+* DDS-101A
+
+* CC-003
+
+---
+
+# Scope
+
+Implement only the Tenant aggregate.
+
+---
+
+## Domain
+
+Implement:
+
+* Aggregate Root
+* Lifecycle management
+* Domain validation
+
+---
+
+## Persistence
+
+Implement:
+
+* Prisma model
+* Database migration
+* Repository interface
+* Repository implementation
+
+---
+
+## Application Layer
+
+Implement:
+
+* Register Tenant
+* Activate Tenant
+* Suspend Tenant
+* Archive Tenant
+* Get Tenant by Id
+* Get Tenant by Code
+* List Tenants
+
+---
+
+## Validation
+
+Validate:
+
+* Unique TenantCode
+* Unique TenantName
+* Valid lifecycle transitions
+* Immutable TenantCode
+
+---
+
+## Testing
+
+Implement:
+
+* Unit tests
+* Repository tests
+* PostgreSQL integration tests
+
+---
+
+# Explicit Exclusions
+
+Do **NOT** implement:
+
+* TenantWorkspace
+* WorkspaceInstallation
+* Subscription
+* Licensing
+* Billing
+* Membership
+* Feature Flags
+* Runtime
+
+---
+
+# Repository Requirements
+
+Implement:
+
+* Create
+* Activate
+* Suspend
+* Archive
+* GetById
+* GetByCode
+* List
+* ExistsCode
+* ExistsName
+
+---
+
+# Acceptance Criteria
+
+The work package is complete only when:
+
+* Aggregate implemented.
+* Migration succeeds.
+* Repository tests pass.
+* Integration tests pass.
+* Lifecycle validation implemented.
+* Audit fields implemented.
+* Soft delete implemented.
+* No architecture violations.
+* No TODO comments.
+* No placeholder implementations.
+
+---
+
+# Output
+
+Provide:
+
+* Summary
+* Files Created
+* Files Modified
+* Database Changes
+* Tests
+* Architecture Compliance
+* Capability Coverage
+* Deferred Items
+* Ready for Review
+
+---
+
+# Definition of Done
+
+The work package is complete only when every acceptance criterion has been satisfied and the implementation is production-ready.
