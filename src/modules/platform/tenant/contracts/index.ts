@@ -7,3 +7,5 @@ export type { IWorkspaceInstallationRepository } from "./IWorkspaceInstallationR
 export type { IWorkspaceInstallationService } from "./IWorkspaceInstallationService";
 export type { ITenantMembershipRepository } from "./ITenantMembershipRepository";
 export type { ITenantMembershipService } from "./ITenantMembershipService";
+export type { IWorkspaceMembershipRepository } from "./IWorkspaceMembershipRepository";
+export type { IWorkspaceMembershipService } from "./IWorkspaceMembershipService";

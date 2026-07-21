@@ -1,0 +1,216 @@
+# EWP-007 — WorkspaceMembership
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-007 – WorkspaceMembership
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **WorkspaceMembership** aggregate exactly as defined by the approved CAP architecture.
+
+WorkspaceMembership establishes operational access while preserving the separation between identity, organizational affiliation, and workspace participation.
+
+---
+
+# Inputs
+
+Implementation shall comply with:
+
+* ES-001 Database Standards
+* ES-008 Architecture & Domain Modeling
+* ES-009 Data Ownership & Persistence
+* ES-010 Platform Naming & Namespace
+* ADR-008-001 through ADR-008-017
+* DDS-101A
+* CC-007
+
+---
+
+# Scope
+
+Implement only the WorkspaceMembership aggregate.
+
+---
+
+## Domain
+
+Implement:
+
+* Aggregate Root
+* Membership lifecycle
+* Workspace association
+* TenantMembership association
+* Domain validation
+
+---
+
+## Persistence
+
+Implement:
+
+* Prisma model
+* Database migration
+* Repository interface
+* Repository implementation
+
+---
+
+## Application Layer
+
+Implement:
+
+* Invite to Workspace
+* Activate Membership
+* Suspend Membership
+* Remove Membership
+* Update Workspace Role
+* Get Membership by Id
+* Get Membership by Workspace
+* List Workspace Members
+
+---
+
+## Validation
+
+Validate:
+
+* Workspace exists.
+* Workspace is Active.
+* TenantMembership exists.
+* TenantMembership is Active.
+* Workspace and TenantMembership belong to the same Tenant.
+* Membership uniqueness `(workspace_id, tenant_membership_id)`.
+* Immutable associations.
+* Valid lifecycle transitions.
+
+---
+
+## Explicit Exclusions
+
+Do **NOT** implement:
+
+* Authentication
+* Tenant membership
+* Licensing
+* Billing
+* Runtime authorization
+* Permission evaluation
+* Feature flags
+
+---
+
+## Repository Requirements
+
+Implement:
+
+* Invite
+* Activate
+* Suspend
+* Remove
+* UpdateRole
+* GetById
+* GetByWorkspace
+* ListByWorkspace
+* ExistsMembership
+
+---
+
+## Testing
+
+Implement:
+
+### Unit Tests
+
+Verify:
+
+* Aggregate creation
+* Reconstitution
+* Lifecycle transitions
+* Invalid transitions
+* Immutable associations
+* Role updates
+* Service orchestration
+
+### Repository Tests
+
+Verify:
+
+* CRUD operations
+* Optimistic concurrency
+* Duplicate constraint translation
+* Soft delete
+
+### PostgreSQL Integration Tests
+
+Verify:
+
+* Workspace FK enforcement
+* TenantMembership FK enforcement
+* Same-Tenant validation
+* Workspace Active prerequisite
+* TenantMembership Active prerequisite
+* Duplicate membership rejection
+* Lifecycle persistence
+* Soft delete filtering
+* Repository queries
+
+---
+
+# Acceptance Criteria
+
+The work package is complete only when:
+
+* Aggregate implemented.
+* Migration succeeds.
+* Repository implemented.
+* Service implemented.
+* Lifecycle enforced.
+* Same-Tenant validation implemented.
+* Audit fields implemented.
+* Optimistic concurrency implemented.
+* Soft delete implemented.
+* Unit tests pass.
+* Repository tests pass.
+* PostgreSQL integration tests pass.
+* No architecture violations.
+* No TODO comments.
+* No placeholder implementations.
+
+---
+
+# Output
+
+Provide:
+
+* Summary
+* Files Created
+* Files Modified
+* Database Changes
+* Test Results
+* Architecture Compliance
+* Capability Coverage
+* Deferred Items
+* Ready for Review
+
+---
+
+# Definition of Done
+
+The work package is complete only after:
+
+1. Implementation completed.
+2. Compliance Report generated.
+3. Review Package generated.
+4. Implementation Review approved.
+5. Certification completed.
+6. Freeze approved.
+7. Git tag created.
+8. Architecture documentation updated.
+
+Completion of EWP-007 concludes the **VS08A Identity & Access Foundation** and establishes the baseline for **VS08B – Subscription, Licensing, Entitlements, and Feature Management**.

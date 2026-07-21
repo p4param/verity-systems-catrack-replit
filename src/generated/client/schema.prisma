@@ -2560,6 +2560,8 @@ model TenantWorkspace {
 
   installations WorkspaceInstallation[]
 
+  workspaceMemberships WorkspaceMembership[]
+
   @@unique([tenantId, code], map: "tenant_workspaces_tenant_code_unique")
   @@unique([tenantId, name], map: "tenant_workspaces_tenant_name_unique")
   @@index([tenantId], map: "idx_tenant_workspaces_tenant_id")
@@ -2658,10 +2660,64 @@ model TenantMembership {
   tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Restrict)
   user   User   @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
 
+  workspaceMemberships WorkspaceMembership[]
+
   @@unique([tenantId, userId], map: "tenant_memberships_tenant_user_unique")
   @@index([tenantId], map: "idx_tenant_memberships_tenant_id")
   @@index([userId], map: "idx_tenant_memberships_user_id")
   @@index([status], map: "idx_tenant_memberships_status")
   @@index([isDeleted], map: "idx_tenant_memberships_is_deleted")
   @@map("tenant_memberships")
+}
+
+// ─── VS08A EWP-007: WorkspaceMembership ───────────────────────────────────────
+//
+// WorkspaceMembership — operational access relationship between TenantMembership
+// (organizational participation) and TenantWorkspace (operational boundary).
+// Grants workspace-level role and participation (ADR-008-017).
+//
+// Security Invariant (D1): Same-tenant validation enforces workspace.tenantId === tenantMembership.tenantId.
+// Deferred Permission Note (D3): Permission evaluation derives from WorkspaceRole in VS08B.
+//
+// Domain rules:
+//   - belongs to 1 TenantWorkspace (workspaceId immutable)
+//   - references 1 TenantMembership (tenantMembershipId immutable)
+//   - (workspaceId, tenantMembershipId) composite unique
+//   - status lifecycle: Invited → Active ↔ Suspended → Removed
+//   - Removed is a terminal state (cannot be reactivated or modified)
+//   - soft delete only
+
+model WorkspaceMembership {
+  id                 String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  workspaceId        String @map("workspace_id") @db.Uuid
+  tenantMembershipId String @map("tenant_membership_id") @db.Uuid
+
+  // Role within Workspace: WorkspaceAdmin | Contributor | Viewer | Guest
+  workspaceRole String @default("Contributor") @map("workspace_role")
+
+  // Lifecycle: Invited | Active | Suspended | Removed
+  status String @default("Invited") @map("status")
+
+  // ES-001 mandatory audit columns
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // ES-001 optimistic concurrency counter
+  version BigInt @default(1) @map("version")
+
+  // Relations with explicit referential actions
+  workspace        TenantWorkspace  @relation(fields: [workspaceId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  tenantMembership TenantMembership @relation(fields: [tenantMembershipId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([workspaceId, tenantMembershipId], map: "workspace_memberships_workspace_tenant_mem_unique")
+  @@index([workspaceId], map: "idx_workspace_memberships_workspace_id")
+  @@index([tenantMembershipId], map: "idx_workspace_memberships_tenant_mem_id")
+  @@index([status], map: "idx_workspace_memberships_status")
+  @@index([isDeleted], map: "idx_workspace_memberships_is_deleted")
+  @@map("workspace_memberships")
 }

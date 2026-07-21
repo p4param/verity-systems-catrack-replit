@@ -1,5 +1,5 @@
 // VS08A: Tenant module barrel
-// Public exports for Tenant, TenantWorkspace, WorkspaceInstallation, and TenantMembership aggregates (VS08A Tenant Foundation)
+// Public exports for Tenant, TenantWorkspace, WorkspaceInstallation, TenantMembership, and WorkspaceMembership aggregates (VS08A Tenant Foundation)
 
 // ─── Tenant (EWP-003) ─────────────────────────────────────────────────────────
 
@@ -145,3 +145,42 @@ export type { ITenantMembershipService } from "./contracts/ITenantMembershipServ
 
 export { TenantMembershipRepository } from "./repositories/TenantMembershipRepository";
 export { TenantMembershipService } from "./services/TenantMembershipService";
+
+// ─── WorkspaceMembership (EWP-007) ────────────────────────────────────────────
+
+export type {
+  WorkspaceMembershipRecord,
+  WorkspaceMembershipStatus,
+  WorkspaceRole,
+  InviteToWorkspaceCommand,
+  ActivateWorkspaceMembershipCommand,
+  SuspendWorkspaceMembershipCommand,
+  RemoveWorkspaceMembershipCommand,
+  UpdateWorkspaceRoleCommand as UpdateWorkspaceMembershipRoleCommand,
+  ListWorkspaceMembersQuery,
+} from "./models/WorkspaceMembershipModels";
+export { WORKSPACE_MEMBERSHIP_STATUS, WORKSPACE_ROLE } from "./models/WorkspaceMembershipModels";
+
+export { WorkspaceMembership } from "./domain/WorkspaceMembership";
+export { WorkspaceMembershipLifecycle } from "./domain/WorkspaceMembershipLifecycle";
+export { WorkspaceMembershipValidator } from "./domain/WorkspaceMembershipValidator";
+export {
+  WorkspaceMembershipNotFoundError,
+  DuplicateWorkspaceMembershipError,
+  WorkspaceMembershipWorkspaceNotFoundError,
+  WorkspaceMembershipWorkspaceNotActiveError,
+  WorkspaceMembershipTenantMembershipNotFoundError,
+  WorkspaceMembershipTenantMembershipNotActiveError,
+  WorkspaceMembershipTenantMismatchError,
+  RemovedWorkspaceMembershipImmutableError,
+  WorkspaceMembershipAssociationImmutableError,
+  InvalidWorkspaceMembershipLifecycleTransitionError,
+  WorkspaceMembershipConcurrencyError,
+  WorkspaceMembershipValidationError,
+} from "./domain/WorkspaceMembershipErrors";
+
+export type { IWorkspaceMembershipRepository } from "./contracts/IWorkspaceMembershipRepository";
+export type { IWorkspaceMembershipService } from "./contracts/IWorkspaceMembershipService";
+
+export { WorkspaceMembershipRepository } from "./repositories/WorkspaceMembershipRepository";
+export { WorkspaceMembershipService } from "./services/WorkspaceMembershipService";
