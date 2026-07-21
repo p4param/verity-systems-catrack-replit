@@ -5,3 +5,5 @@ export type { ITenantWorkspaceRepository, WorkspaceMetadataUpdate } from "./ITen
 export type { ITenantWorkspaceService } from "./ITenantWorkspaceService";
 export type { IWorkspaceInstallationRepository } from "./IWorkspaceInstallationRepository";
 export type { IWorkspaceInstallationService } from "./IWorkspaceInstallationService";
+export type { ITenantMembershipRepository } from "./ITenantMembershipRepository";
+export type { ITenantMembershipService } from "./ITenantMembershipService";

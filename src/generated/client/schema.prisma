@@ -81,6 +81,8 @@ model Tenant {
 
   workspaces TenantWorkspace[]
 
+  memberships TenantMembership[]
+
   @@index([code], map: "idx_tenants_code")
   @@index([name], map: "idx_tenants_name")
   @@index([status], map: "idx_tenants_status")
@@ -121,6 +123,8 @@ model User {
 
   securityAlerts SecurityAlert[]
   invites        UserInvite[]
+
+  memberships TenantMembership[]
 
   @@unique([tenantId, email])
   @@map("users")
@@ -2610,4 +2614,54 @@ model WorkspaceInstallation {
   @@index([status], map: "idx_workspace_installations_status")
   @@index([isDeleted], map: "idx_workspace_installations_is_deleted")
   @@map("workspace_installations")
+}
+
+// ─── VS08A EWP-006: TenantMembership ──────────────────────────────────────────
+//
+// TenantMembership — relationship between Platform User (User) and Tenant (Tenant).
+// Establishes organizational participation while identity remains separate (ADR-008-016).
+// PlatformUser identity is owned by CM-002 Authentication & Identity Engine (D1).
+//
+// Domain rules:
+//   - belongs to 1 Tenant (tenantId immutable)
+//   - references 1 User (userId immutable)
+//   - (tenantId, userId) composite unique (one membership per user per tenant)
+//   - status lifecycle: Invited → Active ↔ Suspended → Removed
+//   - Removed is a terminal state (cannot be reactivated or modified)
+//   - all lifecycle transitions occur in-place on a single record (D2)
+//   - soft delete only
+
+model TenantMembership {
+  id       String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId String @map("tenant_id") @db.Uuid
+  userId   String @map("user_id") @db.Uuid
+
+  // Role within Tenant: Owner | Admin | Member | Guest
+  tenantRole String @default("Member") @map("tenant_role")
+
+  // Lifecycle: Invited | Active | Suspended | Removed
+  status String @default("Invited") @map("status")
+
+  // ES-001 mandatory audit columns
+  createdAt DateTime  @default(now()) @map("created_at")
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at")
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  // ES-001 optimistic concurrency counter
+  version BigInt @default(1) @map("version")
+
+  // Relations with explicit referential actions
+  tenant Tenant @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+  user   User   @relation(fields: [userId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([tenantId, userId], map: "tenant_memberships_tenant_user_unique")
+  @@index([tenantId], map: "idx_tenant_memberships_tenant_id")
+  @@index([userId], map: "idx_tenant_memberships_user_id")
+  @@index([status], map: "idx_tenant_memberships_status")
+  @@index([isDeleted], map: "idx_tenant_memberships_is_deleted")
+  @@map("tenant_memberships")
 }

@@ -1,0 +1,189 @@
+# EWP-006 — TenantMembership
+
+**Engine:** VS08 – License, Subscription & Tenant Management Engine
+
+**Milestone:** VS08A – Tenant Foundation
+
+**Capability Contract:** CC-006 – TenantMembership
+
+**Status:** Approved for Implementation
+
+---
+
+# Objective
+
+Implement the **TenantMembership** aggregate exactly as defined by the approved CAP architecture.
+
+This work package establishes the relationship between Platform Users and Tenants while keeping identity separate from organizational participation.
+
+---
+
+# Inputs
+
+Implementation shall comply with:
+
+* ES-001 Database Standards
+* ES-008 Architecture & Domain Modeling
+* ES-009 Data Ownership & Persistence
+* ES-010 Platform Naming & Namespace
+* ADR-008-001 through ADR-008-016
+* DDS-101A
+* CC-006
+
+---
+
+# Scope
+
+Implement only the TenantMembership aggregate.
+
+---
+
+## Domain
+
+Implement:
+
+* Aggregate Root
+* Membership lifecycle
+* Tenant association
+* User association
+* Domain validation
+
+---
+
+## Persistence
+
+Implement:
+
+* Prisma model
+* Database migration
+* Repository interface
+* Repository implementation
+
+---
+
+## Application Layer
+
+Implement:
+
+* Invite User
+* Activate Membership
+* Suspend Membership
+* Remove Membership
+* Update Tenant Role
+* Get Membership by Id
+* Get Membership by User
+* List Memberships by Tenant
+
+---
+
+## Validation
+
+Validate:
+
+* Tenant exists.
+* Tenant is Active.
+* User exists.
+* Membership uniqueness `(tenant_id, user_id)`.
+* Immutable Tenant/User association.
+* Valid lifecycle transitions.
+
+---
+
+## Explicit Exclusions
+
+Do **NOT** implement:
+
+* Authentication
+* User registration
+* WorkspaceMembership
+* Licensing
+* Billing
+* Runtime authorization
+* Permission evaluation
+
+---
+
+## Repository Requirements
+
+Implement:
+
+* Invite
+* Activate
+* Suspend
+* Remove
+* UpdateRole
+* GetById
+* GetByUser
+* ListByTenant
+* ExistsMembership
+
+---
+
+## Testing
+
+Implement:
+
+* Unit tests
+* Repository tests
+* PostgreSQL integration tests
+
+Verify:
+
+* Tenant FK enforcement
+* User FK enforcement
+* Membership uniqueness
+* Lifecycle transitions
+* Role updates
+* Archived/Removed immutability
+* Optimistic concurrency
+* Soft delete
+
+---
+
+# Acceptance Criteria
+
+Complete only when:
+
+* Aggregate implemented.
+* Migration succeeds.
+* Repository tests pass.
+* Integration tests pass.
+* Lifecycle validation implemented.
+* Audit fields implemented.
+* Soft delete implemented.
+* Tenant/User relationship enforced.
+* No architecture violations.
+* No TODOs or placeholder implementations.
+
+---
+
+# Output
+
+Provide:
+
+* Summary
+* Files Created
+* Files Modified
+* Database Changes
+* Test Results
+* Architecture Compliance
+* Capability Coverage
+* Deferred Items
+* Ready for Review
+
+---
+
+# Definition of Done
+
+The work package is complete only when:
+
+1. Implementation completed.
+2. Compliance Report generated.
+3. Review Package generated.
+4. Implementation Review approved.
+5. Certification completed.
+6. Freeze approved.
+7. Git tag created.
+8. Architecture documentation updated.
+
+Only after successful certification may implementation begin on **EWP-007 – WorkspaceMembership**.

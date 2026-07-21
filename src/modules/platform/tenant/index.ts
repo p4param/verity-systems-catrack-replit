@@ -1,5 +1,5 @@
 // VS08A: Tenant module barrel
-// Public exports for Tenant, TenantWorkspace, and WorkspaceInstallation aggregates (VS08A Tenant Foundation)
+// Public exports for Tenant, TenantWorkspace, WorkspaceInstallation, and TenantMembership aggregates (VS08A Tenant Foundation)
 
 // ─── Tenant (EWP-003) ─────────────────────────────────────────────────────────
 
@@ -108,3 +108,40 @@ export type { IWorkspaceInstallationService } from "./contracts/IWorkspaceInstal
 
 export { WorkspaceInstallationRepository } from "./repositories/WorkspaceInstallationRepository";
 export { WorkspaceInstallationService } from "./services/WorkspaceInstallationService";
+
+// ─── TenantMembership (EWP-006) ───────────────────────────────────────────────
+
+export type {
+  TenantMembershipRecord,
+  TenantMembershipStatus,
+  TenantRole,
+  InviteUserCommand,
+  ActivateMembershipCommand,
+  SuspendMembershipCommand,
+  RemoveMembershipCommand,
+  UpdateTenantRoleCommand,
+  ListTenantMembershipsQuery,
+} from "./models/TenantMembershipModels";
+export { TENANT_MEMBERSHIP_STATUS, TENANT_ROLE } from "./models/TenantMembershipModels";
+
+export { TenantMembership } from "./domain/TenantMembership";
+export { TenantMembershipLifecycle } from "./domain/TenantMembershipLifecycle";
+export { TenantMembershipValidator } from "./domain/TenantMembershipValidator";
+export {
+  MembershipNotFoundError,
+  DuplicateTenantMembershipError,
+  MembershipTenantNotFoundError,
+  MembershipTenantNotActiveError,
+  MembershipUserNotFoundError,
+  RemovedMembershipImmutableError,
+  TenantMembershipAssociationImmutableError,
+  InvalidMembershipLifecycleTransitionError,
+  TenantMembershipConcurrencyError,
+  TenantMembershipValidationError,
+} from "./domain/TenantMembershipErrors";
+
+export type { ITenantMembershipRepository } from "./contracts/ITenantMembershipRepository";
+export type { ITenantMembershipService } from "./contracts/ITenantMembershipService";
+
+export { TenantMembershipRepository } from "./repositories/TenantMembershipRepository";
+export { TenantMembershipService } from "./services/TenantMembershipService";

@@ -2,3 +2,4 @@
 export { TenantRepository } from "./TenantRepository";
 export { TenantWorkspaceRepository } from "./TenantWorkspaceRepository";
 export { WorkspaceInstallationRepository } from "./WorkspaceInstallationRepository";
+export { TenantMembershipRepository } from "./TenantMembershipRepository";
