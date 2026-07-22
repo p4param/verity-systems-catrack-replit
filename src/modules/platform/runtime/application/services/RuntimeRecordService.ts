@@ -88,9 +88,10 @@ export class RuntimeRecordService implements IRuntimeRecordService {
     return {
       tenantId: context.tenantId,
       userId: context.userId,
-      transaction: context.transactionId,
+      transaction: typeof context.transactionId === "object" ? context.transactionId : undefined,
     };
   }
+
 
   private async audit(context: RuntimeContext, action: string, details: string): Promise<void> {
     await createAuditLog({

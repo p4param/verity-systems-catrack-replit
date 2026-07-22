@@ -86,9 +86,10 @@ export default function EntitiesListPage() {
   
   const gridRef = useRef<AgGridReact>(null);
 
-  const canCreate = user?.permissions?.includes("PLATFORM_ENTITY_CREATE") ?? true;
-  const canUpdate = user?.permissions?.includes("PLATFORM_ENTITY_EDIT") ?? true;
-  const canDelete = user?.permissions?.includes("PLATFORM_ENTITY_DELETE") ?? true;
+  const hasAdmin = !user || !user.roles || user.roles.length === 0 || user.roles.some((r: string) => ["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"].includes(r));
+  const canCreate = hasAdmin || (user?.permissions?.includes("PLATFORM_ENTITY_CREATE") ?? false) || (user?.permissions?.includes("ENTITY_WRITE") ?? false);
+  const canUpdate = hasAdmin || (user?.permissions?.includes("PLATFORM_ENTITY_EDIT") ?? false) || (user?.permissions?.includes("ENTITY_WRITE") ?? false);
+  const canDelete = hasAdmin || (user?.permissions?.includes("PLATFORM_ENTITY_DELETE") ?? false) || (user?.permissions?.includes("ENTITY_WRITE") ?? false);
 
   const handleEditClick = (entity: any) => {
     router.push(`/settings/platform/entities/${entity.id}`);
@@ -613,7 +614,7 @@ export default function EntitiesListPage() {
             {canUpdate && (
               <button
                 onClick={handleBulkPublish}
-                className="px-3 py-1.5 border border-border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-emerald-50 text-emerald-600 border-emerald-200"
+                className="px-3 py-1.5 border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-emerald-50 text-emerald-600 border-emerald-200"
               >
                 <Rocket size={14} /> Publish
               </button>
@@ -621,7 +622,7 @@ export default function EntitiesListPage() {
             {canDelete && (
               <button
                 onClick={handleBulkArchive}
-                className="px-3 py-1.5 border border-border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-orange-50 text-orange-600 border-orange-200"
+                className="px-3 py-1.5 border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-orange-50 text-orange-600 border-orange-200"
               >
                 <Archive size={14} /> Archive
               </button>
@@ -629,7 +630,7 @@ export default function EntitiesListPage() {
             {canDelete && (
               <button
                 onClick={handleBulkRestore}
-                className="px-3 py-1.5 border border-border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-emerald-50 text-emerald-600 border-emerald-200"
+                className="px-3 py-1.5 border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-emerald-50 text-emerald-600 border-emerald-200"
               >
                 <ArchiveRestore size={14} /> Restore
               </button>
@@ -637,7 +638,7 @@ export default function EntitiesListPage() {
             {canDelete && (
               <button
                 onClick={handleBulkDelete}
-                className="px-3 py-1.5 border border-border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-rose-50 text-rose-600 border-rose-200"
+                className="px-3 py-1.5 border rounded-lg text-sm font-semibold flex items-center gap-1.5 hover:bg-rose-50 text-rose-600 border-rose-200"
               >
                 <Trash2 size={14} /> Delete
               </button>

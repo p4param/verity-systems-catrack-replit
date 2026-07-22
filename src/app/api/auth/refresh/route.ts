@@ -9,11 +9,11 @@ const ACCESS_TOKEN_EXP = "15m"
 const REFRESH_TOKEN_DAYS = 7
 
 export async function POST(req: Request) {
-    let refreshToken
+    let refreshToken = req.cookies.get("refreshToken")?.value
 
     try {
         const body = await req.json()
-        refreshToken = body.refreshToken
+        refreshToken = body.refreshToken || refreshToken
     } catch {
         return NextResponse.json(
             { message: "Refresh token required" },

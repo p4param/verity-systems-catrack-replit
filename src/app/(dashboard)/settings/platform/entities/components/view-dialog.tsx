@@ -37,10 +37,10 @@ export function ViewDialog({ open, onOpenChange, entityId, viewId, initialData }
   } = useForm({
     resolver: zodResolver(createViewDtoSchema),
     defaultValues: {
-      code: "",
-      name: "",
+      code: "DEFAULT_GRID",
+      name: "Default Grid",
       viewType: "GRID",
-      isDefault: false,
+      isDefault: true,
       metadata: {
         scope: "PUBLIC",
         columns: [],
@@ -61,10 +61,10 @@ export function ViewDialog({ open, onOpenChange, entityId, viewId, initialData }
     if (open) {
       if (isNew) {
         reset({
-          code: "",
-          name: "",
+          code: "DEFAULT_GRID",
+          name: "Default Grid",
           viewType: "GRID",
-          isDefault: false,
+          isDefault: true,
           metadata: {
             scope: "PUBLIC",
             columns: [],
@@ -91,6 +91,25 @@ export function ViewDialog({ open, onOpenChange, entityId, viewId, initialData }
     }
   }, [open, isNew, initialData, reset]);
 
+  // Auto-generate view code from name
+  const nameValue = watch("name");
+  useEffect(() => {
+    if (isNew && nameValue) {
+      let generated = nameValue
+        .toUpperCase()
+        .replace(/[^A-Z0-9\s_]/g, "")
+        .trim()
+        .replace(/\s+/g, "_")
+        .substring(0, 50);
+      if (/^[0-9_]/.test(generated)) {
+        generated = "V_" + generated;
+      }
+      if (generated.length >= 2) {
+        setValue("code", generated);
+      }
+    }
+  }, [nameValue, isNew, setValue]);
+
   const onSubmit = async (data: any) => {
     try {
       // Fix displayOrders automatically before submit
@@ -112,6 +131,7 @@ export function ViewDialog({ open, onOpenChange, entityId, viewId, initialData }
       alert(error.message);
     }
   };
+
 
   const viewTypes = ViewTypeEnum.options;
   const viewScopes = ViewScopeEnum.options;

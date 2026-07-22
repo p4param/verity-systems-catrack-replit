@@ -290,13 +290,14 @@ export function LayoutDialog({
 
   // ─── Form State ──────────────────────────────────────────────────────
 
-  const { register, handleSubmit, reset, watch, setValue } = useForm({
+  const { register, handleSubmit, reset, watch, setValue, formState: { errors } } = useForm({
+    resolver: zodResolver(createLayoutDtoSchema) as any,
     defaultValues: {
-      code: "",
-      name: "",
+      code: "MAIN_FORM",
+      name: "Main Form",
       description: "",
       layoutType: "FORM",
-      isDefault: false,
+      isDefault: true,
     },
   });
 
@@ -314,7 +315,7 @@ export function LayoutDialog({
 
   useEffect(() => {
     if (open) {
-      if (initialData) {
+      if (!isNew && initialData && initialData.code) {
         reset({
           code: initialData.code || "",
           name: initialData.name || "",
@@ -352,11 +353,11 @@ export function LayoutDialog({
         setActiveTab("structure");
       } else {
         reset({
-          code: "",
-          name: "",
+          code: "MAIN_FORM",
+          name: "Main Form",
           description: "",
           layoutType: "FORM",
-          isDefault: false,
+          isDefault: true,
         });
         setLayout({
           layoutVersion: "1.0",
@@ -368,22 +369,28 @@ export function LayoutDialog({
       }
       setSelectedNodeId(null);
     }
-  }, [open, initialData, reset]);
+  }, [open, isNew, initialData, reset]);
+
 
   // Auto-generate code from name
   const nameValue = watch("name");
   useEffect(() => {
     if (isNew && nameValue) {
-      const generated = nameValue
+      let generated = nameValue
         .toUpperCase()
-        .replace(/[^A-Z0-9\s]/g, "")
+        .replace(/[^A-Z0-9\s_]/g, "")
+        .trim()
         .replace(/\s+/g, "_")
         .substring(0, 50);
+      if (/^[0-9_]/.test(generated)) {
+        generated = "L_" + generated;
+      }
       if (generated.length >= 2) {
         setValue("code", generated);
       }
     }
   }, [nameValue, isNew, setValue]);
+
 
   // ─── Tree ──────────────────────────────────────────────────────────
 
@@ -540,8 +547,31 @@ export function LayoutDialog({
 
   const onSubmit = async (formData: any) => {
     try {
+      let name = (formData.name || "").trim();
+      if (!name || name.length < 2) {
+        setActiveTab("general");
+        toast.error("Layout Name must be at least 2 characters long.");
+        return;
+      }
+
+      let code = (formData.code || "").trim().toUpperCase().replace(/[^A-Z0-9_]/g, "_");
+      if (!code || code.length < 2 || !/^[A-Z][A-Z0-9_]*$/.test(code)) {
+        code = name.toUpperCase().replace(/[^A-Z0-9_]/g, "_");
+        if (!/^[A-Z]/.test(code)) {
+          code = "L_" + code;
+        }
+      }
+
+      if (code.length < 2) {
+        setActiveTab("general");
+        toast.error("Layout Code must be at least 2 characters long and start with a letter.");
+        return;
+      }
+
       const payload = {
         ...formData,
+        code,
+        name,
         layout,
       };
 
@@ -554,9 +584,25 @@ export function LayoutDialog({
       }
       onOpenChange(false);
     } catch (err: any) {
-      toast.error(err.message || "Failed to save layout");
+      let msg = err.message || "Failed to save layout";
+      if (typeof msg === "string" && msg.trim().startsWith("[")) {
+        try {
+          const parsed = JSON.parse(msg);
+          if (Array.isArray(parsed)) {
+            msg = parsed.map((i: any) => i.message || JSON.stringify(i)).join(". ");
+          }
+        } catch {}
+      }
+      toast.error(msg);
     }
   };
+
+  const onError = (formErrors: any) => {
+    setActiveTab("general");
+    toast.error("Please specify a valid Layout Name and Code in the General tab.");
+    console.error("Layout Form Validation Errors:", formErrors);
+  };
+
 
   // ─── Field lookup ──────────────────────────────────────────────────
 
@@ -602,7 +648,7 @@ export function LayoutDialog({
         </DialogHeader>
 
         <form
-          onSubmit={handleSubmit(onSubmit)}
+          onSubmit={handleSubmit(onSubmit, onError)}
           className="flex-1 flex flex-col overflow-hidden"
           onKeyDown={(e) => {
             if (
@@ -631,6 +677,7 @@ export function LayoutDialog({
                     className="w-full px-3 py-2 bg-background border border-border rounded-lg text-sm"
                     placeholder="e.g. Main Form"
                   />
+                  {errors.name && <p className="text-rose-500 text-xs mt-1">{errors.name.message as string}</p>}
                 </div>
                 <div>
                   <label className="block text-xs font-bold text-muted-foreground mb-1">
@@ -642,7 +689,9 @@ export function LayoutDialog({
                     placeholder="e.g. MAIN_FORM"
                     readOnly={!isNew}
                   />
+                  {errors.code && <p className="text-rose-500 text-xs mt-1">{errors.code.message as string}</p>}
                 </div>
+
                 <div className="col-span-2">
                   <label className="block text-xs font-bold text-muted-foreground mb-1">
                     Description

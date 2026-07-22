@@ -33,13 +33,32 @@ export class LayoutService {
       module: "LayoutService",
     });
 
-    const validatedData = createLayoutDtoSchema.parse(data);
+    let validatedData: CreateLayoutDto;
+    try {
+      validatedData = createLayoutDtoSchema.parse(data);
+    } catch (err: any) {
+      if (err.name === "ZodError" || err.issues) {
+        const issues = err.issues.map((i: any) => `${i.path.join(".")}: ${i.message}`).join(". ");
+        throw new Error(`Validation failed: ${issues}`);
+      }
+      throw err;
+    }
+
     const formattedCreatedBy = actorUserId;
 
     // Validate the layout JSON structure
     if (validatedData.layout) {
-      LayoutRootSchema.parse(validatedData.layout);
+      try {
+        LayoutRootSchema.parse(validatedData.layout);
+      } catch (err: any) {
+        if (err.name === "ZodError" || err.issues) {
+          const issues = err.issues.map((i: any) => `${i.path.join(".")}: ${i.message}`).join(". ");
+          throw new Error(`Layout structure validation failed: ${issues}`);
+        }
+        throw err;
+      }
     }
+
 
     try {
       return await prisma.$transaction(async (tx) => {
@@ -102,13 +121,32 @@ export class LayoutService {
       module: "LayoutService",
     });
 
-    const validatedData = updateLayoutDtoSchema.parse(data);
+    let validatedData: UpdateLayoutDto;
+    try {
+      validatedData = updateLayoutDtoSchema.parse(data);
+    } catch (err: any) {
+      if (err.name === "ZodError" || err.issues) {
+        const issues = err.issues.map((i: any) => `${i.path.join(".")}: ${i.message}`).join(". ");
+        throw new Error(`Validation failed: ${issues}`);
+      }
+      throw err;
+    }
+
     const formattedUpdatedBy = actorUserId;
 
     // Validate the layout JSON structure if provided
     if (validatedData.layout) {
-      LayoutRootSchema.parse(validatedData.layout);
+      try {
+        LayoutRootSchema.parse(validatedData.layout);
+      } catch (err: any) {
+        if (err.name === "ZodError" || err.issues) {
+          const issues = err.issues.map((i: any) => `${i.path.join(".")}: ${i.message}`).join(". ");
+          throw new Error(`Layout structure validation failed: ${issues}`);
+        }
+        throw err;
+      }
     }
+
 
     try {
       return await prisma.$transaction(async (tx) => {

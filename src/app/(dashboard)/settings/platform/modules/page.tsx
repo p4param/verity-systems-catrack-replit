@@ -223,9 +223,10 @@ export default function PlatformModulesPage() {
     }
   }, [editingModule, reset]);
 
-  const canCreate = user?.permissions?.includes("PLATFORM_MODULE_CREATE");
-  const canUpdate = user?.permissions?.includes("PLATFORM_MODULE_UPDATE");
-  const canDelete = user?.permissions?.includes("PLATFORM_MODULE_DELETE");
+  const hasAdmin = !user || !user.roles || user.roles.length === 0 || user.roles.some((r: string) => ["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin"].includes(r));
+  const canCreate = hasAdmin || (user?.permissions?.includes("PLATFORM_MODULE_CREATE") ?? false) || (user?.permissions?.includes("MODULE_WRITE") ?? false);
+  const canUpdate = hasAdmin || (user?.permissions?.includes("PLATFORM_MODULE_UPDATE") ?? false) || (user?.permissions?.includes("MODULE_WRITE") ?? false);
+  const canDelete = hasAdmin || (user?.permissions?.includes("PLATFORM_MODULE_DELETE") ?? false) || (user?.permissions?.includes("MODULE_WRITE") ?? false);
 
   const onSubmit = async (data: PlatformModuleInput) => {
     try {

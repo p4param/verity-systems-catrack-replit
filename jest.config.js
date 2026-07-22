@@ -65,6 +65,8 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
+    // VS08B: Commercial aggregate — unit + integration tests
+    "<rootDir>/src/modules/platform/commercial/tests/**/*.test.ts",
   ],
 };
 

@@ -407,11 +407,25 @@ export default function NavigationDesignerPage() {
           </button>
           
           <button
-            onClick={() => { setEditingGroup(null); setGroupModalOpen(true); }}
+            onClick={() => {
+              setEditingGroup(null);
+              setGroupForm({
+                code: "",
+                name: "",
+                description: "",
+                icon: "FolderLock",
+                color: "slate",
+                displayOrder: tree.length,
+                isVisible: true,
+                isCollapsedByDefault: false
+              });
+              setGroupModalOpen(true);
+            }}
             className="p-2 border border-border rounded-xl hover:bg-muted/50 text-sm font-semibold flex items-center gap-1.5"
           >
             <FolderPlus size={16} /> Add Group
           </button>
+
 
           <button
             onClick={() => { setEditingItem(null); setItemModalOpen(true); }}

@@ -28,8 +28,11 @@ export class EavRepository implements IRuntimeRepository {
   // ─── Private helpers ─────────────────────────────────────────────────────
 
   private getDb(ctx: PersistenceExecutionContext) {
-    return ctx.transaction ?? prisma;
+    return (ctx.transaction && typeof ctx.transaction === "object" && "entityRecord" in ctx.transaction)
+      ? ctx.transaction
+      : prisma;
   }
+
 
   private flattenRecord(record: any, manifest: RuntimeManifest): RuntimeRecord {
     const flat: any = {

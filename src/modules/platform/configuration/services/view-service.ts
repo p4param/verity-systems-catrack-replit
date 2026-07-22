@@ -23,8 +23,19 @@ export class ViewService {
   async createView(entityId: string, data: CreateViewDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating view creation for entity: ${entityId}`, { tenantId, userId: actorUserId, module: "ViewService" });
 
-    const validatedData = createViewDtoSchema.parse(data);
+    let validatedData: CreateViewDto;
+    try {
+      validatedData = createViewDtoSchema.parse(data);
+    } catch (err: any) {
+      if (err.name === "ZodError" || err.issues) {
+        const issues = err.issues.map((i: any) => `${i.path.join(".")}: ${i.message}`).join(". ");
+        throw new Error(`Validation failed: ${issues}`);
+      }
+      throw err;
+    }
+
     const formattedCreatedBy = actorUserId;
+
 
     try {
       return await prisma.$transaction(async (tx) => {

@@ -3,11 +3,11 @@ import crypto from "crypto"
 import { prisma } from "@/lib/prisma"
 
 export async function POST(req: Request) {
-    let refreshToken
+    let refreshToken = req.cookies.get("refreshToken")?.value
 
     try {
         const body = await req.json()
-        refreshToken = body.refreshToken
+        refreshToken = body.refreshToken || refreshToken
     } catch {
         // If JSON parsing fails or no body, treat as no token provided
     }

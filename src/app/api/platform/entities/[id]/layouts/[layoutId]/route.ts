@@ -36,10 +36,19 @@ export async function PUT(
     return NextResponse.json({ success: true, data: updated });
   } catch (e) {
     if (e instanceof Response) return e;
-    const msg = e instanceof Error ? e.message : "Server error";
+    let msg = e instanceof Error ? e.message : "Server error";
+    if (typeof msg === "string" && msg.trim().startsWith("[") && msg.trim().endsWith("]")) {
+      try {
+        const parsed = JSON.parse(msg);
+        if (Array.isArray(parsed)) {
+          msg = parsed.map((item: any) => item.message || JSON.stringify(item)).join("; ");
+        }
+      } catch {}
+    }
     return NextResponse.json({ success: false, error: { message: msg, code: "SERVER_ERROR" } }, { status: 500 });
   }
 }
+
 
 export async function DELETE(
   req: Request,

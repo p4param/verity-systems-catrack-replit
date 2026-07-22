@@ -88,6 +88,7 @@ export class NavigationRepository {
   }
 
   async createGroup(data: CreateNavigationGroupDto) {
+    const validUser = (data.createdBy && data.createdBy.trim()) ? data.createdBy : "00000000-0000-0000-0000-000000000000";
     return prisma.navigationGroup.create({
       data: {
         code: data.code,
@@ -98,13 +99,14 @@ export class NavigationRepository {
         displayOrder: data.displayOrder ?? 0,
         isVisible: data.isVisible !== false,
         isCollapsedByDefault: data.isCollapsedByDefault === true,
-        createdBy: data.createdBy,
-        updatedBy: data.createdBy
+        createdBy: validUser,
+        updatedBy: validUser
       }
     });
   }
 
   async updateGroup(id: string, data: UpdateNavigationGroupDto) {
+    const validUser = (data.updatedBy && data.updatedBy.trim()) ? data.updatedBy : "00000000-0000-0000-0000-000000000000";
     return prisma.navigationGroup.update({
       where: { id },
       data: {
@@ -115,7 +117,7 @@ export class NavigationRepository {
         displayOrder: data.displayOrder,
         isVisible: data.isVisible,
         isCollapsedByDefault: data.isCollapsedByDefault,
-        updatedBy: data.updatedBy
+        updatedBy: validUser
       }
     });
   }
@@ -157,6 +159,7 @@ export class NavigationRepository {
   }
 
   async createItem(data: CreateNavigationItemDto) {
+    const validUser = (data.createdBy && data.createdBy.trim()) ? data.createdBy : "00000000-0000-0000-0000-000000000000";
     return prisma.navigationItem.create({
       data: {
         title: data.title,
@@ -177,13 +180,14 @@ export class NavigationRepository {
         favoriteAllowed: data.favoriteAllowed !== false,
         searchable: data.searchable !== false,
         metadata: data.metadata || {},
-        createdBy: data.createdBy,
-        updatedBy: data.createdBy
+        createdBy: validUser,
+        updatedBy: validUser
       }
     });
   }
 
   async updateItem(id: string, data: UpdateNavigationItemDto) {
+    const validUser = (data.updatedBy && data.updatedBy.trim()) ? data.updatedBy : "00000000-0000-0000-0000-000000000000";
     return prisma.navigationItem.update({
       where: { id },
       data: {
@@ -205,7 +209,7 @@ export class NavigationRepository {
         favoriteAllowed: data.favoriteAllowed,
         searchable: data.searchable,
         metadata: data.metadata,
-        updatedBy: data.updatedBy
+        updatedBy: validUser
       }
     });
   }

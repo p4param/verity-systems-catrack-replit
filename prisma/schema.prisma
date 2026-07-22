@@ -83,6 +83,8 @@ model Tenant {
 
     memberships TenantMembership[]
 
+    subscriptions TenantSubscription[]
+
   @@index([code], map: "idx_tenants_code")
   @@index([name], map: "idx_tenants_name")
   @@index([status], map: "idx_tenants_status")
@@ -2725,3 +2727,61 @@ model WorkspaceMembership {
   @@index([isDeleted], map: "idx_workspace_memberships_is_deleted")
   @@map("workspace_memberships")
 }
+
+// ─── VS08B EWP-008: TenantSubscription ───────────────────────────────────────
+//
+// TenantSubscription — commercial agreement between a Tenant and the CAP Platform.
+// Aggregate Root for Commercial Agreements bounded context (ADR-008-018).
+//
+// Domain rules:
+//   - code is immutable and unique within owning Tenant (tenant_id, code)
+//   - belongs to 1 Tenant (tenantId immutable)
+//   - references 1 SubscriptionPlan (subscriptionPlanId immutable)
+//   - status lifecycle: Draft → Trial → Active ↔ Suspended → Expired | Cancelled → Archived
+//   - Archived is a terminal state (cannot be reactivated or modified)
+//   - soft delete only
+
+model TenantSubscription {
+  id                   String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId             String    @db.Uuid @map("tenant_id")
+  subscriptionPlanId   String    @db.Uuid @map("subscription_plan_id")
+  code                 String    @map("code")
+  name                 String    @map("name")
+
+  // Configuration & Terms
+  renewalPolicy        String    @default("AUTO_RENEW") @map("renewal_policy")
+  externalReferenceId  String?   @map("external_reference_id")
+
+  // Lifecycle: Draft | Trial | Active | Suspended | Expired | Cancelled | Archived
+  status               String    @default("Draft") @map("status")
+
+  // Timestamps
+  startDate            DateTime  @map("start_date")
+  endDate              DateTime? @map("end_date")
+  trialEndDate         DateTime? @map("trial_end_date")
+  renewedAt            DateTime? @map("renewed_at")
+  cancelledAt          DateTime? @map("cancelled_at")
+
+  // ES-001 mandatory audit columns
+  createdAt            DateTime  @default(now()) @map("created_at")
+  createdBy            String?   @db.Uuid @map("created_by")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  updatedBy            String?   @db.Uuid @map("updated_by")
+  isDeleted            Boolean   @default(false) @map("is_deleted")
+  deletedAt            DateTime? @map("deleted_at")
+  deletedBy            String?   @db.Uuid @map("deleted_by")
+
+  // ES-001 optimistic concurrency counter
+  version              BigInt    @default(1) @map("version")
+
+  // Relations with explicit referential actions
+  tenant               Tenant    @relation(fields: [tenantId], references: [id], onDelete: Restrict, onUpdate: Restrict)
+
+  @@unique([tenantId, code], map: "tenant_subscriptions_tenant_code_unique")
+  @@index([tenantId], map: "idx_tenant_subscriptions_tenant_id")
+  @@index([subscriptionPlanId], map: "idx_tenant_subscriptions_plan_id")
+  @@index([status], map: "idx_tenant_subscriptions_status")
+  @@index([isDeleted], map: "idx_tenant_subscriptions_is_deleted")
+  @@map("tenant_subscriptions")
+}
+

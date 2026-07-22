@@ -61,70 +61,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         accessTokenRef.current = accessToken
     }, [accessToken])
 
-    // On mount, check if token exists and load user
-    useEffect(() => {
-        const token = localStorage.getItem("access_token")
-        if (token) {
-            // Verify if expired
-            if (!isTokenExpired(token)) {
-                setAccessToken(token)
-                try {
-                    const payloadBase64 = token.split(".")[1]
-                    const decoded = JSON.parse(atob(payloadBase64))
-                    setUser(new CurrentUser(decoded as any))
-                } catch (e) {
-                    localStorage.removeItem("access_token")
-                }
-            } else {
-                localStorage.removeItem("access_token")
-            }
-        }
-        setLoading(false)
-    }, [])
-
-    const handleLoginResponse = (data: any) => {
-        if (data.mfaRequired) {
-            setMfaRequired(true)
-            tempTokenRef.current = data.tempToken
-            return data
-        }
-
-        if (data.mfaSetupRequired) {
-            setMfaSetupRequired(true)
-            tempTokenRef.current = data.tempToken
-            return data
-        }
-
-        const token = data.accessToken
-        localStorage.setItem("access_token", token)
-        setAccessToken(token)
-        try {
-            const payloadBase64 = token.split(".")[1]
-            const decoded = JSON.parse(atob(payloadBase64))
-            setUser(new CurrentUser(decoded as any))
-        } catch (e) {
-            console.error("Failed to decode token", e)
-        }
-        return data
-    }
-
-    const handleMFAResponse = (data: any) => {
-        const token = data.accessToken
-        localStorage.setItem("access_token", token)
-        setAccessToken(token)
-        try {
-            const payloadBase64 = token.split(".")[1]
-            const decoded = JSON.parse(atob(payloadBase64))
-            setUser(new CurrentUser(decoded as any))
-            setMfaRequired(false)
-            setMfaSetupRequired(false)
-            tempTokenRef.current = null
-        } catch (e) {
-            console.error("Failed to decode token", e)
-        }
-        return data
-    }
-
     // Keep loading ref in sync for async functions
     const loadingRef = useRef(true)
     useEffect(() => {
@@ -138,9 +74,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
        Session helpers
     ---------------------------------------- */
 
-    const setSession = (access: string, refresh: string) => {
+    const setSession = (access: string) => {
         setAccessToken(access)
-        localStorage.setItem("refreshToken", refresh)
     }
 
     const clearSession = () => {
@@ -149,7 +84,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         setMfaRequired(false)
         setMfaSetupRequired(false)
         tempTokenRef.current = null
-        localStorage.removeItem("refreshToken")
     }
 
     /* ----------------------------------------
@@ -182,7 +116,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
         // Standard Login
         if (data.accessToken) {
-            setSession(data.accessToken, data.refreshToken)
+            setSession(data.accessToken)
             setUser(data.user)
             router.push("/dashboard")
         }
@@ -208,7 +142,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
         }
 
         const data = await res.json()
-        setSession(data.accessToken, data.refreshToken)
+        setSession(data.accessToken)
         setUser(data.user)
 
         // Clear MFA state on success
@@ -221,14 +155,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const logout = useCallback(async () => {
         try {
-            const refreshToken = localStorage.getItem("refreshToken")
-            if (refreshToken) {
-                await fetch("/api/auth/logout", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify({ refreshToken })
-                })
-            }
+            await fetch("/api/auth/logout", { method: "POST })
         } catch {
             // ignore
         } finally {
@@ -242,19 +169,12 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     ---------------------------------------- */
 
     const refreshTokensInternal = async (): Promise<string | null> => {
-        const refreshToken = localStorage.getItem("refreshToken")
-        if (!refreshToken) return null
-
-        const res = await fetch("/api/auth/refresh", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ refreshToken })
-        })
+        const res = await fetch("/api/auth/refresh", { method: "POST" })
 
         if (!res.ok) return null
 
         const data = await res.json()
-        setSession(data.accessToken, data.refreshToken)
+        setSession(data.accessToken)
         if (data.user) {
             setUser(data.user)
         }
@@ -344,14 +264,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     useEffect(() => {
         const restore = async () => {
-            const hasRefreshToken = !!localStorage.getItem("refreshToken")
-            if (!hasRefreshToken) {
-                setLoading(false)
-                return
-            }
-
-            const ok = await refreshTokens()
-            if (!ok) {
+            const token = await getRefreshTokenSingleton()
+            if (!token) {
                 clearSession()
                 setLoading(false)
                 return

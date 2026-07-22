@@ -1825,6 +1825,30 @@ exports.Prisma.WorkspaceMembershipScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.TenantSubscriptionScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  subscriptionPlanId: 'subscriptionPlanId',
+  code: 'code',
+  name: 'name',
+  renewalPolicy: 'renewalPolicy',
+  externalReferenceId: 'externalReferenceId',
+  status: 'status',
+  startDate: 'startDate',
+  endDate: 'endDate',
+  trialEndDate: 'trialEndDate',
+  renewedAt: 'renewedAt',
+  cancelledAt: 'cancelledAt',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1990,7 +2014,8 @@ exports.Prisma.ModelName = {
   TenantWorkspace: 'TenantWorkspace',
   WorkspaceInstallation: 'WorkspaceInstallation',
   TenantMembership: 'TenantMembership',
-  WorkspaceMembership: 'WorkspaceMembership'
+  WorkspaceMembership: 'WorkspaceMembership',
+  TenantSubscription: 'TenantSubscription'
 };
 
 /**
