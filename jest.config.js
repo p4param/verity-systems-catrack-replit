@@ -30,6 +30,13 @@ const PROFILES = {
     // VS08A: Catalog & Tenant aggregates — unit tests only (no DB required)
     "<rootDir>/src/modules/platform/catalog/tests/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
+    // Configuration module — unit tests only (no DB required)
+    "<rootDir>/src/modules/platform/configuration/tests/*.test.ts",
+    // VS09: Notification Engine — domain & application unit tests (no DB required)
+    "<rootDir>/src/modules/platform/notification/domain/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
+    // VS09: Notification Engine — repository unit tests (mocked, no DB required)
+    "<rootDir>/src/modules/platform/notification/infrastructure/persistence/__tests__/NotificationTemplateRepository.test.ts",
   ],
   developer: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
@@ -41,6 +48,13 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
+    // Configuration module — unit + integration tests
+    "<rootDir>/src/modules/platform/configuration/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/configuration/tests/integration/*.test.ts",
+    // VS09: Notification Engine — unit + integration tests (developer profile requires DB)
+    "<rootDir>/src/modules/platform/notification/domain/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/infrastructure/**/__tests__/*.test.ts",
   ],
   certification: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
@@ -55,6 +69,13 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
+    // Configuration module — unit + integration tests
+    "<rootDir>/src/modules/platform/configuration/tests/*.test.ts",
+    "<rootDir>/src/modules/platform/configuration/tests/integration/*.test.ts",
+    // VS09: Notification Engine — unit + integration tests (certification profile requires DB)
+    "<rootDir>/src/modules/platform/notification/domain/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/infrastructure/**/__tests__/*.test.ts",
   ],
   nightly: [
     "<rootDir>/src/modules/platform/persistence/__tests__/**/*.test.ts",
@@ -65,6 +86,12 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/catalog/tests/integration/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/*.test.ts",
     "<rootDir>/src/modules/platform/tenant/tests/integration/*.test.ts",
+    // Configuration module — unit + integration tests
+    "<rootDir>/src/modules/platform/configuration/tests/**/*.test.ts",
+    // VS09: Notification Engine — unit + integration tests (nightly profile requires DB)
+    "<rootDir>/src/modules/platform/notification/domain/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
+    "<rootDir>/src/modules/platform/notification/infrastructure/**/__tests__/*.test.ts",
     // VS08B: Commercial aggregate — unit + integration tests
     "<rootDir>/src/modules/platform/commercial/tests/**/*.test.ts",
   ],

@@ -1,4 +1,5 @@
 import { CurrentUser } from "@/lib/auth/auth-types";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 
 export type EventResource = {
   tenantId: string;
@@ -30,8 +31,8 @@ export type EventPermissionType = keyof typeof EventPermissions;
 
 // Row-level security: check if user owns, is assigned, or belongs to the correct branch/city
 export function checkRowLevelSecurity(user: CurrentUser, resource: EventResource): boolean {
-  const userUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
-  const tenantUuid = "00000000-0000-0000-0000-" + user.tenantId.toString().padStart(12, "0");
+  const userUuid = toCanonicalUuid(user.sub);
+  const tenantUuid = toCanonicalUuid(user.tenantId);
 
   // 1. Hard tenant isolation
   if (resource.tenantId !== tenantUuid) {

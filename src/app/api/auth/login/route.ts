@@ -164,10 +164,9 @@ export async function POST(req: Request) {
             { expiresIn: ACCESS_TOKEN_EXP }
         )
 
-        // 8️⃣ Response
+        // 8️⃣ Response (refreshToken omitted from JSON body per Platform Security Invariant)
         const response = NextResponse.json({
             accessToken,
-            refreshToken,
             expiresIn: 15 * 60,
             user: {
                 id: user.id,

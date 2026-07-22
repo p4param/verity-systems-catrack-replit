@@ -1,15 +1,18 @@
-import { NextResponse } from "next/server"
+import { NextResponse, NextRequest } from "next/server"
 import crypto from "crypto"
 import { prisma } from "@/lib/prisma"
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     let refreshToken = req.cookies.get("refreshToken")?.value
 
     try {
-        const body = await req.json()
-        refreshToken = body.refreshToken || refreshToken
+        const text = await req.text()
+        if (text) {
+            const body = JSON.parse(text)
+            refreshToken = body.refreshToken || refreshToken
+        }
     } catch {
-        // If JSON parsing fails or no body, treat as no token provided
+        // Ignore JSON parse error, fallback to cookie
     }
 
     if (!refreshToken) {

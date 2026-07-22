@@ -3,10 +3,12 @@ import { requirePermission } from "@/lib/auth/auth-guard";
 import { prisma } from "@/lib/prisma";
 import { CreateEventSchema } from "@/modules/events/validations";
 
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
+
 export async function GET(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_VIEW");
-    const tenantUuid = "00000000-0000-0000-0000-" + user.tenantId.toString().padStart(12, "0");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
     const { searchParams } = new URL(req.url);
 
     // Pagination
@@ -109,8 +111,8 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_MANAGE");
-    const tenantUuid = "00000000-0000-0000-0000-" + user.tenantId.toString().padStart(12, "0");
-    const creatorUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
+    const creatorUuid = toCanonicalUuid(user.sub);
 
     const body = await req.json();
     const validated = CreateEventSchema.parse(body);

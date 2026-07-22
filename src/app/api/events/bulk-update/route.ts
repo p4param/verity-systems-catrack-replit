@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/auth/auth-guard";
 import { prisma } from "@/lib/prisma";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 import { z } from "zod";
 
 const BulkUpdateSchema = z.object({
@@ -12,8 +13,8 @@ const BulkUpdateSchema = z.object({
 export async function POST(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_MANAGE");
-    const tenantUuid = "00000000-0000-0000-0000-" + user.tenantId.toString().padStart(12, "0");
-    const updaterUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
+    const updaterUuid = toCanonicalUuid(user.sub);
 
     const body = await req.json();
     const { ids, action, payload } = BulkUpdateSchema.parse(body);
@@ -34,13 +35,7 @@ export async function POST(req: Request) {
         data: { managerId: payload.managerId, updatedBy: updaterUuid },
       });
       updatedCount = result.count;
-    } else if (action === "archive") {
-      const result = await prisma.cateringEvent.updateMany({
-        where,
-        data: { isDeleted: true, deletedAt: new Date(), deletedBy: updaterUuid },
-      });
-      updatedCount = result.count;
-    } else if (action === "delete") {
+    } else if (action === "archive" || action === "delete") {
       const result = await prisma.cateringEvent.updateMany({
         where,
         data: { isDeleted: true, deletedAt: new Date(), deletedBy: updaterUuid },

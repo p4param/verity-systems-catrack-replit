@@ -6,19 +6,28 @@
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/auth/auth-guard";
 import { prisma } from "@/lib/prisma";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 
 const DEPRECATION_HEADER = { "X-Deprecated": "true" };
-
-function systemUuid() { return "00000000-0000-0000-0000-000000000001"; }
 
 export async function PUT(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const user = requirePermission(req, "INVENTORY_MASTER_UPDATE");
+    const tid = toCanonicalUuid(user.tenantId);
+    const userId = toCanonicalUuid(user.sub);
     const { id } = await params;
     const { name, code } = await req.json();
+
+    const existing = await prisma.cateringEventType.findFirst({
+      where: { id, tenantId: tid, isDeleted: false }
+    });
+    if (!existing) {
+      return NextResponse.json({ message: "Master record not found or access denied" }, { status: 404 });
+    }
+
     const item = await prisma.cateringEventType.update({
-      where: { id },
-      data: { name, code: code?.toUpperCase(), updatedBy: systemUuid() },
+      where: { id: existing.id },
+      data: { name, code: code?.toUpperCase(), updatedBy: userId },
     });
     return NextResponse.json(item, { headers: DEPRECATION_HEADER });
   } catch (e) {
@@ -29,11 +38,21 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
 
 export async function DELETE(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
-    requirePermission(req, "INVENTORY_MASTER_DELETE");
+    const user = requirePermission(req, "INVENTORY_MASTER_DELETE");
+    const tid = toCanonicalUuid(user.tenantId);
+    const userId = toCanonicalUuid(user.sub);
     const { id } = await params;
+
+    const existing = await prisma.cateringEventType.findFirst({
+      where: { id, tenantId: tid, isDeleted: false }
+    });
+    if (!existing) {
+      return NextResponse.json({ message: "Master record not found or access denied" }, { status: 404 });
+    }
+
     await prisma.cateringEventType.update({
-      where: { id },
-      data: { isDeleted: true, deletedAt: new Date(), deletedBy: systemUuid() },
+      where: { id: existing.id },
+      data: { isDeleted: true, deletedAt: new Date(), deletedBy: userId },
     });
     return NextResponse.json({ success: true });
   } catch (e) {

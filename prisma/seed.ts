@@ -47,6 +47,32 @@ async function main() {
     "AUDIT_READ",
     "SETTINGS_READ",
     "SETTINGS_WRITE",
+    "PLATFORM_MODULE_VIEW",
+    "PLATFORM_MODULE_CREATE",
+    "PLATFORM_MODULE_UPDATE",
+    "PLATFORM_MODULE_DELETE",
+    "PLATFORM_MODULE_ACTIVATE",
+    "PLATFORM_MODULE_DEACTIVATE",
+    "PLATFORM_MODULE_REORDER",
+    "PLATFORM_MODULE_CLONE",
+    "PLATFORM_ENTITY_VIEW",
+    "PLATFORM_ENTITY_CREATE",
+    "PLATFORM_ENTITY_EDIT",
+    "PLATFORM_ENTITY_DELETE",
+    "PLATFORM_ENTITY_ARCHIVE",
+    "PLATFORM_ENTITY_RESTORE",
+    "PLATFORM_ENTITY_DUPLICATE",
+    "PLATFORM_ENTITY_PUBLISH",
+    "PLATFORM_FIELD_VIEW",
+    "PLATFORM_FIELD_CREATE",
+    "PLATFORM_FIELD_EDIT",
+    "PLATFORM_FIELD_DELETE",
+    "PLATFORM_FIELD_ARCHIVE",
+    "PLATFORM_FIELD_PUBLISH",
+    "PLATFORM_VIEW_VIEW",
+    "PLATFORM_VIEW_CREATE",
+    "PLATFORM_VIEW_EDIT",
+    "PLATFORM_VIEW_DELETE",
   ];
 
   const permissions: Record<string, { id: string; code: string }> = {};
@@ -158,16 +184,19 @@ async function main() {
   });
   console.log(`✅ Admin User: ${adminUser.email} [${adminUser.id}]`);
 
-  // ── 6. Assign SUPER_ADMIN role to admin user ───────────────────────────────
-  await prisma.userRole.upsert({
-    where: { userId_roleId: { userId: adminUser.id, roleId: superAdminRole.id } },
-    update: {},
-    create: {
-      userId: adminUser.id,
-      roleId: superAdminRole.id,
-    },
-  });
-  console.log(`✅ Admin user assigned SUPER_ADMIN role`);
+  // ── 6. Assign ALL roles to admin user ─────────────────────────────────────
+  const allRoles = [superAdminRole, adminRole, userRole];
+  for (const role of allRoles) {
+    await prisma.userRole.upsert({
+      where: { userId_roleId: { userId: adminUser.id, roleId: role.id } },
+      update: {},
+      create: {
+        userId: adminUser.id,
+        roleId: role.id,
+      },
+    });
+  }
+  console.log(`✅ Admin user assigned all roles (SUPER_ADMIN, ADMIN, USER)`);
 
   // ── 7. Summary ─────────────────────────────────────────────────────────────
   console.log("\n🎉 VS05Z Seed complete.");

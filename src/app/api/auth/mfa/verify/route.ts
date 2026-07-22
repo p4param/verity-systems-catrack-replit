@@ -144,10 +144,9 @@ export async function POST(req: Request) {
             }
         });
 
-        // Create response with cookies
+        // Create response with cookies (refreshToken omitted from JSON body per Platform Security Invariant)
         const response = NextResponse.json({
             accessToken,
-            refreshToken,
             expiresIn: 15 * 60,
             user: {
                 id: user.id,

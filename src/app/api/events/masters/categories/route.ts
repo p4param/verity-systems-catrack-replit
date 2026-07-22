@@ -15,6 +15,7 @@
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/auth/auth-guard";
 import { prisma } from "@/lib/prisma";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 
 const DEPRECATION_HEADER = {
   "X-Deprecated": "true",
@@ -22,13 +23,10 @@ const DEPRECATION_HEADER = {
   "X-Migration-Target": "/api/masters/categories?module=EVENT&key=EVENT_CATEGORY",
 };
 
-function tenantUuid(tenantId: string) { return tenantId; }
-function systemUuid() { return "00000000-0000-0000-0000-000000000001"; }
-
 export async function GET(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_VIEW");
-    const tid = tenantUuid(user.tenantId);
+    const tid = toCanonicalUuid(user.tenantId);
     const items = await prisma.cateringEventCategory.findMany({
       where: { tenantId: tid, isDeleted: false },
       orderBy: { name: "asc" },
@@ -43,11 +41,12 @@ export async function GET(req: Request) {
 export async function POST(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_MASTER_CREATE");
-    const tid = tenantUuid(user.tenantId);
+    const tid = toCanonicalUuid(user.tenantId);
+    const userId = toCanonicalUuid(user.sub);
     const { name, code } = await req.json();
     if (!name || !code) return NextResponse.json({ message: "name and code are required" }, { status: 400 });
     const item = await prisma.cateringEventCategory.create({
-      data: { tenantId: tid, companyId: tid, branchId: tid, name, code: code.toUpperCase(), createdBy: systemUuid(), updatedBy: systemUuid() },
+      data: { tenantId: tid, companyId: tid, branchId: tid, name, code: code.toUpperCase(), createdBy: userId, updatedBy: userId },
     });
     return NextResponse.json(item, { status: 201, headers: DEPRECATION_HEADER });
   } catch (e) {

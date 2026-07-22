@@ -2,16 +2,18 @@ import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/auth/auth-guard";
 import { EventService } from "@/modules/events/services/event-service";
 import { UpdateEventSchema } from "@/modules/events/validations";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 
 const service = new EventService();
 
 export async function GET(req: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
     const { id } = await params;
-    requirePermission(req, "INVENTORY_VIEW");
+    const user = requirePermission(req, "INVENTORY_VIEW");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
     const event = await service.getEventById(id);
-    if (!event) {
-      return NextResponse.json({ message: "Event not found" }, { status: 404 });
+    if (!event || event.tenantId !== tenantUuid || event.isDeleted) {
+      return NextResponse.json({ message: "Event not found or access denied" }, { status: 404 });
     }
     return NextResponse.json(event);
   } catch (error) {
@@ -25,7 +27,13 @@ export async function PUT(req: Request, { params }: { params: Promise<{ id: stri
   try {
     const { id } = await params;
     const user = requirePermission(req, "INVENTORY_MANAGE");
-    const updatedByUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
+    const updatedByUuid = toCanonicalUuid(user.sub);
+
+    const existing = await service.getEventById(id);
+    if (!existing || existing.tenantId !== tenantUuid || existing.isDeleted) {
+      return NextResponse.json({ message: "Event not found or access denied" }, { status: 404 });
+    }
 
     const body = await req.json();
     const validated = UpdateEventSchema.parse(body);
@@ -49,7 +57,13 @@ export async function DELETE(req: Request, { params }: { params: Promise<{ id: s
   try {
     const { id } = await params;
     const user = requirePermission(req, "INVENTORY_MANAGE");
-    const deletedByUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
+    const tenantUuid = toCanonicalUuid(user.tenantId);
+    const deletedByUuid = toCanonicalUuid(user.sub);
+
+    const existing = await service.getEventById(id);
+    if (!existing || existing.tenantId !== tenantUuid || existing.isDeleted) {
+      return NextResponse.json({ message: "Event not found or access denied" }, { status: 404 });
+    }
 
     await service.deleteEvent(id, deletedByUuid);
     return NextResponse.json({ success: true });

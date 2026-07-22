@@ -1,11 +1,12 @@
 import { NextResponse } from "next/server";
 import { requirePermission } from "@/lib/auth/auth-guard";
 import { rescheduleEvent } from "@/modules/events/actions/calendar";
+import { toCanonicalUuid } from "@/lib/auth/identity-uuid";
 
 export async function POST(req: Request) {
   try {
     const user = requirePermission(req, "INVENTORY_MANAGE");
-    const updatedByUuid = "00000000-0000-0000-0000-" + user.sub.toString().padStart(12, "0");
+    const updatedByUuid = toCanonicalUuid(user.sub);
 
     const body = await req.json();
     const { id, startAt, endAt } = body;

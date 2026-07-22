@@ -61,13 +61,10 @@ export async function POST(req: Request) {
             }
         })
 
-        // Email stub (dev only)
-        console.log("============================================================")
-        console.log(`[ForgotPW] User Found: ${user.email}`)
-        console.log(`[ForgotPW] Reset link: http://localhost:3000/reset-password?token=${token}`)
-        console.log("============================================================")
+        // Password reset token created successfully
+        console.log(`[ForgotPW] Password reset request processed for user email: ${user.email} [Tenant: ${user.tenantId}]`)
     } else {
-        console.log(`[ForgotPW] User NOT found or inactive for email: ${email}`)
+        console.log(`[ForgotPW] Password reset request processed (User status verified)`)
     }
 
     return NextResponse.json({

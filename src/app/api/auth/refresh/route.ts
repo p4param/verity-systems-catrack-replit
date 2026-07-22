@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server"
+import { NextResponse, NextRequest } from "next/server"
 import crypto from "crypto"
 import { prisma } from "@/lib/prisma"
 import { signJwt } from "@/lib/auth/jwt"
@@ -8,17 +8,17 @@ import { getUserPermissions } from "@/lib/auth/permission"
 const ACCESS_TOKEN_EXP = "15m"
 const REFRESH_TOKEN_DAYS = 7
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
     let refreshToken = req.cookies.get("refreshToken")?.value
 
     try {
-        const body = await req.json()
-        refreshToken = body.refreshToken || refreshToken
+        const text = await req.text()
+        if (text) {
+            const body = JSON.parse(text)
+            refreshToken = body.refreshToken || refreshToken
+        }
     } catch {
-        return NextResponse.json(
-            { message: "Refresh token required" },
-            { status: 400 }
-        )
+        // Ignore JSON parse error if body is empty or not JSON, fallback to cookie
     }
 
     if (!refreshToken) {
@@ -109,10 +109,9 @@ export async function POST(req: Request) {
         { expiresIn: ACCESS_TOKEN_EXP }
     )
 
-    // 🔁 Response
+    // 🔁 Response (refreshToken omitted from JSON body per Platform Security Invariant)
     const response = NextResponse.json({
         accessToken: newAccessToken,
-        refreshToken: newRefreshToken,
         expiresIn: 15 * 60,
         user: {
             id: record.user.id,

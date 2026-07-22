@@ -1849,6 +1849,182 @@ exports.Prisma.TenantSubscriptionScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.NotificationTemplateScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  templateCode: 'templateCode',
+  templateName: 'templateName',
+  description: 'description',
+  category: 'category',
+  status: 'status',
+  templateVersion: 'templateVersion',
+  parentTemplateId: 'parentTemplateId',
+  supportedChannels: 'supportedChannels',
+  supportedLanguages: 'supportedLanguages',
+  defaultLanguage: 'defaultLanguage',
+  brandingProfileId: 'brandingProfileId',
+  isSystemTemplate: 'isSystemTemplate',
+  isActive: 'isActive',
+  variableSchema: 'variableSchema',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.NotificationChannelScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  channelCode: 'channelCode',
+  channelName: 'channelName',
+  description: 'description',
+  channelType: 'channelType',
+  status: 'status',
+  priority: 'priority',
+  isDefault: 'isDefault',
+  isEnabled: 'isEnabled',
+  supportedTemplateCategories: 'supportedTemplateCategories',
+  configurationMetadata: 'configurationMetadata',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.NotificationDeliveryScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  notificationIntentId: 'notificationIntentId',
+  correlationId: 'correlationId',
+  idempotencyKey: 'idempotencyKey',
+  templateId: 'templateId',
+  templateVersion: 'templateVersion',
+  channelId: 'channelId',
+  providerId: 'providerId',
+  recipientUserId: 'recipientUserId',
+  recipientEndpoint: 'recipientEndpoint',
+  deliveryStatus: 'deliveryStatus',
+  retryCount: 'retryCount',
+  maxRetries: 'maxRetries',
+  nextAttemptAt: 'nextAttemptAt',
+  renderedSubject: 'renderedSubject',
+  renderedBody: 'renderedBody',
+  failureReason: 'failureReason',
+  dispatchedAt: 'dispatchedAt',
+  acceptedAt: 'acceptedAt',
+  deliveredAt: 'deliveredAt',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.DeliveryAttemptRecordScalarFieldEnum = {
+  id: 'id',
+  deliveryId: 'deliveryId',
+  attemptNumber: 'attemptNumber',
+  providerId: 'providerId',
+  status: 'status',
+  responseCode: 'responseCode',
+  errorDetails: 'errorDetails',
+  attemptedAt: 'attemptedAt',
+  completedAt: 'completedAt'
+};
+
+exports.Prisma.NotificationRecipientScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  recipientSequence: 'recipientSequence',
+  recipientType: 'recipientType',
+  recipientUserId: 'recipientUserId',
+  recipientGroupId: 'recipientGroupId',
+  recipientEndpoint: 'recipientEndpoint',
+  channelId: 'channelId',
+  deliveryPreferenceSnapshot: 'deliveryPreferenceSnapshot',
+  culture: 'culture',
+  language: 'language',
+  timezone: 'timezone',
+  status: 'status',
+  suppressionReason: 'suppressionReason',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.ProviderProfileScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  providerCode: 'providerCode',
+  providerName: 'providerName',
+  description: 'description',
+  providerType: 'providerType',
+  status: 'status',
+  healthStatus: 'healthStatus',
+  priority: 'priority',
+  isDefault: 'isDefault',
+  isEnabled: 'isEnabled',
+  supportedChannels: 'supportedChannels',
+  capabilityMetadata: 'capabilityMetadata',
+  configurationMetadata: 'configurationMetadata',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.DeliveryTrackingScalarFieldEnum = {
+  id: 'id',
+  notificationId: 'notificationId',
+  tenantId: 'tenantId',
+  workspaceId: 'workspaceId',
+  correlationId: 'correlationId',
+  providerProfileId: 'providerProfileId',
+  trackingStatus: 'trackingStatus',
+  providerAcknowledgementId: 'providerAcknowledgementId',
+  providerStatus: 'providerStatus',
+  providerTimestamp: 'providerTimestamp',
+  deliveryTimestamp: 'deliveryTimestamp',
+  readTimestamp: 'readTimestamp',
+  trackingTimeline: 'trackingTimeline',
+  telemetryMetadata: 'telemetryMetadata',
+  auditMetadata: 'auditMetadata',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -1903,6 +2079,34 @@ exports.LayoutType = exports.$Enums.LayoutType = {
   WIZARD: 'WIZARD',
   MOBILE: 'MOBILE',
   PRINT: 'PRINT'
+};
+
+exports.NotificationChannelType = exports.$Enums.NotificationChannelType = {
+  EMAIL: 'EMAIL',
+  SMS: 'SMS',
+  PUSH: 'PUSH',
+  IN_APP: 'IN_APP',
+  WEBHOOK: 'WEBHOOK',
+  INTERNAL_MESSAGE: 'INTERNAL_MESSAGE'
+};
+
+exports.NotificationChannelStatus = exports.$Enums.NotificationChannelStatus = {
+  DRAFT: 'DRAFT',
+  ACTIVE: 'ACTIVE',
+  SUSPENDED: 'SUSPENDED',
+  ARCHIVED: 'ARCHIVED'
+};
+
+exports.NotificationDeliveryStatus = exports.$Enums.NotificationDeliveryStatus = {
+  QUEUED: 'QUEUED',
+  PROCESSING: 'PROCESSING',
+  RENDERED: 'RENDERED',
+  DISPATCHED: 'DISPATCHED',
+  PROVIDER_ACCEPTED: 'PROVIDER_ACCEPTED',
+  DELIVERED: 'DELIVERED',
+  SUPPRESSED: 'SUPPRESSED',
+  FAILED: 'FAILED',
+  DEAD_LETTER: 'DEAD_LETTER'
 };
 
 exports.Prisma.ModelName = {
@@ -2015,7 +2219,14 @@ exports.Prisma.ModelName = {
   WorkspaceInstallation: 'WorkspaceInstallation',
   TenantMembership: 'TenantMembership',
   WorkspaceMembership: 'WorkspaceMembership',
-  TenantSubscription: 'TenantSubscription'
+  TenantSubscription: 'TenantSubscription',
+  NotificationTemplate: 'NotificationTemplate',
+  NotificationChannel: 'NotificationChannel',
+  NotificationDelivery: 'NotificationDelivery',
+  DeliveryAttemptRecord: 'DeliveryAttemptRecord',
+  NotificationRecipient: 'NotificationRecipient',
+  ProviderProfile: 'ProviderProfile',
+  DeliveryTracking: 'DeliveryTracking'
 };
 
 /**

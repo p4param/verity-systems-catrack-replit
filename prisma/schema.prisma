@@ -2785,3 +2785,316 @@ model TenantSubscription {
   @@map("tenant_subscriptions")
 }
 
+// ─── VS09 EWP-001: NotificationTemplate ──────────────────────────────────────
+//
+// NotificationTemplate — aggregate root defining template metadata, versioning,
+// language variations, and variable JSON schemas.
+//
+// Domain rules:
+//   - Business Identity: (tenantId, templateCode, templateVersion)
+//   - Status lifecycle: DRAFT → PUBLISHED → DEPRECATED → ARCHIVED
+//   - Version immutability upon reaching PUBLISHED state
+//   - Soft delete only
+//
+
+model NotificationTemplate {
+  id                 String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String    @db.Uuid @map("tenant_id")
+  workspaceId        String?   @db.Uuid @map("workspace_id")
+  templateCode       String    @map("template_code")
+  templateName       String    @map("template_name")
+  description        String?   @map("description")
+  category           String    @map("category")
+  status             String    @default("DRAFT") @map("status")
+  templateVersion    String    @default("1.0.0") @map("template_version")
+  parentTemplateId   String?   @db.Uuid @map("parent_template_id")
+  supportedChannels  Json      @map("supported_channels")
+  supportedLanguages Json      @map("supported_languages")
+  defaultLanguage    String    @default("en") @map("default_language")
+  brandingProfileId  String?   @db.Uuid @map("branding_profile_id")
+  isSystemTemplate   Boolean   @default(false) @map("is_system_template")
+  isActive           Boolean   @default(true) @map("is_active")
+  variableSchema     Json      @map("variable_schema")
+
+  // ES-001 mandatory audit columns
+  createdAt          DateTime  @default(now()) @map("created_at")
+  createdBy          String?   @db.Uuid @map("created_by")
+  updatedAt          DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy          String?   @db.Uuid @map("updated_by")
+  isDeleted          Boolean   @default(false) @map("is_deleted")
+  deletedAt          DateTime? @map("deleted_at")
+  deletedBy          String?   @db.Uuid @map("deleted_by")
+
+  // ES-001 optimistic concurrency counter
+  version            BigInt    @default(1) @map("version")
+
+  @@unique([tenantId, templateCode, templateVersion], map: "uq_template_tenant_code_version")
+  @@index([tenantId], map: "idx_notification_templates_tenant_id")
+  @@index([tenantId, status], map: "idx_notification_templates_tenant_status")
+  @@index([tenantId, category], map: "idx_notification_templates_tenant_category")
+  @@index([isDeleted], map: "idx_notification_templates_is_deleted")
+  @@map("notification_templates")
+}
+
+// ─── VS09 EWP-002: NotificationChannel Enums ──────────────────────────────────
+
+enum NotificationChannelType {
+  EMAIL
+  SMS
+  PUSH
+  IN_APP
+  WEBHOOK
+  INTERNAL_MESSAGE
+}
+
+enum NotificationChannelStatus {
+  DRAFT
+  ACTIVE
+  SUSPENDED
+  ARCHIVED
+}
+
+// ─── VS09 EWP-002: NotificationChannel Model ──────────────────────────────────
+
+model NotificationChannel {
+  id                         String                    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String                    @db.Uuid @map("tenant_id")
+  workspaceId                String?                   @db.Uuid @map("workspace_id")
+  channelCode                String                    @map("channel_code")
+  channelName                String                    @map("channel_name")
+  description                String?                   @map("description")
+  channelType                NotificationChannelType   @map("channel_type")
+  status                     NotificationChannelStatus @default(DRAFT) @map("status")
+  priority                   Int                       @default(100) @map("priority")
+  isDefault                  Boolean                   @default(false) @map("is_default")
+  isEnabled                  Boolean                   @default(true) @map("is_enabled")
+  supportedTemplateCategories Json                     @map("supported_template_categories")
+  configurationMetadata      Json?                     @map("configuration_metadata")
+
+  // ES-001 mandatory audit columns
+  createdAt                  DateTime                  @default(now()) @map("created_at")
+  createdBy                  String?                   @db.Uuid @map("created_by")
+  updatedAt                  DateTime                  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy                  String?                   @db.Uuid @map("updated_by")
+  isDeleted                  Boolean                   @default(false) @map("is_deleted")
+  deletedAt                  DateTime?                 @map("deleted_at")
+  deletedBy                  String?                   @db.Uuid @map("deleted_by")
+
+  // ES-001 optimistic concurrency counter
+  version                    BigInt                    @default(1) @map("version")
+
+  @@unique([tenantId, channelCode], map: "uq_channel_tenant_code")
+  @@index([tenantId], map: "idx_channel_tenant")
+  @@index([tenantId, channelType], map: "idx_channel_tenant_type")
+  @@index([tenantId, status], map: "idx_channel_tenant_status")
+  @@index([tenantId, isEnabled], map: "idx_channel_tenant_enabled")
+  @@index([isDeleted], map: "idx_channel_is_deleted")
+  @@map("notification_channels")
+}
+
+// ─── VS09 EWP-003: NotificationDelivery Enums ────────────────────────────────
+
+enum NotificationDeliveryStatus {
+  QUEUED
+  PROCESSING
+  RENDERED
+  DISPATCHED
+  PROVIDER_ACCEPTED
+  DELIVERED
+  SUPPRESSED
+  FAILED
+  DEAD_LETTER
+}
+
+// ─── VS09 EWP-003: NotificationDelivery Models ───────────────────────────────
+
+model NotificationDelivery {
+  id                  String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId            String                     @db.Uuid @map("tenant_id")
+  workspaceId         String?                    @db.Uuid @map("workspace_id")
+  notificationIntentId String                    @db.Uuid @map("notification_intent_id")
+  correlationId       String                     @db.Uuid @map("correlation_id")
+  idempotencyKey      String                     @map("idempotency_key") @db.VarChar(255)
+  templateId          String                     @db.Uuid @map("template_id")
+  templateVersion     String                     @map("template_version") @db.VarChar(50)
+  channelId           String                     @db.Uuid @map("channel_id")
+  providerId          String?                    @db.Uuid @map("provider_id")
+  recipientUserId     String?                    @db.Uuid @map("recipient_user_id")
+  recipientEndpoint   String                     @map("recipient_endpoint") @db.VarChar(500)
+  deliveryStatus      NotificationDeliveryStatus @default(QUEUED) @map("delivery_status")
+  retryCount          Int                        @default(0) @map("retry_count")
+  maxRetries          Int                        @default(3) @map("max_retries")
+  nextAttemptAt       DateTime?                  @map("next_attempt_at") @db.Timestamptz
+  renderedSubject     String?                    @map("rendered_subject") @db.VarChar(1000)
+  renderedBody        String?                    @map("rendered_body") @db.Text
+  failureReason       String?                    @map("failure_reason") @db.VarChar(2000)
+  dispatchedAt        DateTime?                  @map("dispatched_at") @db.Timestamptz
+  acceptedAt          DateTime?                  @map("accepted_at") @db.Timestamptz
+  deliveredAt         DateTime?                  @map("delivered_at") @db.Timestamptz
+
+  // ES-001 mandatory audit columns
+  createdAt           DateTime                   @default(now()) @map("created_at") @db.Timestamptz
+  createdBy           String?                    @db.Uuid @map("created_by")
+  updatedAt           DateTime                   @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy           String?                    @db.Uuid @map("updated_by")
+  isDeleted           Boolean                    @default(false) @map("is_deleted")
+  deletedAt           DateTime?                  @map("deleted_at")
+  deletedBy           String?                    @db.Uuid @map("deleted_by")
+
+  // ES-001 optimistic concurrency counter
+  version             BigInt                     @default(1) @map("version")
+
+  attempts            DeliveryAttemptRecord[]
+
+  @@unique([tenantId, idempotencyKey], map: "uq_delivery_tenant_idempotency")
+  @@index([tenantId], map: "idx_delivery_tenant")
+  @@index([notificationIntentId], map: "idx_delivery_intent")
+  @@index([correlationId], map: "idx_delivery_correlation")
+  @@index([tenantId, deliveryStatus], map: "idx_delivery_tenant_status")
+  @@index([nextAttemptAt], map: "idx_delivery_next_attempt")
+  @@index([isDeleted], map: "idx_delivery_is_deleted")
+  @@index([tenantId, providerId], map: "idx_delivery_provider")
+  @@map("notification_deliveries")
+}
+
+model DeliveryAttemptRecord {
+  id            String                     @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  deliveryId    String                     @map("delivery_id") @db.Uuid
+  attemptNumber Int                        @map("attempt_number")
+  providerId    String?                    @db.Uuid @map("provider_id")
+  status        NotificationDeliveryStatus @map("status")
+  responseCode  String?                    @map("response_code") @db.VarChar(100)
+  errorDetails  String?                    @map("error_details") @db.VarChar(2000)
+  attemptedAt   DateTime                   @default(now()) @map("attempted_at") @db.Timestamptz
+  completedAt   DateTime?                  @map("completed_at") @db.Timestamptz
+
+  delivery      NotificationDelivery       @relation(fields: [deliveryId], references: [id], onDelete: Cascade)
+
+  @@unique([deliveryId, attemptNumber], map: "uq_delivery_attempt_number")
+  @@index([deliveryId], map: "idx_attempt_delivery")
+  @@map("notification_delivery_attempts")
+}
+
+// ─── VS09 EWP-004: NotificationRecipient Model ───────────────────────────────
+
+model NotificationRecipient {
+  id                           String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId               String    @map("notification_id") @db.Uuid
+  tenantId                     String    @map("tenant_id") @db.Uuid
+  workspaceId                  String?   @map("workspace_id") @db.Uuid
+  recipientSequence            Int       @map("recipient_sequence")
+  recipientType                String    @map("recipient_type") @db.VarChar(50)
+  recipientUserId              String?   @map("recipient_user_id") @db.Uuid
+  recipientGroupId             String?   @map("recipient_group_id") @db.Uuid
+  recipientEndpoint            String    @map("recipient_endpoint") @db.VarChar(500)
+  channelId                    String    @map("channel_id") @db.Uuid
+  deliveryPreferenceSnapshot  Json?     @map("delivery_preference_snapshot")
+  culture                      String    @map("culture") @db.VarChar(10)
+  language                     String    @map("language") @db.VarChar(10)
+  timezone                     String    @map("timezone") @db.VarChar(50)
+  status                       String    @map("status") @db.VarChar(50)
+  suppressionReason            String?   @map("suppression_reason") @db.VarChar(500)
+  
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt                    DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy                    String?   @map("created_by") @db.Uuid
+  updatedAt                    DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy                    String?   @map("updated_by") @db.Uuid
+  isDeleted                    Boolean   @default(false) @map("is_deleted")
+  deletedAt                    DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy                    String?   @map("deleted_by") @db.Uuid
+  version                      Int       @default(1) @map("version")
+
+  @@unique([notificationId, recipientSequence], map: "uq_recipient_notification_sequence")
+  @@index([notificationId], map: "idx_recipient_notification")
+  @@index([tenantId], map: "idx_recipient_tenant")
+  @@index([recipientUserId], map: "idx_recipient_user")
+  @@index([status], map: "idx_recipient_status")
+  @@index([channelId], map: "idx_recipient_channel")
+  @@index([isDeleted], map: "idx_recipient_is_deleted")
+  @@index([tenantId, notificationId, status], map: "idx_recipient_tenant_notification_status")
+  @@map("notification_recipients")
+}
+
+// ─── VS09 EWP-005: ProviderProfile Model ────────────────────────────────────
+
+model ProviderProfile {
+  id                     String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId               String    @map("tenant_id") @db.Uuid
+  workspaceId            String?   @map("workspace_id") @db.Uuid
+  providerCode           String    @map("provider_code") @db.VarChar(100)
+  providerName           String    @map("provider_name") @db.VarChar(255)
+  description            String?   @map("description") @db.VarChar(1000)
+  providerType           String    @map("provider_type") @db.VarChar(50)
+  status                 String    @map("status") @db.VarChar(50)
+  healthStatus           String    @default("HEALTHY") @map("health_status") @db.VarChar(50)
+  priority               Int       @default(100) @map("priority")
+  isDefault              Boolean   @default(false) @map("is_default")
+  isEnabled              Boolean   @default(true) @map("is_enabled")
+  supportedChannels      Json      @map("supported_channels")
+  capabilityMetadata     Json      @map("capability_metadata")
+  configurationMetadata  Json?     @map("configuration_metadata")
+  
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt              DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy              String?   @map("created_by") @db.Uuid
+  updatedAt              DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy              String?   @map("updated_by") @db.Uuid
+  isDeleted              Boolean   @default(false) @map("is_deleted")
+  deletedAt              DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy              String?   @map("deleted_by") @db.Uuid
+  version                Int       @default(1) @map("version")
+
+  @@unique([tenantId, providerCode], map: "uq_provider_tenant_code")
+  @@index([tenantId], map: "idx_provider_tenant")
+  @@index([tenantId, providerType], map: "idx_provider_tenant_type")
+  @@index([tenantId, status], map: "idx_provider_tenant_status")
+  @@index([tenantId, healthStatus], map: "idx_provider_tenant_health")
+  @@index([tenantId, isEnabled], map: "idx_provider_tenant_enabled")
+  @@index([isDeleted], map: "idx_provider_is_deleted")
+  @@map("provider_profiles")
+}
+
+// ─── VS09 EWP-006: DeliveryTracking Model ────────────────────────────────────
+
+model DeliveryTracking {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId             String    @map("notification_id") @db.Uuid
+  tenantId                   String    @map("tenant_id") @db.Uuid
+  workspaceId                String?   @map("workspace_id") @db.Uuid
+  correlationId              String    @map("correlation_id") @db.Uuid
+  providerProfileId          String?   @map("provider_profile_id") @db.Uuid
+  trackingStatus             String    @map("tracking_status") @db.VarChar(50)
+  providerAcknowledgementId  String?   @map("provider_acknowledgement_id") @db.VarChar(255)
+  providerStatus             String?   @map("provider_status") @db.VarChar(100)
+  providerTimestamp          DateTime? @map("provider_timestamp") @db.Timestamptz
+  deliveryTimestamp          DateTime? @map("delivery_timestamp") @db.Timestamptz
+  readTimestamp              DateTime? @map("read_timestamp") @db.Timestamptz
+  trackingTimeline           Json      @map("tracking_timeline")
+  telemetryMetadata          Json?     @map("telemetry_metadata")
+  auditMetadata              Json?     @map("audit_metadata")
+  
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt                  DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy                  String?   @map("created_by") @db.Uuid
+  updatedAt                  DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy                  String?   @map("updated_by") @db.Uuid
+  isDeleted                  Boolean   @default(false) @map("is_deleted")
+  deletedAt                  DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy                  String?   @map("deleted_by") @db.Uuid
+  version                    Int       @default(1) @map("version")
+
+  @@unique([notificationId], map: "uq_tracking_notification")
+  @@index([tenantId], map: "idx_tracking_tenant")
+  @@index([correlationId], map: "idx_tracking_correlation")
+  @@index([trackingStatus], map: "idx_tracking_status")
+  @@index([providerStatus], map: "idx_tracking_provider_status")
+  @@index([isDeleted], map: "idx_tracking_is_deleted")
+  @@map("delivery_tracking")
+}
+
+
+
+
+
+
