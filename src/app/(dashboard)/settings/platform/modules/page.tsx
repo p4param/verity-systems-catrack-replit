@@ -1299,7 +1299,7 @@ export default function PlatformModulesPage() {
       {confirmDeleteOpen && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-card border border-border rounded-2xl w-full max-w-sm shadow-xl p-6">
-            <h3 className="font-bold text-lg text-foreground text-rose-600 mb-2">Delete Module?</h3>
+            <h3 className="font-bold text-lg text-rose-600 mb-2">Delete Module?</h3>
             <p className="text-xs text-muted-foreground mb-4">
               Are you sure you want to permanently delete module{" "}
               <strong className="text-foreground">{editingModule?.name}</strong>? This action will remove all configuration settings.

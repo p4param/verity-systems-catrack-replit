@@ -58,7 +58,7 @@ import { useAuth } from "@/lib/auth/auth-context";
 
 export default function NavigationDesignerPage() {
   const { user } = useAuth();
-  
+
   // Queries
   const { data: tree = [], isLoading: loadingTree, refetch: refetchTree } = useNavigationTree();
   const { data: profiles = [], isLoading: loadingProfiles } = useNavigationProfiles();
@@ -83,7 +83,7 @@ export default function NavigationDesignerPage() {
   const [nodeType, setNodeType] = useState<"GROUP" | "ITEM" | null>(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [collapsedGroups, setCollapsedGroups] = useState<Record<string, boolean>>({});
-  
+
   // Modals state
   const [groupModalOpen, setGroupModalOpen] = useState(false);
   const [itemModalOpen, setItemModalOpen] = useState(false);
@@ -405,7 +405,7 @@ export default function NavigationDesignerPage() {
           >
             <RefreshCw size={16} />
           </button>
-          
+
           <button
             onClick={() => {
               setEditingGroup(null);
@@ -445,10 +445,10 @@ export default function NavigationDesignerPage() {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-4 gap-6">
-        
+
         {/* Left Tree Workspace & Visual Canvas */}
         <div className="xl:col-span-3 space-y-6">
-          
+
           {/* Main Visual Layout Canvas */}
           <div className="bg-card border border-border rounded-2xl shadow-sm p-6 space-y-4">
             <div className="flex justify-between items-center pb-2 border-b border-border">
@@ -482,9 +482,8 @@ export default function NavigationDesignerPage() {
                     {/* Group header */}
                     <div
                       onClick={() => handleGroupSelect(group)}
-                      className={`p-3 bg-muted/20 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-all ${
-                        selectedNode?.id === group.id ? "border-l-4 border-primary bg-primary/5" : ""
-                      }`}
+                      className={`p-3 bg-muted/20 flex items-center justify-between cursor-pointer hover:bg-muted/30 transition-all ${selectedNode?.id === group.id ? "border-l-4 border-primary bg-primary/5" : ""
+                        }`}
                     >
                       <div className="flex items-center gap-2">
                         <button
@@ -524,9 +523,8 @@ export default function NavigationDesignerPage() {
                               {/* Root Item */}
                               <div
                                 onClick={() => handleItemSelect(item)}
-                                className={`flex items-center justify-between p-2.5 rounded-xl border bg-background transition-all hover:shadow-sm ${
-                                  selectedNode?.id === item.id ? "border-primary ring-1 ring-primary/20 bg-primary/5" : "border-border"
-                                }`}
+                                className={`flex items-center justify-between p-2.5 rounded-xl border bg-background transition-all hover:shadow-sm ${selectedNode?.id === item.id ? "border-primary ring-1 ring-primary/20 bg-primary/5" : "border-border"
+                                  }`}
                               >
                                 <div className="flex items-center gap-3">
                                   <span className="text-slate-400"><GripVertical size={16} /></span>
@@ -564,9 +562,8 @@ export default function NavigationDesignerPage() {
                                 <div
                                   key={child.id}
                                   onClick={() => handleItemSelect(child)}
-                                  className={`flex items-center justify-between p-2.5 rounded-xl border bg-background ml-8 transition-all hover:shadow-sm ${
-                                    selectedNode?.id === child.id ? "border-primary ring-1 ring-primary/20 bg-primary/5" : "border-border"
-                                  }`}
+                                  className={`flex items-center justify-between p-2.5 rounded-xl border bg-background ml-8 transition-all hover:shadow-sm ${selectedNode?.id === child.id ? "border-primary ring-1 ring-primary/20 bg-primary/5" : "border-border"
+                                    }`}
                                 >
                                   <div className="flex items-center gap-3">
                                     <span className="text-slate-400"><GripVertical size={16} /></span>
@@ -630,9 +627,8 @@ export default function NavigationDesignerPage() {
                   <button
                     key={dev.id}
                     onClick={() => setPreviewDevice(dev.id as any)}
-                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${
-                      previewDevice === dev.id ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:bg-muted"
-                    }`}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-semibold flex items-center gap-1.5 transition-colors ${previewDevice === dev.id ? "bg-primary text-primary-foreground shadow" : "text-muted-foreground hover:bg-muted"
+                      }`}
                   >
                     <dev.icon size={13} />
                     {dev.name}
@@ -683,7 +679,7 @@ export default function NavigationDesignerPage() {
 
         {/* Right side Properties and Versioning panel */}
         <div className="space-y-6">
-          
+
           {/* Properties Editor Sidebar */}
           <div className="bg-card border border-border rounded-2xl shadow-sm p-6 space-y-4">
             <h3 className="font-bold text-sm text-foreground flex items-center gap-2 border-b border-border pb-3">
@@ -825,9 +821,8 @@ export default function NavigationDesignerPage() {
                   <div key={idx} className="p-2.5 rounded-lg border border-border bg-background text-[11px] flex gap-2">
                     <AlertTriangle size={14} className={`shrink-0 mt-0.5 ${a.severity === "ERROR" ? "text-rose-500" : "text-amber-500"}`} />
                     <div>
-                      <span className={`font-mono text-[9px] uppercase px-1 rounded ${
-                        a.severity === "ERROR" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"
-                      }`}>{a.type}</span>
+                      <span className={`font-mono text-[9px] uppercase px-1 rounded ${a.severity === "ERROR" ? "bg-rose-100 text-rose-800" : "bg-amber-100 text-amber-800"
+                        }`}>{a.type}</span>
                       <p className="text-muted-foreground mt-0.5 leading-relaxed">{a.message}</p>
                     </div>
                   </div>
@@ -1090,7 +1085,7 @@ export default function NavigationDesignerPage() {
                   <label className="block text-slate-400 font-bold mb-1">ICON</label>
                   <div className="flex gap-2 items-center">
                     {/* Live preview */}
-                    <div className="flex-shrink-0 w-9 h-9 flex items-center justify-center rounded-lg border border-border bg-muted/40">
+                    <div className="shrink-0 w-9 h-9 flex items-center justify-center rounded-lg border border-border bg-muted/40">
                       {(() => {
                         const Ic = (LucideIcons as any)[itemForm.icon];
                         return Ic ? <Ic size={18} className="text-primary" /> : <HelpCircle size={18} className="text-destructive" />;
@@ -1113,56 +1108,56 @@ export default function NavigationDesignerPage() {
                         className="fixed inset-0 z-40"
                         onMouseDown={() => { setShowIconPicker(false); setIconSearch(""); }}
                       />
-                    <div className="absolute z-50 top-full left-0 mt-1 w-72 bg-popover border border-border rounded-xl shadow-xl p-3">
-                      <input
-                        type="text"
-                        value={iconSearch}
-                        onChange={(e) => setIconSearch(e.target.value)}
-                        placeholder="Search icons…"
-                        className="w-full px-2 py-1.5 border border-border rounded-lg text-xs bg-background mb-2 focus:outline-none"
-                        autoFocus
-                      />
-                      <div className="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
-                        {[
-                          "Box","Settings","Shield","Home","Users","FileText","Database",
-                          "BarChart2","Bell","Calendar","CheckCircle","Cog","Cpu","CreditCard",
-                          "Download","Edit","Eye","Filter","Flag","Folder","Globe","Grid",
-                          "HelpCircle","Inbox","Key","Layers","Link","List","Lock","LogOut",
-                          "Mail","Map","Menu","Monitor","Moon","Package","Pencil","PieChart",
-                          "Plus","Power","Printer","RefreshCw","Search","Send","Server",
-                          "Share","ShieldCheck","ShoppingCart","Sliders","Star","Sun","Tag",
-                          "Terminal","Trash2","TrendingUp","Upload","User","Wallet","Wrench",
-                          "Zap","AlertTriangle","Archive","Bookmark","Building","ChevronRight",
-                          "Clock","Cloud","Code","Columns","Command","Compass","Copy","Crop",
-                          "Activity","Award","Briefcase","Camera","Cast","Coffee","Crosshair"
-                        ]
-                          .filter(n => n.toLowerCase().includes(iconSearch.toLowerCase()))
-                          .map(name => {
-                            const Ic = (LucideIcons as any)[name];
-                            if (!Ic) return null;
-                            return (
-                              <button
-                                key={name}
-                                type="button"
-                                title={name}
-                                onClick={() => {
-                                  setItemForm(prev => ({ ...prev, icon: name }));
-                                  setShowIconPicker(false);
-                                  setIconSearch("");
-                                }}
-                                className={`p-1.5 rounded-lg flex items-center justify-center hover:bg-primary/10 transition-colors ${itemForm.icon === name ? "bg-primary/15 ring-1 ring-primary" : ""}`}
-                              >
-                                <Ic size={16} />
-                              </button>
-                            );
-                          })}
+                      <div className="absolute z-50 top-full left-0 mt-1 w-72 bg-popover border border-border rounded-xl shadow-xl p-3">
+                        <input
+                          type="text"
+                          value={iconSearch}
+                          onChange={(e) => setIconSearch(e.target.value)}
+                          placeholder="Search icons…"
+                          className="w-full px-2 py-1.5 border border-border rounded-lg text-xs bg-background mb-2 focus:outline-none"
+                          autoFocus
+                        />
+                        <div className="grid grid-cols-8 gap-1 max-h-40 overflow-y-auto">
+                          {[
+                            "Box", "Settings", "Shield", "Home", "Users", "FileText", "Database",
+                            "BarChart2", "Bell", "Calendar", "CheckCircle", "Cog", "Cpu", "CreditCard",
+                            "Download", "Edit", "Eye", "Filter", "Flag", "Folder", "Globe", "Grid",
+                            "HelpCircle", "Inbox", "Key", "Layers", "Link", "List", "Lock", "LogOut",
+                            "Mail", "Map", "Menu", "Monitor", "Moon", "Package", "Pencil", "PieChart",
+                            "Plus", "Power", "Printer", "RefreshCw", "Search", "Send", "Server",
+                            "Share", "ShieldCheck", "ShoppingCart", "Sliders", "Star", "Sun", "Tag",
+                            "Terminal", "Trash2", "TrendingUp", "Upload", "User", "Wallet", "Wrench",
+                            "Zap", "AlertTriangle", "Archive", "Bookmark", "Building", "ChevronRight",
+                            "Clock", "Cloud", "Code", "Columns", "Command", "Compass", "Copy", "Crop",
+                            "Activity", "Award", "Briefcase", "Camera", "Cast", "Coffee", "Crosshair"
+                          ]
+                            .filter(n => n.toLowerCase().includes(iconSearch.toLowerCase()))
+                            .map(name => {
+                              const Ic = (LucideIcons as any)[name];
+                              if (!Ic) return null;
+                              return (
+                                <button
+                                  key={name}
+                                  type="button"
+                                  title={name}
+                                  onClick={() => {
+                                    setItemForm(prev => ({ ...prev, icon: name }));
+                                    setShowIconPicker(false);
+                                    setIconSearch("");
+                                  }}
+                                  className={`p-1.5 rounded-lg flex items-center justify-center hover:bg-primary/10 transition-colors ${itemForm.icon === name ? "bg-primary/15 ring-1 ring-primary" : ""}`}
+                                >
+                                  <Ic size={16} />
+                                </button>
+                              );
+                            })}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => { setShowIconPicker(false); setIconSearch(""); }}
+                          className="mt-2 w-full text-xs text-muted-foreground hover:text-foreground text-center"
+                        >Close</button>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => { setShowIconPicker(false); setIconSearch(""); }}
-                        className="mt-2 w-full text-xs text-muted-foreground hover:text-foreground text-center"
-                      >Close</button>
-                    </div>
                     </>
                   )}
                 </div>
