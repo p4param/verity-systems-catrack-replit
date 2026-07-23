@@ -1,0 +1,141 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<engineeringLibraryStructure generatedBy="ChatGPT" version="1.0">
+  <directory name="docs2" path="docs2">
+    <file name="README.md" path="docs2/README.md"/>
+    <file name="INDEX.md" path="docs2/INDEX.md"/>
+    <file name="ENGINEERING-LIBRARY.md" path="docs2/ENGINEERING-LIBRARY.md"/>
+    <file name="LIBRARY-GAPS.md" path="docs2/LIBRARY-GAPS.md"/>
+    <file name="PLATFORM_STATUS.md" path="docs2/PLATFORM_STATUS.md"/>
+    <file name="ENGINES.md" path="docs2/ENGINES.md"/>
+    <directory name="Platform" path="docs2/Platform">
+      <file name="README.md" path="docs2/Platform/README.md"/>
+      <file name="INDEX.md" path="docs2/Platform/INDEX.md"/>
+      <directory name="Architecture" path="docs2/Platform/Architecture">
+        <file name="CAP-v1.0-Architecture.md" path="docs2/Platform/Architecture/CAP-v1.0-Architecture.md"/>
+      </directory>
+      <directory name="Bootstrap" path="docs2/Platform/Bootstrap">
+        <file name="00-Bootstrap-Prompt.md" path="docs2/Platform/Bootstrap/00-Bootstrap-Prompt.md"/>
+        <file name="Bootstrap-Prompt.md" path="docs2/Platform/Bootstrap/Bootstrap-Prompt.md"/>
+        <file name="Bootstrap-Prompt2.md" path="docs2/Platform/Bootstrap/Bootstrap-Prompt2.md"/>
+      </directory>
+      <directory name="Releases" path="docs2/Platform/Releases"/>
+      <directory name="Roadmap" path="docs2/Platform/Roadmap"/>
+    </directory>
+    <directory name="Governance" path="docs2/Governance">
+      <file name="README.md" path="docs2/Governance/README.md"/>
+      <file name="INDEX.md" path="docs2/Governance/INDEX.md"/>
+      <directory name="AG" path="docs2/Governance/AG">
+        <file name="AG-000-CAP-Master-Development-Charter.md" path="docs2/Governance/AG/AG-000-CAP-Master-Development-Charter.md"/>
+      </directory>
+      <directory name="ES" path="docs2/Governance/ES">
+        <file name="ES-001-database-standards.md" path="docs2/Governance/ES/ES-001-database-standards.md"/>
+        <file name="ES-002-Presentation-Standards.md" path="docs2/Governance/ES/ES-002-Presentation-Standards.md"/>
+        <file name="ES-003-Runtime-Controls.md" path="docs2/Governance/ES/ES-003-Runtime-Controls.md"/>
+        <file name="ES-004-Platform-Services.md" path="docs2/Governance/ES/ES-004-Platform-Services.md"/>
+        <file name="ES-005-Runtime-Manifest.md" path="docs2/Governance/ES/ES-005-Runtime-Manifest.md"/>
+        <file name="ES-006-Database-Platform-Engine.md" path="docs2/Governance/ES/ES-006-Database-Platform-Engine.md"/>
+        <file name="ES-007-Runtime-Execution-Contracts.md" path="docs2/Governance/ES/ES-007-Runtime-Execution-Contracts.md"/>
+        <file name="ES-008-Architecture-Domain-Modeling.md" path="docs2/Governance/ES/ES-008-Architecture-Domain-Modeling.md"/>
+        <file name="ES-009-Data-Ownership-Persistence-Standard.md" path="docs2/Governance/ES/ES-009-Data-Ownership-Persistence-Standard.md"/>
+        <file name="ES-010-Platform-Naming-Namespace-Standard.md" path="docs2/Governance/ES/ES-010-Platform-Naming-Namespace-Standard.md"/>
+        <file name="ES-014_Engineering_Work_Package_Implementation_Standard.md" path="docs2/Governance/ES/ES-014_Engineering_Work_Package_Implementation_Standard.md"/>
+        <file name="ES-015_Engine_Engineering_Lifecycle_Standard.md" path="docs2/Governance/ES/ES-015_Engine_Engineering_Lifecycle_Standard.md"/>
+        <file name="ES-016_AI_Assisted_Engineering_Standard.md" path="docs2/Governance/ES/ES-016_AI_Assisted_Engineering_Standard.md"/>
+      </directory>
+      <directory name="Templates" path="docs2/Governance/Templates"/>
+    </directory>
+    <directory name="Platform-Engines" path="docs2/Platform-Engines">
+      <directory name="VS01" path="docs2/Platform-Engines/VS01"/>
+      <directory name="VS02" path="docs2/Platform-Engines/VS02"/>
+      <directory name="VS03" path="docs2/Platform-Engines/VS03"/>
+      <directory name="VS04" path="docs2/Platform-Engines/VS04"/>
+      <directory name="VS05" path="docs2/Platform-Engines/VS05"/>
+      <directory name="VS10" path="docs2/Platform-Engines/VS10"/>
+      <directory name="VS06" path="docs2/Platform-Engines/VS06">
+        <file name="README.md" path="docs2/Platform-Engines/VS06/README.md"/>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS06/INDEX.md"/>
+        <directory name="Standards" path="docs2/Platform-Engines/VS06/Standards"/>
+        <directory name="Releases" path="docs2/Platform-Engines/VS06/Releases"/>
+      </directory>
+      <directory name="VS07" path="docs2/Platform-Engines/VS07">
+        <file name="README.md" path="docs2/Platform-Engines/VS07/README.md"/>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS07/INDEX.md"/>
+        <directory name="Foundation" path="docs2/Platform-Engines/VS07/Foundation"/>
+        <directory name="Standards" path="docs2/Platform-Engines/VS07/Standards"/>
+        <directory name="Releases" path="docs2/Platform-Engines/VS07/Releases"/>
+        <directory name="Certification" path="docs2/Platform-Engines/VS07/Certification"/>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS07/Metrics"/>
+      </directory>
+      <directory name="VS08" path="docs2/Platform-Engines/VS08">
+        <file name="README.md" path="docs2/Platform-Engines/VS08/README.md"/>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS08/INDEX.md"/>
+        <directory name="Blueprint" path="docs2/Platform-Engines/VS08/Blueprint"/>
+        <directory name="Architecture" path="docs2/Platform-Engines/VS08/Architecture"/>
+        <directory name="Domain" path="docs2/Platform-Engines/VS08/Domain"/>
+        <directory name="Foundation" path="docs2/Platform-Engines/VS08/Foundation"/>
+        <directory name="ADR" path="docs2/Platform-Engines/VS08/ADR"/>
+        <directory name="Reviews" path="docs2/Platform-Engines/VS08/Reviews"/>
+        <directory name="Capability-Contracts" path="docs2/Platform-Engines/VS08/Capability-Contracts"/>
+        <directory name="Compatibility-Contracts" path="docs2/Platform-Engines/VS08/Compatibility-Contracts"/>
+        <directory name="Engineering-Work-Packages" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages"/>
+        <directory name="Certification" path="docs2/Platform-Engines/VS08/Certification"/>
+        <directory name="Commercial" path="docs2/Platform-Engines/VS08/Commercial"/>
+        <directory name="Releases" path="docs2/Platform-Engines/VS08/Releases"/>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS08/Metrics"/>
+      </directory>
+      <directory name="VS09" path="docs2/Platform-Engines/VS09">
+        <file name="README.md" path="docs2/Platform-Engines/VS09/README.md"/>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS09/INDEX.md"/>
+        <file name="CHANGELOG.md" path="docs2/Platform-Engines/VS09/CHANGELOG.md"/>
+        <file name="ENGINE-INDEX.md" path="docs2/Platform-Engines/VS09/ENGINE-INDEX.md"/>
+        <file name="RIS-REGISTRY.md" path="docs2/Platform-Engines/VS09/RIS-REGISTRY.md"/>
+        <directory name="Blueprint" path="docs2/Platform-Engines/VS09/Blueprint"/>
+        <directory name="Architecture" path="docs2/Platform-Engines/VS09/Architecture"/>
+        <directory name="Domain" path="docs2/Platform-Engines/VS09/Domain"/>
+        <directory name="ADR" path="docs2/Platform-Engines/VS09/ADR"/>
+        <directory name="AFR" path="docs2/Platform-Engines/VS09/AFR"/>
+        <directory name="CFR" path="docs2/Platform-Engines/VS09/CFR"/>
+        <directory name="Capability-Contracts" path="docs2/Platform-Engines/VS09/Capability-Contracts"/>
+        <directory name="Engineering-Work-Packages" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages"/>
+        <directory name="Certification" path="docs2/Platform-Engines/VS09/Certification"/>
+        <directory name="Freeze" path="docs2/Platform-Engines/VS09/Freeze"/>
+        <directory name="Releases" path="docs2/Platform-Engines/VS09/Releases"/>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS09/Metrics"/>
+        <directory name="Reference-Implementations" path="docs2/Platform-Engines/VS09/Reference-Implementations">
+          <directory name="RIS" path="docs2/Platform-Engines/VS09/Reference-Implementations/RIS"/>
+          <directory name="HF" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF"/>
+        </directory>
+      </directory>
+    </directory>
+    <directory name="AI-Engineering" path="docs2/AI-Engineering">
+      <file name="README.md" path="docs2/AI-Engineering/README.md"/>
+      <directory name="Bootstrap" path="docs2/AI-Engineering/Bootstrap"/>
+      <directory name="Prompt-Library" path="docs2/AI-Engineering/Prompt-Library"/>
+      <directory name="AG" path="docs2/AI-Engineering/AG"/>
+      <directory name="Codex" path="docs2/AI-Engineering/Codex"/>
+      <directory name="Copilot" path="docs2/AI-Engineering/Copilot"/>
+      <directory name="ChatGPT" path="docs2/AI-Engineering/ChatGPT"/>
+    </directory>
+    <directory name="Deployment" path="docs2/Deployment">
+      <file name="README.md" path="docs2/Deployment/README.md"/>
+      <directory name="Local" path="docs2/Deployment/Local"/>
+      <directory name="Docker" path="docs2/Deployment/Docker"/>
+      <directory name="CI-CD" path="docs2/Deployment/CI-CD"/>
+      <directory name="Production" path="docs2/Deployment/Production"/>
+    </directory>
+    <directory name="Knowledge-Base" path="docs2/Knowledge-Base">
+      <file name="README.md" path="docs2/Knowledge-Base/README.md"/>
+      <directory name="Getting-Started" path="docs2/Knowledge-Base/Getting-Started"/>
+      <directory name="Architecture" path="docs2/Knowledge-Base/Architecture"/>
+      <directory name="Governance" path="docs2/Knowledge-Base/Governance"/>
+      <directory name="Engines" path="docs2/Knowledge-Base/Engines"/>
+      <directory name="Development" path="docs2/Knowledge-Base/Development"/>
+      <directory name="Troubleshooting" path="docs2/Knowledge-Base/Troubleshooting"/>
+    </directory>
+    <directory name="Archive" path="docs2/Archive">
+      <file name="README.md" path="docs2/Archive/README.md"/>
+      <directory name="Legacy" path="docs2/Archive/Legacy"/>
+    </directory>
+    <directory name="_UNCLASSIFIED" path="docs2/_UNCLASSIFIED"/>
+  </directory>
+</engineeringLibraryStructure>

@@ -1,0 +1,359 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<engineeringLibraryStructure generatedBy="Antigravity AI" version="1.0">
+  <directory name="docs2" path="docs2">
+    <directory name="_UNCLASSIFIED" path="docs2/_UNCLASSIFIED">
+    </directory>
+    <directory name="AI-Engineering" path="docs2/AI-Engineering">
+      <directory name="AG" path="docs2/AI-Engineering/AG">
+      </directory>
+      <directory name="Bootstrap" path="docs2/AI-Engineering/Bootstrap">
+      </directory>
+      <directory name="ChatGPT" path="docs2/AI-Engineering/ChatGPT">
+      </directory>
+      <directory name="Codex" path="docs2/AI-Engineering/Codex">
+      </directory>
+      <directory name="Copilot" path="docs2/AI-Engineering/Copilot">
+      </directory>
+      <directory name="Prompt-Library" path="docs2/AI-Engineering/Prompt-Library">
+      </directory>
+      <file name="README.md" path="docs2/AI-Engineering/README.md"/>
+    </directory>
+    <directory name="Archive" path="docs2/Archive">
+      <directory name="Legacy" path="docs2/Archive/Legacy">
+      </directory>
+      <directory name="Migration" path="docs2/Archive/Migration">
+        <file name="docs_tree.xml" path="docs2/Archive/Migration/docs_tree.xml"/>
+        <file name="docs2_tree.xml" path="docs2/Archive/Migration/docs2_tree.xml"/>
+        <file name="Engineering-Library-Structure.xml" path="docs2/Archive/Migration/Engineering-Library-Structure.xml"/>
+      </directory>
+      <file name="README.md" path="docs2/Archive/README.md"/>
+    </directory>
+    <directory name="Deployment" path="docs2/Deployment">
+      <directory name="CI-CD" path="docs2/Deployment/CI-CD">
+      </directory>
+      <directory name="Docker" path="docs2/Deployment/Docker">
+      </directory>
+      <directory name="Local" path="docs2/Deployment/Local">
+      </directory>
+      <directory name="Production" path="docs2/Deployment/Production">
+      </directory>
+      <file name="README.md" path="docs2/Deployment/README.md"/>
+    </directory>
+    <directory name="Governance" path="docs2/Governance">
+      <directory name="AG" path="docs2/Governance/AG">
+        <file name="AG-000-CAP-Master-Development-Charter.md" path="docs2/Governance/AG/AG-000-CAP-Master-Development-Charter.md"/>
+      </directory>
+      <directory name="ES" path="docs2/Governance/ES">
+        <file name="ES-001-database-standards.md" path="docs2/Governance/ES/ES-001-database-standards.md"/>
+        <file name="ES-002-Presentation-Standards.md" path="docs2/Governance/ES/ES-002-Presentation-Standards.md"/>
+        <file name="ES-003-Runtime-Controls.md" path="docs2/Governance/ES/ES-003-Runtime-Controls.md"/>
+        <file name="ES-004-Platform-Services.md" path="docs2/Governance/ES/ES-004-Platform-Services.md"/>
+        <file name="ES-005-Runtime-Manifest.md" path="docs2/Governance/ES/ES-005-Runtime-Manifest.md"/>
+        <file name="ES-006-Database-Platform-Engine.md" path="docs2/Governance/ES/ES-006-Database-Platform-Engine.md"/>
+        <file name="ES-007-Runtime-Execution-Contracts.md" path="docs2/Governance/ES/ES-007-Runtime-Execution-Contracts.md"/>
+        <file name="ES-008-Architecture-Domain-Modeling.md" path="docs2/Governance/ES/ES-008-Architecture-Domain-Modeling.md"/>
+        <file name="ES-009-Data-Ownership-Persistence-Standard.md" path="docs2/Governance/ES/ES-009-Data-Ownership-Persistence-Standard.md"/>
+        <file name="ES-010-Platform-Naming-Namespace-Standard.md" path="docs2/Governance/ES/ES-010-Platform-Naming-Namespace-Standard.md"/>
+        <file name="ES-014_Engineering_Work_Package_Implementation_Standard.md" path="docs2/Governance/ES/ES-014_Engineering_Work_Package_Implementation_Standard.md"/>
+        <file name="ES-015_Engine_Engineering_Lifecycle_Standard.md" path="docs2/Governance/ES/ES-015_Engine_Engineering_Lifecycle_Standard.md"/>
+        <file name="ES-016_AI_Assisted_Engineering_Standard.md" path="docs2/Governance/ES/ES-016_AI_Assisted_Engineering_Standard.md"/>
+      </directory>
+      <directory name="Templates" path="docs2/Governance/Templates">
+      </directory>
+      <file name="Engineering-Standards-README.md" path="docs2/Governance/Engineering-Standards-README.md"/>
+      <file name="INDEX.md" path="docs2/Governance/INDEX.md"/>
+      <file name="README.md" path="docs2/Governance/README.md"/>
+    </directory>
+    <directory name="Knowledge-Base" path="docs2/Knowledge-Base">
+      <directory name="Architecture" path="docs2/Knowledge-Base/Architecture">
+      </directory>
+      <directory name="Development" path="docs2/Knowledge-Base/Development">
+      </directory>
+      <directory name="Engines" path="docs2/Knowledge-Base/Engines">
+      </directory>
+      <directory name="Getting-Started" path="docs2/Knowledge-Base/Getting-Started">
+      </directory>
+      <directory name="Governance" path="docs2/Knowledge-Base/Governance">
+      </directory>
+      <directory name="Troubleshooting" path="docs2/Knowledge-Base/Troubleshooting">
+      </directory>
+      <file name="README.md" path="docs2/Knowledge-Base/README.md"/>
+    </directory>
+    <directory name="Platform" path="docs2/Platform">
+      <directory name="Architecture" path="docs2/Platform/Architecture">
+        <file name="CAP-v1.0-Architecture.md" path="docs2/Platform/Architecture/CAP-v1.0-Architecture.md"/>
+      </directory>
+      <directory name="Bootstrap" path="docs2/Platform/Bootstrap">
+        <file name="00-Bootstrap-Prompt.md" path="docs2/Platform/Bootstrap/00-Bootstrap-Prompt.md"/>
+        <file name="Bootstrap-Prompt.md" path="docs2/Platform/Bootstrap/Bootstrap-Prompt.md"/>
+        <file name="Bootstrap-Prompt2.md" path="docs2/Platform/Bootstrap/Bootstrap-Prompt2.md"/>
+      </directory>
+      <directory name="Releases" path="docs2/Platform/Releases">
+      </directory>
+      <directory name="Roadmap" path="docs2/Platform/Roadmap">
+      </directory>
+      <file name="INDEX.md" path="docs2/Platform/INDEX.md"/>
+      <file name="README.md" path="docs2/Platform/README.md"/>
+    </directory>
+    <directory name="Platform-Engines" path="docs2/Platform-Engines">
+      <directory name="VS01" path="docs2/Platform-Engines/VS01">
+      </directory>
+      <directory name="VS02" path="docs2/Platform-Engines/VS02">
+      </directory>
+      <directory name="VS03" path="docs2/Platform-Engines/VS03">
+      </directory>
+      <directory name="VS04" path="docs2/Platform-Engines/VS04">
+      </directory>
+      <directory name="VS05" path="docs2/Platform-Engines/VS05">
+      </directory>
+      <directory name="VS06" path="docs2/Platform-Engines/VS06">
+        <directory name="Releases" path="docs2/Platform-Engines/VS06/Releases">
+        </directory>
+        <directory name="Standards" path="docs2/Platform-Engines/VS06/Standards">
+          <file name="VS06A-runtime-application-engine.md" path="docs2/Platform-Engines/VS06/Standards/VS06A-runtime-application-engine.md"/>
+        </directory>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS06/INDEX.md"/>
+        <file name="README.md" path="docs2/Platform-Engines/VS06/README.md"/>
+      </directory>
+      <directory name="VS07" path="docs2/Platform-Engines/VS07">
+        <directory name="Certification" path="docs2/Platform-Engines/VS07/Certification">
+        </directory>
+        <directory name="Foundation" path="docs2/Platform-Engines/VS07/Foundation">
+          <file name="VS07-workflow-foundation.md" path="docs2/Platform-Engines/VS07/Foundation/VS07-workflow-foundation.md"/>
+        </directory>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS07/Metrics">
+        </directory>
+        <directory name="Releases" path="docs2/Platform-Engines/VS07/Releases">
+          <file name="VS07-freeze-ledger.md" path="docs2/Platform-Engines/VS07/Releases/VS07-freeze-ledger.md"/>
+          <file name="VS07-prompt-005d-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-005d-certification-report.md"/>
+          <file name="VS07-prompt-006a-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-006a-certification-report.md"/>
+          <file name="VS07-prompt-006b-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-006b-certification-report.md"/>
+          <file name="VS07-prompt-006c-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-006c-certification-report.md"/>
+          <file name="VS07-prompt-006d-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-006d-certification-report.md"/>
+          <file name="VS07-prompt-006e-final-certification-report.md" path="docs2/Platform-Engines/VS07/Releases/VS07-prompt-006e-final-certification-report.md"/>
+          <file name="VS07-workflow-capability-matrix.md" path="docs2/Platform-Engines/VS07/Releases/VS07-workflow-capability-matrix.md"/>
+          <file name="VS07-workflow-certification.md" path="docs2/Platform-Engines/VS07/Releases/VS07-workflow-certification.md"/>
+          <file name="VS07-workflow-release-notes.md" path="docs2/Platform-Engines/VS07/Releases/VS07-workflow-release-notes.md"/>
+          <file name="VS07.md" path="docs2/Platform-Engines/VS07/Releases/VS07.md"/>
+        </directory>
+        <directory name="Standards" path="docs2/Platform-Engines/VS07/Standards">
+          <file name="VS07-prompt-002-state-machine-transition-engine.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-002-state-machine-transition-engine.md"/>
+          <file name="VS07-prompt-003-participant-resolution-assignment-foundation.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-003-participant-resolution-assignment-foundation.md"/>
+          <file name="VS07-prompt-005-execution-orchestration-foundation.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-005-execution-orchestration-foundation.md"/>
+          <file name="VS07-prompt-005b-execution-architecture.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-005b-execution-architecture.md"/>
+          <file name="VS07-prompt-005c-execution-observability.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-005c-execution-observability.md"/>
+          <file name="VS07-prompt-006-workflow-engine-certification.md" path="docs2/Platform-Engines/VS07/Standards/VS07-prompt-006-workflow-engine-certification.md"/>
+          <file name="VS07-workflow-architecture-guide.md" path="docs2/Platform-Engines/VS07/Standards/VS07-workflow-architecture-guide.md"/>
+          <file name="workflow-action-policy-framework.md" path="docs2/Platform-Engines/VS07/Standards/workflow-action-policy-framework.md"/>
+        </directory>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS07/INDEX.md"/>
+        <file name="README.md" path="docs2/Platform-Engines/VS07/README.md"/>
+      </directory>
+      <directory name="VS08" path="docs2/Platform-Engines/VS08">
+        <directory name="ADR" path="docs2/Platform-Engines/VS08/ADR">
+          <file name="ADR-008-001.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-001.md"/>
+          <file name="ADR-008-002.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-002.md"/>
+          <file name="ADR-008-003.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-003.md"/>
+          <file name="ADR-008-004.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-004.md"/>
+          <file name="ADR-008-005.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-005.md"/>
+          <file name="ADR-008-006.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-006.md"/>
+          <file name="ADR-008-007.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-007.md"/>
+          <file name="ADR-008-008.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-008.md"/>
+          <file name="ADR-008-009.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-009.md"/>
+          <file name="ADR-008-010.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-010.md"/>
+          <file name="ADR-008-011.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-011.md"/>
+          <file name="ADR-008-012.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-012.md"/>
+          <file name="ADR-008-013.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-013.md"/>
+          <file name="ADR-008-014.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-014.md"/>
+          <file name="ADR-008-015.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-015.md"/>
+          <file name="ADR-008-016.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-016.md"/>
+          <file name="ADR-008-017.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-017.md"/>
+          <file name="ADR-008-018 — Subscription Model.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-018 — Subscription Model.md"/>
+          <file name="ADR-008-019 — License Ownership &amp; Scope Model.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-019 — License Ownership &amp; Scope Model.md"/>
+          <file name="ADR-008-020 — Entitlement Resolution Mode.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-020 — Entitlement Resolution Mode.md"/>
+          <file name="ADR-008-021 — Feature Evaluation Model.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-021 — Feature Evaluation Model.md"/>
+          <file name="ADR-008-022 — Usage Policy Model.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-022 — Usage Policy Model.md"/>
+          <file name="ADR-008-023 — Commercial Manifest &amp; Runtime Enforcement Boundary.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-023 — Commercial Manifest &amp; Runtime Enforcement Boundary.md"/>
+          <file name="ADR-008-024 — Billing Integration Boundary.md" path="docs2/Platform-Engines/VS08/ADR/ADR-008-024 — Billing Integration Boundary.md"/>
+        </directory>
+        <directory name="Architecture" path="docs2/Platform-Engines/VS08/Architecture">
+          <file name="CAG-001 — Commercial Architecture Guide.md" path="docs2/Platform-Engines/VS08/Architecture/CAG-001 — Commercial Architecture Guide.md"/>
+          <file name="DDS-101A-Database-Design-Specification.md" path="docs2/Platform-Engines/VS08/Architecture/DDS-101A-Database-Design-Specification.md"/>
+        </directory>
+        <directory name="Blueprint" path="docs2/Platform-Engines/VS08/Blueprint">
+          <file name="VS08B-001 — Commercial Blueprint.md" path="docs2/Platform-Engines/VS08/Blueprint/VS08B-001 — Commercial Blueprint.md"/>
+        </directory>
+        <directory name="Capability-Contracts" path="docs2/Platform-Engines/VS08/Capability-Contracts">
+          <file name="CC-001-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-001-PlatformApplication.md"/>
+          <file name="CC-002-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-002-PlatformApplication.md"/>
+          <file name="CC-003-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-003-PlatformApplication.md"/>
+          <file name="CC-004-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-004-PlatformApplication.md"/>
+          <file name="CC-005-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-005-PlatformApplication.md"/>
+          <file name="CC-006-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-006-PlatformApplication.md"/>
+          <file name="CC-007-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-007-PlatformApplication.md"/>
+          <file name="CC-008-Subscription.md" path="docs2/Platform-Engines/VS08/Capability-Contracts/CC-008-Subscription.md"/>
+        </directory>
+        <directory name="Certification" path="docs2/Platform-Engines/VS08/Certification">
+          <file name="EWP-008-Certification.md" path="docs2/Platform-Engines/VS08/Certification/EWP-008-Certification.md"/>
+        </directory>
+        <directory name="Commercial" path="docs2/Platform-Engines/VS08/Commercial">
+        </directory>
+        <directory name="Compatibility-Contracts" path="docs2/Platform-Engines/VS08/Compatibility-Contracts">
+        </directory>
+        <directory name="Domain" path="docs2/Platform-Engines/VS08/Domain">
+          <file name="DM-001 — VS08B Commercial Domain Model.md" path="docs2/Platform-Engines/VS08/Domain/DM-001 — VS08B Commercial Domain Model.md"/>
+        </directory>
+        <directory name="Engineering-Work-Packages" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages">
+          <file name="EWP-001-PlatformApplication.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-001-PlatformApplication.md"/>
+          <file name="EWP-001.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-001.md"/>
+          <file name="EWP-002.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-002.md"/>
+          <file name="EWP-003.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-003.md"/>
+          <file name="EWP-004.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-004.md"/>
+          <file name="EWP-005.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-005.md"/>
+          <file name="EWP-006.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-006.md"/>
+          <file name="EWP-007.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-007.md"/>
+          <file name="EWP-008.md" path="docs2/Platform-Engines/VS08/Engineering-Work-Packages/EWP-008.md"/>
+        </directory>
+        <directory name="Foundation" path="docs2/Platform-Engines/VS08/Foundation">
+          <file name="Bootstrap.md" path="docs2/Platform-Engines/VS08/Foundation/Bootstrap.md"/>
+          <file name="VS08A-F-Foundation-Freeze-Milestone.md" path="docs2/Platform-Engines/VS08/Foundation/VS08A-F-Foundation-Freeze-Milestone.md"/>
+        </directory>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS08/Metrics">
+        </directory>
+        <directory name="Releases" path="docs2/Platform-Engines/VS08/Releases">
+        </directory>
+        <directory name="Reviews" path="docs2/Platform-Engines/VS08/Reviews">
+          <file name="AFR-001 — VS08B Architecture Freeze Review.md" path="docs2/Platform-Engines/VS08/Reviews/AFR-001 — VS08B Architecture Freeze Review.md"/>
+        </directory>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS08/INDEX.md"/>
+        <file name="README.md" path="docs2/Platform-Engines/VS08/README.md"/>
+      </directory>
+      <directory name="VS09" path="docs2/Platform-Engines/VS09">
+        <directory name="ADR" path="docs2/Platform-Engines/VS09/ADR">
+          <file name="ADR-009-001 — Communication Delivery Model.md" path="docs2/Platform-Engines/VS09/ADR/ADR-009-001 — Communication Delivery Model.md"/>
+          <file name="ADR-009-002 — Channel &amp; Provider Abstraction.md" path="docs2/Platform-Engines/VS09/ADR/ADR-009-002 — Channel &amp; Provider Abstraction.md"/>
+          <file name="ADR-009-003 — Template Resolution &amp; Personalization.md" path="docs2/Platform-Engines/VS09/ADR/ADR-009-003 — Template Resolution &amp; Personalization.md"/>
+          <file name="ADR-009-004 — Queue, Retry &amp; Delivery Tracking.md" path="docs2/Platform-Engines/VS09/ADR/ADR-009-004 — Queue, Retry &amp; Delivery Tracking.md"/>
+        </directory>
+        <directory name="AFR" path="docs2/Platform-Engines/VS09/AFR">
+          <file name="AFR-001 — VS09 Architecture Freeze Review.md" path="docs2/Platform-Engines/VS09/AFR/AFR-001 — VS09 Architecture Freeze Review.md"/>
+        </directory>
+        <directory name="Architecture" path="docs2/Platform-Engines/VS09/Architecture">
+          <file name="VS09-P002 — Notification Engine Architecture Guide.md" path="docs2/Platform-Engines/VS09/Architecture/VS09-P002 — Notification Engine Architecture Guide.md"/>
+        </directory>
+        <directory name="Blueprint" path="docs2/Platform-Engines/VS09/Blueprint">
+          <file name="VS09-P001 — Notification Engine Blueprint.md" path="docs2/Platform-Engines/VS09/Blueprint/VS09-P001 — Notification Engine Blueprint.md"/>
+        </directory>
+        <directory name="Capability-Contracts" path="docs2/Platform-Engines/VS09/Capability-Contracts">
+          <file name="CC-001 — Notification Template.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-001 — Notification Template.md"/>
+          <file name="CC-002 — Notification Channel.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-002 — Notification Channel.md"/>
+          <file name="CC-003 — Notification.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-003 — Notification.md"/>
+          <file name="CC-004 — Notification Recipient.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-004 — Notification Recipient.md"/>
+          <file name="CC-005 — Provider Profile.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-005 — Provider Profile.md"/>
+          <file name="CC-006 — Delivery Tracking.md" path="docs2/Platform-Engines/VS09/Capability-Contracts/CC-006 — Delivery Tracking.md"/>
+        </directory>
+        <directory name="Certification" path="docs2/Platform-Engines/VS09/Certification">
+          <file name="EWP-003 — Compliance Report.md" path="docs2/Platform-Engines/VS09/Certification/EWP-003 — Compliance Report.md"/>
+          <file name="EWP-003 — Production Certification.md" path="docs2/Platform-Engines/VS09/Certification/EWP-003 — Production Certification.md"/>
+          <file name="EWP-003 — Review Package.md" path="docs2/Platform-Engines/VS09/Certification/EWP-003 — Review Package.md"/>
+        </directory>
+        <directory name="CFR" path="docs2/Platform-Engines/VS09/CFR">
+          <file name="CFR-001 — VS09 Capability Contract Freeze Review.md" path="docs2/Platform-Engines/VS09/CFR/CFR-001 — VS09 Capability Contract Freeze Review.md"/>
+        </directory>
+        <directory name="Domain" path="docs2/Platform-Engines/VS09/Domain">
+          <file name="VS09-P003 — Notification Engine Domain Model.md" path="docs2/Platform-Engines/VS09/Domain/VS09-P003 — Notification Engine Domain Model.md"/>
+        </directory>
+        <directory name="Engineering-Work-Packages" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages">
+          <directory name="EWP-001" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001/walkthrough.md"/>
+          </directory>
+          <directory name="EWP-002" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002/walkthrough.md"/>
+          </directory>
+          <directory name="EWP-003" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003/walkthrough.md"/>
+          </directory>
+          <directory name="EWP-004" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004/walkthrough.md"/>
+          </directory>
+          <directory name="EWP-005" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005/walkthrough.md"/>
+          </directory>
+          <directory name="EWP-006" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006">
+            <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006/compliance-report.md"/>
+            <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006/production-certification.md"/>
+            <file name="README.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006/README.md"/>
+            <file name="review-package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006/review-package.md"/>
+            <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006/walkthrough.md"/>
+          </directory>
+          <file name="EWP-001 — Notification Template Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-001 — Notification Template Implementation Package.md"/>
+          <file name="EWP-002 — Notification Channel Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-002 — Notification Channel Implementation Package.md"/>
+          <file name="EWP-003 — Notification Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-003 — Notification Implementation Package.md"/>
+          <file name="EWP-004 — Notification Recipient Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-004 — Notification Recipient Implementation Package.md"/>
+          <file name="EWP-005 — Provider Profile Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-005 — Provider Profile Implementation Package.md"/>
+          <file name="EWP-006 — Delivery Tracking Implementation Package.md" path="docs2/Platform-Engines/VS09/Engineering-Work-Packages/EWP-006 — Delivery Tracking Implementation Package.md"/>
+        </directory>
+        <directory name="Freeze" path="docs2/Platform-Engines/VS09/Freeze">
+        </directory>
+        <directory name="Metrics" path="docs2/Platform-Engines/VS09/Metrics">
+        </directory>
+        <directory name="Reference-Implementations" path="docs2/Platform-Engines/VS09/Reference-Implementations">
+          <directory name="HF" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF">
+            <directory name="HF-001" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001">
+              <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001/compliance-report.md"/>
+              <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001/production-certification.md"/>
+              <file name="README.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001/README.md"/>
+              <file name="review-package.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001/review-package.md"/>
+              <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-001/walkthrough.md"/>
+            </directory>
+            <directory name="HF-002" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002">
+              <file name="compliance-report.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002/compliance-report.md"/>
+              <file name="production-certification.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002/production-certification.md"/>
+              <file name="README.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002/README.md"/>
+              <file name="review-package.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002/review-package.md"/>
+              <file name="walkthrough.md" path="docs2/Platform-Engines/VS09/Reference-Implementations/HF/HF-002/walkthrough.md"/>
+            </directory>
+          </directory>
+          <directory name="RIS" path="docs2/Platform-Engines/VS09/Reference-Implementations/RIS">
+          </directory>
+        </directory>
+        <directory name="Releases" path="docs2/Platform-Engines/VS09/Releases">
+        </directory>
+        <file name="CHANGELOG.md" path="docs2/Platform-Engines/VS09/CHANGELOG.md"/>
+        <file name="ENGINE-INDEX.md" path="docs2/Platform-Engines/VS09/ENGINE-INDEX.md"/>
+        <file name="INDEX.md" path="docs2/Platform-Engines/VS09/INDEX.md"/>
+        <file name="README.md" path="docs2/Platform-Engines/VS09/README.md"/>
+        <file name="RIS-REGISTRY.md" path="docs2/Platform-Engines/VS09/RIS-REGISTRY.md"/>
+      </directory>
+      <directory name="VS10" path="docs2/Platform-Engines/VS10">
+      </directory>
+    </directory>
+    <file name="ENGINEERING-LIBRARY-MIGRATION-REPORT.md" path="docs2/ENGINEERING-LIBRARY-MIGRATION-REPORT.md"/>
+    <file name="ENGINEERING-LIBRARY.md" path="docs2/ENGINEERING-LIBRARY.md"/>
+    <file name="ENGINES.md" path="docs2/ENGINES.md"/>
+    <file name="INDEX.md" path="docs2/INDEX.md"/>
+    <file name="LIBRARY-GAPS.md" path="docs2/LIBRARY-GAPS.md"/>
+    <file name="PLATFORM_STATUS.md" path="docs2/PLATFORM_STATUS.md"/>
+    <file name="README.md" path="docs2/README.md"/>
+  </directory>
+</engineeringLibraryStructure>
