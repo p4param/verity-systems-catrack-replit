@@ -2,6 +2,7 @@
 
 import React, { useState, useCallback, useMemo, useEffect } from "react";
 import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import {
   Dialog,
@@ -31,14 +32,15 @@ import {
   useUpdateLayout,
 } from "@/modules/platform/configuration/hooks/use-layouts";
 import { useFields } from "@/modules/platform/configuration/hooks/use-fields";
-import type {
-  LayoutRoot,
-  LayoutTab,
-  LayoutSection,
-  LayoutGroup,
-  LayoutRow,
-  LayoutColumn,
-  LayoutFieldPlacement,
+import {
+  createLayoutDtoSchema,
+  type LayoutRoot,
+  type LayoutTab,
+  type LayoutSection,
+  type LayoutGroup,
+  type LayoutRow,
+  type LayoutColumn,
+  type LayoutFieldPlacement,
 } from "@/modules/platform/configuration/validations/layout-validation";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
@@ -142,7 +144,8 @@ function createDefaultPlacement(fieldId: string, fieldLabel: string): LayoutFiel
 
 // Build tree from layout root
 function buildTree(layout: LayoutRoot): TreeNode[] {
-  return (layout.tabs || []).map((tab, ti) => ({
+  const tabs = layout?.tabs || (layout as any)?.root?.tabs || [];
+  return tabs.map((tab, ti) => ({
     id: tab.id,
     type: "tab" as NodeType,
     name: tab.title || tab.name || "Tab",
@@ -323,10 +326,16 @@ export function LayoutDialog({
           layoutType: initialData.layoutType || "FORM",
           isDefault: initialData.isDefault || false,
         });
-        const layoutData = initialData.layout || {
-          layoutVersion: "1.0",
-          responsiveColumns: { xs: 1, sm: 1, md: 2, lg: 2, xl: 3 },
-          tabs: [],
+        const rawLayout = (initialData.layout || {}) as any;
+        const tabsArray = Array.isArray(rawLayout?.tabs)
+          ? rawLayout.tabs
+          : Array.isArray(rawLayout?.root?.tabs)
+          ? rawLayout.root.tabs
+          : [];
+        const layoutData: LayoutRoot = {
+          layoutVersion: rawLayout?.layoutVersion || "1.0",
+          responsiveColumns: rawLayout?.responsiveColumns || { xs: 1, sm: 1, md: 2, lg: 2, xl: 3 },
+          tabs: tabsArray,
         };
         setLayout(layoutData);
         // Expand all nodes initially
@@ -348,7 +357,7 @@ export function LayoutDialog({
             }
           }
         }
-        collectIds(layoutData.tabs);
+        collectIds(tabsArray);
         setExpandedNodes(allIds);
         setActiveTab("structure");
       } else {
@@ -629,7 +638,7 @@ export function LayoutDialog({
         }
       }
     }
-    collect(layout.tabs);
+    collect(layout?.tabs || (layout as any)?.root?.tabs || []);
     return ids;
   }, [layout]);
 
@@ -798,8 +807,8 @@ export function LayoutDialog({
             <div className="flex justify-between w-full">
               <div className="text-xs text-muted-foreground flex items-center gap-2">
                 <span>
-                  {layout.tabs.length} tab(s) •{" "}
-                  {layout.tabs.reduce((sum, t) => sum + t.sections.length, 0)} section(s) •{" "}
+                  {(layout?.tabs || (layout as any)?.root?.tabs || []).length} tab(s) •{" "}
+                  {(layout?.tabs || (layout as any)?.root?.tabs || []).reduce((sum: number, t: any) => sum + (t.sections?.length || 0), 0)} section(s) •{" "}
                   {placedFieldIds.size} field(s) placed
                 </span>
               </div>

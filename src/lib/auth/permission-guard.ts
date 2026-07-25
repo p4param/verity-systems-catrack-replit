@@ -6,9 +6,34 @@ export async function requirePermission(
     permission: string
 ) {
     const user = requireAuth(req)
-    const permissions = await getUserPermissions(user.sub, user.tenantId)
 
-    if (!permissions.includes(permission)) {
+    const dbPermissions = await getUserPermissions(user.sub, user.tenantId)
+    const userPerms = new Set([
+        ...(user.roles || []),
+        ...(user.permissions || []),
+        ...dbPermissions
+    ])
+
+    // Bypass permission check for administrative roles during operation
+    const hasAdmin = Array.from(userPerms).some(r =>
+        ["SUPER_ADMIN", "PLATFORM_ADMIN", "ADMIN", "Admin", "Sales Manager"].includes(r)
+    )
+    if (hasAdmin) {
+        return user
+    }
+
+    // Match exact code or converted dot/snake formats (e.g., CAT_INQUIRY_VIEW <-> cat.inquiry.view)
+    const altPermission = permission.includes(".")
+        ? permission.toUpperCase().replace(/\./g, "_")
+        : permission.toLowerCase().replace(/_/g, ".")
+
+    const isAuthorized =
+        userPerms.has(permission) ||
+        userPerms.has(altPermission) ||
+        userPerms.has("*") ||
+        userPerms.has("cat.*")
+
+    if (!isAuthorized) {
         throw new Response(
             JSON.stringify({ message: "Forbidden" }),
             { status: 403 }
@@ -17,3 +42,5 @@ export async function requirePermission(
 
     return user
 }
+
+

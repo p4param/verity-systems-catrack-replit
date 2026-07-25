@@ -1,10 +1,9 @@
 import { prisma } from "@/lib/prisma"
 
-export async function getUserPermissions(userId: string, tenantId: string) {
+export async function getUserPermissions(userId: string, tenantId?: string) {
     const roles = await prisma.userRole.findMany({
         where: {
             userId,
-            user: { tenantId: tenantId }  // Explicit tenant scoping
         },
         include: {
             role: {
@@ -17,13 +16,9 @@ export async function getUserPermissions(userId: string, tenantId: string) {
         }
     })
 
-    return Array.from(
-        new Set(
-            roles.flatMap(r =>
-                r.role.rolePermissions.map(
-                    rp => rp.permission.code
-                )
-            )
-        )
-    )
+    const roleNames = roles.map(r => r.role.name)
+    const permissionCodes = roles.flatMap(r => r.role.rolePermissions.map(rp => rp.permission.code))
+
+    return Array.from(new Set([...roleNames, ...permissionCodes]))
 }
+

@@ -3093,6 +3093,120 @@ model DeliveryTracking {
   @@map("delivery_tracking")
 }
 
+// ─── CAT BWP-001: Relationship Foundation Models ─────────────────────────────
+
+enum RelationshipType {
+  INDIVIDUAL
+  ORGANIZATION
+}
+
+enum RelationshipStatus {
+  PROSPECT
+  CUSTOMER
+  INACTIVE
+  BLACKLISTED
+}
+
+model CatRelationship {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  relationshipNumber String             @map("relationship_number") @db.VarChar(50)
+  name               String             @db.VarChar(255)
+  type               RelationshipType   @default(INDIVIDUAL)
+  status             RelationshipStatus @default(PROSPECT)
+  primaryContactId   String?            @map("primary_contact_id") @db.Uuid
+
+  // Standard Audit & Concurrency
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   BigInt    @default(1) @map("version")
+
+  contacts  CatContact[]
+  notes     CatRelationshipNote[]
+  documents CatRelationshipDocument[]
+
+  @@unique([tenantId, relationshipNumber], map: "uq_cat_relationship_number")
+  @@index([tenantId, isDeleted], map: "idx_cat_rel_tenant_deleted")
+  @@index([tenantId, status], map: "idx_cat_rel_status")
+  @@index([tenantId, name], map: "idx_cat_rel_name")
+  @@map("cat_relationships")
+}
+
+model CatContact {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  relationshipId String   @map("relationship_id") @db.Uuid
+  name           String   @db.VarChar(255)
+  email          String?  @db.VarChar(255)
+  phone          String?  @db.VarChar(50)
+  role           String?  @db.VarChar(100)
+  isPrimary      Boolean  @default(false) @map("is_primary")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_contact_rel")
+  @@index([tenantId, email], map: "idx_cat_contact_email")
+  @@index([tenantId, phone], map: "idx_cat_contact_phone")
+  @@map("cat_contacts")
+}
+
+model CatRelationshipNote {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  relationshipId String   @map("relationship_id") @db.Uuid
+  content        String   @db.Text
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_note_rel")
+  @@map("cat_relationship_notes")
+}
+
+model CatRelationshipDocument {
+  id             String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String   @map("tenant_id") @db.Uuid
+  relationshipId String   @map("relationship_id") @db.Uuid
+  fileName       String   @map("file_name") @db.VarChar(255)
+  fileUrl        String   @map("file_url") @db.VarChar(1000)
+  fileSize       Int      @map("file_size")
+  fileType       String   @map("file_type") @db.VarChar(100)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_doc_rel")
+  @@map("cat_relationship_documents")
+}
+
+
 
 
 

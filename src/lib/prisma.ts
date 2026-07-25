@@ -8,8 +8,8 @@ const globalForPrisma = global as unknown as { prisma: PrismaClient };
 // The check should reference the MOST RECENTLY ADDED model so hot-reload
 // always picks up the updated generated client.
 // VS09 EWP-001: Updated to check for notificationTemplate (most recent model).
-if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).notificationTemplate) {
-    console.warn("⚠️ Stale Prisma Client detected (missing notificationTemplate model). Forcing re-initialization...");
+if (globalForPrisma.prisma && !(globalForPrisma.prisma as any).catRelationship) {
+    console.warn("⚠️ Stale Prisma Client detected (missing catRelationship model). Forcing re-initialization...");
     (globalForPrisma.prisma as any) = undefined;
 }
 

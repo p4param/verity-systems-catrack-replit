@@ -14,13 +14,24 @@ import { AuthUser, CurrentUser } from "./auth-types"
  * MUST include tenantId explicitly.
  */
 export function requireAuth(req: Request): CurrentUser {
-    const authHeader = req.headers.get("authorization")
+    let token: string | undefined
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    const authHeader = req.headers.get("authorization")
+    if (authHeader && authHeader.startsWith("Bearer ")) {
+        token = authHeader.replace("Bearer ", "").trim()
+    } else {
+        const cookieHeader = req.headers.get("cookie")
+        if (cookieHeader) {
+            const match = cookieHeader.match(/(?:^|;\s*)accessToken=([^;]+)/)
+            if (match) {
+                token = decodeURIComponent(match[1])
+            }
+        }
     }
 
-    const token = authHeader.replace("Bearer ", "").trim()
+    if (!token) {
+        throw NextResponse.json({ message: "Unauthorized" }, { status: 401 })
+    }
 
     let user: CurrentUser
     try {
@@ -46,6 +57,7 @@ export function requireAuth(req: Request): CurrentUser {
 
     return user
 }
+
 
 export function requireRole(req: Request, role: string): CurrentUser {
     const user = requireAuth(req)

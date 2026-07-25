@@ -22,7 +22,6 @@ function buildXmlTree(dirPath, indentLevel = 1) {
 
   const items = fs.readdirSync(dirPath, { withFileTypes: true });
   
-  // Sort directories first, then files
   items.sort((a, b) => {
     if (a.isDirectory() && !b.isDirectory()) return -1;
     if (!a.isDirectory() && b.isDirectory()) return 1;
@@ -50,7 +49,11 @@ const footer = `</engineeringLibraryStructure>\n`;
 
 const fullXml = header + body + footer;
 
-const outputPath = 'docs2/Archive/Migration/docs2_tree.xml';
+const outputDir = 'docs2/Archive/Migration';
+if (!fs.existsSync(outputDir)) {
+  fs.mkdirSync(outputDir, { recursive: true });
+}
+
+const outputPath = path.join(outputDir, 'docs2_tree.xml');
 fs.writeFileSync(outputPath, fullXml, 'utf8');
 console.log(`XML file generated successfully at ${outputPath}`);
-console.log(`Total XML lines: ${fullXml.split('\n').length}`);

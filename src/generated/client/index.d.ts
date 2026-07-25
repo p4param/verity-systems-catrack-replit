@@ -610,6 +610,26 @@ export type ProviderProfile = $Result.DefaultSelection<Prisma.$ProviderProfilePa
  * 
  */
 export type DeliveryTracking = $Result.DefaultSelection<Prisma.$DeliveryTrackingPayload>
+/**
+ * Model CatRelationship
+ * 
+ */
+export type CatRelationship = $Result.DefaultSelection<Prisma.$CatRelationshipPayload>
+/**
+ * Model CatContact
+ * 
+ */
+export type CatContact = $Result.DefaultSelection<Prisma.$CatContactPayload>
+/**
+ * Model CatRelationshipNote
+ * 
+ */
+export type CatRelationshipNote = $Result.DefaultSelection<Prisma.$CatRelationshipNotePayload>
+/**
+ * Model CatRelationshipDocument
+ * 
+ */
+export type CatRelationshipDocument = $Result.DefaultSelection<Prisma.$CatRelationshipDocumentPayload>
 
 /**
  * Enums
@@ -687,6 +707,24 @@ export const NotificationDeliveryStatus: {
 
 export type NotificationDeliveryStatus = (typeof NotificationDeliveryStatus)[keyof typeof NotificationDeliveryStatus]
 
+
+export const RelationshipType: {
+  INDIVIDUAL: 'INDIVIDUAL',
+  ORGANIZATION: 'ORGANIZATION'
+};
+
+export type RelationshipType = (typeof RelationshipType)[keyof typeof RelationshipType]
+
+
+export const RelationshipStatus: {
+  PROSPECT: 'PROSPECT',
+  CUSTOMER: 'CUSTOMER',
+  INACTIVE: 'INACTIVE',
+  BLACKLISTED: 'BLACKLISTED'
+};
+
+export type RelationshipStatus = (typeof RelationshipStatus)[keyof typeof RelationshipStatus]
+
 }
 
 export type StockCondition = $Enums.StockCondition
@@ -712,6 +750,14 @@ export const NotificationChannelStatus: typeof $Enums.NotificationChannelStatus
 export type NotificationDeliveryStatus = $Enums.NotificationDeliveryStatus
 
 export const NotificationDeliveryStatus: typeof $Enums.NotificationDeliveryStatus
+
+export type RelationshipType = $Enums.RelationshipType
+
+export const RelationshipType: typeof $Enums.RelationshipType
+
+export type RelationshipStatus = $Enums.RelationshipStatus
+
+export const RelationshipStatus: typeof $Enums.RelationshipStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -2005,6 +2051,46 @@ export class PrismaClient<
     * ```
     */
   get deliveryTracking(): Prisma.DeliveryTrackingDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catRelationship`: Exposes CRUD operations for the **CatRelationship** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatRelationships
+    * const catRelationships = await prisma.catRelationship.findMany()
+    * ```
+    */
+  get catRelationship(): Prisma.CatRelationshipDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catContact`: Exposes CRUD operations for the **CatContact** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatContacts
+    * const catContacts = await prisma.catContact.findMany()
+    * ```
+    */
+  get catContact(): Prisma.CatContactDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catRelationshipNote`: Exposes CRUD operations for the **CatRelationshipNote** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatRelationshipNotes
+    * const catRelationshipNotes = await prisma.catRelationshipNote.findMany()
+    * ```
+    */
+  get catRelationshipNote(): Prisma.CatRelationshipNoteDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catRelationshipDocument`: Exposes CRUD operations for the **CatRelationshipDocument** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatRelationshipDocuments
+    * const catRelationshipDocuments = await prisma.catRelationshipDocument.findMany()
+    * ```
+    */
+  get catRelationshipDocument(): Prisma.CatRelationshipDocumentDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -2562,7 +2648,11 @@ export namespace Prisma {
     DeliveryAttemptRecord: 'DeliveryAttemptRecord',
     NotificationRecipient: 'NotificationRecipient',
     ProviderProfile: 'ProviderProfile',
-    DeliveryTracking: 'DeliveryTracking'
+    DeliveryTracking: 'DeliveryTracking',
+    CatRelationship: 'CatRelationship',
+    CatContact: 'CatContact',
+    CatRelationshipNote: 'CatRelationshipNote',
+    CatRelationshipDocument: 'CatRelationshipDocument'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2578,7 +2668,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking"
+      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking" | "catRelationship" | "catContact" | "catRelationshipNote" | "catRelationshipDocument"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -10772,6 +10862,286 @@ export namespace Prisma {
           }
         }
       }
+      CatRelationship: {
+        payload: Prisma.$CatRelationshipPayload<ExtArgs>
+        fields: Prisma.CatRelationshipFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatRelationshipFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatRelationshipFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          findFirst: {
+            args: Prisma.CatRelationshipFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatRelationshipFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          findMany: {
+            args: Prisma.CatRelationshipFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>[]
+          }
+          create: {
+            args: Prisma.CatRelationshipCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          createMany: {
+            args: Prisma.CatRelationshipCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatRelationshipCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>[]
+          }
+          delete: {
+            args: Prisma.CatRelationshipDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          update: {
+            args: Prisma.CatRelationshipUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          deleteMany: {
+            args: Prisma.CatRelationshipDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatRelationshipUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatRelationshipUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipPayload>
+          }
+          aggregate: {
+            args: Prisma.CatRelationshipAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatRelationship>
+          }
+          groupBy: {
+            args: Prisma.CatRelationshipGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatRelationshipCountArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatContact: {
+        payload: Prisma.$CatContactPayload<ExtArgs>
+        fields: Prisma.CatContactFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatContactFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatContactFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          findFirst: {
+            args: Prisma.CatContactFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatContactFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          findMany: {
+            args: Prisma.CatContactFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>[]
+          }
+          create: {
+            args: Prisma.CatContactCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          createMany: {
+            args: Prisma.CatContactCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatContactCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>[]
+          }
+          delete: {
+            args: Prisma.CatContactDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          update: {
+            args: Prisma.CatContactUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          deleteMany: {
+            args: Prisma.CatContactDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatContactUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatContactUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatContactPayload>
+          }
+          aggregate: {
+            args: Prisma.CatContactAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatContact>
+          }
+          groupBy: {
+            args: Prisma.CatContactGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatContactGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatContactCountArgs<ExtArgs>
+            result: $Utils.Optional<CatContactCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatRelationshipNote: {
+        payload: Prisma.$CatRelationshipNotePayload<ExtArgs>
+        fields: Prisma.CatRelationshipNoteFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatRelationshipNoteFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatRelationshipNoteFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          findFirst: {
+            args: Prisma.CatRelationshipNoteFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatRelationshipNoteFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          findMany: {
+            args: Prisma.CatRelationshipNoteFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>[]
+          }
+          create: {
+            args: Prisma.CatRelationshipNoteCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          createMany: {
+            args: Prisma.CatRelationshipNoteCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatRelationshipNoteCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>[]
+          }
+          delete: {
+            args: Prisma.CatRelationshipNoteDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          update: {
+            args: Prisma.CatRelationshipNoteUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          deleteMany: {
+            args: Prisma.CatRelationshipNoteDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatRelationshipNoteUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatRelationshipNoteUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipNotePayload>
+          }
+          aggregate: {
+            args: Prisma.CatRelationshipNoteAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatRelationshipNote>
+          }
+          groupBy: {
+            args: Prisma.CatRelationshipNoteGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipNoteGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatRelationshipNoteCountArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipNoteCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatRelationshipDocument: {
+        payload: Prisma.$CatRelationshipDocumentPayload<ExtArgs>
+        fields: Prisma.CatRelationshipDocumentFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatRelationshipDocumentFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatRelationshipDocumentFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          findFirst: {
+            args: Prisma.CatRelationshipDocumentFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatRelationshipDocumentFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          findMany: {
+            args: Prisma.CatRelationshipDocumentFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>[]
+          }
+          create: {
+            args: Prisma.CatRelationshipDocumentCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          createMany: {
+            args: Prisma.CatRelationshipDocumentCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatRelationshipDocumentCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>[]
+          }
+          delete: {
+            args: Prisma.CatRelationshipDocumentDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          update: {
+            args: Prisma.CatRelationshipDocumentUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          deleteMany: {
+            args: Prisma.CatRelationshipDocumentDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatRelationshipDocumentUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatRelationshipDocumentUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatRelationshipDocumentPayload>
+          }
+          aggregate: {
+            args: Prisma.CatRelationshipDocumentAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatRelationshipDocument>
+          }
+          groupBy: {
+            args: Prisma.CatRelationshipDocumentGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipDocumentGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatRelationshipDocumentCountArgs<ExtArgs>
+            result: $Utils.Optional<CatRelationshipDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -12878,6 +13248,55 @@ export namespace Prisma {
    */
   export type NotificationDeliveryCountOutputTypeCountAttemptsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: DeliveryAttemptRecordWhereInput
+  }
+
+
+  /**
+   * Count Type CatRelationshipCountOutputType
+   */
+
+  export type CatRelationshipCountOutputType = {
+    contacts: number
+    notes: number
+    documents: number
+  }
+
+  export type CatRelationshipCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contacts?: boolean | CatRelationshipCountOutputTypeCountContactsArgs
+    notes?: boolean | CatRelationshipCountOutputTypeCountNotesArgs
+    documents?: boolean | CatRelationshipCountOutputTypeCountDocumentsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * CatRelationshipCountOutputType without action
+   */
+  export type CatRelationshipCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipCountOutputType
+     */
+    select?: CatRelationshipCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * CatRelationshipCountOutputType without action
+   */
+  export type CatRelationshipCountOutputTypeCountContactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatContactWhereInput
+  }
+
+  /**
+   * CatRelationshipCountOutputType without action
+   */
+  export type CatRelationshipCountOutputTypeCountNotesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatRelationshipNoteWhereInput
+  }
+
+  /**
+   * CatRelationshipCountOutputType without action
+   */
+  export type CatRelationshipCountOutputTypeCountDocumentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatRelationshipDocumentWhereInput
   }
 
 
@@ -140118,6 +140537,4289 @@ export namespace Prisma {
 
 
   /**
+   * Model CatRelationship
+   */
+
+  export type AggregateCatRelationship = {
+    _count: CatRelationshipCountAggregateOutputType | null
+    _avg: CatRelationshipAvgAggregateOutputType | null
+    _sum: CatRelationshipSumAggregateOutputType | null
+    _min: CatRelationshipMinAggregateOutputType | null
+    _max: CatRelationshipMaxAggregateOutputType | null
+  }
+
+  export type CatRelationshipAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type CatRelationshipSumAggregateOutputType = {
+    version: bigint | null
+  }
+
+  export type CatRelationshipMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipNumber: string | null
+    name: string | null
+    type: $Enums.RelationshipType | null
+    status: $Enums.RelationshipStatus | null
+    primaryContactId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint | null
+  }
+
+  export type CatRelationshipMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipNumber: string | null
+    name: string | null
+    type: $Enums.RelationshipType | null
+    status: $Enums.RelationshipStatus | null
+    primaryContactId: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint | null
+  }
+
+  export type CatRelationshipCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    relationshipNumber: number
+    name: number
+    type: number
+    status: number
+    primaryContactId: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    deletedBy: number
+    version: number
+    _all: number
+  }
+
+
+  export type CatRelationshipAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type CatRelationshipSumAggregateInputType = {
+    version?: true
+  }
+
+  export type CatRelationshipMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipNumber?: true
+    name?: true
+    type?: true
+    status?: true
+    primaryContactId?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+  }
+
+  export type CatRelationshipMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipNumber?: true
+    name?: true
+    type?: true
+    status?: true
+    primaryContactId?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+  }
+
+  export type CatRelationshipCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipNumber?: true
+    name?: true
+    type?: true
+    status?: true
+    primaryContactId?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+    _all?: true
+  }
+
+  export type CatRelationshipAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationship to aggregate.
+     */
+    where?: CatRelationshipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationships to fetch.
+     */
+    orderBy?: CatRelationshipOrderByWithRelationInput | CatRelationshipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatRelationshipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatRelationships
+    **/
+    _count?: true | CatRelationshipCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatRelationshipAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatRelationshipSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatRelationshipMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatRelationshipMaxAggregateInputType
+  }
+
+  export type GetCatRelationshipAggregateType<T extends CatRelationshipAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatRelationship]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatRelationship[P]>
+      : GetScalarType<T[P], AggregateCatRelationship[P]>
+  }
+
+
+
+
+  export type CatRelationshipGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatRelationshipWhereInput
+    orderBy?: CatRelationshipOrderByWithAggregationInput | CatRelationshipOrderByWithAggregationInput[]
+    by: CatRelationshipScalarFieldEnum[] | CatRelationshipScalarFieldEnum
+    having?: CatRelationshipScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatRelationshipCountAggregateInputType | true
+    _avg?: CatRelationshipAvgAggregateInputType
+    _sum?: CatRelationshipSumAggregateInputType
+    _min?: CatRelationshipMinAggregateInputType
+    _max?: CatRelationshipMaxAggregateInputType
+  }
+
+  export type CatRelationshipGroupByOutputType = {
+    id: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type: $Enums.RelationshipType
+    status: $Enums.RelationshipStatus
+    primaryContactId: string | null
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint
+    _count: CatRelationshipCountAggregateOutputType | null
+    _avg: CatRelationshipAvgAggregateOutputType | null
+    _sum: CatRelationshipSumAggregateOutputType | null
+    _min: CatRelationshipMinAggregateOutputType | null
+    _max: CatRelationshipMaxAggregateOutputType | null
+  }
+
+  type GetCatRelationshipGroupByPayload<T extends CatRelationshipGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatRelationshipGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatRelationshipGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatRelationshipGroupByOutputType[P]>
+            : GetScalarType<T[P], CatRelationshipGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatRelationshipSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipNumber?: boolean
+    name?: boolean
+    type?: boolean
+    status?: boolean
+    primaryContactId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+    contacts?: boolean | CatRelationship$contactsArgs<ExtArgs>
+    notes?: boolean | CatRelationship$notesArgs<ExtArgs>
+    documents?: boolean | CatRelationship$documentsArgs<ExtArgs>
+    _count?: boolean | CatRelationshipCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catRelationship"]>
+
+  export type CatRelationshipSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipNumber?: boolean
+    name?: boolean
+    type?: boolean
+    status?: boolean
+    primaryContactId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+  }, ExtArgs["result"]["catRelationship"]>
+
+  export type CatRelationshipSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    relationshipNumber?: boolean
+    name?: boolean
+    type?: boolean
+    status?: boolean
+    primaryContactId?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+  }
+
+  export type CatRelationshipInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    contacts?: boolean | CatRelationship$contactsArgs<ExtArgs>
+    notes?: boolean | CatRelationship$notesArgs<ExtArgs>
+    documents?: boolean | CatRelationship$documentsArgs<ExtArgs>
+    _count?: boolean | CatRelationshipCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type CatRelationshipIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {}
+
+  export type $CatRelationshipPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatRelationship"
+    objects: {
+      contacts: Prisma.$CatContactPayload<ExtArgs>[]
+      notes: Prisma.$CatRelationshipNotePayload<ExtArgs>[]
+      documents: Prisma.$CatRelationshipDocumentPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      relationshipNumber: string
+      name: string
+      type: $Enums.RelationshipType
+      status: $Enums.RelationshipStatus
+      primaryContactId: string | null
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      deletedBy: string | null
+      version: bigint
+    }, ExtArgs["result"]["catRelationship"]>
+    composites: {}
+  }
+
+  type CatRelationshipGetPayload<S extends boolean | null | undefined | CatRelationshipDefaultArgs> = $Result.GetResult<Prisma.$CatRelationshipPayload, S>
+
+  type CatRelationshipCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatRelationshipFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatRelationshipCountAggregateInputType | true
+    }
+
+  export interface CatRelationshipDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatRelationship'], meta: { name: 'CatRelationship' } }
+    /**
+     * Find zero or one CatRelationship that matches the filter.
+     * @param {CatRelationshipFindUniqueArgs} args - Arguments to find a CatRelationship
+     * @example
+     * // Get one CatRelationship
+     * const catRelationship = await prisma.catRelationship.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatRelationshipFindUniqueArgs>(args: SelectSubset<T, CatRelationshipFindUniqueArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatRelationship that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatRelationshipFindUniqueOrThrowArgs} args - Arguments to find a CatRelationship
+     * @example
+     * // Get one CatRelationship
+     * const catRelationship = await prisma.catRelationship.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatRelationshipFindUniqueOrThrowArgs>(args: SelectSubset<T, CatRelationshipFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatRelationship that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipFindFirstArgs} args - Arguments to find a CatRelationship
+     * @example
+     * // Get one CatRelationship
+     * const catRelationship = await prisma.catRelationship.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatRelationshipFindFirstArgs>(args?: SelectSubset<T, CatRelationshipFindFirstArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatRelationship that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipFindFirstOrThrowArgs} args - Arguments to find a CatRelationship
+     * @example
+     * // Get one CatRelationship
+     * const catRelationship = await prisma.catRelationship.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatRelationshipFindFirstOrThrowArgs>(args?: SelectSubset<T, CatRelationshipFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatRelationships that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatRelationships
+     * const catRelationships = await prisma.catRelationship.findMany()
+     * 
+     * // Get first 10 CatRelationships
+     * const catRelationships = await prisma.catRelationship.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catRelationshipWithIdOnly = await prisma.catRelationship.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatRelationshipFindManyArgs>(args?: SelectSubset<T, CatRelationshipFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatRelationship.
+     * @param {CatRelationshipCreateArgs} args - Arguments to create a CatRelationship.
+     * @example
+     * // Create one CatRelationship
+     * const CatRelationship = await prisma.catRelationship.create({
+     *   data: {
+     *     // ... data to create a CatRelationship
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatRelationshipCreateArgs>(args: SelectSubset<T, CatRelationshipCreateArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatRelationships.
+     * @param {CatRelationshipCreateManyArgs} args - Arguments to create many CatRelationships.
+     * @example
+     * // Create many CatRelationships
+     * const catRelationship = await prisma.catRelationship.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatRelationshipCreateManyArgs>(args?: SelectSubset<T, CatRelationshipCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatRelationships and returns the data saved in the database.
+     * @param {CatRelationshipCreateManyAndReturnArgs} args - Arguments to create many CatRelationships.
+     * @example
+     * // Create many CatRelationships
+     * const catRelationship = await prisma.catRelationship.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatRelationships and only return the `id`
+     * const catRelationshipWithIdOnly = await prisma.catRelationship.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatRelationshipCreateManyAndReturnArgs>(args?: SelectSubset<T, CatRelationshipCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatRelationship.
+     * @param {CatRelationshipDeleteArgs} args - Arguments to delete one CatRelationship.
+     * @example
+     * // Delete one CatRelationship
+     * const CatRelationship = await prisma.catRelationship.delete({
+     *   where: {
+     *     // ... filter to delete one CatRelationship
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatRelationshipDeleteArgs>(args: SelectSubset<T, CatRelationshipDeleteArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatRelationship.
+     * @param {CatRelationshipUpdateArgs} args - Arguments to update one CatRelationship.
+     * @example
+     * // Update one CatRelationship
+     * const catRelationship = await prisma.catRelationship.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatRelationshipUpdateArgs>(args: SelectSubset<T, CatRelationshipUpdateArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatRelationships.
+     * @param {CatRelationshipDeleteManyArgs} args - Arguments to filter CatRelationships to delete.
+     * @example
+     * // Delete a few CatRelationships
+     * const { count } = await prisma.catRelationship.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatRelationshipDeleteManyArgs>(args?: SelectSubset<T, CatRelationshipDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatRelationships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatRelationships
+     * const catRelationship = await prisma.catRelationship.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatRelationshipUpdateManyArgs>(args: SelectSubset<T, CatRelationshipUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatRelationship.
+     * @param {CatRelationshipUpsertArgs} args - Arguments to update or create a CatRelationship.
+     * @example
+     * // Update or create a CatRelationship
+     * const catRelationship = await prisma.catRelationship.upsert({
+     *   create: {
+     *     // ... data to create a CatRelationship
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatRelationship we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatRelationshipUpsertArgs>(args: SelectSubset<T, CatRelationshipUpsertArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatRelationships.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipCountArgs} args - Arguments to filter CatRelationships to count.
+     * @example
+     * // Count the number of CatRelationships
+     * const count = await prisma.catRelationship.count({
+     *   where: {
+     *     // ... the filter for the CatRelationships we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatRelationshipCountArgs>(
+      args?: Subset<T, CatRelationshipCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatRelationshipCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatRelationship.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatRelationshipAggregateArgs>(args: Subset<T, CatRelationshipAggregateArgs>): Prisma.PrismaPromise<GetCatRelationshipAggregateType<T>>
+
+    /**
+     * Group by CatRelationship.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatRelationshipGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatRelationshipGroupByArgs['orderBy'] }
+        : { orderBy?: CatRelationshipGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatRelationshipGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatRelationshipGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatRelationship model
+   */
+  readonly fields: CatRelationshipFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatRelationship.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatRelationshipClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    contacts<T extends CatRelationship$contactsArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationship$contactsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findMany"> | Null>
+    notes<T extends CatRelationship$notesArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationship$notesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findMany"> | Null>
+    documents<T extends CatRelationship$documentsArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationship$documentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findMany"> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatRelationship model
+   */ 
+  interface CatRelationshipFieldRefs {
+    readonly id: FieldRef<"CatRelationship", 'String'>
+    readonly tenantId: FieldRef<"CatRelationship", 'String'>
+    readonly relationshipNumber: FieldRef<"CatRelationship", 'String'>
+    readonly name: FieldRef<"CatRelationship", 'String'>
+    readonly type: FieldRef<"CatRelationship", 'RelationshipType'>
+    readonly status: FieldRef<"CatRelationship", 'RelationshipStatus'>
+    readonly primaryContactId: FieldRef<"CatRelationship", 'String'>
+    readonly createdAt: FieldRef<"CatRelationship", 'DateTime'>
+    readonly createdBy: FieldRef<"CatRelationship", 'String'>
+    readonly updatedAt: FieldRef<"CatRelationship", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatRelationship", 'String'>
+    readonly isDeleted: FieldRef<"CatRelationship", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatRelationship", 'DateTime'>
+    readonly deletedBy: FieldRef<"CatRelationship", 'String'>
+    readonly version: FieldRef<"CatRelationship", 'BigInt'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatRelationship findUnique
+   */
+  export type CatRelationshipFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationship to fetch.
+     */
+    where: CatRelationshipWhereUniqueInput
+  }
+
+  /**
+   * CatRelationship findUniqueOrThrow
+   */
+  export type CatRelationshipFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationship to fetch.
+     */
+    where: CatRelationshipWhereUniqueInput
+  }
+
+  /**
+   * CatRelationship findFirst
+   */
+  export type CatRelationshipFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationship to fetch.
+     */
+    where?: CatRelationshipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationships to fetch.
+     */
+    orderBy?: CatRelationshipOrderByWithRelationInput | CatRelationshipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationships.
+     */
+    cursor?: CatRelationshipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationships.
+     */
+    distinct?: CatRelationshipScalarFieldEnum | CatRelationshipScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship findFirstOrThrow
+   */
+  export type CatRelationshipFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationship to fetch.
+     */
+    where?: CatRelationshipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationships to fetch.
+     */
+    orderBy?: CatRelationshipOrderByWithRelationInput | CatRelationshipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationships.
+     */
+    cursor?: CatRelationshipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationships.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationships.
+     */
+    distinct?: CatRelationshipScalarFieldEnum | CatRelationshipScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship findMany
+   */
+  export type CatRelationshipFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationships to fetch.
+     */
+    where?: CatRelationshipWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationships to fetch.
+     */
+    orderBy?: CatRelationshipOrderByWithRelationInput | CatRelationshipOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatRelationships.
+     */
+    cursor?: CatRelationshipWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationships from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationships.
+     */
+    skip?: number
+    distinct?: CatRelationshipScalarFieldEnum | CatRelationshipScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship create
+   */
+  export type CatRelationshipCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CatRelationship.
+     */
+    data: XOR<CatRelationshipCreateInput, CatRelationshipUncheckedCreateInput>
+  }
+
+  /**
+   * CatRelationship createMany
+   */
+  export type CatRelationshipCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatRelationships.
+     */
+    data: CatRelationshipCreateManyInput | CatRelationshipCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatRelationship createManyAndReturn
+   */
+  export type CatRelationshipCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatRelationships.
+     */
+    data: CatRelationshipCreateManyInput | CatRelationshipCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatRelationship update
+   */
+  export type CatRelationshipUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CatRelationship.
+     */
+    data: XOR<CatRelationshipUpdateInput, CatRelationshipUncheckedUpdateInput>
+    /**
+     * Choose, which CatRelationship to update.
+     */
+    where: CatRelationshipWhereUniqueInput
+  }
+
+  /**
+   * CatRelationship updateMany
+   */
+  export type CatRelationshipUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatRelationships.
+     */
+    data: XOR<CatRelationshipUpdateManyMutationInput, CatRelationshipUncheckedUpdateManyInput>
+    /**
+     * Filter which CatRelationships to update
+     */
+    where?: CatRelationshipWhereInput
+  }
+
+  /**
+   * CatRelationship upsert
+   */
+  export type CatRelationshipUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CatRelationship to update in case it exists.
+     */
+    where: CatRelationshipWhereUniqueInput
+    /**
+     * In case the CatRelationship found by the `where` argument doesn't exist, create a new CatRelationship with this data.
+     */
+    create: XOR<CatRelationshipCreateInput, CatRelationshipUncheckedCreateInput>
+    /**
+     * In case the CatRelationship was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatRelationshipUpdateInput, CatRelationshipUncheckedUpdateInput>
+  }
+
+  /**
+   * CatRelationship delete
+   */
+  export type CatRelationshipDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+    /**
+     * Filter which CatRelationship to delete.
+     */
+    where: CatRelationshipWhereUniqueInput
+  }
+
+  /**
+   * CatRelationship deleteMany
+   */
+  export type CatRelationshipDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationships to delete
+     */
+    where?: CatRelationshipWhereInput
+  }
+
+  /**
+   * CatRelationship.contacts
+   */
+  export type CatRelationship$contactsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    where?: CatContactWhereInput
+    orderBy?: CatContactOrderByWithRelationInput | CatContactOrderByWithRelationInput[]
+    cursor?: CatContactWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CatContactScalarFieldEnum | CatContactScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship.notes
+   */
+  export type CatRelationship$notesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    where?: CatRelationshipNoteWhereInput
+    orderBy?: CatRelationshipNoteOrderByWithRelationInput | CatRelationshipNoteOrderByWithRelationInput[]
+    cursor?: CatRelationshipNoteWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CatRelationshipNoteScalarFieldEnum | CatRelationshipNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship.documents
+   */
+  export type CatRelationship$documentsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    where?: CatRelationshipDocumentWhereInput
+    orderBy?: CatRelationshipDocumentOrderByWithRelationInput | CatRelationshipDocumentOrderByWithRelationInput[]
+    cursor?: CatRelationshipDocumentWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: CatRelationshipDocumentScalarFieldEnum | CatRelationshipDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationship without action
+   */
+  export type CatRelationshipDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationship
+     */
+    select?: CatRelationshipSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatContact
+   */
+
+  export type AggregateCatContact = {
+    _count: CatContactCountAggregateOutputType | null
+    _min: CatContactMinAggregateOutputType | null
+    _max: CatContactMaxAggregateOutputType | null
+  }
+
+  export type CatContactMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    role: string | null
+    isPrimary: boolean | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatContactMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    role: string | null
+    isPrimary: boolean | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatContactCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    relationshipId: number
+    name: number
+    email: number
+    phone: number
+    role: number
+    isPrimary: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    deletedBy: number
+    _all: number
+  }
+
+
+  export type CatContactMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    name?: true
+    email?: true
+    phone?: true
+    role?: true
+    isPrimary?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatContactMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    name?: true
+    email?: true
+    phone?: true
+    role?: true
+    isPrimary?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatContactCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    name?: true
+    email?: true
+    phone?: true
+    role?: true
+    isPrimary?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    _all?: true
+  }
+
+  export type CatContactAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatContact to aggregate.
+     */
+    where?: CatContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatContacts to fetch.
+     */
+    orderBy?: CatContactOrderByWithRelationInput | CatContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatContacts
+    **/
+    _count?: true | CatContactCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatContactMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatContactMaxAggregateInputType
+  }
+
+  export type GetCatContactAggregateType<T extends CatContactAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatContact]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatContact[P]>
+      : GetScalarType<T[P], AggregateCatContact[P]>
+  }
+
+
+
+
+  export type CatContactGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatContactWhereInput
+    orderBy?: CatContactOrderByWithAggregationInput | CatContactOrderByWithAggregationInput[]
+    by: CatContactScalarFieldEnum[] | CatContactScalarFieldEnum
+    having?: CatContactScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatContactCountAggregateInputType | true
+    _min?: CatContactMinAggregateInputType
+    _max?: CatContactMaxAggregateInputType
+  }
+
+  export type CatContactGroupByOutputType = {
+    id: string
+    tenantId: string
+    relationshipId: string
+    name: string
+    email: string | null
+    phone: string | null
+    role: string | null
+    isPrimary: boolean
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    _count: CatContactCountAggregateOutputType | null
+    _min: CatContactMinAggregateOutputType | null
+    _max: CatContactMaxAggregateOutputType | null
+  }
+
+  type GetCatContactGroupByPayload<T extends CatContactGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatContactGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatContactGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatContactGroupByOutputType[P]>
+            : GetScalarType<T[P], CatContactGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatContactSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    role?: boolean
+    isPrimary?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catContact"]>
+
+  export type CatContactSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    role?: boolean
+    isPrimary?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catContact"]>
+
+  export type CatContactSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    role?: boolean
+    isPrimary?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+  }
+
+  export type CatContactInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+  export type CatContactIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+
+  export type $CatContactPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatContact"
+    objects: {
+      relationship: Prisma.$CatRelationshipPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      relationshipId: string
+      name: string
+      email: string | null
+      phone: string | null
+      role: string | null
+      isPrimary: boolean
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      deletedBy: string | null
+    }, ExtArgs["result"]["catContact"]>
+    composites: {}
+  }
+
+  type CatContactGetPayload<S extends boolean | null | undefined | CatContactDefaultArgs> = $Result.GetResult<Prisma.$CatContactPayload, S>
+
+  type CatContactCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatContactFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatContactCountAggregateInputType | true
+    }
+
+  export interface CatContactDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatContact'], meta: { name: 'CatContact' } }
+    /**
+     * Find zero or one CatContact that matches the filter.
+     * @param {CatContactFindUniqueArgs} args - Arguments to find a CatContact
+     * @example
+     * // Get one CatContact
+     * const catContact = await prisma.catContact.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatContactFindUniqueArgs>(args: SelectSubset<T, CatContactFindUniqueArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatContact that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatContactFindUniqueOrThrowArgs} args - Arguments to find a CatContact
+     * @example
+     * // Get one CatContact
+     * const catContact = await prisma.catContact.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatContactFindUniqueOrThrowArgs>(args: SelectSubset<T, CatContactFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatContact that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactFindFirstArgs} args - Arguments to find a CatContact
+     * @example
+     * // Get one CatContact
+     * const catContact = await prisma.catContact.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatContactFindFirstArgs>(args?: SelectSubset<T, CatContactFindFirstArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatContact that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactFindFirstOrThrowArgs} args - Arguments to find a CatContact
+     * @example
+     * // Get one CatContact
+     * const catContact = await prisma.catContact.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatContactFindFirstOrThrowArgs>(args?: SelectSubset<T, CatContactFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatContacts that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatContacts
+     * const catContacts = await prisma.catContact.findMany()
+     * 
+     * // Get first 10 CatContacts
+     * const catContacts = await prisma.catContact.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catContactWithIdOnly = await prisma.catContact.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatContactFindManyArgs>(args?: SelectSubset<T, CatContactFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatContact.
+     * @param {CatContactCreateArgs} args - Arguments to create a CatContact.
+     * @example
+     * // Create one CatContact
+     * const CatContact = await prisma.catContact.create({
+     *   data: {
+     *     // ... data to create a CatContact
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatContactCreateArgs>(args: SelectSubset<T, CatContactCreateArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatContacts.
+     * @param {CatContactCreateManyArgs} args - Arguments to create many CatContacts.
+     * @example
+     * // Create many CatContacts
+     * const catContact = await prisma.catContact.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatContactCreateManyArgs>(args?: SelectSubset<T, CatContactCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatContacts and returns the data saved in the database.
+     * @param {CatContactCreateManyAndReturnArgs} args - Arguments to create many CatContacts.
+     * @example
+     * // Create many CatContacts
+     * const catContact = await prisma.catContact.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatContacts and only return the `id`
+     * const catContactWithIdOnly = await prisma.catContact.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatContactCreateManyAndReturnArgs>(args?: SelectSubset<T, CatContactCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatContact.
+     * @param {CatContactDeleteArgs} args - Arguments to delete one CatContact.
+     * @example
+     * // Delete one CatContact
+     * const CatContact = await prisma.catContact.delete({
+     *   where: {
+     *     // ... filter to delete one CatContact
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatContactDeleteArgs>(args: SelectSubset<T, CatContactDeleteArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatContact.
+     * @param {CatContactUpdateArgs} args - Arguments to update one CatContact.
+     * @example
+     * // Update one CatContact
+     * const catContact = await prisma.catContact.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatContactUpdateArgs>(args: SelectSubset<T, CatContactUpdateArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatContacts.
+     * @param {CatContactDeleteManyArgs} args - Arguments to filter CatContacts to delete.
+     * @example
+     * // Delete a few CatContacts
+     * const { count } = await prisma.catContact.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatContactDeleteManyArgs>(args?: SelectSubset<T, CatContactDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatContacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatContacts
+     * const catContact = await prisma.catContact.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatContactUpdateManyArgs>(args: SelectSubset<T, CatContactUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatContact.
+     * @param {CatContactUpsertArgs} args - Arguments to update or create a CatContact.
+     * @example
+     * // Update or create a CatContact
+     * const catContact = await prisma.catContact.upsert({
+     *   create: {
+     *     // ... data to create a CatContact
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatContact we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatContactUpsertArgs>(args: SelectSubset<T, CatContactUpsertArgs<ExtArgs>>): Prisma__CatContactClient<$Result.GetResult<Prisma.$CatContactPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatContacts.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactCountArgs} args - Arguments to filter CatContacts to count.
+     * @example
+     * // Count the number of CatContacts
+     * const count = await prisma.catContact.count({
+     *   where: {
+     *     // ... the filter for the CatContacts we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatContactCountArgs>(
+      args?: Subset<T, CatContactCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatContactCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatContact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatContactAggregateArgs>(args: Subset<T, CatContactAggregateArgs>): Prisma.PrismaPromise<GetCatContactAggregateType<T>>
+
+    /**
+     * Group by CatContact.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatContactGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatContactGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatContactGroupByArgs['orderBy'] }
+        : { orderBy?: CatContactGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatContactGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatContactGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatContact model
+   */
+  readonly fields: CatContactFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatContact.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatContactClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    relationship<T extends CatRelationshipDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationshipDefaultArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatContact model
+   */ 
+  interface CatContactFieldRefs {
+    readonly id: FieldRef<"CatContact", 'String'>
+    readonly tenantId: FieldRef<"CatContact", 'String'>
+    readonly relationshipId: FieldRef<"CatContact", 'String'>
+    readonly name: FieldRef<"CatContact", 'String'>
+    readonly email: FieldRef<"CatContact", 'String'>
+    readonly phone: FieldRef<"CatContact", 'String'>
+    readonly role: FieldRef<"CatContact", 'String'>
+    readonly isPrimary: FieldRef<"CatContact", 'Boolean'>
+    readonly createdAt: FieldRef<"CatContact", 'DateTime'>
+    readonly createdBy: FieldRef<"CatContact", 'String'>
+    readonly updatedAt: FieldRef<"CatContact", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatContact", 'String'>
+    readonly isDeleted: FieldRef<"CatContact", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatContact", 'DateTime'>
+    readonly deletedBy: FieldRef<"CatContact", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatContact findUnique
+   */
+  export type CatContactFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CatContact to fetch.
+     */
+    where: CatContactWhereUniqueInput
+  }
+
+  /**
+   * CatContact findUniqueOrThrow
+   */
+  export type CatContactFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CatContact to fetch.
+     */
+    where: CatContactWhereUniqueInput
+  }
+
+  /**
+   * CatContact findFirst
+   */
+  export type CatContactFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CatContact to fetch.
+     */
+    where?: CatContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatContacts to fetch.
+     */
+    orderBy?: CatContactOrderByWithRelationInput | CatContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatContacts.
+     */
+    cursor?: CatContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatContacts.
+     */
+    distinct?: CatContactScalarFieldEnum | CatContactScalarFieldEnum[]
+  }
+
+  /**
+   * CatContact findFirstOrThrow
+   */
+  export type CatContactFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CatContact to fetch.
+     */
+    where?: CatContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatContacts to fetch.
+     */
+    orderBy?: CatContactOrderByWithRelationInput | CatContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatContacts.
+     */
+    cursor?: CatContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatContacts.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatContacts.
+     */
+    distinct?: CatContactScalarFieldEnum | CatContactScalarFieldEnum[]
+  }
+
+  /**
+   * CatContact findMany
+   */
+  export type CatContactFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter, which CatContacts to fetch.
+     */
+    where?: CatContactWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatContacts to fetch.
+     */
+    orderBy?: CatContactOrderByWithRelationInput | CatContactOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatContacts.
+     */
+    cursor?: CatContactWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatContacts from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatContacts.
+     */
+    skip?: number
+    distinct?: CatContactScalarFieldEnum | CatContactScalarFieldEnum[]
+  }
+
+  /**
+   * CatContact create
+   */
+  export type CatContactCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CatContact.
+     */
+    data: XOR<CatContactCreateInput, CatContactUncheckedCreateInput>
+  }
+
+  /**
+   * CatContact createMany
+   */
+  export type CatContactCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatContacts.
+     */
+    data: CatContactCreateManyInput | CatContactCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatContact createManyAndReturn
+   */
+  export type CatContactCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatContacts.
+     */
+    data: CatContactCreateManyInput | CatContactCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CatContact update
+   */
+  export type CatContactUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CatContact.
+     */
+    data: XOR<CatContactUpdateInput, CatContactUncheckedUpdateInput>
+    /**
+     * Choose, which CatContact to update.
+     */
+    where: CatContactWhereUniqueInput
+  }
+
+  /**
+   * CatContact updateMany
+   */
+  export type CatContactUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatContacts.
+     */
+    data: XOR<CatContactUpdateManyMutationInput, CatContactUncheckedUpdateManyInput>
+    /**
+     * Filter which CatContacts to update
+     */
+    where?: CatContactWhereInput
+  }
+
+  /**
+   * CatContact upsert
+   */
+  export type CatContactUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CatContact to update in case it exists.
+     */
+    where: CatContactWhereUniqueInput
+    /**
+     * In case the CatContact found by the `where` argument doesn't exist, create a new CatContact with this data.
+     */
+    create: XOR<CatContactCreateInput, CatContactUncheckedCreateInput>
+    /**
+     * In case the CatContact was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatContactUpdateInput, CatContactUncheckedUpdateInput>
+  }
+
+  /**
+   * CatContact delete
+   */
+  export type CatContactDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+    /**
+     * Filter which CatContact to delete.
+     */
+    where: CatContactWhereUniqueInput
+  }
+
+  /**
+   * CatContact deleteMany
+   */
+  export type CatContactDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatContacts to delete
+     */
+    where?: CatContactWhereInput
+  }
+
+  /**
+   * CatContact without action
+   */
+  export type CatContactDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatContact
+     */
+    select?: CatContactSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatContactInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatRelationshipNote
+   */
+
+  export type AggregateCatRelationshipNote = {
+    _count: CatRelationshipNoteCountAggregateOutputType | null
+    _min: CatRelationshipNoteMinAggregateOutputType | null
+    _max: CatRelationshipNoteMaxAggregateOutputType | null
+  }
+
+  export type CatRelationshipNoteMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    content: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatRelationshipNoteMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    content: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatRelationshipNoteCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    relationshipId: number
+    content: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    deletedBy: number
+    _all: number
+  }
+
+
+  export type CatRelationshipNoteMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    content?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatRelationshipNoteMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    content?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatRelationshipNoteCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    content?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    _all?: true
+  }
+
+  export type CatRelationshipNoteAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationshipNote to aggregate.
+     */
+    where?: CatRelationshipNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipNotes to fetch.
+     */
+    orderBy?: CatRelationshipNoteOrderByWithRelationInput | CatRelationshipNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatRelationshipNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatRelationshipNotes
+    **/
+    _count?: true | CatRelationshipNoteCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatRelationshipNoteMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatRelationshipNoteMaxAggregateInputType
+  }
+
+  export type GetCatRelationshipNoteAggregateType<T extends CatRelationshipNoteAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatRelationshipNote]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatRelationshipNote[P]>
+      : GetScalarType<T[P], AggregateCatRelationshipNote[P]>
+  }
+
+
+
+
+  export type CatRelationshipNoteGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatRelationshipNoteWhereInput
+    orderBy?: CatRelationshipNoteOrderByWithAggregationInput | CatRelationshipNoteOrderByWithAggregationInput[]
+    by: CatRelationshipNoteScalarFieldEnum[] | CatRelationshipNoteScalarFieldEnum
+    having?: CatRelationshipNoteScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatRelationshipNoteCountAggregateInputType | true
+    _min?: CatRelationshipNoteMinAggregateInputType
+    _max?: CatRelationshipNoteMaxAggregateInputType
+  }
+
+  export type CatRelationshipNoteGroupByOutputType = {
+    id: string
+    tenantId: string
+    relationshipId: string
+    content: string
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    _count: CatRelationshipNoteCountAggregateOutputType | null
+    _min: CatRelationshipNoteMinAggregateOutputType | null
+    _max: CatRelationshipNoteMaxAggregateOutputType | null
+  }
+
+  type GetCatRelationshipNoteGroupByPayload<T extends CatRelationshipNoteGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatRelationshipNoteGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatRelationshipNoteGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatRelationshipNoteGroupByOutputType[P]>
+            : GetScalarType<T[P], CatRelationshipNoteGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatRelationshipNoteSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catRelationshipNote"]>
+
+  export type CatRelationshipNoteSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catRelationshipNote"]>
+
+  export type CatRelationshipNoteSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    content?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+  }
+
+  export type CatRelationshipNoteInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+  export type CatRelationshipNoteIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+
+  export type $CatRelationshipNotePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatRelationshipNote"
+    objects: {
+      relationship: Prisma.$CatRelationshipPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      relationshipId: string
+      content: string
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      deletedBy: string | null
+    }, ExtArgs["result"]["catRelationshipNote"]>
+    composites: {}
+  }
+
+  type CatRelationshipNoteGetPayload<S extends boolean | null | undefined | CatRelationshipNoteDefaultArgs> = $Result.GetResult<Prisma.$CatRelationshipNotePayload, S>
+
+  type CatRelationshipNoteCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatRelationshipNoteFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatRelationshipNoteCountAggregateInputType | true
+    }
+
+  export interface CatRelationshipNoteDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatRelationshipNote'], meta: { name: 'CatRelationshipNote' } }
+    /**
+     * Find zero or one CatRelationshipNote that matches the filter.
+     * @param {CatRelationshipNoteFindUniqueArgs} args - Arguments to find a CatRelationshipNote
+     * @example
+     * // Get one CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatRelationshipNoteFindUniqueArgs>(args: SelectSubset<T, CatRelationshipNoteFindUniqueArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatRelationshipNote that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatRelationshipNoteFindUniqueOrThrowArgs} args - Arguments to find a CatRelationshipNote
+     * @example
+     * // Get one CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatRelationshipNoteFindUniqueOrThrowArgs>(args: SelectSubset<T, CatRelationshipNoteFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatRelationshipNote that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteFindFirstArgs} args - Arguments to find a CatRelationshipNote
+     * @example
+     * // Get one CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatRelationshipNoteFindFirstArgs>(args?: SelectSubset<T, CatRelationshipNoteFindFirstArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatRelationshipNote that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteFindFirstOrThrowArgs} args - Arguments to find a CatRelationshipNote
+     * @example
+     * // Get one CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatRelationshipNoteFindFirstOrThrowArgs>(args?: SelectSubset<T, CatRelationshipNoteFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatRelationshipNotes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatRelationshipNotes
+     * const catRelationshipNotes = await prisma.catRelationshipNote.findMany()
+     * 
+     * // Get first 10 CatRelationshipNotes
+     * const catRelationshipNotes = await prisma.catRelationshipNote.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catRelationshipNoteWithIdOnly = await prisma.catRelationshipNote.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatRelationshipNoteFindManyArgs>(args?: SelectSubset<T, CatRelationshipNoteFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatRelationshipNote.
+     * @param {CatRelationshipNoteCreateArgs} args - Arguments to create a CatRelationshipNote.
+     * @example
+     * // Create one CatRelationshipNote
+     * const CatRelationshipNote = await prisma.catRelationshipNote.create({
+     *   data: {
+     *     // ... data to create a CatRelationshipNote
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatRelationshipNoteCreateArgs>(args: SelectSubset<T, CatRelationshipNoteCreateArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatRelationshipNotes.
+     * @param {CatRelationshipNoteCreateManyArgs} args - Arguments to create many CatRelationshipNotes.
+     * @example
+     * // Create many CatRelationshipNotes
+     * const catRelationshipNote = await prisma.catRelationshipNote.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatRelationshipNoteCreateManyArgs>(args?: SelectSubset<T, CatRelationshipNoteCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatRelationshipNotes and returns the data saved in the database.
+     * @param {CatRelationshipNoteCreateManyAndReturnArgs} args - Arguments to create many CatRelationshipNotes.
+     * @example
+     * // Create many CatRelationshipNotes
+     * const catRelationshipNote = await prisma.catRelationshipNote.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatRelationshipNotes and only return the `id`
+     * const catRelationshipNoteWithIdOnly = await prisma.catRelationshipNote.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatRelationshipNoteCreateManyAndReturnArgs>(args?: SelectSubset<T, CatRelationshipNoteCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatRelationshipNote.
+     * @param {CatRelationshipNoteDeleteArgs} args - Arguments to delete one CatRelationshipNote.
+     * @example
+     * // Delete one CatRelationshipNote
+     * const CatRelationshipNote = await prisma.catRelationshipNote.delete({
+     *   where: {
+     *     // ... filter to delete one CatRelationshipNote
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatRelationshipNoteDeleteArgs>(args: SelectSubset<T, CatRelationshipNoteDeleteArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatRelationshipNote.
+     * @param {CatRelationshipNoteUpdateArgs} args - Arguments to update one CatRelationshipNote.
+     * @example
+     * // Update one CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatRelationshipNoteUpdateArgs>(args: SelectSubset<T, CatRelationshipNoteUpdateArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatRelationshipNotes.
+     * @param {CatRelationshipNoteDeleteManyArgs} args - Arguments to filter CatRelationshipNotes to delete.
+     * @example
+     * // Delete a few CatRelationshipNotes
+     * const { count } = await prisma.catRelationshipNote.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatRelationshipNoteDeleteManyArgs>(args?: SelectSubset<T, CatRelationshipNoteDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatRelationshipNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatRelationshipNotes
+     * const catRelationshipNote = await prisma.catRelationshipNote.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatRelationshipNoteUpdateManyArgs>(args: SelectSubset<T, CatRelationshipNoteUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatRelationshipNote.
+     * @param {CatRelationshipNoteUpsertArgs} args - Arguments to update or create a CatRelationshipNote.
+     * @example
+     * // Update or create a CatRelationshipNote
+     * const catRelationshipNote = await prisma.catRelationshipNote.upsert({
+     *   create: {
+     *     // ... data to create a CatRelationshipNote
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatRelationshipNote we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatRelationshipNoteUpsertArgs>(args: SelectSubset<T, CatRelationshipNoteUpsertArgs<ExtArgs>>): Prisma__CatRelationshipNoteClient<$Result.GetResult<Prisma.$CatRelationshipNotePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatRelationshipNotes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteCountArgs} args - Arguments to filter CatRelationshipNotes to count.
+     * @example
+     * // Count the number of CatRelationshipNotes
+     * const count = await prisma.catRelationshipNote.count({
+     *   where: {
+     *     // ... the filter for the CatRelationshipNotes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatRelationshipNoteCountArgs>(
+      args?: Subset<T, CatRelationshipNoteCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatRelationshipNoteCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatRelationshipNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatRelationshipNoteAggregateArgs>(args: Subset<T, CatRelationshipNoteAggregateArgs>): Prisma.PrismaPromise<GetCatRelationshipNoteAggregateType<T>>
+
+    /**
+     * Group by CatRelationshipNote.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipNoteGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatRelationshipNoteGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatRelationshipNoteGroupByArgs['orderBy'] }
+        : { orderBy?: CatRelationshipNoteGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatRelationshipNoteGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatRelationshipNoteGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatRelationshipNote model
+   */
+  readonly fields: CatRelationshipNoteFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatRelationshipNote.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatRelationshipNoteClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    relationship<T extends CatRelationshipDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationshipDefaultArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatRelationshipNote model
+   */ 
+  interface CatRelationshipNoteFieldRefs {
+    readonly id: FieldRef<"CatRelationshipNote", 'String'>
+    readonly tenantId: FieldRef<"CatRelationshipNote", 'String'>
+    readonly relationshipId: FieldRef<"CatRelationshipNote", 'String'>
+    readonly content: FieldRef<"CatRelationshipNote", 'String'>
+    readonly createdAt: FieldRef<"CatRelationshipNote", 'DateTime'>
+    readonly createdBy: FieldRef<"CatRelationshipNote", 'String'>
+    readonly updatedAt: FieldRef<"CatRelationshipNote", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatRelationshipNote", 'String'>
+    readonly isDeleted: FieldRef<"CatRelationshipNote", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatRelationshipNote", 'DateTime'>
+    readonly deletedBy: FieldRef<"CatRelationshipNote", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatRelationshipNote findUnique
+   */
+  export type CatRelationshipNoteFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipNote to fetch.
+     */
+    where: CatRelationshipNoteWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipNote findUniqueOrThrow
+   */
+  export type CatRelationshipNoteFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipNote to fetch.
+     */
+    where: CatRelationshipNoteWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipNote findFirst
+   */
+  export type CatRelationshipNoteFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipNote to fetch.
+     */
+    where?: CatRelationshipNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipNotes to fetch.
+     */
+    orderBy?: CatRelationshipNoteOrderByWithRelationInput | CatRelationshipNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationshipNotes.
+     */
+    cursor?: CatRelationshipNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationshipNotes.
+     */
+    distinct?: CatRelationshipNoteScalarFieldEnum | CatRelationshipNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipNote findFirstOrThrow
+   */
+  export type CatRelationshipNoteFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipNote to fetch.
+     */
+    where?: CatRelationshipNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipNotes to fetch.
+     */
+    orderBy?: CatRelationshipNoteOrderByWithRelationInput | CatRelationshipNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationshipNotes.
+     */
+    cursor?: CatRelationshipNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipNotes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationshipNotes.
+     */
+    distinct?: CatRelationshipNoteScalarFieldEnum | CatRelationshipNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipNote findMany
+   */
+  export type CatRelationshipNoteFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipNotes to fetch.
+     */
+    where?: CatRelationshipNoteWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipNotes to fetch.
+     */
+    orderBy?: CatRelationshipNoteOrderByWithRelationInput | CatRelationshipNoteOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatRelationshipNotes.
+     */
+    cursor?: CatRelationshipNoteWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipNotes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipNotes.
+     */
+    skip?: number
+    distinct?: CatRelationshipNoteScalarFieldEnum | CatRelationshipNoteScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipNote create
+   */
+  export type CatRelationshipNoteCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CatRelationshipNote.
+     */
+    data: XOR<CatRelationshipNoteCreateInput, CatRelationshipNoteUncheckedCreateInput>
+  }
+
+  /**
+   * CatRelationshipNote createMany
+   */
+  export type CatRelationshipNoteCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatRelationshipNotes.
+     */
+    data: CatRelationshipNoteCreateManyInput | CatRelationshipNoteCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatRelationshipNote createManyAndReturn
+   */
+  export type CatRelationshipNoteCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatRelationshipNotes.
+     */
+    data: CatRelationshipNoteCreateManyInput | CatRelationshipNoteCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CatRelationshipNote update
+   */
+  export type CatRelationshipNoteUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CatRelationshipNote.
+     */
+    data: XOR<CatRelationshipNoteUpdateInput, CatRelationshipNoteUncheckedUpdateInput>
+    /**
+     * Choose, which CatRelationshipNote to update.
+     */
+    where: CatRelationshipNoteWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipNote updateMany
+   */
+  export type CatRelationshipNoteUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatRelationshipNotes.
+     */
+    data: XOR<CatRelationshipNoteUpdateManyMutationInput, CatRelationshipNoteUncheckedUpdateManyInput>
+    /**
+     * Filter which CatRelationshipNotes to update
+     */
+    where?: CatRelationshipNoteWhereInput
+  }
+
+  /**
+   * CatRelationshipNote upsert
+   */
+  export type CatRelationshipNoteUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CatRelationshipNote to update in case it exists.
+     */
+    where: CatRelationshipNoteWhereUniqueInput
+    /**
+     * In case the CatRelationshipNote found by the `where` argument doesn't exist, create a new CatRelationshipNote with this data.
+     */
+    create: XOR<CatRelationshipNoteCreateInput, CatRelationshipNoteUncheckedCreateInput>
+    /**
+     * In case the CatRelationshipNote was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatRelationshipNoteUpdateInput, CatRelationshipNoteUncheckedUpdateInput>
+  }
+
+  /**
+   * CatRelationshipNote delete
+   */
+  export type CatRelationshipNoteDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+    /**
+     * Filter which CatRelationshipNote to delete.
+     */
+    where: CatRelationshipNoteWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipNote deleteMany
+   */
+  export type CatRelationshipNoteDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationshipNotes to delete
+     */
+    where?: CatRelationshipNoteWhereInput
+  }
+
+  /**
+   * CatRelationshipNote without action
+   */
+  export type CatRelationshipNoteDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipNote
+     */
+    select?: CatRelationshipNoteSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipNoteInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatRelationshipDocument
+   */
+
+  export type AggregateCatRelationshipDocument = {
+    _count: CatRelationshipDocumentCountAggregateOutputType | null
+    _avg: CatRelationshipDocumentAvgAggregateOutputType | null
+    _sum: CatRelationshipDocumentSumAggregateOutputType | null
+    _min: CatRelationshipDocumentMinAggregateOutputType | null
+    _max: CatRelationshipDocumentMaxAggregateOutputType | null
+  }
+
+  export type CatRelationshipDocumentAvgAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type CatRelationshipDocumentSumAggregateOutputType = {
+    fileSize: number | null
+  }
+
+  export type CatRelationshipDocumentMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    fileType: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatRelationshipDocumentMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    relationshipId: string | null
+    fileName: string | null
+    fileUrl: string | null
+    fileSize: number | null
+    fileType: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+  }
+
+  export type CatRelationshipDocumentCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    relationshipId: number
+    fileName: number
+    fileUrl: number
+    fileSize: number
+    fileType: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    deletedBy: number
+    _all: number
+  }
+
+
+  export type CatRelationshipDocumentAvgAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type CatRelationshipDocumentSumAggregateInputType = {
+    fileSize?: true
+  }
+
+  export type CatRelationshipDocumentMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatRelationshipDocumentMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+  }
+
+  export type CatRelationshipDocumentCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    relationshipId?: true
+    fileName?: true
+    fileUrl?: true
+    fileSize?: true
+    fileType?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    _all?: true
+  }
+
+  export type CatRelationshipDocumentAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationshipDocument to aggregate.
+     */
+    where?: CatRelationshipDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipDocuments to fetch.
+     */
+    orderBy?: CatRelationshipDocumentOrderByWithRelationInput | CatRelationshipDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatRelationshipDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatRelationshipDocuments
+    **/
+    _count?: true | CatRelationshipDocumentCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatRelationshipDocumentAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatRelationshipDocumentSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatRelationshipDocumentMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatRelationshipDocumentMaxAggregateInputType
+  }
+
+  export type GetCatRelationshipDocumentAggregateType<T extends CatRelationshipDocumentAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatRelationshipDocument]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatRelationshipDocument[P]>
+      : GetScalarType<T[P], AggregateCatRelationshipDocument[P]>
+  }
+
+
+
+
+  export type CatRelationshipDocumentGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatRelationshipDocumentWhereInput
+    orderBy?: CatRelationshipDocumentOrderByWithAggregationInput | CatRelationshipDocumentOrderByWithAggregationInput[]
+    by: CatRelationshipDocumentScalarFieldEnum[] | CatRelationshipDocumentScalarFieldEnum
+    having?: CatRelationshipDocumentScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatRelationshipDocumentCountAggregateInputType | true
+    _avg?: CatRelationshipDocumentAvgAggregateInputType
+    _sum?: CatRelationshipDocumentSumAggregateInputType
+    _min?: CatRelationshipDocumentMinAggregateInputType
+    _max?: CatRelationshipDocumentMaxAggregateInputType
+  }
+
+  export type CatRelationshipDocumentGroupByOutputType = {
+    id: string
+    tenantId: string
+    relationshipId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    _count: CatRelationshipDocumentCountAggregateOutputType | null
+    _avg: CatRelationshipDocumentAvgAggregateOutputType | null
+    _sum: CatRelationshipDocumentSumAggregateOutputType | null
+    _min: CatRelationshipDocumentMinAggregateOutputType | null
+    _max: CatRelationshipDocumentMaxAggregateOutputType | null
+  }
+
+  type GetCatRelationshipDocumentGroupByPayload<T extends CatRelationshipDocumentGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatRelationshipDocumentGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatRelationshipDocumentGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatRelationshipDocumentGroupByOutputType[P]>
+            : GetScalarType<T[P], CatRelationshipDocumentGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatRelationshipDocumentSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catRelationshipDocument"]>
+
+  export type CatRelationshipDocumentSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["catRelationshipDocument"]>
+
+  export type CatRelationshipDocumentSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    relationshipId?: boolean
+    fileName?: boolean
+    fileUrl?: boolean
+    fileSize?: boolean
+    fileType?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+  }
+
+  export type CatRelationshipDocumentInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+  export type CatRelationshipDocumentIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    relationship?: boolean | CatRelationshipDefaultArgs<ExtArgs>
+  }
+
+  export type $CatRelationshipDocumentPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatRelationshipDocument"
+    objects: {
+      relationship: Prisma.$CatRelationshipPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      relationshipId: string
+      fileName: string
+      fileUrl: string
+      fileSize: number
+      fileType: string
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      deletedBy: string | null
+    }, ExtArgs["result"]["catRelationshipDocument"]>
+    composites: {}
+  }
+
+  type CatRelationshipDocumentGetPayload<S extends boolean | null | undefined | CatRelationshipDocumentDefaultArgs> = $Result.GetResult<Prisma.$CatRelationshipDocumentPayload, S>
+
+  type CatRelationshipDocumentCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatRelationshipDocumentFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatRelationshipDocumentCountAggregateInputType | true
+    }
+
+  export interface CatRelationshipDocumentDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatRelationshipDocument'], meta: { name: 'CatRelationshipDocument' } }
+    /**
+     * Find zero or one CatRelationshipDocument that matches the filter.
+     * @param {CatRelationshipDocumentFindUniqueArgs} args - Arguments to find a CatRelationshipDocument
+     * @example
+     * // Get one CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatRelationshipDocumentFindUniqueArgs>(args: SelectSubset<T, CatRelationshipDocumentFindUniqueArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatRelationshipDocument that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatRelationshipDocumentFindUniqueOrThrowArgs} args - Arguments to find a CatRelationshipDocument
+     * @example
+     * // Get one CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatRelationshipDocumentFindUniqueOrThrowArgs>(args: SelectSubset<T, CatRelationshipDocumentFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatRelationshipDocument that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentFindFirstArgs} args - Arguments to find a CatRelationshipDocument
+     * @example
+     * // Get one CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatRelationshipDocumentFindFirstArgs>(args?: SelectSubset<T, CatRelationshipDocumentFindFirstArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatRelationshipDocument that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentFindFirstOrThrowArgs} args - Arguments to find a CatRelationshipDocument
+     * @example
+     * // Get one CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatRelationshipDocumentFindFirstOrThrowArgs>(args?: SelectSubset<T, CatRelationshipDocumentFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatRelationshipDocuments that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatRelationshipDocuments
+     * const catRelationshipDocuments = await prisma.catRelationshipDocument.findMany()
+     * 
+     * // Get first 10 CatRelationshipDocuments
+     * const catRelationshipDocuments = await prisma.catRelationshipDocument.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catRelationshipDocumentWithIdOnly = await prisma.catRelationshipDocument.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatRelationshipDocumentFindManyArgs>(args?: SelectSubset<T, CatRelationshipDocumentFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatRelationshipDocument.
+     * @param {CatRelationshipDocumentCreateArgs} args - Arguments to create a CatRelationshipDocument.
+     * @example
+     * // Create one CatRelationshipDocument
+     * const CatRelationshipDocument = await prisma.catRelationshipDocument.create({
+     *   data: {
+     *     // ... data to create a CatRelationshipDocument
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatRelationshipDocumentCreateArgs>(args: SelectSubset<T, CatRelationshipDocumentCreateArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatRelationshipDocuments.
+     * @param {CatRelationshipDocumentCreateManyArgs} args - Arguments to create many CatRelationshipDocuments.
+     * @example
+     * // Create many CatRelationshipDocuments
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatRelationshipDocumentCreateManyArgs>(args?: SelectSubset<T, CatRelationshipDocumentCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatRelationshipDocuments and returns the data saved in the database.
+     * @param {CatRelationshipDocumentCreateManyAndReturnArgs} args - Arguments to create many CatRelationshipDocuments.
+     * @example
+     * // Create many CatRelationshipDocuments
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatRelationshipDocuments and only return the `id`
+     * const catRelationshipDocumentWithIdOnly = await prisma.catRelationshipDocument.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatRelationshipDocumentCreateManyAndReturnArgs>(args?: SelectSubset<T, CatRelationshipDocumentCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatRelationshipDocument.
+     * @param {CatRelationshipDocumentDeleteArgs} args - Arguments to delete one CatRelationshipDocument.
+     * @example
+     * // Delete one CatRelationshipDocument
+     * const CatRelationshipDocument = await prisma.catRelationshipDocument.delete({
+     *   where: {
+     *     // ... filter to delete one CatRelationshipDocument
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatRelationshipDocumentDeleteArgs>(args: SelectSubset<T, CatRelationshipDocumentDeleteArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatRelationshipDocument.
+     * @param {CatRelationshipDocumentUpdateArgs} args - Arguments to update one CatRelationshipDocument.
+     * @example
+     * // Update one CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatRelationshipDocumentUpdateArgs>(args: SelectSubset<T, CatRelationshipDocumentUpdateArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatRelationshipDocuments.
+     * @param {CatRelationshipDocumentDeleteManyArgs} args - Arguments to filter CatRelationshipDocuments to delete.
+     * @example
+     * // Delete a few CatRelationshipDocuments
+     * const { count } = await prisma.catRelationshipDocument.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatRelationshipDocumentDeleteManyArgs>(args?: SelectSubset<T, CatRelationshipDocumentDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatRelationshipDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatRelationshipDocuments
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatRelationshipDocumentUpdateManyArgs>(args: SelectSubset<T, CatRelationshipDocumentUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatRelationshipDocument.
+     * @param {CatRelationshipDocumentUpsertArgs} args - Arguments to update or create a CatRelationshipDocument.
+     * @example
+     * // Update or create a CatRelationshipDocument
+     * const catRelationshipDocument = await prisma.catRelationshipDocument.upsert({
+     *   create: {
+     *     // ... data to create a CatRelationshipDocument
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatRelationshipDocument we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatRelationshipDocumentUpsertArgs>(args: SelectSubset<T, CatRelationshipDocumentUpsertArgs<ExtArgs>>): Prisma__CatRelationshipDocumentClient<$Result.GetResult<Prisma.$CatRelationshipDocumentPayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatRelationshipDocuments.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentCountArgs} args - Arguments to filter CatRelationshipDocuments to count.
+     * @example
+     * // Count the number of CatRelationshipDocuments
+     * const count = await prisma.catRelationshipDocument.count({
+     *   where: {
+     *     // ... the filter for the CatRelationshipDocuments we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatRelationshipDocumentCountArgs>(
+      args?: Subset<T, CatRelationshipDocumentCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatRelationshipDocumentCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatRelationshipDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatRelationshipDocumentAggregateArgs>(args: Subset<T, CatRelationshipDocumentAggregateArgs>): Prisma.PrismaPromise<GetCatRelationshipDocumentAggregateType<T>>
+
+    /**
+     * Group by CatRelationshipDocument.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatRelationshipDocumentGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatRelationshipDocumentGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatRelationshipDocumentGroupByArgs['orderBy'] }
+        : { orderBy?: CatRelationshipDocumentGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatRelationshipDocumentGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatRelationshipDocumentGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatRelationshipDocument model
+   */
+  readonly fields: CatRelationshipDocumentFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatRelationshipDocument.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatRelationshipDocumentClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    relationship<T extends CatRelationshipDefaultArgs<ExtArgs> = {}>(args?: Subset<T, CatRelationshipDefaultArgs<ExtArgs>>): Prisma__CatRelationshipClient<$Result.GetResult<Prisma.$CatRelationshipPayload<ExtArgs>, T, "findUniqueOrThrow"> | Null, Null, ExtArgs>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatRelationshipDocument model
+   */ 
+  interface CatRelationshipDocumentFieldRefs {
+    readonly id: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly tenantId: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly relationshipId: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly fileName: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly fileUrl: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly fileSize: FieldRef<"CatRelationshipDocument", 'Int'>
+    readonly fileType: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly createdAt: FieldRef<"CatRelationshipDocument", 'DateTime'>
+    readonly createdBy: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly updatedAt: FieldRef<"CatRelationshipDocument", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatRelationshipDocument", 'String'>
+    readonly isDeleted: FieldRef<"CatRelationshipDocument", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatRelationshipDocument", 'DateTime'>
+    readonly deletedBy: FieldRef<"CatRelationshipDocument", 'String'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatRelationshipDocument findUnique
+   */
+  export type CatRelationshipDocumentFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipDocument to fetch.
+     */
+    where: CatRelationshipDocumentWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipDocument findUniqueOrThrow
+   */
+  export type CatRelationshipDocumentFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipDocument to fetch.
+     */
+    where: CatRelationshipDocumentWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipDocument findFirst
+   */
+  export type CatRelationshipDocumentFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipDocument to fetch.
+     */
+    where?: CatRelationshipDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipDocuments to fetch.
+     */
+    orderBy?: CatRelationshipDocumentOrderByWithRelationInput | CatRelationshipDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationshipDocuments.
+     */
+    cursor?: CatRelationshipDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationshipDocuments.
+     */
+    distinct?: CatRelationshipDocumentScalarFieldEnum | CatRelationshipDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipDocument findFirstOrThrow
+   */
+  export type CatRelationshipDocumentFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipDocument to fetch.
+     */
+    where?: CatRelationshipDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipDocuments to fetch.
+     */
+    orderBy?: CatRelationshipDocumentOrderByWithRelationInput | CatRelationshipDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatRelationshipDocuments.
+     */
+    cursor?: CatRelationshipDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipDocuments.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatRelationshipDocuments.
+     */
+    distinct?: CatRelationshipDocumentScalarFieldEnum | CatRelationshipDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipDocument findMany
+   */
+  export type CatRelationshipDocumentFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter, which CatRelationshipDocuments to fetch.
+     */
+    where?: CatRelationshipDocumentWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatRelationshipDocuments to fetch.
+     */
+    orderBy?: CatRelationshipDocumentOrderByWithRelationInput | CatRelationshipDocumentOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatRelationshipDocuments.
+     */
+    cursor?: CatRelationshipDocumentWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatRelationshipDocuments from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatRelationshipDocuments.
+     */
+    skip?: number
+    distinct?: CatRelationshipDocumentScalarFieldEnum | CatRelationshipDocumentScalarFieldEnum[]
+  }
+
+  /**
+   * CatRelationshipDocument create
+   */
+  export type CatRelationshipDocumentCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to create a CatRelationshipDocument.
+     */
+    data: XOR<CatRelationshipDocumentCreateInput, CatRelationshipDocumentUncheckedCreateInput>
+  }
+
+  /**
+   * CatRelationshipDocument createMany
+   */
+  export type CatRelationshipDocumentCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatRelationshipDocuments.
+     */
+    data: CatRelationshipDocumentCreateManyInput | CatRelationshipDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatRelationshipDocument createManyAndReturn
+   */
+  export type CatRelationshipDocumentCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatRelationshipDocuments.
+     */
+    data: CatRelationshipDocumentCreateManyInput | CatRelationshipDocumentCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * CatRelationshipDocument update
+   */
+  export type CatRelationshipDocumentUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * The data needed to update a CatRelationshipDocument.
+     */
+    data: XOR<CatRelationshipDocumentUpdateInput, CatRelationshipDocumentUncheckedUpdateInput>
+    /**
+     * Choose, which CatRelationshipDocument to update.
+     */
+    where: CatRelationshipDocumentWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipDocument updateMany
+   */
+  export type CatRelationshipDocumentUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatRelationshipDocuments.
+     */
+    data: XOR<CatRelationshipDocumentUpdateManyMutationInput, CatRelationshipDocumentUncheckedUpdateManyInput>
+    /**
+     * Filter which CatRelationshipDocuments to update
+     */
+    where?: CatRelationshipDocumentWhereInput
+  }
+
+  /**
+   * CatRelationshipDocument upsert
+   */
+  export type CatRelationshipDocumentUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * The filter to search for the CatRelationshipDocument to update in case it exists.
+     */
+    where: CatRelationshipDocumentWhereUniqueInput
+    /**
+     * In case the CatRelationshipDocument found by the `where` argument doesn't exist, create a new CatRelationshipDocument with this data.
+     */
+    create: XOR<CatRelationshipDocumentCreateInput, CatRelationshipDocumentUncheckedCreateInput>
+    /**
+     * In case the CatRelationshipDocument was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatRelationshipDocumentUpdateInput, CatRelationshipDocumentUncheckedUpdateInput>
+  }
+
+  /**
+   * CatRelationshipDocument delete
+   */
+  export type CatRelationshipDocumentDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+    /**
+     * Filter which CatRelationshipDocument to delete.
+     */
+    where: CatRelationshipDocumentWhereUniqueInput
+  }
+
+  /**
+   * CatRelationshipDocument deleteMany
+   */
+  export type CatRelationshipDocumentDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatRelationshipDocuments to delete
+     */
+    where?: CatRelationshipDocumentWhereInput
+  }
+
+  /**
+   * CatRelationshipDocument without action
+   */
+  export type CatRelationshipDocumentDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatRelationshipDocument
+     */
+    select?: CatRelationshipDocumentSelect<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: CatRelationshipDocumentInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -142385,6 +147087,85 @@ export namespace Prisma {
   export type DeliveryTrackingScalarFieldEnum = (typeof DeliveryTrackingScalarFieldEnum)[keyof typeof DeliveryTrackingScalarFieldEnum]
 
 
+  export const CatRelationshipScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    relationshipNumber: 'relationshipNumber',
+    name: 'name',
+    type: 'type',
+    status: 'status',
+    primaryContactId: 'primaryContactId',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy',
+    version: 'version'
+  };
+
+  export type CatRelationshipScalarFieldEnum = (typeof CatRelationshipScalarFieldEnum)[keyof typeof CatRelationshipScalarFieldEnum]
+
+
+  export const CatContactScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    relationshipId: 'relationshipId',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    role: 'role',
+    isPrimary: 'isPrimary',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy'
+  };
+
+  export type CatContactScalarFieldEnum = (typeof CatContactScalarFieldEnum)[keyof typeof CatContactScalarFieldEnum]
+
+
+  export const CatRelationshipNoteScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    relationshipId: 'relationshipId',
+    content: 'content',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy'
+  };
+
+  export type CatRelationshipNoteScalarFieldEnum = (typeof CatRelationshipNoteScalarFieldEnum)[keyof typeof CatRelationshipNoteScalarFieldEnum]
+
+
+  export const CatRelationshipDocumentScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    relationshipId: 'relationshipId',
+    fileName: 'fileName',
+    fileUrl: 'fileUrl',
+    fileSize: 'fileSize',
+    fileType: 'fileType',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy'
+  };
+
+  export type CatRelationshipDocumentScalarFieldEnum = (typeof CatRelationshipDocumentScalarFieldEnum)[keyof typeof CatRelationshipDocumentScalarFieldEnum]
+
+
   export const SortOrder: {
     asc: 'asc',
     desc: 'desc'
@@ -142617,6 +147398,34 @@ export namespace Prisma {
    * Reference to a field of type 'NotificationDeliveryStatus[]'
    */
   export type ListEnumNotificationDeliveryStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'NotificationDeliveryStatus[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RelationshipType'
+   */
+  export type EnumRelationshipTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationshipType'>
+    
+
+
+  /**
+   * Reference to a field of type 'RelationshipType[]'
+   */
+  export type ListEnumRelationshipTypeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationshipType[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'RelationshipStatus'
+   */
+  export type EnumRelationshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationshipStatus'>
+    
+
+
+  /**
+   * Reference to a field of type 'RelationshipStatus[]'
+   */
+  export type ListEnumRelationshipStatusFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'RelationshipStatus[]'>
     
   /**
    * Deep Input Types
@@ -154586,6 +159395,412 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"DeliveryTracking"> | Date | string | null
     deletedBy?: UuidNullableWithAggregatesFilter<"DeliveryTracking"> | string | null
     version?: IntWithAggregatesFilter<"DeliveryTracking"> | number
+  }
+
+  export type CatRelationshipWhereInput = {
+    AND?: CatRelationshipWhereInput | CatRelationshipWhereInput[]
+    OR?: CatRelationshipWhereInput[]
+    NOT?: CatRelationshipWhereInput | CatRelationshipWhereInput[]
+    id?: UuidFilter<"CatRelationship"> | string
+    tenantId?: UuidFilter<"CatRelationship"> | string
+    relationshipNumber?: StringFilter<"CatRelationship"> | string
+    name?: StringFilter<"CatRelationship"> | string
+    type?: EnumRelationshipTypeFilter<"CatRelationship"> | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFilter<"CatRelationship"> | $Enums.RelationshipStatus
+    primaryContactId?: UuidNullableFilter<"CatRelationship"> | string | null
+    createdAt?: DateTimeFilter<"CatRelationship"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationship"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    isDeleted?: BoolFilter<"CatRelationship"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationship"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    version?: BigIntFilter<"CatRelationship"> | bigint | number
+    contacts?: CatContactListRelationFilter
+    notes?: CatRelationshipNoteListRelationFilter
+    documents?: CatRelationshipDocumentListRelationFilter
+  }
+
+  export type CatRelationshipOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipNumber?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    primaryContactId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    version?: SortOrder
+    contacts?: CatContactOrderByRelationAggregateInput
+    notes?: CatRelationshipNoteOrderByRelationAggregateInput
+    documents?: CatRelationshipDocumentOrderByRelationAggregateInput
+  }
+
+  export type CatRelationshipWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_relationshipNumber?: CatRelationshipTenantIdRelationshipNumberCompoundUniqueInput
+    AND?: CatRelationshipWhereInput | CatRelationshipWhereInput[]
+    OR?: CatRelationshipWhereInput[]
+    NOT?: CatRelationshipWhereInput | CatRelationshipWhereInput[]
+    tenantId?: UuidFilter<"CatRelationship"> | string
+    relationshipNumber?: StringFilter<"CatRelationship"> | string
+    name?: StringFilter<"CatRelationship"> | string
+    type?: EnumRelationshipTypeFilter<"CatRelationship"> | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFilter<"CatRelationship"> | $Enums.RelationshipStatus
+    primaryContactId?: UuidNullableFilter<"CatRelationship"> | string | null
+    createdAt?: DateTimeFilter<"CatRelationship"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationship"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    isDeleted?: BoolFilter<"CatRelationship"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationship"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationship"> | string | null
+    version?: BigIntFilter<"CatRelationship"> | bigint | number
+    contacts?: CatContactListRelationFilter
+    notes?: CatRelationshipNoteListRelationFilter
+    documents?: CatRelationshipDocumentListRelationFilter
+  }, "id" | "tenantId_relationshipNumber">
+
+  export type CatRelationshipOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipNumber?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    primaryContactId?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    version?: SortOrder
+    _count?: CatRelationshipCountOrderByAggregateInput
+    _avg?: CatRelationshipAvgOrderByAggregateInput
+    _max?: CatRelationshipMaxOrderByAggregateInput
+    _min?: CatRelationshipMinOrderByAggregateInput
+    _sum?: CatRelationshipSumOrderByAggregateInput
+  }
+
+  export type CatRelationshipScalarWhereWithAggregatesInput = {
+    AND?: CatRelationshipScalarWhereWithAggregatesInput | CatRelationshipScalarWhereWithAggregatesInput[]
+    OR?: CatRelationshipScalarWhereWithAggregatesInput[]
+    NOT?: CatRelationshipScalarWhereWithAggregatesInput | CatRelationshipScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatRelationship"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatRelationship"> | string
+    relationshipNumber?: StringWithAggregatesFilter<"CatRelationship"> | string
+    name?: StringWithAggregatesFilter<"CatRelationship"> | string
+    type?: EnumRelationshipTypeWithAggregatesFilter<"CatRelationship"> | $Enums.RelationshipType
+    status?: EnumRelationshipStatusWithAggregatesFilter<"CatRelationship"> | $Enums.RelationshipStatus
+    primaryContactId?: UuidNullableWithAggregatesFilter<"CatRelationship"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CatRelationship"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatRelationship"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatRelationship"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatRelationship"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatRelationship"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatRelationship"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"CatRelationship"> | string | null
+    version?: BigIntWithAggregatesFilter<"CatRelationship"> | bigint | number
+  }
+
+  export type CatContactWhereInput = {
+    AND?: CatContactWhereInput | CatContactWhereInput[]
+    OR?: CatContactWhereInput[]
+    NOT?: CatContactWhereInput | CatContactWhereInput[]
+    id?: UuidFilter<"CatContact"> | string
+    tenantId?: UuidFilter<"CatContact"> | string
+    relationshipId?: UuidFilter<"CatContact"> | string
+    name?: StringFilter<"CatContact"> | string
+    email?: StringNullableFilter<"CatContact"> | string | null
+    phone?: StringNullableFilter<"CatContact"> | string | null
+    role?: StringNullableFilter<"CatContact"> | string | null
+    isPrimary?: BoolFilter<"CatContact"> | boolean
+    createdAt?: DateTimeFilter<"CatContact"> | Date | string
+    createdBy?: UuidNullableFilter<"CatContact"> | string | null
+    updatedAt?: DateTimeFilter<"CatContact"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatContact"> | string | null
+    isDeleted?: BoolFilter<"CatContact"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatContact"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatContact"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }
+
+  export type CatContactOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    name?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    relationship?: CatRelationshipOrderByWithRelationInput
+  }
+
+  export type CatContactWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatContactWhereInput | CatContactWhereInput[]
+    OR?: CatContactWhereInput[]
+    NOT?: CatContactWhereInput | CatContactWhereInput[]
+    tenantId?: UuidFilter<"CatContact"> | string
+    relationshipId?: UuidFilter<"CatContact"> | string
+    name?: StringFilter<"CatContact"> | string
+    email?: StringNullableFilter<"CatContact"> | string | null
+    phone?: StringNullableFilter<"CatContact"> | string | null
+    role?: StringNullableFilter<"CatContact"> | string | null
+    isPrimary?: BoolFilter<"CatContact"> | boolean
+    createdAt?: DateTimeFilter<"CatContact"> | Date | string
+    createdBy?: UuidNullableFilter<"CatContact"> | string | null
+    updatedAt?: DateTimeFilter<"CatContact"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatContact"> | string | null
+    isDeleted?: BoolFilter<"CatContact"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatContact"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatContact"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }, "id">
+
+  export type CatContactOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    name?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    role?: SortOrderInput | SortOrder
+    isPrimary?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    _count?: CatContactCountOrderByAggregateInput
+    _max?: CatContactMaxOrderByAggregateInput
+    _min?: CatContactMinOrderByAggregateInput
+  }
+
+  export type CatContactScalarWhereWithAggregatesInput = {
+    AND?: CatContactScalarWhereWithAggregatesInput | CatContactScalarWhereWithAggregatesInput[]
+    OR?: CatContactScalarWhereWithAggregatesInput[]
+    NOT?: CatContactScalarWhereWithAggregatesInput | CatContactScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatContact"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatContact"> | string
+    relationshipId?: UuidWithAggregatesFilter<"CatContact"> | string
+    name?: StringWithAggregatesFilter<"CatContact"> | string
+    email?: StringNullableWithAggregatesFilter<"CatContact"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"CatContact"> | string | null
+    role?: StringNullableWithAggregatesFilter<"CatContact"> | string | null
+    isPrimary?: BoolWithAggregatesFilter<"CatContact"> | boolean
+    createdAt?: DateTimeWithAggregatesFilter<"CatContact"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatContact"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatContact"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatContact"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatContact"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatContact"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"CatContact"> | string | null
+  }
+
+  export type CatRelationshipNoteWhereInput = {
+    AND?: CatRelationshipNoteWhereInput | CatRelationshipNoteWhereInput[]
+    OR?: CatRelationshipNoteWhereInput[]
+    NOT?: CatRelationshipNoteWhereInput | CatRelationshipNoteWhereInput[]
+    id?: UuidFilter<"CatRelationshipNote"> | string
+    tenantId?: UuidFilter<"CatRelationshipNote"> | string
+    relationshipId?: UuidFilter<"CatRelationshipNote"> | string
+    content?: StringFilter<"CatRelationshipNote"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipNote"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipNote"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }
+
+  export type CatRelationshipNoteOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    relationship?: CatRelationshipOrderByWithRelationInput
+  }
+
+  export type CatRelationshipNoteWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatRelationshipNoteWhereInput | CatRelationshipNoteWhereInput[]
+    OR?: CatRelationshipNoteWhereInput[]
+    NOT?: CatRelationshipNoteWhereInput | CatRelationshipNoteWhereInput[]
+    tenantId?: UuidFilter<"CatRelationshipNote"> | string
+    relationshipId?: UuidFilter<"CatRelationshipNote"> | string
+    content?: StringFilter<"CatRelationshipNote"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipNote"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipNote"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }, "id">
+
+  export type CatRelationshipNoteOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    _count?: CatRelationshipNoteCountOrderByAggregateInput
+    _max?: CatRelationshipNoteMaxOrderByAggregateInput
+    _min?: CatRelationshipNoteMinOrderByAggregateInput
+  }
+
+  export type CatRelationshipNoteScalarWhereWithAggregatesInput = {
+    AND?: CatRelationshipNoteScalarWhereWithAggregatesInput | CatRelationshipNoteScalarWhereWithAggregatesInput[]
+    OR?: CatRelationshipNoteScalarWhereWithAggregatesInput[]
+    NOT?: CatRelationshipNoteScalarWhereWithAggregatesInput | CatRelationshipNoteScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatRelationshipNote"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatRelationshipNote"> | string
+    relationshipId?: UuidWithAggregatesFilter<"CatRelationshipNote"> | string
+    content?: StringWithAggregatesFilter<"CatRelationshipNote"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CatRelationshipNote"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatRelationshipNote"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatRelationshipNote"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatRelationshipNote"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatRelationshipNote"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatRelationshipNote"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"CatRelationshipNote"> | string | null
+  }
+
+  export type CatRelationshipDocumentWhereInput = {
+    AND?: CatRelationshipDocumentWhereInput | CatRelationshipDocumentWhereInput[]
+    OR?: CatRelationshipDocumentWhereInput[]
+    NOT?: CatRelationshipDocumentWhereInput | CatRelationshipDocumentWhereInput[]
+    id?: UuidFilter<"CatRelationshipDocument"> | string
+    tenantId?: UuidFilter<"CatRelationshipDocument"> | string
+    relationshipId?: UuidFilter<"CatRelationshipDocument"> | string
+    fileName?: StringFilter<"CatRelationshipDocument"> | string
+    fileUrl?: StringFilter<"CatRelationshipDocument"> | string
+    fileSize?: IntFilter<"CatRelationshipDocument"> | number
+    fileType?: StringFilter<"CatRelationshipDocument"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipDocument"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipDocument"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }
+
+  export type CatRelationshipDocumentOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    relationship?: CatRelationshipOrderByWithRelationInput
+  }
+
+  export type CatRelationshipDocumentWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatRelationshipDocumentWhereInput | CatRelationshipDocumentWhereInput[]
+    OR?: CatRelationshipDocumentWhereInput[]
+    NOT?: CatRelationshipDocumentWhereInput | CatRelationshipDocumentWhereInput[]
+    tenantId?: UuidFilter<"CatRelationshipDocument"> | string
+    relationshipId?: UuidFilter<"CatRelationshipDocument"> | string
+    fileName?: StringFilter<"CatRelationshipDocument"> | string
+    fileUrl?: StringFilter<"CatRelationshipDocument"> | string
+    fileSize?: IntFilter<"CatRelationshipDocument"> | number
+    fileType?: StringFilter<"CatRelationshipDocument"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipDocument"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipDocument"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    relationship?: XOR<CatRelationshipRelationFilter, CatRelationshipWhereInput>
+  }, "id">
+
+  export type CatRelationshipDocumentOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    _count?: CatRelationshipDocumentCountOrderByAggregateInput
+    _avg?: CatRelationshipDocumentAvgOrderByAggregateInput
+    _max?: CatRelationshipDocumentMaxOrderByAggregateInput
+    _min?: CatRelationshipDocumentMinOrderByAggregateInput
+    _sum?: CatRelationshipDocumentSumOrderByAggregateInput
+  }
+
+  export type CatRelationshipDocumentScalarWhereWithAggregatesInput = {
+    AND?: CatRelationshipDocumentScalarWhereWithAggregatesInput | CatRelationshipDocumentScalarWhereWithAggregatesInput[]
+    OR?: CatRelationshipDocumentScalarWhereWithAggregatesInput[]
+    NOT?: CatRelationshipDocumentScalarWhereWithAggregatesInput | CatRelationshipDocumentScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatRelationshipDocument"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatRelationshipDocument"> | string
+    relationshipId?: UuidWithAggregatesFilter<"CatRelationshipDocument"> | string
+    fileName?: StringWithAggregatesFilter<"CatRelationshipDocument"> | string
+    fileUrl?: StringWithAggregatesFilter<"CatRelationshipDocument"> | string
+    fileSize?: IntWithAggregatesFilter<"CatRelationshipDocument"> | number
+    fileType?: StringWithAggregatesFilter<"CatRelationshipDocument"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"CatRelationshipDocument"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatRelationshipDocument"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatRelationshipDocument"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatRelationshipDocument"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatRelationshipDocument"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatRelationshipDocument"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"CatRelationshipDocument"> | string | null
   }
 
   export type TenantCreateInput = {
@@ -168234,6 +173449,484 @@ export namespace Prisma {
     version?: IntFieldUpdateOperationsInput | number
   }
 
+  export type CatRelationshipCreateInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactCreateNestedManyWithoutRelationshipInput
+    notes?: CatRelationshipNoteCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactUncheckedCreateNestedManyWithoutRelationshipInput
+    notes?: CatRelationshipNoteUncheckedCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentUncheckedCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUpdateManyWithoutRelationshipNestedInput
+    notes?: CatRelationshipNoteUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUncheckedUpdateManyWithoutRelationshipNestedInput
+    notes?: CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipCreateManyInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+  }
+
+  export type CatRelationshipUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CatRelationshipUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CatContactCreateInput = {
+    id?: string
+    tenantId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    relationship: CatRelationshipCreateNestedOneWithoutContactsInput
+  }
+
+  export type CatContactUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatContactUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    relationship?: CatRelationshipUpdateOneRequiredWithoutContactsNestedInput
+  }
+
+  export type CatContactUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatContactCreateManyInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatContactUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatContactUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteCreateInput = {
+    id?: string
+    tenantId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    relationship: CatRelationshipCreateNestedOneWithoutNotesInput
+  }
+
+  export type CatRelationshipNoteUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipNoteUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    relationship?: CatRelationshipUpdateOneRequiredWithoutNotesNestedInput
+  }
+
+  export type CatRelationshipNoteUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteCreateManyInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipNoteUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentCreateInput = {
+    id?: string
+    tenantId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    relationship: CatRelationshipCreateNestedOneWithoutDocumentsInput
+  }
+
+  export type CatRelationshipDocumentUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipDocumentUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    relationship?: CatRelationshipUpdateOneRequiredWithoutDocumentsNestedInput
+  }
+
+  export type CatRelationshipDocumentUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentCreateManyInput = {
+    id?: string
+    tenantId: string
+    relationshipId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipDocumentUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -176824,6 +182517,297 @@ export namespace Prisma {
     version?: SortOrder
   }
 
+  export type EnumRelationshipTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipType | EnumRelationshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipTypeFilter<$PrismaModel> | $Enums.RelationshipType
+  }
+
+  export type EnumRelationshipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipStatus | EnumRelationshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipStatusFilter<$PrismaModel> | $Enums.RelationshipStatus
+  }
+
+  export type CatContactListRelationFilter = {
+    every?: CatContactWhereInput
+    some?: CatContactWhereInput
+    none?: CatContactWhereInput
+  }
+
+  export type CatRelationshipNoteListRelationFilter = {
+    every?: CatRelationshipNoteWhereInput
+    some?: CatRelationshipNoteWhereInput
+    none?: CatRelationshipNoteWhereInput
+  }
+
+  export type CatRelationshipDocumentListRelationFilter = {
+    every?: CatRelationshipDocumentWhereInput
+    some?: CatRelationshipDocumentWhereInput
+    none?: CatRelationshipDocumentWhereInput
+  }
+
+  export type CatContactOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CatRelationshipNoteOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CatRelationshipDocumentOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type CatRelationshipTenantIdRelationshipNumberCompoundUniqueInput = {
+    tenantId: string
+    relationshipNumber: string
+  }
+
+  export type CatRelationshipCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipNumber?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    primaryContactId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatRelationshipAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type CatRelationshipMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipNumber?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    primaryContactId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatRelationshipMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipNumber?: SortOrder
+    name?: SortOrder
+    type?: SortOrder
+    status?: SortOrder
+    primaryContactId?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatRelationshipSumOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type EnumRelationshipTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipType | EnumRelationshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipTypeWithAggregatesFilter<$PrismaModel> | $Enums.RelationshipType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationshipTypeFilter<$PrismaModel>
+    _max?: NestedEnumRelationshipTypeFilter<$PrismaModel>
+  }
+
+  export type EnumRelationshipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipStatus | EnumRelationshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationshipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationshipStatusFilter<$PrismaModel>
+    _max?: NestedEnumRelationshipStatusFilter<$PrismaModel>
+  }
+
+  export type CatRelationshipRelationFilter = {
+    is?: CatRelationshipWhereInput
+    isNot?: CatRelationshipWhereInput
+  }
+
+  export type CatContactCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    role?: SortOrder
+    isPrimary?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatContactMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    role?: SortOrder
+    isPrimary?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatContactMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    role?: SortOrder
+    isPrimary?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipNoteCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipNoteMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipNoteMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    content?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipDocumentCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipDocumentAvgOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
+  export type CatRelationshipDocumentMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipDocumentMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    relationshipId?: SortOrder
+    fileName?: SortOrder
+    fileUrl?: SortOrder
+    fileSize?: SortOrder
+    fileType?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+  }
+
+  export type CatRelationshipDocumentSumOrderByAggregateInput = {
+    fileSize?: SortOrder
+  }
+
   export type UserCreateNestedManyWithoutTenantInput = {
     create?: XOR<UserCreateWithoutTenantInput, UserUncheckedCreateWithoutTenantInput> | UserCreateWithoutTenantInput[] | UserUncheckedCreateWithoutTenantInput[]
     connectOrCreate?: UserCreateOrConnectWithoutTenantInput | UserCreateOrConnectWithoutTenantInput[]
@@ -184438,6 +190422,182 @@ export namespace Prisma {
     update?: XOR<XOR<NotificationDeliveryUpdateToOneWithWhereWithoutAttemptsInput, NotificationDeliveryUpdateWithoutAttemptsInput>, NotificationDeliveryUncheckedUpdateWithoutAttemptsInput>
   }
 
+  export type CatContactCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput> | CatContactCreateWithoutRelationshipInput[] | CatContactUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatContactCreateOrConnectWithoutRelationshipInput | CatContactCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatContactCreateManyRelationshipInputEnvelope
+    connect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+  }
+
+  export type CatRelationshipNoteCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput> | CatRelationshipNoteCreateWithoutRelationshipInput[] | CatRelationshipNoteUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipNoteCreateOrConnectWithoutRelationshipInput | CatRelationshipNoteCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatRelationshipNoteCreateManyRelationshipInputEnvelope
+    connect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+  }
+
+  export type CatRelationshipDocumentCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput> | CatRelationshipDocumentCreateWithoutRelationshipInput[] | CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput | CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatRelationshipDocumentCreateManyRelationshipInputEnvelope
+    connect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+  }
+
+  export type CatContactUncheckedCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput> | CatContactCreateWithoutRelationshipInput[] | CatContactUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatContactCreateOrConnectWithoutRelationshipInput | CatContactCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatContactCreateManyRelationshipInputEnvelope
+    connect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+  }
+
+  export type CatRelationshipNoteUncheckedCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput> | CatRelationshipNoteCreateWithoutRelationshipInput[] | CatRelationshipNoteUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipNoteCreateOrConnectWithoutRelationshipInput | CatRelationshipNoteCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatRelationshipNoteCreateManyRelationshipInputEnvelope
+    connect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+  }
+
+  export type CatRelationshipDocumentUncheckedCreateNestedManyWithoutRelationshipInput = {
+    create?: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput> | CatRelationshipDocumentCreateWithoutRelationshipInput[] | CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput | CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput[]
+    createMany?: CatRelationshipDocumentCreateManyRelationshipInputEnvelope
+    connect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+  }
+
+  export type EnumRelationshipTypeFieldUpdateOperationsInput = {
+    set?: $Enums.RelationshipType
+  }
+
+  export type EnumRelationshipStatusFieldUpdateOperationsInput = {
+    set?: $Enums.RelationshipStatus
+  }
+
+  export type CatContactUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput> | CatContactCreateWithoutRelationshipInput[] | CatContactUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatContactCreateOrConnectWithoutRelationshipInput | CatContactCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatContactUpsertWithWhereUniqueWithoutRelationshipInput | CatContactUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatContactCreateManyRelationshipInputEnvelope
+    set?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    disconnect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    delete?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    connect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    update?: CatContactUpdateWithWhereUniqueWithoutRelationshipInput | CatContactUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatContactUpdateManyWithWhereWithoutRelationshipInput | CatContactUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatContactScalarWhereInput | CatContactScalarWhereInput[]
+  }
+
+  export type CatRelationshipNoteUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput> | CatRelationshipNoteCreateWithoutRelationshipInput[] | CatRelationshipNoteUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipNoteCreateOrConnectWithoutRelationshipInput | CatRelationshipNoteCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatRelationshipNoteUpsertWithWhereUniqueWithoutRelationshipInput | CatRelationshipNoteUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatRelationshipNoteCreateManyRelationshipInputEnvelope
+    set?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    disconnect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    delete?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    connect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    update?: CatRelationshipNoteUpdateWithWhereUniqueWithoutRelationshipInput | CatRelationshipNoteUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatRelationshipNoteUpdateManyWithWhereWithoutRelationshipInput | CatRelationshipNoteUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatRelationshipNoteScalarWhereInput | CatRelationshipNoteScalarWhereInput[]
+  }
+
+  export type CatRelationshipDocumentUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput> | CatRelationshipDocumentCreateWithoutRelationshipInput[] | CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput | CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatRelationshipDocumentUpsertWithWhereUniqueWithoutRelationshipInput | CatRelationshipDocumentUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatRelationshipDocumentCreateManyRelationshipInputEnvelope
+    set?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    disconnect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    delete?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    connect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    update?: CatRelationshipDocumentUpdateWithWhereUniqueWithoutRelationshipInput | CatRelationshipDocumentUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatRelationshipDocumentUpdateManyWithWhereWithoutRelationshipInput | CatRelationshipDocumentUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatRelationshipDocumentScalarWhereInput | CatRelationshipDocumentScalarWhereInput[]
+  }
+
+  export type CatContactUncheckedUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput> | CatContactCreateWithoutRelationshipInput[] | CatContactUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatContactCreateOrConnectWithoutRelationshipInput | CatContactCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatContactUpsertWithWhereUniqueWithoutRelationshipInput | CatContactUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatContactCreateManyRelationshipInputEnvelope
+    set?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    disconnect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    delete?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    connect?: CatContactWhereUniqueInput | CatContactWhereUniqueInput[]
+    update?: CatContactUpdateWithWhereUniqueWithoutRelationshipInput | CatContactUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatContactUpdateManyWithWhereWithoutRelationshipInput | CatContactUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatContactScalarWhereInput | CatContactScalarWhereInput[]
+  }
+
+  export type CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput> | CatRelationshipNoteCreateWithoutRelationshipInput[] | CatRelationshipNoteUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipNoteCreateOrConnectWithoutRelationshipInput | CatRelationshipNoteCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatRelationshipNoteUpsertWithWhereUniqueWithoutRelationshipInput | CatRelationshipNoteUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatRelationshipNoteCreateManyRelationshipInputEnvelope
+    set?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    disconnect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    delete?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    connect?: CatRelationshipNoteWhereUniqueInput | CatRelationshipNoteWhereUniqueInput[]
+    update?: CatRelationshipNoteUpdateWithWhereUniqueWithoutRelationshipInput | CatRelationshipNoteUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatRelationshipNoteUpdateManyWithWhereWithoutRelationshipInput | CatRelationshipNoteUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatRelationshipNoteScalarWhereInput | CatRelationshipNoteScalarWhereInput[]
+  }
+
+  export type CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipNestedInput = {
+    create?: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput> | CatRelationshipDocumentCreateWithoutRelationshipInput[] | CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput[]
+    connectOrCreate?: CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput | CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput[]
+    upsert?: CatRelationshipDocumentUpsertWithWhereUniqueWithoutRelationshipInput | CatRelationshipDocumentUpsertWithWhereUniqueWithoutRelationshipInput[]
+    createMany?: CatRelationshipDocumentCreateManyRelationshipInputEnvelope
+    set?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    disconnect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    delete?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    connect?: CatRelationshipDocumentWhereUniqueInput | CatRelationshipDocumentWhereUniqueInput[]
+    update?: CatRelationshipDocumentUpdateWithWhereUniqueWithoutRelationshipInput | CatRelationshipDocumentUpdateWithWhereUniqueWithoutRelationshipInput[]
+    updateMany?: CatRelationshipDocumentUpdateManyWithWhereWithoutRelationshipInput | CatRelationshipDocumentUpdateManyWithWhereWithoutRelationshipInput[]
+    deleteMany?: CatRelationshipDocumentScalarWhereInput | CatRelationshipDocumentScalarWhereInput[]
+  }
+
+  export type CatRelationshipCreateNestedOneWithoutContactsInput = {
+    create?: XOR<CatRelationshipCreateWithoutContactsInput, CatRelationshipUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutContactsInput
+    connect?: CatRelationshipWhereUniqueInput
+  }
+
+  export type CatRelationshipUpdateOneRequiredWithoutContactsNestedInput = {
+    create?: XOR<CatRelationshipCreateWithoutContactsInput, CatRelationshipUncheckedCreateWithoutContactsInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutContactsInput
+    upsert?: CatRelationshipUpsertWithoutContactsInput
+    connect?: CatRelationshipWhereUniqueInput
+    update?: XOR<XOR<CatRelationshipUpdateToOneWithWhereWithoutContactsInput, CatRelationshipUpdateWithoutContactsInput>, CatRelationshipUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type CatRelationshipCreateNestedOneWithoutNotesInput = {
+    create?: XOR<CatRelationshipCreateWithoutNotesInput, CatRelationshipUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutNotesInput
+    connect?: CatRelationshipWhereUniqueInput
+  }
+
+  export type CatRelationshipUpdateOneRequiredWithoutNotesNestedInput = {
+    create?: XOR<CatRelationshipCreateWithoutNotesInput, CatRelationshipUncheckedCreateWithoutNotesInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutNotesInput
+    upsert?: CatRelationshipUpsertWithoutNotesInput
+    connect?: CatRelationshipWhereUniqueInput
+    update?: XOR<XOR<CatRelationshipUpdateToOneWithWhereWithoutNotesInput, CatRelationshipUpdateWithoutNotesInput>, CatRelationshipUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type CatRelationshipCreateNestedOneWithoutDocumentsInput = {
+    create?: XOR<CatRelationshipCreateWithoutDocumentsInput, CatRelationshipUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutDocumentsInput
+    connect?: CatRelationshipWhereUniqueInput
+  }
+
+  export type CatRelationshipUpdateOneRequiredWithoutDocumentsNestedInput = {
+    create?: XOR<CatRelationshipCreateWithoutDocumentsInput, CatRelationshipUncheckedCreateWithoutDocumentsInput>
+    connectOrCreate?: CatRelationshipCreateOrConnectWithoutDocumentsInput
+    upsert?: CatRelationshipUpsertWithoutDocumentsInput
+    connect?: CatRelationshipWhereUniqueInput
+    update?: XOR<XOR<CatRelationshipUpdateToOneWithWhereWithoutDocumentsInput, CatRelationshipUpdateWithoutDocumentsInput>, CatRelationshipUncheckedUpdateWithoutDocumentsInput>
+  }
+
   export type NestedUuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -184943,6 +191103,40 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
     _max?: NestedEnumNotificationDeliveryStatusFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRelationshipTypeFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipType | EnumRelationshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipTypeFilter<$PrismaModel> | $Enums.RelationshipType
+  }
+
+  export type NestedEnumRelationshipStatusFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipStatus | EnumRelationshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipStatusFilter<$PrismaModel> | $Enums.RelationshipStatus
+  }
+
+  export type NestedEnumRelationshipTypeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipType | EnumRelationshipTypeFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipType[] | ListEnumRelationshipTypeFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipTypeWithAggregatesFilter<$PrismaModel> | $Enums.RelationshipType
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationshipTypeFilter<$PrismaModel>
+    _max?: NestedEnumRelationshipTypeFilter<$PrismaModel>
+  }
+
+  export type NestedEnumRelationshipStatusWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.RelationshipStatus | EnumRelationshipStatusFieldRefInput<$PrismaModel>
+    in?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    notIn?: $Enums.RelationshipStatus[] | ListEnumRelationshipStatusFieldRefInput<$PrismaModel>
+    not?: NestedEnumRelationshipStatusWithAggregatesFilter<$PrismaModel> | $Enums.RelationshipStatus
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumRelationshipStatusFilter<$PrismaModel>
+    _max?: NestedEnumRelationshipStatusFilter<$PrismaModel>
   }
 
   export type UserCreateWithoutTenantInput = {
@@ -215796,6 +221990,522 @@ export namespace Prisma {
     version?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
+  export type CatContactCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatContactUncheckedCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatContactCreateOrConnectWithoutRelationshipInput = {
+    where: CatContactWhereUniqueInput
+    create: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatContactCreateManyRelationshipInputEnvelope = {
+    data: CatContactCreateManyRelationshipInput | CatContactCreateManyRelationshipInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CatRelationshipNoteCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipNoteUncheckedCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipNoteCreateOrConnectWithoutRelationshipInput = {
+    where: CatRelationshipNoteWhereUniqueInput
+    create: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipNoteCreateManyRelationshipInputEnvelope = {
+    data: CatRelationshipNoteCreateManyRelationshipInput | CatRelationshipNoteCreateManyRelationshipInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CatRelationshipDocumentCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput = {
+    id?: string
+    tenantId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipDocumentCreateOrConnectWithoutRelationshipInput = {
+    where: CatRelationshipDocumentWhereUniqueInput
+    create: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipDocumentCreateManyRelationshipInputEnvelope = {
+    data: CatRelationshipDocumentCreateManyRelationshipInput | CatRelationshipDocumentCreateManyRelationshipInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type CatContactUpsertWithWhereUniqueWithoutRelationshipInput = {
+    where: CatContactWhereUniqueInput
+    update: XOR<CatContactUpdateWithoutRelationshipInput, CatContactUncheckedUpdateWithoutRelationshipInput>
+    create: XOR<CatContactCreateWithoutRelationshipInput, CatContactUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatContactUpdateWithWhereUniqueWithoutRelationshipInput = {
+    where: CatContactWhereUniqueInput
+    data: XOR<CatContactUpdateWithoutRelationshipInput, CatContactUncheckedUpdateWithoutRelationshipInput>
+  }
+
+  export type CatContactUpdateManyWithWhereWithoutRelationshipInput = {
+    where: CatContactScalarWhereInput
+    data: XOR<CatContactUpdateManyMutationInput, CatContactUncheckedUpdateManyWithoutRelationshipInput>
+  }
+
+  export type CatContactScalarWhereInput = {
+    AND?: CatContactScalarWhereInput | CatContactScalarWhereInput[]
+    OR?: CatContactScalarWhereInput[]
+    NOT?: CatContactScalarWhereInput | CatContactScalarWhereInput[]
+    id?: UuidFilter<"CatContact"> | string
+    tenantId?: UuidFilter<"CatContact"> | string
+    relationshipId?: UuidFilter<"CatContact"> | string
+    name?: StringFilter<"CatContact"> | string
+    email?: StringNullableFilter<"CatContact"> | string | null
+    phone?: StringNullableFilter<"CatContact"> | string | null
+    role?: StringNullableFilter<"CatContact"> | string | null
+    isPrimary?: BoolFilter<"CatContact"> | boolean
+    createdAt?: DateTimeFilter<"CatContact"> | Date | string
+    createdBy?: UuidNullableFilter<"CatContact"> | string | null
+    updatedAt?: DateTimeFilter<"CatContact"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatContact"> | string | null
+    isDeleted?: BoolFilter<"CatContact"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatContact"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatContact"> | string | null
+  }
+
+  export type CatRelationshipNoteUpsertWithWhereUniqueWithoutRelationshipInput = {
+    where: CatRelationshipNoteWhereUniqueInput
+    update: XOR<CatRelationshipNoteUpdateWithoutRelationshipInput, CatRelationshipNoteUncheckedUpdateWithoutRelationshipInput>
+    create: XOR<CatRelationshipNoteCreateWithoutRelationshipInput, CatRelationshipNoteUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipNoteUpdateWithWhereUniqueWithoutRelationshipInput = {
+    where: CatRelationshipNoteWhereUniqueInput
+    data: XOR<CatRelationshipNoteUpdateWithoutRelationshipInput, CatRelationshipNoteUncheckedUpdateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipNoteUpdateManyWithWhereWithoutRelationshipInput = {
+    where: CatRelationshipNoteScalarWhereInput
+    data: XOR<CatRelationshipNoteUpdateManyMutationInput, CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipNoteScalarWhereInput = {
+    AND?: CatRelationshipNoteScalarWhereInput | CatRelationshipNoteScalarWhereInput[]
+    OR?: CatRelationshipNoteScalarWhereInput[]
+    NOT?: CatRelationshipNoteScalarWhereInput | CatRelationshipNoteScalarWhereInput[]
+    id?: UuidFilter<"CatRelationshipNote"> | string
+    tenantId?: UuidFilter<"CatRelationshipNote"> | string
+    relationshipId?: UuidFilter<"CatRelationshipNote"> | string
+    content?: StringFilter<"CatRelationshipNote"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipNote"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipNote"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipNote"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipNote"> | string | null
+  }
+
+  export type CatRelationshipDocumentUpsertWithWhereUniqueWithoutRelationshipInput = {
+    where: CatRelationshipDocumentWhereUniqueInput
+    update: XOR<CatRelationshipDocumentUpdateWithoutRelationshipInput, CatRelationshipDocumentUncheckedUpdateWithoutRelationshipInput>
+    create: XOR<CatRelationshipDocumentCreateWithoutRelationshipInput, CatRelationshipDocumentUncheckedCreateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipDocumentUpdateWithWhereUniqueWithoutRelationshipInput = {
+    where: CatRelationshipDocumentWhereUniqueInput
+    data: XOR<CatRelationshipDocumentUpdateWithoutRelationshipInput, CatRelationshipDocumentUncheckedUpdateWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipDocumentUpdateManyWithWhereWithoutRelationshipInput = {
+    where: CatRelationshipDocumentScalarWhereInput
+    data: XOR<CatRelationshipDocumentUpdateManyMutationInput, CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipInput>
+  }
+
+  export type CatRelationshipDocumentScalarWhereInput = {
+    AND?: CatRelationshipDocumentScalarWhereInput | CatRelationshipDocumentScalarWhereInput[]
+    OR?: CatRelationshipDocumentScalarWhereInput[]
+    NOT?: CatRelationshipDocumentScalarWhereInput | CatRelationshipDocumentScalarWhereInput[]
+    id?: UuidFilter<"CatRelationshipDocument"> | string
+    tenantId?: UuidFilter<"CatRelationshipDocument"> | string
+    relationshipId?: UuidFilter<"CatRelationshipDocument"> | string
+    fileName?: StringFilter<"CatRelationshipDocument"> | string
+    fileUrl?: StringFilter<"CatRelationshipDocument"> | string
+    fileSize?: IntFilter<"CatRelationshipDocument"> | number
+    fileType?: StringFilter<"CatRelationshipDocument"> | string
+    createdAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    createdBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    updatedAt?: DateTimeFilter<"CatRelationshipDocument"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+    isDeleted?: BoolFilter<"CatRelationshipDocument"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatRelationshipDocument"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatRelationshipDocument"> | string | null
+  }
+
+  export type CatRelationshipCreateWithoutContactsInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    notes?: CatRelationshipNoteCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipUncheckedCreateWithoutContactsInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    notes?: CatRelationshipNoteUncheckedCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentUncheckedCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipCreateOrConnectWithoutContactsInput = {
+    where: CatRelationshipWhereUniqueInput
+    create: XOR<CatRelationshipCreateWithoutContactsInput, CatRelationshipUncheckedCreateWithoutContactsInput>
+  }
+
+  export type CatRelationshipUpsertWithoutContactsInput = {
+    update: XOR<CatRelationshipUpdateWithoutContactsInput, CatRelationshipUncheckedUpdateWithoutContactsInput>
+    create: XOR<CatRelationshipCreateWithoutContactsInput, CatRelationshipUncheckedCreateWithoutContactsInput>
+    where?: CatRelationshipWhereInput
+  }
+
+  export type CatRelationshipUpdateToOneWithWhereWithoutContactsInput = {
+    where?: CatRelationshipWhereInput
+    data: XOR<CatRelationshipUpdateWithoutContactsInput, CatRelationshipUncheckedUpdateWithoutContactsInput>
+  }
+
+  export type CatRelationshipUpdateWithoutContactsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    notes?: CatRelationshipNoteUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipUncheckedUpdateWithoutContactsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    notes?: CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipCreateWithoutNotesInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipUncheckedCreateWithoutNotesInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactUncheckedCreateNestedManyWithoutRelationshipInput
+    documents?: CatRelationshipDocumentUncheckedCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipCreateOrConnectWithoutNotesInput = {
+    where: CatRelationshipWhereUniqueInput
+    create: XOR<CatRelationshipCreateWithoutNotesInput, CatRelationshipUncheckedCreateWithoutNotesInput>
+  }
+
+  export type CatRelationshipUpsertWithoutNotesInput = {
+    update: XOR<CatRelationshipUpdateWithoutNotesInput, CatRelationshipUncheckedUpdateWithoutNotesInput>
+    create: XOR<CatRelationshipCreateWithoutNotesInput, CatRelationshipUncheckedCreateWithoutNotesInput>
+    where?: CatRelationshipWhereInput
+  }
+
+  export type CatRelationshipUpdateToOneWithWhereWithoutNotesInput = {
+    where?: CatRelationshipWhereInput
+    data: XOR<CatRelationshipUpdateWithoutNotesInput, CatRelationshipUncheckedUpdateWithoutNotesInput>
+  }
+
+  export type CatRelationshipUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipUncheckedUpdateWithoutNotesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUncheckedUpdateManyWithoutRelationshipNestedInput
+    documents?: CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipCreateWithoutDocumentsInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactCreateNestedManyWithoutRelationshipInput
+    notes?: CatRelationshipNoteCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipUncheckedCreateWithoutDocumentsInput = {
+    id?: string
+    tenantId: string
+    relationshipNumber: string
+    name: string
+    type?: $Enums.RelationshipType
+    status?: $Enums.RelationshipStatus
+    primaryContactId?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+    contacts?: CatContactUncheckedCreateNestedManyWithoutRelationshipInput
+    notes?: CatRelationshipNoteUncheckedCreateNestedManyWithoutRelationshipInput
+  }
+
+  export type CatRelationshipCreateOrConnectWithoutDocumentsInput = {
+    where: CatRelationshipWhereUniqueInput
+    create: XOR<CatRelationshipCreateWithoutDocumentsInput, CatRelationshipUncheckedCreateWithoutDocumentsInput>
+  }
+
+  export type CatRelationshipUpsertWithoutDocumentsInput = {
+    update: XOR<CatRelationshipUpdateWithoutDocumentsInput, CatRelationshipUncheckedUpdateWithoutDocumentsInput>
+    create: XOR<CatRelationshipCreateWithoutDocumentsInput, CatRelationshipUncheckedCreateWithoutDocumentsInput>
+    where?: CatRelationshipWhereInput
+  }
+
+  export type CatRelationshipUpdateToOneWithWhereWithoutDocumentsInput = {
+    where?: CatRelationshipWhereInput
+    data: XOR<CatRelationshipUpdateWithoutDocumentsInput, CatRelationshipUncheckedUpdateWithoutDocumentsInput>
+  }
+
+  export type CatRelationshipUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUpdateManyWithoutRelationshipNestedInput
+    notes?: CatRelationshipNoteUpdateManyWithoutRelationshipNestedInput
+  }
+
+  export type CatRelationshipUncheckedUpdateWithoutDocumentsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    relationshipNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    type?: EnumRelationshipTypeFieldUpdateOperationsInput | $Enums.RelationshipType
+    status?: EnumRelationshipStatusFieldUpdateOperationsInput | $Enums.RelationshipStatus
+    primaryContactId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+    contacts?: CatContactUncheckedUpdateManyWithoutRelationshipNestedInput
+    notes?: CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipNestedInput
+  }
+
   export type UserCreateManyTenantInput = {
     id?: string
     fullName: string
@@ -223580,6 +230290,190 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
   }
 
+  export type CatContactCreateManyRelationshipInput = {
+    id?: string
+    tenantId: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    role?: string | null
+    isPrimary?: boolean
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipNoteCreateManyRelationshipInput = {
+    id?: string
+    tenantId: string
+    content: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatRelationshipDocumentCreateManyRelationshipInput = {
+    id?: string
+    tenantId: string
+    fileName: string
+    fileUrl: string
+    fileSize: number
+    fileType: string
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+  }
+
+  export type CatContactUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatContactUncheckedUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatContactUncheckedUpdateManyWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    role?: NullableStringFieldUpdateOperationsInput | string | null
+    isPrimary?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteUncheckedUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipNoteUncheckedUpdateManyWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    content?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentUncheckedUpdateWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
+  export type CatRelationshipDocumentUncheckedUpdateManyWithoutRelationshipInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    fileName?: StringFieldUpdateOperationsInput | string
+    fileUrl?: StringFieldUpdateOperationsInput | string
+    fileSize?: IntFieldUpdateOperationsInput | number
+    fileType?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+  }
+
 
 
   /**
@@ -223729,6 +230623,10 @@ export namespace Prisma {
      * @deprecated Use NotificationDeliveryCountOutputTypeDefaultArgs instead
      */
     export type NotificationDeliveryCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = NotificationDeliveryCountOutputTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatRelationshipCountOutputTypeDefaultArgs instead
+     */
+    export type CatRelationshipCountOutputTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatRelationshipCountOutputTypeDefaultArgs<ExtArgs>
     /**
      * @deprecated Use TenantDefaultArgs instead
      */
@@ -224197,6 +231095,22 @@ export namespace Prisma {
      * @deprecated Use DeliveryTrackingDefaultArgs instead
      */
     export type DeliveryTrackingArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = DeliveryTrackingDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatRelationshipDefaultArgs instead
+     */
+    export type CatRelationshipArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatRelationshipDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatContactDefaultArgs instead
+     */
+    export type CatContactArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatContactDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatRelationshipNoteDefaultArgs instead
+     */
+    export type CatRelationshipNoteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatRelationshipNoteDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatRelationshipDocumentDefaultArgs instead
+     */
+    export type CatRelationshipDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatRelationshipDocumentDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

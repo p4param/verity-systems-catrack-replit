@@ -1,0 +1,171 @@
+# BA-001 — Catering Business Architecture
+
+**Document ID:** BA-001
+**Title:** Catering Business Architecture
+**Status:** Approved
+**Version:** 1.0
+**Category:** Product Library → Business Architecture
+
+---
+
+# Purpose
+
+Define the high-level operational architecture of the Catering ERP.
+
+---
+
+# Business Identity
+
+A catering company delivers **events**, not simply food.
+
+Food, logistics, staffing, procurement, equipment, transportation, finance, and customer communication all exist to support successful event execution.
+
+---
+
+# Central Business Aggregate
+
+The primary operational aggregate is the **Event**.
+
+All operational planning and execution revolves around the Event.
+
+Examples include:
+
+* Menus
+* Production
+* Procurement
+* Inventory
+* Staff
+* Equipment
+* Logistics
+* Finance
+* Documentation
+* Communication
+
+---
+
+# Business Lifecycle
+
+Lead
+
+↓
+
+Inquiry
+
+↓
+
+Quotation
+
+↓
+
+Negotiation
+
+↓
+
+Booking
+
+↓
+
+Planning
+
+↓
+
+Procurement
+
+↓
+
+Production
+
+↓
+
+Logistics
+
+↓
+
+Event Execution
+
+↓
+
+Settlement
+
+↓
+
+Closure
+
+↓
+
+Analysis
+
+---
+
+# Core Business Domains
+
+* CRM & Sales
+* Event Management
+* Menu Engineering
+* Recipe & Production
+* Inventory Management
+* Procurement
+* Logistics
+* Workforce Management
+* Finance
+* Analytics
+
+---
+
+# Workspace Hierarchy
+
+Company Workspace
+
+↓
+
+Operations Workspace
+
+↓
+
+Event Workspace
+
+↓
+
+Operational Workspaces
+
+* Kitchen
+* Procurement
+* Inventory
+* Logistics
+* Finance
+
+---
+
+# Operational Layers
+
+Observe
+
+↓
+
+Plan
+
+↓
+
+Execute
+
+↓
+
+Review
+
+Every business capability should support one or more of these operational layers.
+
+---
+
+# Architectural Direction
+
+The Event Workspace is the primary operational experience of the Catering ERP.
+
+Supporting domains enrich the Event Workspace rather than competing with it.
+
+The business application is designed around business operations instead of technical modules.
+
+---
+
+# Guiding Statement
+
+> **People do not use Catrack to manage data. They use Catrack to run their catering business.**

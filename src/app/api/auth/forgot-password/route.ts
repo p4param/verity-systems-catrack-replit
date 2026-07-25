@@ -61,8 +61,14 @@ export async function POST(req: Request) {
             }
         })
 
-        // Password reset token created successfully
-        console.log(`[ForgotPW] Password reset request processed for user email: ${user.email} [Tenant: ${user.tenantId}]`)
+        const host = req.headers.get("host") || "localhost:3000"
+        const protocol = req.headers.get("x-forwarded-proto") || "http"
+        const resetUrl = `${protocol}://${host}/reset-password?token=${token}`
+
+        console.log(`\n==================================================`)
+        console.log(`🔑 [ForgotPW] Password reset link for ${user.email} [Tenant: ${user.tenantId}]:`)
+        console.log(`🔗 ${resetUrl}`)
+        console.log(`==================================================\n`)
     } else {
         console.log(`[ForgotPW] Password reset request processed (User status verified)`)
     }
@@ -71,3 +77,4 @@ export async function POST(req: Request) {
         message: "If the email exists, a reset link has been sent"
     })
 }
+

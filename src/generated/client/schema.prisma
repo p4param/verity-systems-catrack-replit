@@ -2970,3 +2970,234 @@ model DeliveryAttemptRecord {
   @@index([deliveryId], map: "idx_attempt_delivery")
   @@map("notification_delivery_attempts")
 }
+
+// ─── VS09 EWP-004: NotificationRecipient Model ───────────────────────────────
+
+model NotificationRecipient {
+  id                         String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId             String  @map("notification_id") @db.Uuid
+  tenantId                   String  @map("tenant_id") @db.Uuid
+  workspaceId                String? @map("workspace_id") @db.Uuid
+  recipientSequence          Int     @map("recipient_sequence")
+  recipientType              String  @map("recipient_type") @db.VarChar(50)
+  recipientUserId            String? @map("recipient_user_id") @db.Uuid
+  recipientGroupId           String? @map("recipient_group_id") @db.Uuid
+  recipientEndpoint          String  @map("recipient_endpoint") @db.VarChar(500)
+  channelId                  String  @map("channel_id") @db.Uuid
+  deliveryPreferenceSnapshot Json?   @map("delivery_preference_snapshot")
+  culture                    String  @map("culture") @db.VarChar(10)
+  language                   String  @map("language") @db.VarChar(10)
+  timezone                   String  @map("timezone") @db.VarChar(50)
+  status                     String  @map("status") @db.VarChar(50)
+  suppressionReason          String? @map("suppression_reason") @db.VarChar(500)
+
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   Int       @default(1) @map("version")
+
+  @@unique([notificationId, recipientSequence], map: "uq_recipient_notification_sequence")
+  @@index([notificationId], map: "idx_recipient_notification")
+  @@index([tenantId], map: "idx_recipient_tenant")
+  @@index([recipientUserId], map: "idx_recipient_user")
+  @@index([status], map: "idx_recipient_status")
+  @@index([channelId], map: "idx_recipient_channel")
+  @@index([isDeleted], map: "idx_recipient_is_deleted")
+  @@index([tenantId, notificationId, status], map: "idx_recipient_tenant_notification_status")
+  @@map("notification_recipients")
+}
+
+// ─── VS09 EWP-005: ProviderProfile Model ────────────────────────────────────
+
+model ProviderProfile {
+  id                    String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId              String  @map("tenant_id") @db.Uuid
+  workspaceId           String? @map("workspace_id") @db.Uuid
+  providerCode          String  @map("provider_code") @db.VarChar(100)
+  providerName          String  @map("provider_name") @db.VarChar(255)
+  description           String? @map("description") @db.VarChar(1000)
+  providerType          String  @map("provider_type") @db.VarChar(50)
+  status                String  @map("status") @db.VarChar(50)
+  healthStatus          String  @default("HEALTHY") @map("health_status") @db.VarChar(50)
+  priority              Int     @default(100) @map("priority")
+  isDefault             Boolean @default(false) @map("is_default")
+  isEnabled             Boolean @default(true) @map("is_enabled")
+  supportedChannels     Json    @map("supported_channels")
+  capabilityMetadata    Json    @map("capability_metadata")
+  configurationMetadata Json?   @map("configuration_metadata")
+
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   Int       @default(1) @map("version")
+
+  @@unique([tenantId, providerCode], map: "uq_provider_tenant_code")
+  @@index([tenantId], map: "idx_provider_tenant")
+  @@index([tenantId, providerType], map: "idx_provider_tenant_type")
+  @@index([tenantId, status], map: "idx_provider_tenant_status")
+  @@index([tenantId, healthStatus], map: "idx_provider_tenant_health")
+  @@index([tenantId, isEnabled], map: "idx_provider_tenant_enabled")
+  @@index([isDeleted], map: "idx_provider_is_deleted")
+  @@map("provider_profiles")
+}
+
+// ─── VS09 EWP-006: DeliveryTracking Model ────────────────────────────────────
+
+model DeliveryTracking {
+  id                        String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  notificationId            String    @map("notification_id") @db.Uuid
+  tenantId                  String    @map("tenant_id") @db.Uuid
+  workspaceId               String?   @map("workspace_id") @db.Uuid
+  correlationId             String    @map("correlation_id") @db.Uuid
+  providerProfileId         String?   @map("provider_profile_id") @db.Uuid
+  trackingStatus            String    @map("tracking_status") @db.VarChar(50)
+  providerAcknowledgementId String?   @map("provider_acknowledgement_id") @db.VarChar(255)
+  providerStatus            String?   @map("provider_status") @db.VarChar(100)
+  providerTimestamp         DateTime? @map("provider_timestamp") @db.Timestamptz
+  deliveryTimestamp         DateTime? @map("delivery_timestamp") @db.Timestamptz
+  readTimestamp             DateTime? @map("read_timestamp") @db.Timestamptz
+  trackingTimeline          Json      @map("tracking_timeline")
+  telemetryMetadata         Json?     @map("telemetry_metadata")
+  auditMetadata             Json?     @map("audit_metadata")
+
+  // ES-001 Audit, Soft-Delete & Optimistic Concurrency Columns
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   Int       @default(1) @map("version")
+
+  @@unique([notificationId], map: "uq_tracking_notification")
+  @@index([tenantId], map: "idx_tracking_tenant")
+  @@index([correlationId], map: "idx_tracking_correlation")
+  @@index([trackingStatus], map: "idx_tracking_status")
+  @@index([providerStatus], map: "idx_tracking_provider_status")
+  @@index([isDeleted], map: "idx_tracking_is_deleted")
+  @@map("delivery_tracking")
+}
+
+// ─── CAT BWP-001: Relationship Foundation Models ─────────────────────────────
+
+enum RelationshipType {
+  INDIVIDUAL
+  ORGANIZATION
+}
+
+enum RelationshipStatus {
+  PROSPECT
+  CUSTOMER
+  INACTIVE
+  BLACKLISTED
+}
+
+model CatRelationship {
+  id                 String             @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String             @map("tenant_id") @db.Uuid
+  relationshipNumber String             @map("relationship_number") @db.VarChar(50)
+  name               String             @db.VarChar(255)
+  type               RelationshipType   @default(INDIVIDUAL)
+  status             RelationshipStatus @default(PROSPECT)
+  primaryContactId   String?            @map("primary_contact_id") @db.Uuid
+
+  // Standard Audit & Concurrency
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   BigInt    @default(1) @map("version")
+
+  contacts  CatContact[]
+  notes     CatRelationshipNote[]
+  documents CatRelationshipDocument[]
+
+  @@unique([tenantId, relationshipNumber], map: "uq_cat_relationship_number")
+  @@index([tenantId, isDeleted], map: "idx_cat_rel_tenant_deleted")
+  @@index([tenantId, status], map: "idx_cat_rel_status")
+  @@index([tenantId, name], map: "idx_cat_rel_name")
+  @@map("cat_relationships")
+}
+
+model CatContact {
+  id             String  @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String  @map("tenant_id") @db.Uuid
+  relationshipId String  @map("relationship_id") @db.Uuid
+  name           String  @db.VarChar(255)
+  email          String? @db.VarChar(255)
+  phone          String? @db.VarChar(50)
+  role           String? @db.VarChar(100)
+  isPrimary      Boolean @default(false) @map("is_primary")
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_contact_rel")
+  @@index([tenantId, email], map: "idx_cat_contact_email")
+  @@index([tenantId, phone], map: "idx_cat_contact_phone")
+  @@map("cat_contacts")
+}
+
+model CatRelationshipNote {
+  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String @map("tenant_id") @db.Uuid
+  relationshipId String @map("relationship_id") @db.Uuid
+  content        String @db.Text
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_note_rel")
+  @@map("cat_relationship_notes")
+}
+
+model CatRelationshipDocument {
+  id             String @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId       String @map("tenant_id") @db.Uuid
+  relationshipId String @map("relationship_id") @db.Uuid
+  fileName       String @map("file_name") @db.VarChar(255)
+  fileUrl        String @map("file_url") @db.VarChar(1000)
+  fileSize       Int    @map("file_size")
+  fileType       String @map("file_type") @db.VarChar(100)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+
+  relationship CatRelationship @relation(fields: [relationshipId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId, relationshipId], map: "idx_cat_doc_rel")
+  @@map("cat_relationship_documents")
+}

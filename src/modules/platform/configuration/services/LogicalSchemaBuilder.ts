@@ -56,8 +56,8 @@ export class LogicalSchemaBuilder {
       const fieldProps = field.properties || {};
       const name = field.code.toLowerCase();
 
-      // Skip manually declared ID or Tenant fields to avoid duplicates
-      if (name === "id" || name === "tenant_id") continue;
+      // Skip manually declared system fields or fields already pushed to avoid duplicate column DDL
+      if (columns.some((c) => c.name.toLowerCase() === name)) continue;
 
       let dataType = field.dataType;
       let length = fieldProps.length || fieldProps.characterLimit || undefined;

@@ -96,9 +96,22 @@ export async function proxy(request: NextRequest) {
     return NextResponse.next()
 }
 
-// Optimization: Match all domains declared in PASS
-// Note: matcher must be static strings, so we can't easily generate it from PRIVILEGED_AREAS keys
-// but we can list the known prefixes.
+// Optimization: Match all protected application paths
 export const config = {
-    matcher: ["/admin/:path*", "/billing/:path*", "/compliance/:path*", "/exports/:path*"]
+    matcher: [
+        "/admin/:path*",
+        "/billing/:path*",
+        "/compliance/:path*",
+        "/exports/:path*",
+        "/dashboard/:path*",
+        "/settings/:path*",
+        "/runtime/:path*",
+        "/events/:path*",
+        "/cat/:path*",
+        "/inventory/:path*",
+        "/reports/:path*",
+        "/profile/:path*",
+        "/change-password/:path*"
+    ]
 }
+

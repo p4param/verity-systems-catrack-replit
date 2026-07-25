@@ -2,6 +2,7 @@ import { EntityRepository, CreateEntityDto, UpdateEntityDto } from "../repositor
 import { EntityValidationService } from "./entity-validation-service";
 import { EntityDuplicateService } from "./entity-duplicate-service";
 import { ValidationEngine } from "./validation/validation-engine";
+import { entityBootstrapService } from "./EntityBootstrapService";
 import { createAuditLog } from "@/lib/audit";
 import { formatUserIdToUuid } from "@/lib/auth/uuid-helper";
 import { manifestGeneratorService } from "@/modules/platform/runtime/services/manifest-generator";
@@ -30,8 +31,8 @@ export class EntityService {
   }
 
   /**
-   * Creates a new Business Entity.
-   * Executes within a transaction to guarantee Audit Log creation.
+   * Creates a new Business Entity and bootstraps platform-level metadata.
+   * Executes within a transaction to guarantee Audit Log & Bootstrap creation.
    */
   async create(data: CreateEntityDto, tenantId: string, actorUserId: string) {
     logger.info(`Initiating entity creation: ${data.code}`, { tenantId, userId: actorUserId, module: "EntityService" });
@@ -49,6 +50,9 @@ export class EntityService {
         }
 
         const entity = await this.repository.create(entityData, tx);
+
+        // Bootstrap platform-level metadata (system fields, ALL_RECORDS & ACTIVE_RECORDS views, MAIN_FORM layout, navigation)
+        await entityBootstrapService.bootstrapEntity(entity.id, actorUserId, tx);
         
         await createAuditLog({
           tenantId,
@@ -57,7 +61,7 @@ export class EntityService {
           details: `Created Business Entity: ${entity.code} (${entity.name})`,
         }, tx);
 
-        logger.info(`Entity created successfully: ${entity.id}`, { tenantId, userId: actorUserId, entity: entity.id });
+        logger.info(`Entity created and bootstrapped successfully: ${entity.id}`, { tenantId, userId: actorUserId, entity: entity.id });
         return entity;
       });
     } catch (error: any) {
@@ -68,6 +72,14 @@ export class EntityService {
       logger.error(`Error during entity creation: ${error.message}`, error, { tenantId, userId: actorUserId });
       throw error;
     }
+  }
+
+  /**
+   * Explicitly triggers platform metadata bootstrapping for an existing entity.
+   */
+  async bootstrap(id: string, tenantId: string, actorUserId: string) {
+    logger.info(`Initiating explicit entity bootstrap: ${id}`, { tenantId, userId: actorUserId, entity: id, module: "EntityService" });
+    return await entityBootstrapService.bootstrapEntity(id, actorUserId);
   }
 
   /**

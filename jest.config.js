@@ -37,6 +37,8 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
     // VS09: Notification Engine — repository unit tests (mocked, no DB required)
     "<rootDir>/src/modules/platform/notification/infrastructure/persistence/__tests__/NotificationTemplateRepository.test.ts",
+    // CAT BWP-001: Catrack Relationship Foundation unit tests
+    "<rootDir>/src/modules/cat/relationship/**/__tests__/*.test.ts",
   ],
   developer: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",
@@ -55,6 +57,8 @@ const PROFILES = {
     "<rootDir>/src/modules/platform/notification/domain/**/__tests__/*.test.ts",
     "<rootDir>/src/modules/platform/notification/application/**/__tests__/*.test.ts",
     "<rootDir>/src/modules/platform/notification/infrastructure/**/__tests__/*.test.ts",
+    // CAT BWP-001: Catrack Relationship Foundation tests
+    "<rootDir>/src/modules/cat/relationship/**/__tests__/*.test.ts",
   ],
   certification: [
     "<rootDir>/src/modules/platform/persistence/__tests__/unit/**/*.test.ts",

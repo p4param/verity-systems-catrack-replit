@@ -2025,6 +2025,73 @@ exports.Prisma.DeliveryTrackingScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.CatRelationshipScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  relationshipNumber: 'relationshipNumber',
+  name: 'name',
+  type: 'type',
+  status: 'status',
+  primaryContactId: 'primaryContactId',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.CatContactScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  relationshipId: 'relationshipId',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  role: 'role',
+  isPrimary: 'isPrimary',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy'
+};
+
+exports.Prisma.CatRelationshipNoteScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  relationshipId: 'relationshipId',
+  content: 'content',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy'
+};
+
+exports.Prisma.CatRelationshipDocumentScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  relationshipId: 'relationshipId',
+  fileName: 'fileName',
+  fileUrl: 'fileUrl',
+  fileSize: 'fileSize',
+  fileType: 'fileType',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2107,6 +2174,18 @@ exports.NotificationDeliveryStatus = exports.$Enums.NotificationDeliveryStatus =
   SUPPRESSED: 'SUPPRESSED',
   FAILED: 'FAILED',
   DEAD_LETTER: 'DEAD_LETTER'
+};
+
+exports.RelationshipType = exports.$Enums.RelationshipType = {
+  INDIVIDUAL: 'INDIVIDUAL',
+  ORGANIZATION: 'ORGANIZATION'
+};
+
+exports.RelationshipStatus = exports.$Enums.RelationshipStatus = {
+  PROSPECT: 'PROSPECT',
+  CUSTOMER: 'CUSTOMER',
+  INACTIVE: 'INACTIVE',
+  BLACKLISTED: 'BLACKLISTED'
 };
 
 exports.Prisma.ModelName = {
@@ -2226,7 +2305,11 @@ exports.Prisma.ModelName = {
   DeliveryAttemptRecord: 'DeliveryAttemptRecord',
   NotificationRecipient: 'NotificationRecipient',
   ProviderProfile: 'ProviderProfile',
-  DeliveryTracking: 'DeliveryTracking'
+  DeliveryTracking: 'DeliveryTracking',
+  CatRelationship: 'CatRelationship',
+  CatContact: 'CatContact',
+  CatRelationshipNote: 'CatRelationshipNote',
+  CatRelationshipDocument: 'CatRelationshipDocument'
 };
 
 /**
