@@ -60,35 +60,40 @@ export default function EventBasicsWorkspacePanel({
 
   // Form State initialized from persisted eventBasics (if available) or defaults
   const [occasion, setOccasion] = useState(
-    savedEb?.occasion || initialInquiryTitle || "Wedding Reception"
+    savedEb?.occasion || initialInquiryTitle || "Wedding Reception",
   );
-  const [toneStyle, setToneStyle] = useState(savedEb?.toneStyle || "Formal Elegant");
+  const [toneStyle, setToneStyle] = useState(
+    savedEb?.toneStyle || "Formal Elegant",
+  );
   const [tentativeDate, setTentativeDate] = useState(
     savedEb?.tentativeDate
       ? savedEb.tentativeDate
       : initialInquiryDate
-      ? new Date(initialInquiryDate).toISOString().split("T")[0]
-      : ""
+        ? new Date(initialInquiryDate).toISOString().split("T")[0]
+        : "",
   );
-  const [dateConfidence, setDateConfidence] = useState<"TENTATIVE" | "CONFIRMED">(
-    savedEb?.dateConfidence || "TENTATIVE"
+  const [dateConfidence, setDateConfidence] = useState<
+    "TENTATIVE" | "CONFIRMED"
+  >(savedEb?.dateConfidence || "TENTATIVE");
+  const [approximateGuestCount, setApproximateGuestCount] = useState<
+    number | ""
+  >(savedEb?.approximateGuestCount ?? 250);
+  const [importantNotes, setImportantNotes] = useState(
+    savedEb?.importantNotes || "",
   );
-  const [approximateGuestCount, setApproximateGuestCount] = useState<number | "">(
-    savedEb?.approximateGuestCount ?? 250
-  );
-  const [importantNotes, setImportantNotes] = useState(savedEb?.importantNotes || "");
 
   // Summary State
   const [businessSummary, setBusinessSummary] = useState(
-    savedEb?.businessSummary || initialArea?.summary || ""
+    savedEb?.businessSummary || initialArea?.summary || "",
   );
   const [isSummaryManuallyEdited, setIsSummaryManuallyEdited] = useState(
-    savedEb?.isSummaryManuallyEdited ?? (initialArea?.summary ? true : false)
+    savedEb?.isSummaryManuallyEdited ?? (initialArea?.summary ? true : false),
   );
 
   // Discussion Status State (COMPLETE vs CONTINUE_LATER)
   const [discussionStatus, setDiscussionStatus] = useState<DiscussionStatus>(
-    savedEb?.discussionStatus || (initialArea?.lifecycle === "COMPLETED" ? "COMPLETE" : "CONTINUE_LATER")
+    savedEb?.discussionStatus ||
+      (initialArea?.lifecycle === "COMPLETED" ? "COMPLETE" : "CONTINUE_LATER"),
   );
 
   // Save State
@@ -103,39 +108,47 @@ export default function EventBasicsWorkspacePanel({
       if (eb.toneStyle) setToneStyle(eb.toneStyle);
       if (eb.tentativeDate) setTentativeDate(eb.tentativeDate);
       if (eb.dateConfidence) setDateConfidence(eb.dateConfidence);
-      if (eb.approximateGuestCount !== undefined) setApproximateGuestCount(eb.approximateGuestCount);
+      if (eb.approximateGuestCount !== undefined)
+        setApproximateGuestCount(eb.approximateGuestCount);
       if (eb.importantNotes !== undefined) setImportantNotes(eb.importantNotes);
       if (eb.businessSummary) setBusinessSummary(eb.businessSummary);
-      if (eb.isSummaryManuallyEdited !== undefined) setIsSummaryManuallyEdited(eb.isSummaryManuallyEdited);
+      if (eb.isSummaryManuallyEdited !== undefined)
+        setIsSummaryManuallyEdited(eb.isSummaryManuallyEdited);
       if (eb.discussionStatus) setDiscussionStatus(eb.discussionStatus);
     }
   }, [initialArea]);
 
   // System-Computed Validation Status
-  const parsedGuestCount = typeof approximateGuestCount === "number" ? approximateGuestCount : 0;
-  const computedValidation: BusinessValidationStatus = computeEventBasicsValidation(
-    occasion,
-    tentativeDate,
-    parsedGuestCount
-  );
+  const parsedGuestCount =
+    typeof approximateGuestCount === "number" ? approximateGuestCount : 0;
+  const computedValidation: BusinessValidationStatus =
+    computeEventBasicsValidation(occasion, tentativeDate, parsedGuestCount);
 
   // Helper to generate dynamic summary
   const generateAutoSummary = () => {
     const parts: string[] = [];
     if (occasion) parts.push(`${occasion}`);
-    if (parsedGuestCount > 0) parts.push(`for approx. ${parsedGuestCount} guests`);
+    if (parsedGuestCount > 0)
+      parts.push(`for approx. ${parsedGuestCount} guests`);
     if (tentativeDate) {
-      const formattedDate = new Date(tentativeDate).toLocaleDateString("en-US", {
-        month: "short",
-        day: "numeric",
-        year: "numeric",
-      });
-      parts.push(`on ${formattedDate} (${dateConfidence === "CONFIRMED" ? "Date Confirmed" : "Tentative Date"})`);
+      const formattedDate = new Date(tentativeDate).toLocaleDateString(
+        "en-US",
+        {
+          month: "short",
+          day: "numeric",
+          year: "numeric",
+        },
+      );
+      parts.push(
+        `on ${formattedDate} (${dateConfidence === "CONFIRMED" ? "Date Confirmed" : "Tentative Date"})`,
+      );
     }
     if (toneStyle) parts.push(`[Style: ${toneStyle}]`);
     if (importantNotes.trim()) parts.push(`Note: ${importantNotes.trim()}`);
 
-    return parts.length > 0 ? parts.join(" ") : "Event Basics discovery conversation initiated.";
+    return parts.length > 0
+      ? parts.join(" ")
+      : "Event Basics discovery conversation initiated.";
   };
 
   // Auto-generate summary when fields change IF not manually edited
@@ -143,13 +156,22 @@ export default function EventBasicsWorkspacePanel({
     if (!isSummaryManuallyEdited) {
       setBusinessSummary(generateAutoSummary());
     }
-  }, [occasion, toneStyle, tentativeDate, dateConfidence, approximateGuestCount, importantNotes, isSummaryManuallyEdited]);
+  }, [
+    occasion,
+    toneStyle,
+    tentativeDate,
+    dateConfidence,
+    approximateGuestCount,
+    importantNotes,
+    isSummaryManuallyEdited,
+  ]);
 
   const handleSaveDiscovery = async () => {
     setSaving(true);
     setSuccessMessage(null);
     try {
-      const finalLifecycle = discussionStatus === "COMPLETE" ? "COMPLETED" : "IN_PROGRESS";
+      const finalLifecycle =
+        discussionStatus === "COMPLETE" ? "COMPLETED" : "IN_PROGRESS";
       const finalSummary = businessSummary.trim() || generateAutoSummary();
 
       const eventBasicsPayload = {
@@ -180,13 +202,16 @@ export default function EventBasicsWorkspacePanel({
       const json = res.ok ? await res.json().catch(() => ({})) : {};
 
       if (res.ok && json?.success) {
-        setSuccessMessage("Event Basics Discovery saved successfully! Quotation Readiness updated.");
+        setSuccessMessage(
+          "Event Basics Discovery saved successfully! Quotation Readiness updated.",
+        );
         await Promise.resolve(onSaveSuccess(json?.overview));
         setTimeout(() => setSuccessMessage(null), 5000);
       } else {
         let errorMsg = "Server error";
         try {
-          const errJson = json && Object.keys(json).length > 0 ? json : await res.json();
+          const errJson =
+            json && Object.keys(json).length > 0 ? json : await res.json();
           errorMsg = errJson?.error || errorMsg;
         } catch (_) {}
         alert(`Failed to save discovery: ${errorMsg}`);
@@ -198,7 +223,6 @@ export default function EventBasicsWorkspacePanel({
       setSaving(false);
     }
   };
-
 
   return (
     <div className="space-y-6">
@@ -242,7 +266,9 @@ export default function EventBasicsWorkspacePanel({
             <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>{successMessage}</span>
           </div>
-          <span className="text-[10px] text-emerald-600 font-normal">Editing in-place</span>
+          <span className="text-[10px] text-emerald-600 font-normal">
+            Editing in-place
+          </span>
         </div>
       )}
 
@@ -257,7 +283,8 @@ export default function EventBasicsWorkspacePanel({
           </h2>
         </div>
         <p className="text-xs text-muted-foreground pl-8">
-          Captures essential event parameters (Occasion, Date, Headcount, High-level Notes) required to establish quotation readiness.
+          Captures essential event parameters (Occasion, Date, Headcount,
+          High-level Notes) required to establish quotation readiness.
         </p>
       </div>
 
@@ -273,13 +300,16 @@ export default function EventBasicsWorkspacePanel({
               <span>What event are we planning?</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5 italic">
-              Establishes the core occasion and celebration style to guide menu and decor options.
+              Establishes the core occasion and celebration style to guide menu
+              and decor options.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-foreground">Occasion / Event Type *</label>
+              <label className="text-xs font-bold text-foreground">
+                Occasion / Event Type *
+              </label>
               <input
                 type="text"
                 value={occasion}
@@ -306,7 +336,9 @@ export default function EventBasicsWorkspacePanel({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-foreground">Tone / Style (Optional)</label>
+              <label className="text-xs font-bold text-foreground">
+                Tone / Style (Optional)
+              </label>
               <input
                 type="text"
                 value={toneStyle}
@@ -342,13 +374,16 @@ export default function EventBasicsWorkspacePanel({
               <span>When is the event planned?</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5 italic">
-              Determines date availability, seasonal pricing, and kitchen capacity.
+              Determines date availability, seasonal pricing, and kitchen
+              capacity.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-foreground">Tentative Event Date *</label>
+              <label className="text-xs font-bold text-foreground">
+                Tentative Event Date *
+              </label>
               <input
                 type="date"
                 value={tentativeDate}
@@ -358,7 +393,9 @@ export default function EventBasicsWorkspacePanel({
             </div>
 
             <div className="space-y-1.5">
-              <label className="text-xs font-bold text-foreground">Date Confidence</label>
+              <label className="text-xs font-bold text-foreground">
+                Date Confidence
+              </label>
               <div className="grid grid-cols-2 gap-2">
                 <button
                   type="button"
@@ -395,17 +432,24 @@ export default function EventBasicsWorkspacePanel({
               <span>Approximately how many guests?</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5 italic">
-              Sets high-level scale for headcount planning, portioning, and service staffing.
+              Sets high-level scale for headcount planning, portioning, and
+              service staffing.
             </p>
           </div>
 
           <div className="max-w-md space-y-1.5 pt-1">
-            <label className="text-xs font-bold text-foreground">Approximate Guest Count *</label>
+            <label className="text-xs font-bold text-foreground">
+              Approximate Guest Count *
+            </label>
             <div className="relative">
               <input
                 type="number"
                 value={approximateGuestCount}
-                onChange={(e) => setApproximateGuestCount(e.target.value ? parseInt(e.target.value) : "")}
+                onChange={(e) =>
+                  setApproximateGuestCount(
+                    e.target.value ? parseInt(e.target.value) : "",
+                  )
+                }
                 placeholder="e.g. 250"
                 className="w-full text-xs bg-background border border-border/60 rounded-xl p-2.5 pl-9 focus:ring-2 focus:ring-primary/40 font-bold"
               />
@@ -438,7 +482,8 @@ export default function EventBasicsWorkspacePanel({
               <span>Anything else we should know?</span>
             </h3>
             <p className="text-xs text-muted-foreground mt-0.5 italic">
-              Captures host expectations, special requests, or critical constraints.
+              Captures host expectations, special requests, or critical
+              constraints.
             </p>
           </div>
 
@@ -513,7 +558,8 @@ export default function EventBasicsWorkspacePanel({
                 className="text-primary focus:ring-primary"
               />
               <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-700 rounded-lg border border-emerald-500/20">
-                Yes, discussion is complete for now (Sets Lifecycle to COMPLETED)
+                Yes, discussion is complete for now (Sets Lifecycle to
+                COMPLETED)
               </span>
             </label>
 

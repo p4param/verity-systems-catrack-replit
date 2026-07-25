@@ -54,7 +54,6 @@ import {
 } from "@/modules/cat/inquiry/domain/activity-types";
 import EventBasicsWorkspacePanel from "./components/event-basics-workspace-panel";
 
-
 interface InquiryWorkspaceData {
   id: string;
   inquiryNumber: string;
@@ -88,14 +87,38 @@ const AREA_ICONS: Record<DiscoveryAreaKey, React.ReactNode> = {
   SPECIAL_REQUIREMENTS: <HelpCircle className="w-4 h-4 text-orange-600" />,
 };
 
-const ACTIVITY_TYPE_LABELS: Record<ActivityType, { label: string; icon: React.ReactNode }> = {
-  FOLLOW_UP: { label: "Follow-up", icon: <Clock className="w-3.5 h-3.5 text-blue-600" /> },
-  CLIENT_CALL: { label: "Client Call", icon: <Phone className="w-3.5 h-3.5 text-emerald-600" /> },
-  CLIENT_MEETING: { label: "Client Meeting", icon: <Users className="w-3.5 h-3.5 text-indigo-600" /> },
-  SITE_VISIT: { label: "Site Visit", icon: <Eye className="w-3.5 h-3.5 text-purple-600" /> },
-  MENU_TASTING: { label: "Menu Tasting", icon: <ChefHat className="w-3.5 h-3.5 text-amber-600" /> },
-  COMMERCIAL_REVIEW: { label: "Commercial Review", icon: <Briefcase className="w-3.5 h-3.5 text-rose-600" /> },
-  INTERNAL_NOTE: { label: "Internal Note", icon: <MessageSquareText className="w-3.5 h-3.5 text-slate-600" /> },
+const ACTIVITY_TYPE_LABELS: Record<
+  ActivityType,
+  { label: string; icon: React.ReactNode }
+> = {
+  FOLLOW_UP: {
+    label: "Follow-up",
+    icon: <Clock className="w-3.5 h-3.5 text-blue-600" />,
+  },
+  CLIENT_CALL: {
+    label: "Client Call",
+    icon: <Phone className="w-3.5 h-3.5 text-emerald-600" />,
+  },
+  CLIENT_MEETING: {
+    label: "Client Meeting",
+    icon: <Users className="w-3.5 h-3.5 text-indigo-600" />,
+  },
+  SITE_VISIT: {
+    label: "Site Visit",
+    icon: <Eye className="w-3.5 h-3.5 text-purple-600" />,
+  },
+  MENU_TASTING: {
+    label: "Menu Tasting",
+    icon: <ChefHat className="w-3.5 h-3.5 text-amber-600" />,
+  },
+  COMMERCIAL_REVIEW: {
+    label: "Commercial Review",
+    icon: <Briefcase className="w-3.5 h-3.5 text-rose-600" />,
+  },
+  INTERNAL_NOTE: {
+    label: "Internal Note",
+    icon: <MessageSquareText className="w-3.5 h-3.5 text-slate-600" />,
+  },
 };
 
 export default function InquiryWorkspacePage() {
@@ -103,30 +126,42 @@ export default function InquiryWorkspacePage() {
   const id = (routeParams?.id as string) || "";
 
   const [inquiry, setInquiry] = useState<InquiryWorkspaceData | null>(null);
-  const [overview, setOverview] = useState<InquiryDiscoveryOverview | null>(null);
-  const [activitiesGrouped, setActivitiesGrouped] = useState<GroupedActivities | null>(null);
+  const [overview, setOverview] = useState<InquiryDiscoveryOverview | null>(
+    null,
+  );
+  const [activitiesGrouped, setActivitiesGrouped] =
+    useState<GroupedActivities | null>(null);
   const [timeline, setTimeline] = useState<TimelineItem[]>([]);
   const [loading, setLoading] = useState(true);
 
   // Active Discovery Modal
   const [activeArea, setActiveArea] = useState<DiscoveryArea | null>(null);
-  const [editLifecycle, setEditLifecycle] = useState<DiscoveryLifecycleStatus>("NOT_STARTED");
-  const [editValidation, setEditValidation] = useState<BusinessValidationStatus>("READY");
+  const [editLifecycle, setEditLifecycle] =
+    useState<DiscoveryLifecycleStatus>("NOT_STARTED");
+  const [editValidation, setEditValidation] =
+    useState<BusinessValidationStatus>("READY");
   const [editSummary, setEditSummary] = useState("");
   const [savingDiscovery, setSavingDiscovery] = useState(false);
 
   // WP02B State: Create Activity Modal
   const [showCreateActivityModal, setShowCreateActivityModal] = useState(false);
   const [newActivityTitle, setNewActivityTitle] = useState("");
-  const [newActivityType, setNewActivityType] = useState<ActivityType>("FOLLOW_UP");
-  const [newActivityDueDate, setNewActivityDueDate] = useState(new Date().toISOString().split("T")[0]);
-  const [newActivityPriority, setNewActivityPriority] = useState<ActivityPriority>("MEDIUM");
+  const [newActivityType, setNewActivityType] =
+    useState<ActivityType>("FOLLOW_UP");
+  const [newActivityDueDate, setNewActivityDueDate] = useState(
+    new Date().toISOString().split("T")[0],
+  );
+  const [newActivityPriority, setNewActivityPriority] =
+    useState<ActivityPriority>("MEDIUM");
   const [newActivityOwner, setNewActivityOwner] = useState("Sales Team");
-  const [newActivityAreaKey, setNewActivityAreaKey] = useState<DiscoveryAreaKey | "">("");
+  const [newActivityAreaKey, setNewActivityAreaKey] = useState<
+    DiscoveryAreaKey | ""
+  >("");
   const [savingActivity, setSavingActivity] = useState(false);
 
   // WP02B State: Complete Activity Modal
-  const [completingActivity, setCompletingActivity] = useState<InquiryActivity | null>(null);
+  const [completingActivity, setCompletingActivity] =
+    useState<InquiryActivity | null>(null);
   const [activityOutcome, setActivityOutcome] = useState("");
   const [completing, setCompleting] = useState(false);
 
@@ -136,39 +171,57 @@ export default function InquiryWorkspacePage() {
 
   // Active Workspace Navigation Tab
   const [activeWorkspaceTab, setActiveWorkspaceTab] = useState<
-    "OVERVIEW" | "ACTIVITIES" | "TIMELINE" | "REQUIREMENTS" | "QUOTATIONS" | "DOCUMENTS" | "NOTES"
+    | "OVERVIEW"
+    | "ACTIVITIES"
+    | "TIMELINE"
+    | "REQUIREMENTS"
+    | "QUOTATIONS"
+    | "DOCUMENTS"
+    | "NOTES"
   >("OVERVIEW");
 
   // PR-IM-010 State: Requirements Discovery Directory & Workspace View Navigation
-  const [activeDiscoveryView, setActiveDiscoveryView] = useState<"DIRECTORY" | "EVENT_BASICS">("DIRECTORY");
+  const [activeDiscoveryView, setActiveDiscoveryView] = useState<
+    "DIRECTORY" | "EVENT_BASICS"
+  >("DIRECTORY");
 
   // WP02B State: Filters
-  const [activityTab, setActivityTab] = useState<"ALL" | "OVERDUE" | "TODAY" | "TOMORROW" | "UPCOMING" | "COMPLETED">("ALL");
-  const [timelineCategoryFilter, setTimelineCategoryFilter] = useState<TimelineCategory | "ALL">("ALL");
-
-
+  const [activityTab, setActivityTab] = useState<
+    "ALL" | "OVERDUE" | "TODAY" | "TOMORROW" | "UPCOMING" | "COMPLETED"
+  >("ALL");
+  const [timelineCategoryFilter, setTimelineCategoryFilter] = useState<
+    TimelineCategory | "ALL"
+  >("ALL");
 
   const fetchWorkspaceData = async () => {
     if (!id) return;
     setLoading(true);
     try {
-      const [inquiryRes, discoveryRes, activitiesRes, timelineRes] = await Promise.all([
-        fetch(`/api/cat/inquiries/${id}`),
-        fetch(`/api/cat/inquiries/${id}/discovery`),
-        fetch(`/api/cat/inquiries/${id}/activities`),
-        fetch(`/api/cat/inquiries/${id}/timeline`),
-      ]);
+      const [inquiryRes, discoveryRes, activitiesRes, timelineRes] =
+        await Promise.all([
+          fetch(`/api/cat/inquiries/${id}`),
+          fetch(`/api/cat/inquiries/${id}/discovery`),
+          fetch(`/api/cat/inquiries/${id}/activities`),
+          fetch(`/api/cat/inquiries/${id}/timeline`),
+        ]);
 
-      const inquiryJson = inquiryRes.ok ? await inquiryRes.json().catch(() => ({})) : {};
-      const discoveryJson = discoveryRes.ok ? await discoveryRes.json().catch(() => ({})) : {};
-      const activitiesJson = activitiesRes.ok ? await activitiesRes.json().catch(() => ({})) : {};
-      const timelineJson = timelineRes.ok ? await timelineRes.json().catch(() => ({})) : {};
+      const inquiryJson = inquiryRes.ok
+        ? await inquiryRes.json().catch(() => ({}))
+        : {};
+      const discoveryJson = discoveryRes.ok
+        ? await discoveryRes.json().catch(() => ({}))
+        : {};
+      const activitiesJson = activitiesRes.ok
+        ? await activitiesRes.json().catch(() => ({}))
+        : {};
+      const timelineJson = timelineRes.ok
+        ? await timelineRes.json().catch(() => ({}))
+        : {};
 
       if (inquiryJson.success) setInquiry(inquiryJson.inquiry);
       if (discoveryJson.success) setOverview(discoveryJson.overview);
       if (activitiesJson.success) setActivitiesGrouped(activitiesJson.grouped);
       if (timelineJson.success) setTimeline(timelineJson.timeline);
-
     } catch (err) {
       console.error("Failed to load inquiry workspace:", err);
     } finally {
@@ -192,7 +245,6 @@ export default function InquiryWorkspacePage() {
     setEditValidation(area.validation);
     setEditSummary(area.summary || "");
   };
-
 
   const handleSaveDiscovery = async () => {
     if (!activeArea) return;
@@ -317,13 +369,14 @@ export default function InquiryWorkspacePage() {
     }
   };
 
-  const handleEventBasicsSaveSuccess = async (nextOverview?: InquiryDiscoveryOverview) => {
+  const handleEventBasicsSaveSuccess = async (
+    nextOverview?: InquiryDiscoveryOverview,
+  ) => {
     if (nextOverview) {
       setOverview(nextOverview);
     }
     await fetchWorkspaceData();
   };
-
 
   if (loading) {
     return (
@@ -337,11 +390,16 @@ export default function InquiryWorkspacePage() {
     return (
       <div className="bg-card p-12 text-center border border-border/40 rounded-2xl">
         <AlertCircle className="w-10 h-10 text-rose-500 mx-auto mb-3" />
-        <h2 className="text-lg font-bold text-foreground">Inquiry Record Not Found</h2>
+        <h2 className="text-lg font-bold text-foreground">
+          Inquiry Record Not Found
+        </h2>
         <p className="text-xs text-muted-foreground mt-1 mb-4">
           The requested Inquiry ID could not be located.
         </p>
-        <Link href="/cat/inquiries" className="text-xs font-bold text-primary hover:underline">
+        <Link
+          href="/cat/inquiries"
+          className="text-xs font-bold text-primary hover:underline"
+        >
           &larr; Back to Inquiry Directory
         </Link>
       </div>
@@ -353,9 +411,10 @@ export default function InquiryWorkspacePage() {
   const additionalAreas = overview.areas.filter((a) => !a.isMandatory);
 
   // Filter Timeline Items
-  const filteredTimeline = timelineCategoryFilter === "ALL"
-    ? timeline
-    : timeline.filter((t) => t.category === timelineCategoryFilter);
+  const filteredTimeline =
+    timelineCategoryFilter === "ALL"
+      ? timeline
+      : timeline.filter((t) => t.category === timelineCategoryFilter);
 
   return (
     <div className="space-y-6 max-w-7xl mx-auto pb-16">
@@ -402,7 +461,10 @@ export default function InquiryWorkspacePage() {
                 </Link>
               </div>
               <div>
-                Salesperson: <span className="font-medium text-foreground">{salesperson}</span>
+                Salesperson:{" "}
+                <span className="font-medium text-foreground">
+                  {salesperson}
+                </span>
               </div>
               {inquiry.tentativeEventDate && (
                 <div>
@@ -420,7 +482,11 @@ export default function InquiryWorkspacePage() {
       {/* 2. RESTORED INQUIRY WORKSPACE NAVIGATION TABS */}
       <div className="flex items-center gap-1 border-b border-border/40 overflow-x-auto text-xs font-bold pt-1">
         {[
-          { id: "OVERVIEW", label: "Overview", icon: <Target className="w-4 h-4" /> },
+          {
+            id: "OVERVIEW",
+            label: "Overview",
+            icon: <Target className="w-4 h-4" />,
+          },
           {
             id: "ACTIVITIES",
             label: `Activities ${activitiesGrouped ? `(${activitiesGrouped.overdue.length + activitiesGrouped.today.length + activitiesGrouped.tomorrow.length + activitiesGrouped.upcoming.length})` : ""}`,
@@ -432,10 +498,26 @@ export default function InquiryWorkspacePage() {
             label: `Timeline ${timeline ? `(${timeline.length})` : ""}`,
             icon: <History className="w-4 h-4" />,
           },
-          { id: "REQUIREMENTS", label: "Requirements", icon: <FileText className="w-4 h-4" /> },
-          { id: "QUOTATIONS", label: "Quotations", icon: <DollarSign className="w-4 h-4" /> },
-          { id: "DOCUMENTS", label: "Documents", icon: <Briefcase className="w-4 h-4" /> },
-          { id: "NOTES", label: "Notes", icon: <MessageSquareText className="w-4 h-4" /> },
+          {
+            id: "REQUIREMENTS",
+            label: "Requirements",
+            icon: <FileText className="w-4 h-4" />,
+          },
+          {
+            id: "QUOTATIONS",
+            label: "Quotations",
+            icon: <DollarSign className="w-4 h-4" />,
+          },
+          {
+            id: "DOCUMENTS",
+            label: "Documents",
+            icon: <Briefcase className="w-4 h-4" />,
+          },
+          {
+            id: "NOTES",
+            label: "Notes",
+            icon: <MessageSquareText className="w-4 h-4" />,
+          },
         ].map((tab) => (
           <button
             key={tab.id}
@@ -482,13 +564,15 @@ export default function InquiryWorkspacePage() {
               <button
                 onClick={() => {
                   const target = overview.areas.find(
-                    (a) => a.areaKey === overview.todayFocus.areaKey
+                    (a) => a.areaKey === overview.todayFocus.areaKey,
                   );
                   if (target) openDiscoveryModal(target);
                 }}
                 className="inline-flex items-center gap-1.5 text-xs font-black px-3.5 py-2 bg-white text-indigo-900 rounded-xl hover:bg-indigo-50 transition shadow-xs shrink-0"
               >
-                <span>Continue Discovery for {overview.todayFocus.areaTitle}</span>
+                <span>
+                  Continue Discovery for {overview.todayFocus.areaTitle}
+                </span>
                 <ArrowRight className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -526,28 +610,37 @@ export default function InquiryWorkspacePage() {
                 <h4 className="text-xs font-bold text-foreground mb-1.5">
                   Mandatory Requirements Preventing Quotation:
                 </h4>
-                {!overview.preventingMandatoryRequirements || overview.preventingMandatoryRequirements.length === 0 ? (
+                {!overview.preventingMandatoryRequirements ||
+                overview.preventingMandatoryRequirements.length === 0 ? (
                   <div className="text-xs font-semibold text-emerald-600 bg-emerald-500/10 p-2.5 rounded-xl border border-emerald-500/20 flex items-center gap-2">
                     <ShieldCheck className="w-4 h-4 text-emerald-600 shrink-0" />
-                    <span>All 4 mandatory discovery areas are Completed and Ready.</span>
+                    <span>
+                      All 4 mandatory discovery areas are Completed and Ready.
+                    </span>
                   </div>
                 ) : (
                   <div className="bg-rose-500/5 p-2.5 rounded-xl border border-rose-500/20 space-y-1.5">
                     <p className="text-[11px] text-rose-700 font-medium leading-tight">
-                      Quotation generation is prevented until the following mandatory requirements are satisfied:
+                      Quotation generation is prevented until the following
+                      mandatory requirements are satisfied:
                     </p>
                     <ul className="grid grid-cols-1 md:grid-cols-2 gap-1.5 pt-0.5">
-                      {overview.preventingMandatoryRequirements.map((item, idx) => (
-                        <li key={idx} className="text-xs text-rose-700 font-bold flex items-center justify-between bg-card p-2 rounded-lg border border-rose-200/80 shadow-2xs">
-                          <div className="flex items-center gap-1.5">
-                            <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
-                            <span>{item.areaTitle}</span>
-                          </div>
-                          <span className="text-[10px] font-extrabold px-1.5 py-0.5 bg-rose-500/10 text-rose-600 rounded-md">
-                            {item.reason}
-                          </span>
-                        </li>
-                      ))}
+                      {overview.preventingMandatoryRequirements.map(
+                        (item, idx) => (
+                          <li
+                            key={idx}
+                            className="text-xs text-rose-700 font-bold flex items-center justify-between bg-card p-2 rounded-lg border border-rose-200/80 shadow-2xs"
+                          >
+                            <div className="flex items-center gap-1.5">
+                              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                              <span>{item.areaTitle}</span>
+                            </div>
+                            <span className="text-[10px] font-extrabold px-1.5 py-0.5 bg-rose-500/10 text-rose-600 rounded-md">
+                              {item.reason}
+                            </span>
+                          </li>
+                        ),
+                      )}
                     </ul>
                   </div>
                 )}
@@ -562,7 +655,8 @@ export default function InquiryWorkspacePage() {
                     Discovery Progress
                   </span>
                   <span className="text-xs font-bold text-foreground">
-                    {overview.discoveryProgress.completedAreas} of {overview.discoveryProgress.totalAreas} Complete
+                    {overview.discoveryProgress.completedAreas} of{" "}
+                    {overview.discoveryProgress.totalAreas} Complete
                   </span>
                 </div>
 
@@ -572,7 +666,8 @@ export default function InquiryWorkspacePage() {
                       Mandatory
                     </span>
                     <span className="font-extrabold text-foreground text-xs">
-                      {overview.discoveryProgress.mandatoryCompleted} of {overview.discoveryProgress.mandatoryTotal} Complete
+                      {overview.discoveryProgress.mandatoryCompleted} of{" "}
+                      {overview.discoveryProgress.mandatoryTotal} Complete
                     </span>
                   </div>
                   <div className="bg-muted/30 p-2.5 rounded-xl border border-border/30">
@@ -580,7 +675,8 @@ export default function InquiryWorkspacePage() {
                       Additional
                     </span>
                     <span className="font-extrabold text-foreground text-xs">
-                      {overview.discoveryProgress.optionalCompleted} of {overview.discoveryProgress.optionalTotal} Complete
+                      {overview.discoveryProgress.optionalCompleted} of{" "}
+                      {overview.discoveryProgress.optionalTotal} Complete
                     </span>
                   </div>
                 </div>
@@ -592,7 +688,9 @@ export default function InquiryWorkspacePage() {
                 </span>
                 <p className="text-xs font-black text-foreground flex items-center gap-1.5">
                   <ChevronRight className="w-4 h-4 text-indigo-600 shrink-0" />
-                  <span className="text-indigo-950 font-extrabold">{overview.recommendedNextAction}</span>
+                  <span className="text-indigo-950 font-extrabold">
+                    {overview.recommendedNextAction}
+                  </span>
                 </p>
               </div>
             </div>
@@ -659,7 +757,9 @@ export default function InquiryWorkspacePage() {
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <CheckSquare className="w-5 h-5 text-primary shrink-0" />
-                <h2 className="text-lg font-extrabold text-foreground tracking-tight">Activities</h2>
+                <h2 className="text-lg font-extrabold text-foreground tracking-tight">
+                  Activities
+                </h2>
                 <span className="text-xs text-muted-foreground font-normal">
                   ("What do we need to do?")
                 </span>
@@ -685,12 +785,41 @@ export default function InquiryWorkspacePage() {
               <div className="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
                 {(
                   [
-                    { id: "ALL", label: "All Activities", count: activitiesGrouped.overdue.length + activitiesGrouped.today.length + activitiesGrouped.tomorrow.length + activitiesGrouped.upcoming.length + activitiesGrouped.completed.length },
-                    { id: "OVERDUE", label: "Overdue", count: activitiesGrouped.overdue.length },
-                    { id: "TODAY", label: "Today", count: activitiesGrouped.today.length },
-                    { id: "TOMORROW", label: "Tomorrow", count: activitiesGrouped.tomorrow.length },
-                    { id: "UPCOMING", label: "Upcoming", count: activitiesGrouped.upcoming.length },
-                    { id: "COMPLETED", label: "Completed", count: activitiesGrouped.completed.length },
+                    {
+                      id: "ALL",
+                      label: "All Activities",
+                      count:
+                        activitiesGrouped.overdue.length +
+                        activitiesGrouped.today.length +
+                        activitiesGrouped.tomorrow.length +
+                        activitiesGrouped.upcoming.length +
+                        activitiesGrouped.completed.length,
+                    },
+                    {
+                      id: "OVERDUE",
+                      label: "Overdue",
+                      count: activitiesGrouped.overdue.length,
+                    },
+                    {
+                      id: "TODAY",
+                      label: "Today",
+                      count: activitiesGrouped.today.length,
+                    },
+                    {
+                      id: "TOMORROW",
+                      label: "Tomorrow",
+                      count: activitiesGrouped.tomorrow.length,
+                    },
+                    {
+                      id: "UPCOMING",
+                      label: "Upcoming",
+                      count: activitiesGrouped.upcoming.length,
+                    },
+                    {
+                      id: "COMPLETED",
+                      label: "Completed",
+                      count: activitiesGrouped.completed.length,
+                    },
                   ] as const
                 ).map((tab) => (
                   <button
@@ -797,13 +926,16 @@ export default function InquiryWorkspacePage() {
             <div className="space-y-0.5">
               <div className="flex items-center gap-2">
                 <History className="w-5 h-5 text-indigo-600 shrink-0" />
-                <h2 className="text-lg font-extrabold text-foreground tracking-tight">System Timeline</h2>
+                <h2 className="text-lg font-extrabold text-foreground tracking-tight">
+                  System Timeline
+                </h2>
                 <span className="text-xs text-muted-foreground font-normal">
                   (Read-only system-generated feed)
                 </span>
               </div>
               <p className="text-xs text-muted-foreground">
-                Automated audit stream of inquiry milestones, discovery updates, activity events, and notes.
+                Automated audit stream of inquiry milestones, discovery updates,
+                activity events, and notes.
               </p>
             </div>
 
@@ -905,7 +1037,6 @@ export default function InquiryWorkspacePage() {
         </div>
       )}
 
-
       {/* ========================================================================= */}
       {/* OTHER PLACEHOLDER TABS                                                    */}
       {/* ========================================================================= */}
@@ -917,7 +1048,9 @@ export default function InquiryWorkspacePage() {
           {activeDiscoveryView === "EVENT_BASICS" ? (
             <EventBasicsWorkspacePanel
               inquiryId={id}
-              initialArea={overview.areas.find((a) => a.areaKey === "EVENT_BASICS") || null}
+              initialArea={
+                overview.areas.find((a) => a.areaKey === "EVENT_BASICS") || null
+              }
               initialInquiryDate={inquiry.tentativeEventDate}
               initialInquiryTitle={inquiry.title}
               onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
@@ -937,7 +1070,8 @@ export default function InquiryWorkspacePage() {
                   </span>
                 </div>
                 <p className="text-xs text-muted-foreground pl-7">
-                  Click any Discovery Area below to open its dedicated Business Discovery Workspace.
+                  Click any Discovery Area below to open its dedicated Business
+                  Discovery Workspace.
                 </p>
               </div>
 
@@ -1003,13 +1137,15 @@ export default function InquiryWorkspacePage() {
         </div>
       )}
 
-
       {activeWorkspaceTab === "QUOTATIONS" && (
         <div className="bg-card p-12 rounded-2xl border border-border/40 text-center space-y-3">
           <DollarSign className="w-10 h-10 text-indigo-600 mx-auto opacity-60" />
-          <h3 className="text-base font-bold text-foreground">Quotation & Proposal Engine</h3>
+          <h3 className="text-base font-bold text-foreground">
+            Quotation & Proposal Engine
+          </h3>
           <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Commercial quotation creation, pricing calculation, and proposal generation.
+            Commercial quotation creation, pricing calculation, and proposal
+            generation.
           </p>
         </div>
       )}
@@ -1017,7 +1153,9 @@ export default function InquiryWorkspacePage() {
       {activeWorkspaceTab === "DOCUMENTS" && (
         <div className="bg-card p-12 rounded-2xl border border-border/40 text-center space-y-3">
           <Briefcase className="w-10 h-10 text-emerald-600 mx-auto opacity-60" />
-          <h3 className="text-base font-bold text-foreground">Inquiry Document Management</h3>
+          <h3 className="text-base font-bold text-foreground">
+            Inquiry Document Management
+          </h3>
           <p className="text-xs text-muted-foreground max-w-md mx-auto">
             Contracts, menu PDFs, site plans, and client attachment repository.
           </p>
@@ -1027,7 +1165,9 @@ export default function InquiryWorkspacePage() {
       {activeWorkspaceTab === "NOTES" && (
         <div className="bg-card p-12 rounded-2xl border border-border/40 text-center space-y-3">
           <MessageSquareText className="w-10 h-10 text-amber-600 mx-auto opacity-60" />
-          <h3 className="text-base font-bold text-foreground">Workspace Informational Log & Notes</h3>
+          <h3 className="text-base font-bold text-foreground">
+            Workspace Informational Log & Notes
+          </h3>
           <p className="text-xs text-muted-foreground max-w-md mx-auto font-medium mb-4">
             Informational notes log for internal team communication.
           </p>
@@ -1059,7 +1199,6 @@ export default function InquiryWorkspacePage() {
           </div>
         </div>
       )}
-
 
       {/* ========================================================================= */}
       {/* MODAL 1: FROZEN IM-WP02A DISCOVERY MODAL                                 */}
@@ -1140,8 +1279,8 @@ export default function InquiryWorkspacePage() {
                           ? option.code === "READY"
                             ? "bg-emerald-600 text-white border-emerald-600"
                             : option.code === "NEEDS_ATTENTION"
-                            ? "bg-amber-600 text-white border-amber-600"
-                            : "bg-rose-600 text-white border-rose-600"
+                              ? "bg-amber-600 text-white border-amber-600"
+                              : "bg-rose-600 text-white border-rose-600"
                           : "bg-muted/40 text-muted-foreground border-border/40 hover:border-border"
                       }`}
                     >
@@ -1195,7 +1334,9 @@ export default function InquiryWorkspacePage() {
             <div className="p-4 border-b border-border/40 flex items-center justify-between bg-muted/30">
               <div className="flex items-center gap-2">
                 <CheckSquare className="w-5 h-5 text-primary" />
-                <h3 className="text-base font-bold text-foreground">Create Activity</h3>
+                <h3 className="text-base font-bold text-foreground">
+                  Create Activity
+                </h3>
               </div>
               <button
                 onClick={() => setShowCreateActivityModal(false)}
@@ -1207,7 +1348,9 @@ export default function InquiryWorkspacePage() {
 
             <div className="p-5 space-y-4">
               <div className="space-y-1">
-                <label className="text-xs font-bold text-foreground">Activity Title *</label>
+                <label className="text-xs font-bold text-foreground">
+                  Activity Title *
+                </label>
                 <input
                   type="text"
                   value={newActivityTitle}
@@ -1219,10 +1362,14 @@ export default function InquiryWorkspacePage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-foreground">Activity Type</label>
+                  <label className="text-xs font-bold text-foreground">
+                    Activity Type
+                  </label>
                   <select
                     value={newActivityType}
-                    onChange={(e) => setNewActivityType(e.target.value as ActivityType)}
+                    onChange={(e) =>
+                      setNewActivityType(e.target.value as ActivityType)
+                    }
                     className="w-full text-xs bg-background border border-border/60 rounded-xl p-2.5"
                   >
                     <option value="FOLLOW_UP">Follow-up</option>
@@ -1236,10 +1383,14 @@ export default function InquiryWorkspacePage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-foreground">Priority</label>
+                  <label className="text-xs font-bold text-foreground">
+                    Priority
+                  </label>
                   <select
                     value={newActivityPriority}
-                    onChange={(e) => setNewActivityPriority(e.target.value as ActivityPriority)}
+                    onChange={(e) =>
+                      setNewActivityPriority(e.target.value as ActivityPriority)
+                    }
                     className="w-full text-xs bg-background border border-border/60 rounded-xl p-2.5"
                   >
                     <option value="LOW">Low</option>
@@ -1252,7 +1403,9 @@ export default function InquiryWorkspacePage() {
 
               <div className="grid grid-cols-2 gap-3">
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-foreground">Due Date</label>
+                  <label className="text-xs font-bold text-foreground">
+                    Due Date
+                  </label>
                   <input
                     type="date"
                     value={newActivityDueDate}
@@ -1262,7 +1415,9 @@ export default function InquiryWorkspacePage() {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-xs font-bold text-foreground">Assigned Owner</label>
+                  <label className="text-xs font-bold text-foreground">
+                    Assigned Owner
+                  </label>
                   <input
                     type="text"
                     value={newActivityOwner}
@@ -1278,13 +1433,18 @@ export default function InquiryWorkspacePage() {
                 </label>
                 <select
                   value={newActivityAreaKey}
-                  onChange={(e) => setNewActivityAreaKey(e.target.value as DiscoveryAreaKey | "")}
+                  onChange={(e) =>
+                    setNewActivityAreaKey(
+                      e.target.value as DiscoveryAreaKey | "",
+                    )
+                  }
                   className="w-full text-xs bg-background border border-border/60 rounded-xl p-2.5"
                 >
                   <option value="">-- Unlinked (General Activity) --</option>
                   {overview.areas.map((area) => (
                     <option key={area.areaKey} value={area.areaKey}>
-                      {area.title} ({area.isMandatory ? "Mandatory" : "Optional"})
+                      {area.title} (
+                      {area.isMandatory ? "Mandatory" : "Optional"})
                     </option>
                   ))}
                 </select>
@@ -1372,7 +1532,9 @@ export default function InquiryWorkspacePage() {
   );
 }
 
-{/* Polished Discovery Area Card Component (FROZEN IM-WP02A) */}
+{
+  /* Polished Discovery Area Card Component (FROZEN IM-WP02A) */
+}
 function DiscoveryAreaCard({
   area,
   onContinueDiscovery,
@@ -1468,7 +1630,9 @@ function DiscoveryAreaCard({
   );
 }
 
-{/* Operational Activity Group Section Component (IM-WP02B) */}
+{
+  /* Operational Activity Group Section Component (IM-WP02B) */
+}
 function ActivityGroupSection({
   title,
   accentColor,
@@ -1491,13 +1655,18 @@ function ActivityGroupSection({
   return (
     <div className="space-y-3">
       <h3 className="text-xs font-black uppercase tracking-wider text-muted-foreground flex items-center gap-2">
-        <span className={`w-2 h-2 rounded-full ${accentColor === "rose" ? "bg-rose-500" : accentColor === "amber" ? "bg-amber-500" : accentColor === "blue" ? "bg-blue-500" : accentColor === "indigo" ? "bg-indigo-500" : "bg-emerald-500"}`} />
-        <span>{title} ({activities.length})</span>
+        <span
+          className={`w-2 h-2 rounded-full ${accentColor === "rose" ? "bg-rose-500" : accentColor === "amber" ? "bg-amber-500" : accentColor === "blue" ? "bg-blue-500" : accentColor === "indigo" ? "bg-indigo-500" : "bg-emerald-500"}`}
+        />
+        <span>
+          {title} ({activities.length})
+        </span>
       </h3>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         {activities.map((act) => {
-          const typeMeta = ACTIVITY_TYPE_LABELS[act.type] || ACTIVITY_TYPE_LABELS.FOLLOW_UP;
+          const typeMeta =
+            ACTIVITY_TYPE_LABELS[act.type] || ACTIVITY_TYPE_LABELS.FOLLOW_UP;
           const isCompleted = act.status === "COMPLETED";
 
           return (
@@ -1512,10 +1681,14 @@ function ActivityGroupSection({
               <div className="space-y-2">
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex items-center gap-2">
-                    <div className={`p-1.5 rounded-lg ${isCompleted ? "bg-muted/40" : "bg-muted/60"}`}>
+                    <div
+                      className={`p-1.5 rounded-lg ${isCompleted ? "bg-muted/40" : "bg-muted/60"}`}
+                    >
                       {typeMeta.icon}
                     </div>
-                    <span className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md ${isCompleted ? "bg-muted/50 text-muted-foreground/80" : "bg-muted text-muted-foreground"}`}>
+                    <span
+                      className={`text-[10px] font-bold uppercase px-2 py-0.5 rounded-md ${isCompleted ? "bg-muted/50 text-muted-foreground/80" : "bg-muted text-muted-foreground"}`}
+                    >
                       {typeMeta.label}
                     </span>
                   </div>
@@ -1527,17 +1700,24 @@ function ActivityGroupSection({
                   </span>
                 </div>
 
-                <h4 className={`text-xs font-extrabold leading-snug ${isCompleted ? "text-muted-foreground line-through decoration-muted-foreground/40" : "text-foreground"}`}>
+                <h4
+                  className={`text-xs font-extrabold leading-snug ${isCompleted ? "text-muted-foreground line-through decoration-muted-foreground/40" : "text-foreground"}`}
+                >
                   {act.title}
                 </h4>
 
-
                 <div className="flex flex-wrap items-center gap-3 text-[11px] text-muted-foreground">
                   <div>
-                    Due: <span className="font-semibold text-foreground">{act.dueDate}</span>
+                    Due:{" "}
+                    <span className="font-semibold text-foreground">
+                      {act.dueDate}
+                    </span>
                   </div>
                   <div>
-                    Assigned: <span className="font-semibold text-foreground">{act.assignedTo}</span>
+                    Assigned:{" "}
+                    <span className="font-semibold text-foreground">
+                      {act.assignedTo}
+                    </span>
                   </div>
                   {act.discoveryAreaKey && (
                     <div className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-primary/10 text-primary text-[10px] font-bold">
@@ -1553,10 +1733,14 @@ function ActivityGroupSection({
                     <span className="text-[10px] font-black uppercase text-emerald-700 block">
                       Outcome:
                     </span>
-                    <p className="italic font-medium leading-snug">"{act.outcome}"</p>
+                    <p className="italic font-medium leading-snug">
+                      "{act.outcome}"
+                    </p>
                     {act.completedAt && (
                       <span className="text-[10px] text-emerald-700/80 block pt-0.5">
-                        Completed on {new Date(act.completedAt).toLocaleDateString()} by {act.completedBy || "User"}
+                        Completed on{" "}
+                        {new Date(act.completedAt).toLocaleDateString()} by{" "}
+                        {act.completedBy || "User"}
                       </span>
                     )}
                   </div>
