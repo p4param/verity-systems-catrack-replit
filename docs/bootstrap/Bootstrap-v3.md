@@ -288,52 +288,7 @@ Every platform improvement must be justified by a real business requirement disc
 
 Development Boundary
 
-During Catering ERP development, do not spend implementation effort analyzing, validating, restructuring, or explaining VAP's internal architecture. Treat the platform as a stable framework whose internals are outside the scope of normal business feature implementation.
-
-Unless explicitly requested, do not:
-
-Revisit Entity Framework boundaries
-Revisit service or repository layering
-Analyze runtime internals
-Redesign metadata infrastructure
-Propose framework abstractions
-Refactor stable platform components
-
-Instead, focus exclusively on:
-
-Business requirements
-Business workflows
-Workspace design
-Metadata definition
-Generic runtime utilization
-Handcrafted business experiences
-Production-quality implementation
-
-Platform changes are justified only when a real business requirement cannot be implemented cleanly using the existing platform.
-
-
-One small refinement
-
-I would actually soften one line slightly.
-
-Instead of:
-
-I will EXCLUSIVELY focus on...
-
-I'd prefer:
-
-During normal Catering ERP development, my primary focus is...
-
-During normal Catering ERP development, my primary focus is:
-
-Business understanding
-Business workflows
-Workspace design
-Metadata definition
-Generic Runtime utilization
-Production-quality implementation
-
-I will only revisit platform internals when explicitly instructed or when a genuine business requirement exposes a verified platform gap.
+This section was split into its own document during the docs/ repository migration: see [`docs/project-governance/DEVELOPMENT-BOUNDARY.md`](../project-governance/DEVELOPMENT-BOUNDARY.md) for the full, current text.
 
 Design the experience first.
 
