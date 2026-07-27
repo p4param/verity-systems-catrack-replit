@@ -26,6 +26,7 @@ import {
     MapPin,
     AlertCircle,
     Building2,
+    Sparkles,
     Hash,
     HelpCircle,
     Sliders,
@@ -204,13 +205,43 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
             };
         };
 
-        return sidebarGroups.map((g) => {
+        const configuredGroups = sidebarGroups.map((g) => {
             return {
                 name: g.name,
                 icon: LucideIcons[g.icon] || FolderLock,
                 children: g.items.map(mapItem)
             };
         });
+
+        return [
+            ...configuredGroups,
+            {
+                name: "Business Setup",
+                icon: Sliders,
+                children: [
+                    {
+                        name: "Workspace",
+                        href: "/business-setup",
+                        icon: Sliders,
+                    },
+                    {
+                        name: "Contacts",
+                        href: "/cat/relationships",
+                        icon: Users2,
+                    },
+                    {
+                        name: "Venues",
+                        href: "/cat/venues",
+                        icon: Building2,
+                    },
+                    {
+                        name: "Event Occasions",
+                        href: "/cat/event-occasions",
+                        icon: Sparkles,
+                    },
+                ],
+            },
+        ];
     }, [sidebarGroups]);
 
     // Flatten all hrefs for active routing highlights checks

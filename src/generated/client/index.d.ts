@@ -630,6 +630,11 @@ export type CatRelationshipNote = $Result.DefaultSelection<Prisma.$CatRelationsh
  * 
  */
 export type CatRelationshipDocument = $Result.DefaultSelection<Prisma.$CatRelationshipDocumentPayload>
+/**
+ * Model CatVenue
+ * 
+ */
+export type CatVenue = $Result.DefaultSelection<Prisma.$CatVenuePayload>
 
 /**
  * Enums
@@ -2091,6 +2096,16 @@ export class PrismaClient<
     * ```
     */
   get catRelationshipDocument(): Prisma.CatRelationshipDocumentDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catVenue`: Exposes CRUD operations for the **CatVenue** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatVenues
+    * const catVenues = await prisma.catVenue.findMany()
+    * ```
+    */
+  get catVenue(): Prisma.CatVenueDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -2652,7 +2667,8 @@ export namespace Prisma {
     CatRelationship: 'CatRelationship',
     CatContact: 'CatContact',
     CatRelationshipNote: 'CatRelationshipNote',
-    CatRelationshipDocument: 'CatRelationshipDocument'
+    CatRelationshipDocument: 'CatRelationshipDocument',
+    CatVenue: 'CatVenue'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2668,7 +2684,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking" | "catRelationship" | "catContact" | "catRelationshipNote" | "catRelationshipDocument"
+      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking" | "catRelationship" | "catContact" | "catRelationshipNote" | "catRelationshipDocument" | "catVenue"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -11139,6 +11155,76 @@ export namespace Prisma {
           count: {
             args: Prisma.CatRelationshipDocumentCountArgs<ExtArgs>
             result: $Utils.Optional<CatRelationshipDocumentCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatVenue: {
+        payload: Prisma.$CatVenuePayload<ExtArgs>
+        fields: Prisma.CatVenueFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatVenueFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatVenueFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          findFirst: {
+            args: Prisma.CatVenueFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatVenueFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          findMany: {
+            args: Prisma.CatVenueFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>[]
+          }
+          create: {
+            args: Prisma.CatVenueCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          createMany: {
+            args: Prisma.CatVenueCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatVenueCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>[]
+          }
+          delete: {
+            args: Prisma.CatVenueDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          update: {
+            args: Prisma.CatVenueUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          deleteMany: {
+            args: Prisma.CatVenueDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatVenueUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatVenueUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatVenuePayload>
+          }
+          aggregate: {
+            args: Prisma.CatVenueAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatVenue>
+          }
+          groupBy: {
+            args: Prisma.CatVenueGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatVenueGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatVenueCountArgs<ExtArgs>
+            result: $Utils.Optional<CatVenueCountAggregateOutputType> | number
           }
         }
       }
@@ -144820,6 +144906,1194 @@ export namespace Prisma {
 
 
   /**
+   * Model CatVenue
+   */
+
+  export type AggregateCatVenue = {
+    _count: CatVenueCountAggregateOutputType | null
+    _avg: CatVenueAvgAggregateOutputType | null
+    _sum: CatVenueSumAggregateOutputType | null
+    _min: CatVenueMinAggregateOutputType | null
+    _max: CatVenueMaxAggregateOutputType | null
+  }
+
+  export type CatVenueAvgAggregateOutputType = {
+    version: number | null
+  }
+
+  export type CatVenueSumAggregateOutputType = {
+    version: bigint | null
+  }
+
+  export type CatVenueMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    venueNumber: string | null
+    venueName: string | null
+    venueType: string | null
+    address: string | null
+    areaLocality: string | null
+    city: string | null
+    state: string | null
+    country: string | null
+    pinCode: string | null
+    primaryContactName: string | null
+    primaryContactMobile: string | null
+    primaryContactEmail: string | null
+    notes: string | null
+    status: string | null
+    creationSource: string | null
+    createdFromModule: string | null
+    createdFromRecordId: string | null
+    createdFromRecordNumber: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint | null
+  }
+
+  export type CatVenueMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    venueNumber: string | null
+    venueName: string | null
+    venueType: string | null
+    address: string | null
+    areaLocality: string | null
+    city: string | null
+    state: string | null
+    country: string | null
+    pinCode: string | null
+    primaryContactName: string | null
+    primaryContactMobile: string | null
+    primaryContactEmail: string | null
+    notes: string | null
+    status: string | null
+    creationSource: string | null
+    createdFromModule: string | null
+    createdFromRecordId: string | null
+    createdFromRecordNumber: string | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint | null
+  }
+
+  export type CatVenueCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    venueNumber: number
+    venueName: number
+    venueType: number
+    address: number
+    areaLocality: number
+    city: number
+    state: number
+    country: number
+    pinCode: number
+    primaryContactName: number
+    primaryContactMobile: number
+    primaryContactEmail: number
+    notes: number
+    status: number
+    creationSource: number
+    createdFromModule: number
+    createdFromRecordId: number
+    createdFromRecordNumber: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    deletedBy: number
+    version: number
+    _all: number
+  }
+
+
+  export type CatVenueAvgAggregateInputType = {
+    version?: true
+  }
+
+  export type CatVenueSumAggregateInputType = {
+    version?: true
+  }
+
+  export type CatVenueMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    venueNumber?: true
+    venueName?: true
+    venueType?: true
+    address?: true
+    areaLocality?: true
+    city?: true
+    state?: true
+    country?: true
+    pinCode?: true
+    primaryContactName?: true
+    primaryContactMobile?: true
+    primaryContactEmail?: true
+    notes?: true
+    status?: true
+    creationSource?: true
+    createdFromModule?: true
+    createdFromRecordId?: true
+    createdFromRecordNumber?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+  }
+
+  export type CatVenueMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    venueNumber?: true
+    venueName?: true
+    venueType?: true
+    address?: true
+    areaLocality?: true
+    city?: true
+    state?: true
+    country?: true
+    pinCode?: true
+    primaryContactName?: true
+    primaryContactMobile?: true
+    primaryContactEmail?: true
+    notes?: true
+    status?: true
+    creationSource?: true
+    createdFromModule?: true
+    createdFromRecordId?: true
+    createdFromRecordNumber?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+  }
+
+  export type CatVenueCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    venueNumber?: true
+    venueName?: true
+    venueType?: true
+    address?: true
+    areaLocality?: true
+    city?: true
+    state?: true
+    country?: true
+    pinCode?: true
+    primaryContactName?: true
+    primaryContactMobile?: true
+    primaryContactEmail?: true
+    notes?: true
+    status?: true
+    creationSource?: true
+    createdFromModule?: true
+    createdFromRecordId?: true
+    createdFromRecordNumber?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    deletedBy?: true
+    version?: true
+    _all?: true
+  }
+
+  export type CatVenueAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatVenue to aggregate.
+     */
+    where?: CatVenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatVenues to fetch.
+     */
+    orderBy?: CatVenueOrderByWithRelationInput | CatVenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatVenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatVenues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatVenues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatVenues
+    **/
+    _count?: true | CatVenueCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatVenueAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatVenueSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatVenueMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatVenueMaxAggregateInputType
+  }
+
+  export type GetCatVenueAggregateType<T extends CatVenueAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatVenue]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatVenue[P]>
+      : GetScalarType<T[P], AggregateCatVenue[P]>
+  }
+
+
+
+
+  export type CatVenueGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatVenueWhereInput
+    orderBy?: CatVenueOrderByWithAggregationInput | CatVenueOrderByWithAggregationInput[]
+    by: CatVenueScalarFieldEnum[] | CatVenueScalarFieldEnum
+    having?: CatVenueScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatVenueCountAggregateInputType | true
+    _avg?: CatVenueAvgAggregateInputType
+    _sum?: CatVenueSumAggregateInputType
+    _min?: CatVenueMinAggregateInputType
+    _max?: CatVenueMaxAggregateInputType
+  }
+
+  export type CatVenueGroupByOutputType = {
+    id: string
+    tenantId: string
+    venueNumber: string
+    venueName: string
+    venueType: string
+    address: string | null
+    areaLocality: string | null
+    city: string | null
+    state: string | null
+    country: string | null
+    pinCode: string | null
+    primaryContactName: string | null
+    primaryContactMobile: string | null
+    primaryContactEmail: string | null
+    notes: string | null
+    status: string
+    creationSource: string
+    createdFromModule: string | null
+    createdFromRecordId: string | null
+    createdFromRecordNumber: string | null
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    deletedBy: string | null
+    version: bigint
+    _count: CatVenueCountAggregateOutputType | null
+    _avg: CatVenueAvgAggregateOutputType | null
+    _sum: CatVenueSumAggregateOutputType | null
+    _min: CatVenueMinAggregateOutputType | null
+    _max: CatVenueMaxAggregateOutputType | null
+  }
+
+  type GetCatVenueGroupByPayload<T extends CatVenueGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatVenueGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatVenueGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatVenueGroupByOutputType[P]>
+            : GetScalarType<T[P], CatVenueGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatVenueSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    venueNumber?: boolean
+    venueName?: boolean
+    venueType?: boolean
+    address?: boolean
+    areaLocality?: boolean
+    city?: boolean
+    state?: boolean
+    country?: boolean
+    pinCode?: boolean
+    primaryContactName?: boolean
+    primaryContactMobile?: boolean
+    primaryContactEmail?: boolean
+    notes?: boolean
+    status?: boolean
+    creationSource?: boolean
+    createdFromModule?: boolean
+    createdFromRecordId?: boolean
+    createdFromRecordNumber?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+  }, ExtArgs["result"]["catVenue"]>
+
+  export type CatVenueSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    venueNumber?: boolean
+    venueName?: boolean
+    venueType?: boolean
+    address?: boolean
+    areaLocality?: boolean
+    city?: boolean
+    state?: boolean
+    country?: boolean
+    pinCode?: boolean
+    primaryContactName?: boolean
+    primaryContactMobile?: boolean
+    primaryContactEmail?: boolean
+    notes?: boolean
+    status?: boolean
+    creationSource?: boolean
+    createdFromModule?: boolean
+    createdFromRecordId?: boolean
+    createdFromRecordNumber?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+  }, ExtArgs["result"]["catVenue"]>
+
+  export type CatVenueSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    venueNumber?: boolean
+    venueName?: boolean
+    venueType?: boolean
+    address?: boolean
+    areaLocality?: boolean
+    city?: boolean
+    state?: boolean
+    country?: boolean
+    pinCode?: boolean
+    primaryContactName?: boolean
+    primaryContactMobile?: boolean
+    primaryContactEmail?: boolean
+    notes?: boolean
+    status?: boolean
+    creationSource?: boolean
+    createdFromModule?: boolean
+    createdFromRecordId?: boolean
+    createdFromRecordNumber?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+    deletedBy?: boolean
+    version?: boolean
+  }
+
+
+  export type $CatVenuePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatVenue"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      venueNumber: string
+      venueName: string
+      venueType: string
+      address: string | null
+      areaLocality: string | null
+      city: string | null
+      state: string | null
+      country: string | null
+      pinCode: string | null
+      primaryContactName: string | null
+      primaryContactMobile: string | null
+      primaryContactEmail: string | null
+      notes: string | null
+      status: string
+      creationSource: string
+      createdFromModule: string | null
+      createdFromRecordId: string | null
+      createdFromRecordNumber: string | null
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+      deletedBy: string | null
+      version: bigint
+    }, ExtArgs["result"]["catVenue"]>
+    composites: {}
+  }
+
+  type CatVenueGetPayload<S extends boolean | null | undefined | CatVenueDefaultArgs> = $Result.GetResult<Prisma.$CatVenuePayload, S>
+
+  type CatVenueCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatVenueFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatVenueCountAggregateInputType | true
+    }
+
+  export interface CatVenueDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatVenue'], meta: { name: 'CatVenue' } }
+    /**
+     * Find zero or one CatVenue that matches the filter.
+     * @param {CatVenueFindUniqueArgs} args - Arguments to find a CatVenue
+     * @example
+     * // Get one CatVenue
+     * const catVenue = await prisma.catVenue.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatVenueFindUniqueArgs>(args: SelectSubset<T, CatVenueFindUniqueArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatVenue that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatVenueFindUniqueOrThrowArgs} args - Arguments to find a CatVenue
+     * @example
+     * // Get one CatVenue
+     * const catVenue = await prisma.catVenue.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatVenueFindUniqueOrThrowArgs>(args: SelectSubset<T, CatVenueFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatVenue that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueFindFirstArgs} args - Arguments to find a CatVenue
+     * @example
+     * // Get one CatVenue
+     * const catVenue = await prisma.catVenue.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatVenueFindFirstArgs>(args?: SelectSubset<T, CatVenueFindFirstArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatVenue that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueFindFirstOrThrowArgs} args - Arguments to find a CatVenue
+     * @example
+     * // Get one CatVenue
+     * const catVenue = await prisma.catVenue.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatVenueFindFirstOrThrowArgs>(args?: SelectSubset<T, CatVenueFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatVenues that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatVenues
+     * const catVenues = await prisma.catVenue.findMany()
+     * 
+     * // Get first 10 CatVenues
+     * const catVenues = await prisma.catVenue.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catVenueWithIdOnly = await prisma.catVenue.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatVenueFindManyArgs>(args?: SelectSubset<T, CatVenueFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatVenue.
+     * @param {CatVenueCreateArgs} args - Arguments to create a CatVenue.
+     * @example
+     * // Create one CatVenue
+     * const CatVenue = await prisma.catVenue.create({
+     *   data: {
+     *     // ... data to create a CatVenue
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatVenueCreateArgs>(args: SelectSubset<T, CatVenueCreateArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatVenues.
+     * @param {CatVenueCreateManyArgs} args - Arguments to create many CatVenues.
+     * @example
+     * // Create many CatVenues
+     * const catVenue = await prisma.catVenue.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatVenueCreateManyArgs>(args?: SelectSubset<T, CatVenueCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatVenues and returns the data saved in the database.
+     * @param {CatVenueCreateManyAndReturnArgs} args - Arguments to create many CatVenues.
+     * @example
+     * // Create many CatVenues
+     * const catVenue = await prisma.catVenue.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatVenues and only return the `id`
+     * const catVenueWithIdOnly = await prisma.catVenue.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatVenueCreateManyAndReturnArgs>(args?: SelectSubset<T, CatVenueCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatVenue.
+     * @param {CatVenueDeleteArgs} args - Arguments to delete one CatVenue.
+     * @example
+     * // Delete one CatVenue
+     * const CatVenue = await prisma.catVenue.delete({
+     *   where: {
+     *     // ... filter to delete one CatVenue
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatVenueDeleteArgs>(args: SelectSubset<T, CatVenueDeleteArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatVenue.
+     * @param {CatVenueUpdateArgs} args - Arguments to update one CatVenue.
+     * @example
+     * // Update one CatVenue
+     * const catVenue = await prisma.catVenue.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatVenueUpdateArgs>(args: SelectSubset<T, CatVenueUpdateArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatVenues.
+     * @param {CatVenueDeleteManyArgs} args - Arguments to filter CatVenues to delete.
+     * @example
+     * // Delete a few CatVenues
+     * const { count } = await prisma.catVenue.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatVenueDeleteManyArgs>(args?: SelectSubset<T, CatVenueDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatVenues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatVenues
+     * const catVenue = await prisma.catVenue.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatVenueUpdateManyArgs>(args: SelectSubset<T, CatVenueUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatVenue.
+     * @param {CatVenueUpsertArgs} args - Arguments to update or create a CatVenue.
+     * @example
+     * // Update or create a CatVenue
+     * const catVenue = await prisma.catVenue.upsert({
+     *   create: {
+     *     // ... data to create a CatVenue
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatVenue we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatVenueUpsertArgs>(args: SelectSubset<T, CatVenueUpsertArgs<ExtArgs>>): Prisma__CatVenueClient<$Result.GetResult<Prisma.$CatVenuePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatVenues.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueCountArgs} args - Arguments to filter CatVenues to count.
+     * @example
+     * // Count the number of CatVenues
+     * const count = await prisma.catVenue.count({
+     *   where: {
+     *     // ... the filter for the CatVenues we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatVenueCountArgs>(
+      args?: Subset<T, CatVenueCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatVenueCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatVenue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatVenueAggregateArgs>(args: Subset<T, CatVenueAggregateArgs>): Prisma.PrismaPromise<GetCatVenueAggregateType<T>>
+
+    /**
+     * Group by CatVenue.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatVenueGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatVenueGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatVenueGroupByArgs['orderBy'] }
+        : { orderBy?: CatVenueGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatVenueGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatVenueGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatVenue model
+   */
+  readonly fields: CatVenueFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatVenue.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatVenueClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatVenue model
+   */ 
+  interface CatVenueFieldRefs {
+    readonly id: FieldRef<"CatVenue", 'String'>
+    readonly tenantId: FieldRef<"CatVenue", 'String'>
+    readonly venueNumber: FieldRef<"CatVenue", 'String'>
+    readonly venueName: FieldRef<"CatVenue", 'String'>
+    readonly venueType: FieldRef<"CatVenue", 'String'>
+    readonly address: FieldRef<"CatVenue", 'String'>
+    readonly areaLocality: FieldRef<"CatVenue", 'String'>
+    readonly city: FieldRef<"CatVenue", 'String'>
+    readonly state: FieldRef<"CatVenue", 'String'>
+    readonly country: FieldRef<"CatVenue", 'String'>
+    readonly pinCode: FieldRef<"CatVenue", 'String'>
+    readonly primaryContactName: FieldRef<"CatVenue", 'String'>
+    readonly primaryContactMobile: FieldRef<"CatVenue", 'String'>
+    readonly primaryContactEmail: FieldRef<"CatVenue", 'String'>
+    readonly notes: FieldRef<"CatVenue", 'String'>
+    readonly status: FieldRef<"CatVenue", 'String'>
+    readonly creationSource: FieldRef<"CatVenue", 'String'>
+    readonly createdFromModule: FieldRef<"CatVenue", 'String'>
+    readonly createdFromRecordId: FieldRef<"CatVenue", 'String'>
+    readonly createdFromRecordNumber: FieldRef<"CatVenue", 'String'>
+    readonly createdAt: FieldRef<"CatVenue", 'DateTime'>
+    readonly createdBy: FieldRef<"CatVenue", 'String'>
+    readonly updatedAt: FieldRef<"CatVenue", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatVenue", 'String'>
+    readonly isDeleted: FieldRef<"CatVenue", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatVenue", 'DateTime'>
+    readonly deletedBy: FieldRef<"CatVenue", 'String'>
+    readonly version: FieldRef<"CatVenue", 'BigInt'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatVenue findUnique
+   */
+  export type CatVenueFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter, which CatVenue to fetch.
+     */
+    where: CatVenueWhereUniqueInput
+  }
+
+  /**
+   * CatVenue findUniqueOrThrow
+   */
+  export type CatVenueFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter, which CatVenue to fetch.
+     */
+    where: CatVenueWhereUniqueInput
+  }
+
+  /**
+   * CatVenue findFirst
+   */
+  export type CatVenueFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter, which CatVenue to fetch.
+     */
+    where?: CatVenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatVenues to fetch.
+     */
+    orderBy?: CatVenueOrderByWithRelationInput | CatVenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatVenues.
+     */
+    cursor?: CatVenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatVenues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatVenues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatVenues.
+     */
+    distinct?: CatVenueScalarFieldEnum | CatVenueScalarFieldEnum[]
+  }
+
+  /**
+   * CatVenue findFirstOrThrow
+   */
+  export type CatVenueFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter, which CatVenue to fetch.
+     */
+    where?: CatVenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatVenues to fetch.
+     */
+    orderBy?: CatVenueOrderByWithRelationInput | CatVenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatVenues.
+     */
+    cursor?: CatVenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatVenues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatVenues.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatVenues.
+     */
+    distinct?: CatVenueScalarFieldEnum | CatVenueScalarFieldEnum[]
+  }
+
+  /**
+   * CatVenue findMany
+   */
+  export type CatVenueFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter, which CatVenues to fetch.
+     */
+    where?: CatVenueWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatVenues to fetch.
+     */
+    orderBy?: CatVenueOrderByWithRelationInput | CatVenueOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatVenues.
+     */
+    cursor?: CatVenueWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatVenues from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatVenues.
+     */
+    skip?: number
+    distinct?: CatVenueScalarFieldEnum | CatVenueScalarFieldEnum[]
+  }
+
+  /**
+   * CatVenue create
+   */
+  export type CatVenueCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * The data needed to create a CatVenue.
+     */
+    data: XOR<CatVenueCreateInput, CatVenueUncheckedCreateInput>
+  }
+
+  /**
+   * CatVenue createMany
+   */
+  export type CatVenueCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatVenues.
+     */
+    data: CatVenueCreateManyInput | CatVenueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatVenue createManyAndReturn
+   */
+  export type CatVenueCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatVenues.
+     */
+    data: CatVenueCreateManyInput | CatVenueCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatVenue update
+   */
+  export type CatVenueUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * The data needed to update a CatVenue.
+     */
+    data: XOR<CatVenueUpdateInput, CatVenueUncheckedUpdateInput>
+    /**
+     * Choose, which CatVenue to update.
+     */
+    where: CatVenueWhereUniqueInput
+  }
+
+  /**
+   * CatVenue updateMany
+   */
+  export type CatVenueUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatVenues.
+     */
+    data: XOR<CatVenueUpdateManyMutationInput, CatVenueUncheckedUpdateManyInput>
+    /**
+     * Filter which CatVenues to update
+     */
+    where?: CatVenueWhereInput
+  }
+
+  /**
+   * CatVenue upsert
+   */
+  export type CatVenueUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * The filter to search for the CatVenue to update in case it exists.
+     */
+    where: CatVenueWhereUniqueInput
+    /**
+     * In case the CatVenue found by the `where` argument doesn't exist, create a new CatVenue with this data.
+     */
+    create: XOR<CatVenueCreateInput, CatVenueUncheckedCreateInput>
+    /**
+     * In case the CatVenue was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatVenueUpdateInput, CatVenueUncheckedUpdateInput>
+  }
+
+  /**
+   * CatVenue delete
+   */
+  export type CatVenueDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+    /**
+     * Filter which CatVenue to delete.
+     */
+    where: CatVenueWhereUniqueInput
+  }
+
+  /**
+   * CatVenue deleteMany
+   */
+  export type CatVenueDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatVenues to delete
+     */
+    where?: CatVenueWhereInput
+  }
+
+  /**
+   * CatVenue without action
+   */
+  export type CatVenueDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatVenue
+     */
+    select?: CatVenueSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -147164,6 +148438,40 @@ export namespace Prisma {
   };
 
   export type CatRelationshipDocumentScalarFieldEnum = (typeof CatRelationshipDocumentScalarFieldEnum)[keyof typeof CatRelationshipDocumentScalarFieldEnum]
+
+
+  export const CatVenueScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    venueNumber: 'venueNumber',
+    venueName: 'venueName',
+    venueType: 'venueType',
+    address: 'address',
+    areaLocality: 'areaLocality',
+    city: 'city',
+    state: 'state',
+    country: 'country',
+    pinCode: 'pinCode',
+    primaryContactName: 'primaryContactName',
+    primaryContactMobile: 'primaryContactMobile',
+    primaryContactEmail: 'primaryContactEmail',
+    notes: 'notes',
+    status: 'status',
+    creationSource: 'creationSource',
+    createdFromModule: 'createdFromModule',
+    createdFromRecordId: 'createdFromRecordId',
+    createdFromRecordNumber: 'createdFromRecordNumber',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt',
+    deletedBy: 'deletedBy',
+    version: 'version'
+  };
+
+  export type CatVenueScalarFieldEnum = (typeof CatVenueScalarFieldEnum)[keyof typeof CatVenueScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -159801,6 +161109,176 @@ export namespace Prisma {
     isDeleted?: BoolWithAggregatesFilter<"CatRelationshipDocument"> | boolean
     deletedAt?: DateTimeNullableWithAggregatesFilter<"CatRelationshipDocument"> | Date | string | null
     deletedBy?: UuidNullableWithAggregatesFilter<"CatRelationshipDocument"> | string | null
+  }
+
+  export type CatVenueWhereInput = {
+    AND?: CatVenueWhereInput | CatVenueWhereInput[]
+    OR?: CatVenueWhereInput[]
+    NOT?: CatVenueWhereInput | CatVenueWhereInput[]
+    id?: UuidFilter<"CatVenue"> | string
+    tenantId?: UuidFilter<"CatVenue"> | string
+    venueNumber?: StringFilter<"CatVenue"> | string
+    venueName?: StringFilter<"CatVenue"> | string
+    venueType?: StringFilter<"CatVenue"> | string
+    address?: StringNullableFilter<"CatVenue"> | string | null
+    areaLocality?: StringNullableFilter<"CatVenue"> | string | null
+    city?: StringNullableFilter<"CatVenue"> | string | null
+    state?: StringNullableFilter<"CatVenue"> | string | null
+    country?: StringNullableFilter<"CatVenue"> | string | null
+    pinCode?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactName?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactMobile?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactEmail?: StringNullableFilter<"CatVenue"> | string | null
+    notes?: StringNullableFilter<"CatVenue"> | string | null
+    status?: StringFilter<"CatVenue"> | string
+    creationSource?: StringFilter<"CatVenue"> | string
+    createdFromModule?: StringNullableFilter<"CatVenue"> | string | null
+    createdFromRecordId?: UuidNullableFilter<"CatVenue"> | string | null
+    createdFromRecordNumber?: StringNullableFilter<"CatVenue"> | string | null
+    createdAt?: DateTimeFilter<"CatVenue"> | Date | string
+    createdBy?: UuidNullableFilter<"CatVenue"> | string | null
+    updatedAt?: DateTimeFilter<"CatVenue"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatVenue"> | string | null
+    isDeleted?: BoolFilter<"CatVenue"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatVenue"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatVenue"> | string | null
+    version?: BigIntFilter<"CatVenue"> | bigint | number
+  }
+
+  export type CatVenueOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    venueNumber?: SortOrder
+    venueName?: SortOrder
+    venueType?: SortOrder
+    address?: SortOrderInput | SortOrder
+    areaLocality?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
+    primaryContactName?: SortOrderInput | SortOrder
+    primaryContactMobile?: SortOrderInput | SortOrder
+    primaryContactEmail?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    creationSource?: SortOrder
+    createdFromModule?: SortOrderInput | SortOrder
+    createdFromRecordId?: SortOrderInput | SortOrder
+    createdFromRecordNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    version?: SortOrder
+  }
+
+  export type CatVenueWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    tenantId_venueNumber?: CatVenueTenantIdVenueNumberCompoundUniqueInput
+    AND?: CatVenueWhereInput | CatVenueWhereInput[]
+    OR?: CatVenueWhereInput[]
+    NOT?: CatVenueWhereInput | CatVenueWhereInput[]
+    tenantId?: UuidFilter<"CatVenue"> | string
+    venueNumber?: StringFilter<"CatVenue"> | string
+    venueName?: StringFilter<"CatVenue"> | string
+    venueType?: StringFilter<"CatVenue"> | string
+    address?: StringNullableFilter<"CatVenue"> | string | null
+    areaLocality?: StringNullableFilter<"CatVenue"> | string | null
+    city?: StringNullableFilter<"CatVenue"> | string | null
+    state?: StringNullableFilter<"CatVenue"> | string | null
+    country?: StringNullableFilter<"CatVenue"> | string | null
+    pinCode?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactName?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactMobile?: StringNullableFilter<"CatVenue"> | string | null
+    primaryContactEmail?: StringNullableFilter<"CatVenue"> | string | null
+    notes?: StringNullableFilter<"CatVenue"> | string | null
+    status?: StringFilter<"CatVenue"> | string
+    creationSource?: StringFilter<"CatVenue"> | string
+    createdFromModule?: StringNullableFilter<"CatVenue"> | string | null
+    createdFromRecordId?: UuidNullableFilter<"CatVenue"> | string | null
+    createdFromRecordNumber?: StringNullableFilter<"CatVenue"> | string | null
+    createdAt?: DateTimeFilter<"CatVenue"> | Date | string
+    createdBy?: UuidNullableFilter<"CatVenue"> | string | null
+    updatedAt?: DateTimeFilter<"CatVenue"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatVenue"> | string | null
+    isDeleted?: BoolFilter<"CatVenue"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatVenue"> | Date | string | null
+    deletedBy?: UuidNullableFilter<"CatVenue"> | string | null
+    version?: BigIntFilter<"CatVenue"> | bigint | number
+  }, "id" | "tenantId_venueNumber">
+
+  export type CatVenueOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    venueNumber?: SortOrder
+    venueName?: SortOrder
+    venueType?: SortOrder
+    address?: SortOrderInput | SortOrder
+    areaLocality?: SortOrderInput | SortOrder
+    city?: SortOrderInput | SortOrder
+    state?: SortOrderInput | SortOrder
+    country?: SortOrderInput | SortOrder
+    pinCode?: SortOrderInput | SortOrder
+    primaryContactName?: SortOrderInput | SortOrder
+    primaryContactMobile?: SortOrderInput | SortOrder
+    primaryContactEmail?: SortOrderInput | SortOrder
+    notes?: SortOrderInput | SortOrder
+    status?: SortOrder
+    creationSource?: SortOrder
+    createdFromModule?: SortOrderInput | SortOrder
+    createdFromRecordId?: SortOrderInput | SortOrder
+    createdFromRecordNumber?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    deletedBy?: SortOrderInput | SortOrder
+    version?: SortOrder
+    _count?: CatVenueCountOrderByAggregateInput
+    _avg?: CatVenueAvgOrderByAggregateInput
+    _max?: CatVenueMaxOrderByAggregateInput
+    _min?: CatVenueMinOrderByAggregateInput
+    _sum?: CatVenueSumOrderByAggregateInput
+  }
+
+  export type CatVenueScalarWhereWithAggregatesInput = {
+    AND?: CatVenueScalarWhereWithAggregatesInput | CatVenueScalarWhereWithAggregatesInput[]
+    OR?: CatVenueScalarWhereWithAggregatesInput[]
+    NOT?: CatVenueScalarWhereWithAggregatesInput | CatVenueScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatVenue"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatVenue"> | string
+    venueNumber?: StringWithAggregatesFilter<"CatVenue"> | string
+    venueName?: StringWithAggregatesFilter<"CatVenue"> | string
+    venueType?: StringWithAggregatesFilter<"CatVenue"> | string
+    address?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    areaLocality?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    city?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    state?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    country?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    pinCode?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    primaryContactName?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    primaryContactMobile?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    primaryContactEmail?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    notes?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    status?: StringWithAggregatesFilter<"CatVenue"> | string
+    creationSource?: StringWithAggregatesFilter<"CatVenue"> | string
+    createdFromModule?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    createdFromRecordId?: UuidNullableWithAggregatesFilter<"CatVenue"> | string | null
+    createdFromRecordNumber?: StringNullableWithAggregatesFilter<"CatVenue"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"CatVenue"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatVenue"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatVenue"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatVenue"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatVenue"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatVenue"> | Date | string | null
+    deletedBy?: UuidNullableWithAggregatesFilter<"CatVenue"> | string | null
+    version?: BigIntWithAggregatesFilter<"CatVenue"> | bigint | number
   }
 
   export type TenantCreateInput = {
@@ -173927,6 +175405,223 @@ export namespace Prisma {
     deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
   }
 
+  export type CatVenueCreateInput = {
+    id?: string
+    tenantId: string
+    venueNumber: string
+    venueName: string
+    venueType: string
+    address?: string | null
+    areaLocality?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string | null
+    pinCode?: string | null
+    primaryContactName?: string | null
+    primaryContactMobile?: string | null
+    primaryContactEmail?: string | null
+    notes?: string | null
+    status?: string
+    creationSource?: string
+    createdFromModule?: string | null
+    createdFromRecordId?: string | null
+    createdFromRecordNumber?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+  }
+
+  export type CatVenueUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    venueNumber: string
+    venueName: string
+    venueType: string
+    address?: string | null
+    areaLocality?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string | null
+    pinCode?: string | null
+    primaryContactName?: string | null
+    primaryContactMobile?: string | null
+    primaryContactEmail?: string | null
+    notes?: string | null
+    status?: string
+    creationSource?: string
+    createdFromModule?: string | null
+    createdFromRecordId?: string | null
+    createdFromRecordNumber?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+  }
+
+  export type CatVenueUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    venueNumber?: StringFieldUpdateOperationsInput | string
+    venueName?: StringFieldUpdateOperationsInput | string
+    venueType?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    areaLocality?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    creationSource?: StringFieldUpdateOperationsInput | string
+    createdFromModule?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CatVenueUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    venueNumber?: StringFieldUpdateOperationsInput | string
+    venueName?: StringFieldUpdateOperationsInput | string
+    venueType?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    areaLocality?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    creationSource?: StringFieldUpdateOperationsInput | string
+    createdFromModule?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CatVenueCreateManyInput = {
+    id?: string
+    tenantId: string
+    venueNumber: string
+    venueName: string
+    venueType: string
+    address?: string | null
+    areaLocality?: string | null
+    city?: string | null
+    state?: string | null
+    country?: string | null
+    pinCode?: string | null
+    primaryContactName?: string | null
+    primaryContactMobile?: string | null
+    primaryContactEmail?: string | null
+    notes?: string | null
+    status?: string
+    creationSource?: string
+    createdFromModule?: string | null
+    createdFromRecordId?: string | null
+    createdFromRecordNumber?: string | null
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+    deletedBy?: string | null
+    version?: bigint | number
+  }
+
+  export type CatVenueUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    venueNumber?: StringFieldUpdateOperationsInput | string
+    venueName?: StringFieldUpdateOperationsInput | string
+    venueType?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    areaLocality?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    creationSource?: StringFieldUpdateOperationsInput | string
+    createdFromModule?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
+  export type CatVenueUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    venueNumber?: StringFieldUpdateOperationsInput | string
+    venueName?: StringFieldUpdateOperationsInput | string
+    venueType?: StringFieldUpdateOperationsInput | string
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    areaLocality?: NullableStringFieldUpdateOperationsInput | string | null
+    city?: NullableStringFieldUpdateOperationsInput | string | null
+    state?: NullableStringFieldUpdateOperationsInput | string | null
+    country?: NullableStringFieldUpdateOperationsInput | string | null
+    pinCode?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactName?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactMobile?: NullableStringFieldUpdateOperationsInput | string | null
+    primaryContactEmail?: NullableStringFieldUpdateOperationsInput | string | null
+    notes?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    creationSource?: StringFieldUpdateOperationsInput | string
+    createdFromModule?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordId?: NullableStringFieldUpdateOperationsInput | string | null
+    createdFromRecordNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    deletedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    version?: BigIntFieldUpdateOperationsInput | bigint | number
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -182806,6 +184501,112 @@ export namespace Prisma {
 
   export type CatRelationshipDocumentSumOrderByAggregateInput = {
     fileSize?: SortOrder
+  }
+
+  export type CatVenueTenantIdVenueNumberCompoundUniqueInput = {
+    tenantId: string
+    venueNumber: string
+  }
+
+  export type CatVenueCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    venueNumber?: SortOrder
+    venueName?: SortOrder
+    venueType?: SortOrder
+    address?: SortOrder
+    areaLocality?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    country?: SortOrder
+    pinCode?: SortOrder
+    primaryContactName?: SortOrder
+    primaryContactMobile?: SortOrder
+    primaryContactEmail?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    creationSource?: SortOrder
+    createdFromModule?: SortOrder
+    createdFromRecordId?: SortOrder
+    createdFromRecordNumber?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatVenueAvgOrderByAggregateInput = {
+    version?: SortOrder
+  }
+
+  export type CatVenueMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    venueNumber?: SortOrder
+    venueName?: SortOrder
+    venueType?: SortOrder
+    address?: SortOrder
+    areaLocality?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    country?: SortOrder
+    pinCode?: SortOrder
+    primaryContactName?: SortOrder
+    primaryContactMobile?: SortOrder
+    primaryContactEmail?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    creationSource?: SortOrder
+    createdFromModule?: SortOrder
+    createdFromRecordId?: SortOrder
+    createdFromRecordNumber?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatVenueMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    venueNumber?: SortOrder
+    venueName?: SortOrder
+    venueType?: SortOrder
+    address?: SortOrder
+    areaLocality?: SortOrder
+    city?: SortOrder
+    state?: SortOrder
+    country?: SortOrder
+    pinCode?: SortOrder
+    primaryContactName?: SortOrder
+    primaryContactMobile?: SortOrder
+    primaryContactEmail?: SortOrder
+    notes?: SortOrder
+    status?: SortOrder
+    creationSource?: SortOrder
+    createdFromModule?: SortOrder
+    createdFromRecordId?: SortOrder
+    createdFromRecordNumber?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+    deletedBy?: SortOrder
+    version?: SortOrder
+  }
+
+  export type CatVenueSumOrderByAggregateInput = {
+    version?: SortOrder
   }
 
   export type UserCreateNestedManyWithoutTenantInput = {
@@ -231111,6 +232912,10 @@ export namespace Prisma {
      * @deprecated Use CatRelationshipDocumentDefaultArgs instead
      */
     export type CatRelationshipDocumentArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatRelationshipDocumentDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatVenueDefaultArgs instead
+     */
+    export type CatVenueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatVenueDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

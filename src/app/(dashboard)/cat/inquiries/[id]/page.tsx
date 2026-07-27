@@ -53,6 +53,10 @@ import {
   TimelineItem,
 } from "@/modules/cat/inquiry/domain/activity-types";
 import EventBasicsWorkspacePanel from "./components/event-basics-workspace-panel";
+import VenueDiscoveryWorkspacePanel from "@/modules/cat/inquiry/features/venue-discovery/VenueDiscoveryWorkspacePanel";
+import FoodBeverageWorkspacePanel from "@/modules/cat/inquiry/features/food-beverage-discovery/FoodBeverageWorkspacePanel";
+import BudgetCommercialWorkspacePanel from "@/modules/cat/inquiry/features/budget-commercial-discovery/BudgetCommercialWorkspacePanel";
+import DecorAmbienceWorkspacePanel from "@/modules/cat/inquiry/features/decor-ambience-discovery/DecorAmbienceWorkspacePanel";
 
 interface InquiryWorkspaceData {
   id: string;
@@ -182,7 +186,12 @@ export default function InquiryWorkspacePage() {
 
   // PR-IM-010 State: Requirements Discovery Directory & Workspace View Navigation
   const [activeDiscoveryView, setActiveDiscoveryView] = useState<
-    "DIRECTORY" | "EVENT_BASICS"
+    | "DIRECTORY"
+    | "EVENT_BASICS"
+    | "VENUE"
+    | "FOOD_BEVERAGE"
+    | "BUDGET_COMMERCIALS"
+    | "DECOR_AMBIENCE"
   >("DIRECTORY");
 
   // WP02B State: Filters
@@ -238,6 +247,26 @@ export default function InquiryWorkspacePage() {
     if (area.areaKey === "EVENT_BASICS") {
       setActiveWorkspaceTab("REQUIREMENTS");
       setActiveDiscoveryView("EVENT_BASICS");
+      return;
+    }
+    if (area.areaKey === "VENUE") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("VENUE");
+      return;
+    }
+    if (area.areaKey === "FOOD_BEVERAGE") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("FOOD_BEVERAGE");
+      return;
+    }
+    if (area.areaKey === "BUDGET_COMMERCIALS") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("BUDGET_COMMERCIALS");
+      return;
+    }
+    if (area.areaKey === "DECOR_AMBIENCE") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("DECOR_AMBIENCE");
       return;
     }
     setActiveArea(area);
@@ -369,13 +398,29 @@ export default function InquiryWorkspacePage() {
     }
   };
 
-  const handleEventBasicsSaveSuccess = async (
+  const handleDiscoveryWorkspaceSaveSuccess = async (
     nextOverview?: InquiryDiscoveryOverview,
   ) => {
     if (nextOverview) {
       setOverview(nextOverview);
     }
     await fetchWorkspaceData();
+  };
+
+  const handleVenueSuggestedActivity = (payload: {
+    title: string;
+    discoveryAreaKey: "VENUE";
+    priority: ActivityPriority;
+    dueDate: string;
+    assignedTo: string;
+  }) => {
+    setNewActivityTitle(payload.title);
+    setNewActivityType("FOLLOW_UP");
+    setNewActivityPriority(payload.priority);
+    setNewActivityAreaKey(payload.discoveryAreaKey);
+    setNewActivityDueDate(payload.dueDate);
+    setNewActivityOwner(payload.assignedTo);
+    setShowCreateActivityModal(true);
   };
 
   if (loading) {
@@ -1054,7 +1099,48 @@ export default function InquiryWorkspacePage() {
               initialInquiryDate={inquiry.tentativeEventDate}
               initialInquiryTitle={inquiry.title}
               onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
-              onSaveSuccess={handleEventBasicsSaveSuccess}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
+          ) : activeDiscoveryView === "VENUE" ? (
+            <VenueDiscoveryWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find((a) => a.areaKey === "VENUE") || null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+              onCreateSuggestedActivity={handleVenueSuggestedActivity}
+            />
+          ) : activeDiscoveryView === "FOOD_BEVERAGE" ? (
+            <FoodBeverageWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find((a) => a.areaKey === "FOOD_BEVERAGE") ||
+                null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
+          ) : activeDiscoveryView === "BUDGET_COMMERCIALS" ? (
+            <BudgetCommercialWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find(
+                  (a) => a.areaKey === "BUDGET_COMMERCIALS",
+                ) || null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
+          ) : activeDiscoveryView === "DECOR_AMBIENCE" ? (
+            <DecorAmbienceWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find((a) => a.areaKey === "DECOR_AMBIENCE") ||
+                null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
             />
           ) : (
             <div className="space-y-6">
@@ -1095,6 +1181,16 @@ export default function InquiryWorkspacePage() {
                       onContinueDiscovery={(selectedArea) => {
                         if (selectedArea.areaKey === "EVENT_BASICS") {
                           setActiveDiscoveryView("EVENT_BASICS");
+                        } else if (selectedArea.areaKey === "VENUE") {
+                          setActiveDiscoveryView("VENUE");
+                        } else if (selectedArea.areaKey === "FOOD_BEVERAGE") {
+                          setActiveDiscoveryView("FOOD_BEVERAGE");
+                        } else if (
+                          selectedArea.areaKey === "BUDGET_COMMERCIALS"
+                        ) {
+                          setActiveDiscoveryView("BUDGET_COMMERCIALS");
+                        } else if (selectedArea.areaKey === "DECOR_AMBIENCE") {
+                          setActiveDiscoveryView("DECOR_AMBIENCE");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }
@@ -1124,6 +1220,16 @@ export default function InquiryWorkspacePage() {
                       onContinueDiscovery={(selectedArea) => {
                         if (selectedArea.areaKey === "EVENT_BASICS") {
                           setActiveDiscoveryView("EVENT_BASICS");
+                        } else if (selectedArea.areaKey === "VENUE") {
+                          setActiveDiscoveryView("VENUE");
+                        } else if (selectedArea.areaKey === "FOOD_BEVERAGE") {
+                          setActiveDiscoveryView("FOOD_BEVERAGE");
+                        } else if (
+                          selectedArea.areaKey === "BUDGET_COMMERCIALS"
+                        ) {
+                          setActiveDiscoveryView("BUDGET_COMMERCIALS");
+                        } else if (selectedArea.areaKey === "DECOR_AMBIENCE") {
+                          setActiveDiscoveryView("DECOR_AMBIENCE");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }

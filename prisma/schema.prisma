@@ -3206,6 +3206,106 @@ model CatRelationshipDocument {
   @@map("cat_relationship_documents")
 }
 
+model CatVenue {
+  id                 String   @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId           String   @map("tenant_id") @db.Uuid
+  venueNumber        String   @map("venue_number") @db.VarChar(50)
+  venueName          String   @map("venue_name") @db.VarChar(255)
+  venueType          String   @map("venue_type") @db.VarChar(100)
+  address            String?  @db.Text
+  areaLocality       String?  @map("area_locality") @db.VarChar(255)
+  city               String?  @db.VarChar(100)
+  state              String?  @db.VarChar(100)
+  country            String?  @db.VarChar(100)
+  pinCode            String?  @map("pin_code") @db.VarChar(20)
+  primaryContactName String?  @map("primary_contact_name") @db.VarChar(255)
+  primaryContactMobile String? @map("primary_contact_mobile") @db.VarChar(50)
+  primaryContactEmail String? @map("primary_contact_email") @db.VarChar(255)
+  notes              String?  @db.Text
+  status             String   @default("ACTIVE") @db.VarChar(20)
+
+  creationSource           String  @default("MANUAL") @map("creation_source") @db.VarChar(50)
+  createdFromModule        String? @map("created_from_module") @db.VarChar(50)
+  createdFromRecordId      String? @map("created_from_record_id") @db.Uuid
+  createdFromRecordNumber  String? @map("created_from_record_number") @db.VarChar(50)
+
+  createdAt DateTime  @default(now()) @map("created_at") @db.Timestamptz
+  createdBy String?   @map("created_by") @db.Uuid
+  updatedAt DateTime  @updatedAt @map("updated_at") @db.Timestamptz
+  updatedBy String?   @map("updated_by") @db.Uuid
+  isDeleted Boolean   @default(false) @map("is_deleted")
+  deletedAt DateTime? @map("deleted_at") @db.Timestamptz
+  deletedBy String?   @map("deleted_by") @db.Uuid
+  version   BigInt    @default(1) @map("version")
+
+  @@unique([tenantId, venueNumber], map: "uq_cat_venues_tenant_number")
+  @@index([tenantId, isDeleted], map: "idx_cat_venues_tenant_deleted")
+  @@index([tenantId, status], map: "idx_cat_venues_tenant_status")
+  @@index([tenantId, venueName], map: "idx_cat_venues_tenant_name")
+  @@index([tenantId, city], map: "idx_cat_venues_tenant_city")
+  @@map("cat_venues")
+}
+
+model CatOccasionType {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String    @map("tenant_id") @db.Uuid
+  occasionNumber             String    @map("occasion_number") @db.VarChar(50)
+  name                       String    @db.VarChar(255)
+  code                       String    @db.VarChar(100)
+  isActive                   Boolean   @default(true) @map("is_active")
+  showInDiscoveryQuickSelect Boolean   @default(true) @map("show_in_discovery_quick_select")
+  displayOrder               Int       @default(1) @map("display_order")
+  createdAt                  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  createdBy                  String?   @map("created_by") @db.Uuid
+  updatedAt                  DateTime  @default(now()) @map("updated_at") @db.Timestamp(3)
+  updatedBy                  String?   @map("updated_by") @db.Uuid
+  isDeleted                  Boolean   @default(false) @map("is_deleted")
+  deletedAt                  DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  @@index([tenantId, isDeleted, isActive, displayOrder], map: "idx_cat_occasion_types_tenant")
+  @@map("cat_occasion_types")
+}
+
+model CatCuisine {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String    @map("tenant_id") @db.Uuid
+  cuisineNumber              String    @map("cuisine_number") @db.VarChar(50)
+  name                       String    @db.VarChar(255)
+  code                       String    @db.VarChar(100)
+  isActive                   Boolean   @default(true) @map("is_active")
+  showInDiscoveryQuickSelect Boolean   @default(true) @map("show_in_discovery_quick_select")
+  displayOrder               Int       @default(1) @map("display_order")
+  createdAt                  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  createdBy                  String?   @map("created_by") @db.Uuid
+  updatedAt                  DateTime  @default(now()) @map("updated_at") @db.Timestamp(3)
+  updatedBy                  String?   @map("updated_by") @db.Uuid
+  isDeleted                  Boolean   @default(false) @map("is_deleted")
+  deletedAt                  DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  @@index([tenantId, isDeleted, isActive, displayOrder], map: "idx_cat_cuisines_tenant")
+  @@map("cat_cuisines")
+}
+
+model CatServiceStyle {
+  id                         String    @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
+  tenantId                   String    @map("tenant_id") @db.Uuid
+  styleNumber                String    @map("style_number") @db.VarChar(50)
+  name                       String    @db.VarChar(255)
+  code                       String    @db.VarChar(100)
+  isActive                   Boolean   @default(true) @map("is_active")
+  showInDiscoveryQuickSelect Boolean   @default(true) @map("show_in_discovery_quick_select")
+  displayOrder               Int       @default(1) @map("display_order")
+  createdAt                  DateTime  @default(now()) @map("created_at") @db.Timestamp(3)
+  createdBy                  String?   @map("created_by") @db.Uuid
+  updatedAt                  DateTime  @default(now()) @map("updated_at") @db.Timestamp(3)
+  updatedBy                  String?   @map("updated_by") @db.Uuid
+  isDeleted                  Boolean   @default(false) @map("is_deleted")
+  deletedAt                  DateTime? @map("deleted_at") @db.Timestamp(3)
+
+  @@index([tenantId, isDeleted, isActive, displayOrder], map: "idx_cat_service_styles_tenant")
+  @@map("cat_service_styles")
+}
+
 
 
 

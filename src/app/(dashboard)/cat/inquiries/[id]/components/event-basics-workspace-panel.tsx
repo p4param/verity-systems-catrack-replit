@@ -1,19 +1,18 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   ArrowLeft,
   Calendar,
+  ChevronRight,
   Sparkles,
   Users,
-  MessageSquareText,
   CheckCircle2,
   AlertTriangle,
-  Clock,
   Check,
   RotateCcw,
   ShieldCheck,
-  Building2,
+  Zap,
 } from "lucide-react";
 import {
   DiscoveryArea,
@@ -22,6 +21,8 @@ import {
   computeEventBasicsValidation,
   DiscussionStatus,
 } from "@/modules/cat/inquiry/domain/discovery-types";
+import OccasionLookup from "@/modules/cat/occasion-types/components/OccasionLookup";
+import { CatOccasionType } from "@/modules/cat/occasion-types/types";
 
 interface EventBasicsWorkspacePanelProps {
   inquiryId: string;
@@ -31,15 +32,6 @@ interface EventBasicsWorkspacePanelProps {
   onBackToRequirements: () => void;
   onSaveSuccess: (overview?: InquiryDiscoveryOverview) => void | Promise<void>;
 }
-
-const OCCASION_PRESETS = [
-  "Wedding Reception",
-  "Corporate Gala",
-  "Birthday Party",
-  "Anniversary",
-  "Social Gathering",
-  "Cultural Celebration",
-];
 
 const TONE_PRESETS = [
   "Formal Elegant",
@@ -57,6 +49,33 @@ export default function EventBasicsWorkspacePanel({
   onSaveSuccess,
 }: EventBasicsWorkspacePanelProps) {
   const savedEb = initialArea?.eventBasics;
+
+  const [occasionTypes, setOccasionTypes] = useState<CatOccasionType[]>([]);
+  const [loadingOccasions, setLoadingOccasions] = useState(true);
+
+  useEffect(() => {
+    let active = true;
+    fetch("/api/cat/occasion-types?activeOnly=true")
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (active && data?.success && Array.isArray(data.items)) {
+          setOccasionTypes(data.items);
+        }
+      })
+      .catch((err) => console.error("Error loading occasion types:", err))
+      .finally(() => {
+        if (active) setLoadingOccasions(false);
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
+
+  const quickSelectChips = useMemo(() => {
+    return occasionTypes
+      .filter((o) => o.showInDiscoveryQuickSelect)
+      .sort((a, b) => a.displayOrder - b.displayOrder);
+  }, [occasionTypes]);
 
   // Form State initialized from persisted eventBasics (if available) or defaults
   const [occasion, setOccasion] = useState(
@@ -123,6 +142,60 @@ export default function EventBasicsWorkspacePanel({
     typeof approximateGuestCount === "number" ? approximateGuestCount : 0;
   const computedValidation: BusinessValidationStatus =
     computeEventBasicsValidation(occasion, tentativeDate, parsedGuestCount);
+
+  const isDiscoveryReady =
+    discussionStatus === "COMPLETE" && computedValidation === "READY";
+
+  const conversationProgress = useMemo(() => {
+    let completed = 0;
+    if (occasion) completed++;
+    if (tentativeDate) completed++;
+    if (parsedGuestCount > 0) completed++;
+    if (importantNotes.trim()) completed++;
+    const percentage = Math.round((completed / 4) * 100);
+    return { completed, total: 4, percentage };
+  }, [occasion, tentativeDate, parsedGuestCount, importantNotes]);
+
+  const suggestedActivities = useMemo(() => {
+    const items: Array<{ priority: "URGENT" | "IMPORTANT" | "RECOMMENDATION"; text: string }> = [];
+
+    if (!tentativeDate) {
+      items.push({
+        priority: "URGENT",
+        text: "Capture a tentative event date to improve planning confidence for downstream discovery.",
+      });
+    }
+
+    if (dateConfidence === "TENTATIVE") {
+      items.push({
+        priority: "IMPORTANT",
+        text: "Reconfirm date confidence with the host before final handover.",
+      });
+    }
+
+    if (parsedGuestCount > 0 && parsedGuestCount < 100) {
+      items.push({
+        priority: "RECOMMENDATION",
+        text: "Validate whether the guest count is likely to expand before quotation readiness.",
+      });
+    }
+
+    if (discussionStatus === "COMPLETE" && computedValidation === "READY") {
+      items.push({
+        priority: "RECOMMENDATION",
+        text: "Event Basics discovery is ready for the next workspace handover.",
+      });
+    }
+
+    if (items.length === 0) {
+      items.push({
+        priority: "RECOMMENDATION",
+        text: "Continue capturing core event facts only; avoid execution-level planning at this stage.",
+      });
+    }
+
+    return items;
+  }, [tentativeDate, dateConfidence, parsedGuestCount, discussionStatus, computedValidation]);
 
   // Helper to generate dynamic summary
   const generateAutoSummary = () => {
@@ -225,37 +298,46 @@ export default function EventBasicsWorkspacePanel({
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-6 max-w-6xl mx-auto pb-12">
       {/* 1. Header & Navigation Back */}
-      <div className="flex items-center justify-between border-b border-border/40 pb-3">
+      <div className="flex items-center justify-between border-b border-border/40 pb-4">
         <button
           onClick={onBackToRequirements}
-          className="inline-flex items-center gap-1.5 text-xs font-bold text-primary hover:text-primary/80 transition cursor-pointer"
+          className="inline-flex items-center gap-2 text-xs font-bold text-muted-foreground hover:text-foreground transition cursor-pointer"
         >
           <ArrowLeft className="w-4 h-4" />
-          <span>&larr; Back to Requirements</span>
+          <span>Back to Discovery Hub</span>
         </button>
 
-        <div className="flex items-center gap-2 text-xs font-bold">
-          <span className="text-muted-foreground">System Validation:</span>
+        <div className="flex items-center gap-3">
           {computedValidation === "READY" && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-emerald-500/15 text-emerald-600 rounded-full border border-emerald-500/30 font-extrabold">
               <CheckCircle2 className="w-3.5 h-3.5" />
-              SYSTEM READY
+              Discovery Ready
             </span>
           )}
           {computedValidation === "NEEDS_ATTENTION" && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-amber-500/15 text-amber-600 rounded-full border border-amber-500/30 font-extrabold">
               <AlertTriangle className="w-3.5 h-3.5" />
-              NEEDS ATTENTION
+              Needs Attention
             </span>
           )}
           {computedValidation === "BLOCKED" && (
             <span className="inline-flex items-center gap-1 px-2.5 py-0.5 bg-rose-500/15 text-rose-600 rounded-full border border-rose-500/30 font-extrabold">
               <AlertTriangle className="w-3.5 h-3.5" />
-              BLOCKED
+              Business Blocked
             </span>
           )}
+
+          <button
+            type="button"
+            disabled={saving}
+            onClick={handleSaveDiscovery}
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-extrabold bg-primary text-primary-foreground hover:bg-primary/90 shadow-xs transition cursor-pointer disabled:opacity-50"
+          >
+            <ShieldCheck className="w-4 h-4" />
+            <span>{saving ? "Saving..." : "Save Discovery"}</span>
+          </button>
         </div>
       </div>
 
@@ -272,20 +354,78 @@ export default function EventBasicsWorkspacePanel({
         </div>
       )}
 
-      {/* Purpose Context Banner */}
-      <div className="bg-card p-4 rounded-2xl border border-border/40 space-y-1">
-        <div className="flex items-center gap-2">
-          <div className="p-1.5 rounded-lg bg-primary/10 text-primary">
-            <Calendar className="w-4 h-4" />
+      <div className="bg-card border border-border/60 rounded-2xl p-6 shadow-xs space-y-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <span className="text-[10px] font-black uppercase tracking-wider text-primary bg-primary/10 px-2 py-0.5 rounded-md">
+                Guided Workspace
+              </span>
+              <span className="text-xs font-bold text-muted-foreground">Area: Event Basics</span>
+            </div>
+            <h1 className="text-xl font-black text-foreground flex items-center gap-2">
+              <Calendar className="w-5 h-5 text-primary" />
+              <span>Event Basics Discovery</span>
+            </h1>
+            <p className="text-xs text-muted-foreground">
+              Capture essential event facts required to establish discovery readiness.
+            </p>
           </div>
-          <h2 className="text-base font-extrabold text-foreground tracking-tight">
-            Event Basics Discovery Workspace
-          </h2>
+
+          <div className="bg-muted/30 p-1.5 rounded-2xl border border-border/40 shrink-0">
+            <div className="text-[10px] font-bold text-muted-foreground px-2 pb-1 uppercase tracking-wider">
+              Discussion Status
+            </div>
+            <div className="flex items-center gap-1">
+              <button
+                type="button"
+                onClick={() => setDiscussionStatus("CONTINUE_LATER")}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${
+                  discussionStatus === "CONTINUE_LATER"
+                    ? "bg-card text-amber-700 border border-amber-500/30 shadow-2xs"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                In Progress
+              </button>
+              <button
+                type="button"
+                onClick={() => setDiscussionStatus("COMPLETE")}
+                className={`px-3 py-1.5 rounded-xl text-xs font-extrabold transition cursor-pointer ${
+                  discussionStatus === "COMPLETE"
+                    ? "bg-emerald-600 text-white shadow-2xs"
+                    : "text-muted-foreground hover:text-foreground"
+                }`}
+              >
+                Discussion Complete
+              </button>
+            </div>
+          </div>
         </div>
-        <p className="text-xs text-muted-foreground pl-8">
-          Captures essential event parameters (Occasion, Date, Headcount,
-          High-level Notes) required to establish quotation readiness.
-        </p>
+
+        <div className="pt-3 border-t border-border/30 space-y-2">
+          <div className="flex items-center justify-between text-xs font-bold">
+            <div className="flex items-center gap-2">
+              <span className="text-muted-foreground text-[11px] uppercase tracking-wider">
+                Event Basics Discovery Progress
+              </span>
+              {isDiscoveryReady && (
+                <span className="text-[9px] font-black uppercase px-2 py-0.5 rounded-full bg-emerald-500/15 text-emerald-700 border border-emerald-500/25">
+                  Discovery Ready
+                </span>
+              )}
+            </div>
+            <span className="text-primary font-black text-xs">
+              {conversationProgress.completed} of {conversationProgress.total} Cards Completed ({conversationProgress.percentage}%)
+            </span>
+          </div>
+          <div className="w-full bg-muted/60 rounded-full h-2.5 overflow-hidden border border-border/30 shadow-inner">
+            <div
+              className="bg-linear-to-r from-primary via-primary/90 to-emerald-500 h-full rounded-full transition-all duration-500"
+              style={{ width: `${conversationProgress.percentage}%` }}
+            />
+          </div>
+        </div>
       </div>
 
       {/* ========================================================================= */}
@@ -308,31 +448,72 @@ export default function EventBasicsWorkspacePanel({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
             <div className="space-y-1.5">
               <label className="text-xs font-bold text-foreground">
-                Occasion / Event Type *
+                Event Occasion *
               </label>
-              <input
-                type="text"
-                value={occasion}
-                onChange={(e) => setOccasion(e.target.value)}
-                placeholder="e.g. Wedding Reception, Corporate Gala"
-                className="w-full text-xs bg-background border border-border/60 rounded-xl p-2.5 focus:ring-2 focus:ring-primary/40 font-medium"
+              <OccasionLookup
+                value={occasion || null}
+                onChange={(item) => {
+                  setOccasion(item?.name || "");
+                }}
+                placeholder="Search event occasions (e.g. Wedding Reception, Corporate Gala)..."
+                allowQuickCreate
+                onRequestCreate={async (searchName) => {
+                  try {
+                    const res = await fetch("/api/cat/occasion-types", {
+                      method: "POST",
+                      headers: { "Content-Type": "application/json" },
+                      body: JSON.stringify({
+                        name: searchName,
+                        isActive: true,
+                        showInDiscoveryQuickSelect: false,
+                      }),
+                    });
+                    const json = res.ok ? await res.json().catch(() => ({})) : {};
+                    if (json?.success && json?.id) {
+                      setOccasion(searchName);
+                      if (json.isDuplicate) {
+                        setSuccessMessage(
+                          "An existing event occasion matched your entry and has been selected."
+                        );
+                      } else {
+                        setSuccessMessage(
+                          `Event Occasion '${searchName}' created and selected.`
+                        );
+                      }
+                      setTimeout(() => setSuccessMessage(null), 5000);
+                      // Refetch occasion types for chips
+                      fetch("/api/cat/occasion-types?activeOnly=true")
+                        .then((r) => (r.ok ? r.json() : null))
+                        .then((d) => {
+                          if (d?.success && Array.isArray(d.items)) {
+                            setOccasionTypes(d.items);
+                          }
+                        });
+                    }
+                  } catch (err) {
+                    console.error("Error creating event occasion:", err);
+                  }
+                }}
               />
-              <div className="flex flex-wrap gap-1.5 pt-1">
-                {OCCASION_PRESETS.map((preset) => (
-                  <button
-                    key={preset}
-                    type="button"
-                    onClick={() => setOccasion(preset)}
-                    className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition cursor-pointer ${
-                      occasion === preset
-                        ? "bg-primary text-primary-foreground border-primary"
-                        : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted"
-                    }`}
-                  >
-                    {preset}
-                  </button>
-                ))}
-              </div>
+
+              {quickSelectChips.length > 0 && (
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {quickSelectChips.map((chip) => (
+                    <button
+                      key={chip.id}
+                      type="button"
+                      onClick={() => setOccasion(chip.name)}
+                      className={`text-[10px] font-bold px-2 py-0.5 rounded-lg border transition cursor-pointer ${
+                        occasion === chip.name
+                          ? "bg-primary text-primary-foreground border-primary shadow-2xs"
+                          : "bg-muted/40 text-muted-foreground border-border/40 hover:bg-muted"
+                      }`}
+                    >
+                      {chip.name}
+                    </button>
+                  ))}
+                </div>
+              )}
             </div>
 
             <div className="space-y-1.5">
@@ -503,11 +684,21 @@ export default function EventBasicsWorkspacePanel({
       {/* 3. BUSINESS SUMMARY ENGINE & DISCUSSION STATUS                            */}
       {/* ========================================================================= */}
       <div className="bg-card p-5 rounded-2xl border border-border/40 space-y-4">
+        <div className="bg-muted/40 p-4 border border-border/40 rounded-xl flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Sparkles className="w-4 h-4 text-primary" />
+            <h3 className="text-xs font-black text-foreground uppercase tracking-wider">Insight Assistant</h3>
+          </div>
+          <span className="text-[9px] font-extrabold uppercase px-2 py-0.5 rounded-full bg-primary/10 text-primary">
+            Event Basics
+          </span>
+        </div>
+
         <div className="space-y-1.5">
           <div className="flex items-center justify-between">
             <label className="text-xs font-extrabold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
               <Sparkles className="w-3.5 h-3.5 text-primary" />
-              <span>Editable Business Summary</span>
+              <span>Structured Business Summary</span>
             </label>
 
             {isSummaryManuallyEdited && (
@@ -542,39 +733,70 @@ export default function EventBasicsWorkspacePanel({
           </span>
         </div>
 
+        <div className="space-y-3 border-t border-border/30 pt-3">
+          <h3 className="text-xs font-bold uppercase tracking-wider text-foreground flex items-center gap-1.5">
+            <Zap className="w-3.5 h-3.5 text-primary" />
+            <span>Suggested Next Activities</span>
+          </h3>
+
+          <div className="space-y-2">
+            {suggestedActivities.map((item, idx) => (
+              <div
+                key={idx}
+                className="p-2.5 bg-muted/20 border border-border/30 rounded-xl text-xs text-foreground flex items-start gap-2"
+              >
+                <ChevronRight className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                <div className="space-y-1">
+                  <span
+                    className={`inline-flex items-center text-[9px] font-black uppercase tracking-wider px-2 py-0.5 rounded-md border ${
+                      item.priority === "URGENT"
+                        ? "bg-rose-500/15 text-rose-800 border-rose-500/30"
+                        : item.priority === "IMPORTANT"
+                        ? "bg-amber-500/15 text-amber-800 border-amber-500/30"
+                        : "bg-emerald-500/15 text-emerald-800 border-emerald-500/30"
+                    }`}
+                  >
+                    {item.priority === "URGENT"
+                      ? "🔴 Urgent"
+                      : item.priority === "IMPORTANT"
+                      ? "🟠 Important"
+                      : "🟢 Recommendation"}
+                  </span>
+                  <span className="text-[11px] font-medium leading-relaxed block">{item.text}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
         {/* Discussion Status Question */}
         <div className="bg-muted/20 p-4 rounded-xl border border-border/30 space-y-2">
-          <label className="text-xs font-bold text-foreground block">
-            Is this discussion complete for now?
-          </label>
+          <label className="text-xs font-bold text-foreground block">Discussion Status</label>
 
-          <div className="flex flex-col sm:flex-row gap-3">
-            <label className="flex items-center gap-2 text-xs font-extrabold text-foreground cursor-pointer">
-              <input
-                type="radio"
-                name="discussionStatus"
-                checked={discussionStatus === "COMPLETE"}
-                onChange={() => setDiscussionStatus("COMPLETE")}
-                className="text-primary focus:ring-primary"
-              />
-              <span className="px-2.5 py-1 bg-emerald-500/10 text-emerald-700 rounded-lg border border-emerald-500/20">
-                Yes, discussion is complete for now (Sets Lifecycle to
-                COMPLETED)
-              </span>
-            </label>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-2 bg-muted/20 p-1 rounded-xl border border-border/30">
+            <button
+              type="button"
+              onClick={() => setDiscussionStatus("COMPLETE")}
+              className={`px-3 py-2 text-xs font-bold rounded-lg border transition text-center cursor-pointer ${
+                discussionStatus === "COMPLETE"
+                  ? "bg-emerald-600 text-white border-emerald-600 shadow-sm"
+                  : "bg-background text-muted-foreground border-border/40 hover:bg-muted/40"
+              }`}
+            >
+              Discussion Complete
+            </button>
 
-            <label className="flex items-center gap-2 text-xs font-extrabold text-foreground cursor-pointer">
-              <input
-                type="radio"
-                name="discussionStatus"
-                checked={discussionStatus === "CONTINUE_LATER"}
-                onChange={() => setDiscussionStatus("CONTINUE_LATER")}
-                className="text-primary focus:ring-primary"
-              />
-              <span className="px-2.5 py-1 bg-amber-500/10 text-amber-700 rounded-lg border border-amber-500/20">
-                No, we'll continue later (Sets Lifecycle to IN_PROGRESS)
-              </span>
-            </label>
+            <button
+              type="button"
+              onClick={() => setDiscussionStatus("CONTINUE_LATER")}
+              className={`px-3 py-2 text-xs font-bold rounded-lg border transition text-center cursor-pointer ${
+                discussionStatus === "CONTINUE_LATER"
+                  ? "bg-amber-500/15 text-amber-700 border-amber-500/40 shadow-sm"
+                  : "bg-background text-muted-foreground border-border/40 hover:bg-muted/40"
+              }`}
+            >
+              Continue Later
+            </button>
           </div>
         </div>
 
@@ -602,3 +824,5 @@ export default function EventBasicsWorkspacePanel({
     </div>
   );
 }
+
+

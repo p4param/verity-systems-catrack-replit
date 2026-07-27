@@ -2092,6 +2092,37 @@ exports.Prisma.CatRelationshipDocumentScalarFieldEnum = {
   deletedBy: 'deletedBy'
 };
 
+exports.Prisma.CatVenueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  venueNumber: 'venueNumber',
+  venueName: 'venueName',
+  venueType: 'venueType',
+  address: 'address',
+  areaLocality: 'areaLocality',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  pinCode: 'pinCode',
+  primaryContactName: 'primaryContactName',
+  primaryContactMobile: 'primaryContactMobile',
+  primaryContactEmail: 'primaryContactEmail',
+  notes: 'notes',
+  status: 'status',
+  creationSource: 'creationSource',
+  createdFromModule: 'createdFromModule',
+  createdFromRecordId: 'createdFromRecordId',
+  createdFromRecordNumber: 'createdFromRecordNumber',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2309,7 +2340,8 @@ exports.Prisma.ModelName = {
   CatRelationship: 'CatRelationship',
   CatContact: 'CatContact',
   CatRelationshipNote: 'CatRelationshipNote',
-  CatRelationshipDocument: 'CatRelationshipDocument'
+  CatRelationshipDocument: 'CatRelationshipDocument',
+  CatVenue: 'CatVenue'
 };
 
 /**

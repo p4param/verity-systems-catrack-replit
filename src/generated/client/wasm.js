@@ -2092,6 +2092,88 @@ exports.Prisma.CatRelationshipDocumentScalarFieldEnum = {
   deletedBy: 'deletedBy'
 };
 
+exports.Prisma.CatVenueScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  venueNumber: 'venueNumber',
+  venueName: 'venueName',
+  venueType: 'venueType',
+  address: 'address',
+  areaLocality: 'areaLocality',
+  city: 'city',
+  state: 'state',
+  country: 'country',
+  pinCode: 'pinCode',
+  primaryContactName: 'primaryContactName',
+  primaryContactMobile: 'primaryContactMobile',
+  primaryContactEmail: 'primaryContactEmail',
+  notes: 'notes',
+  status: 'status',
+  creationSource: 'creationSource',
+  createdFromModule: 'createdFromModule',
+  createdFromRecordId: 'createdFromRecordId',
+  createdFromRecordNumber: 'createdFromRecordNumber',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt',
+  deletedBy: 'deletedBy',
+  version: 'version'
+};
+
+exports.Prisma.CatOccasionTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  occasionNumber: 'occasionNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.CatCuisineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  cuisineNumber: 'cuisineNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.CatServiceStyleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  styleNumber: 'styleNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2309,7 +2391,11 @@ exports.Prisma.ModelName = {
   CatRelationship: 'CatRelationship',
   CatContact: 'CatContact',
   CatRelationshipNote: 'CatRelationshipNote',
-  CatRelationshipDocument: 'CatRelationshipDocument'
+  CatRelationshipDocument: 'CatRelationshipDocument',
+  CatVenue: 'CatVenue',
+  CatOccasionType: 'CatOccasionType',
+  CatCuisine: 'CatCuisine',
+  CatServiceStyle: 'CatServiceStyle'
 };
 
 /**

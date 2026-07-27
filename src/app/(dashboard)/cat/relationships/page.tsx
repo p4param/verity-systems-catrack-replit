@@ -21,7 +21,8 @@ import {
   ArrowRight,
   TrendingUp,
   Clock,
-  Sparkles
+  Sparkles,
+  FileSpreadsheet
 } from 'lucide-react';
 
 interface RelationshipItem {
@@ -37,7 +38,16 @@ interface RelationshipItem {
   notesCount?: number;
   primaryContactName?: string;
   primaryContactEmail?: string;
+  primaryContactPhone?: string;
   createdAt: string;
+}
+
+interface RelationshipContact {
+  id: string;
+  name: string;
+  email?: string;
+  phone?: string;
+  isPrimary?: boolean;
 }
 
 export default function RelationshipsDirectoryDashboardPage() {
@@ -76,7 +86,19 @@ export default function RelationshipsDirectoryDashboardPage() {
       }
       const data = await res.json();
       if (data.success) {
-        setRelationships(data.items || []);
+        const mapped = (data.items || []).map((item: any) => {
+          const contacts: RelationshipContact[] = Array.isArray(item.contacts) ? item.contacts : [];
+          const primary = contacts.find((c) => c?.isPrimary) || contacts[0];
+
+          return {
+            ...item,
+            primaryContactName: item.primaryContactName || primary?.name,
+            primaryContactEmail: item.primaryContactEmail || primary?.email,
+            primaryContactPhone: item.primaryContactPhone || primary?.phone,
+          } as RelationshipItem;
+        });
+
+        setRelationships(mapped);
       } else {
         console.error('Relationships API error:', data);
       }
@@ -151,6 +173,48 @@ export default function RelationshipsDirectoryDashboardPage() {
   const customersCount = relationships.filter(r => r.status === 'CUSTOMER').length;
   const qualifiedCount = relationships.filter(r => r.status === 'QUALIFIED').length;
 
+  const toCsvValue = (value: string | undefined) => {
+    const safe = (value ?? '').replace(/\r?\n|\r/g, ' ');
+    return `"${safe.replace(/"/g, '""')}"`;
+  };
+
+  const handleExportExcel = () => {
+    const header = [
+      'Relationship Number',
+      'Name',
+      'Organization',
+      'Mobile',
+      'Email',
+      'Status',
+      'Created Date',
+    ];
+
+    const rows = relationships.map((rel) => [
+      rel.relationshipNumber,
+      rel.name,
+      rel.type === 'ORGANIZATION' ? rel.name : '',
+      rel.primaryContactPhone ?? '',
+      rel.primaryContactEmail ?? '',
+      rel.status,
+      rel.createdAt ? new Date(rel.createdAt).toISOString().slice(0, 10) : '',
+    ]);
+
+    const csv = [
+      header.map(toCsvValue).join(','),
+      ...rows.map((row) => row.map((cell) => toCsvValue(String(cell))).join(',')),
+    ].join('\n');
+
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = `relationship-directory-${new Date().toISOString().slice(0, 10)}.csv`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="space-y-5">
       {/* 1. Header & Quick Action */}
@@ -163,13 +227,23 @@ export default function RelationshipsDirectoryDashboardPage() {
           <h1 className="text-xl font-extrabold text-foreground tracking-tight">Relationship Directory</h1>
         </div>
 
-        <button
-          onClick={() => { resetForm(); setShowCreateDrawer(true); }}
-          className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs px-4 py-2 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
-        >
-          <UserPlus className="w-3.5 h-3.5" />
-          <span>Quick Create Relationship</span>
-        </button>
+        <div className="flex items-center gap-2 w-full sm:w-auto">
+          <button
+            onClick={handleExportExcel}
+            className="bg-muted hover:bg-muted/80 text-foreground font-semibold text-xs px-3.5 py-2 rounded-xl border border-border/50 transition flex items-center gap-2 cursor-pointer"
+          >
+            <FileSpreadsheet className="w-3.5 h-3.5" />
+            <span>Export CSV</span>
+          </button>
+
+          <button
+            onClick={() => { resetForm(); setShowCreateDrawer(true); }}
+            className="bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs px-4 py-2 rounded-xl shadow-xs transition flex items-center gap-2 cursor-pointer"
+          >
+            <UserPlus className="w-3.5 h-3.5" />
+            <span>+ New Relationship</span>
+          </button>
+        </div>
       </div>
 
       {/* Item 1.3: Compact KPI Cards (Height reduced ~25%, emphasis on number + label) */}
@@ -258,12 +332,22 @@ export default function RelationshipsDirectoryDashboardPage() {
             Loading Relationship Directory...
           </div>
         ) : relationships.length === 0 ? (
-          <div className="p-8 text-center">
-            <Users className="w-6 h-6 text-muted-foreground/40 mx-auto mb-2" />
-            <h3 className="text-xs font-bold text-foreground">No Relationships Found</h3>
-            <p className="text-[11px] text-muted-foreground mt-0.5 max-w-xs mx-auto">
-              No commercial relationships match your search query.
+          <div className="p-10 text-center max-w-lg mx-auto">
+            <div className="w-12 h-12 rounded-2xl bg-primary/10 text-primary flex items-center justify-center mx-auto mb-3">
+              <Users className="w-6 h-6" />
+            </div>
+            <h3 className="text-sm font-bold text-foreground">No Contacts Yet</h3>
+            <p className="text-xs text-muted-foreground mt-1 leading-relaxed">
+              Start your commercial network by creating your first relationship.
+              Once added, contacts and organizations will appear here for quick access.
             </p>
+            <button
+              onClick={() => { resetForm(); setShowCreateDrawer(true); }}
+              className="mt-4 inline-flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground font-semibold text-xs px-4 py-2 rounded-xl shadow-xs transition"
+            >
+              <UserPlus className="w-3.5 h-3.5" />
+              <span>+ New Relationship</span>
+            </button>
           </div>
         ) : (
           <div className="divide-y divide-border/30">
