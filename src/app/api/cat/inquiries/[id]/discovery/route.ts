@@ -13,7 +13,7 @@ import {
   BusinessValidationStatus,
 } from '@/modules/cat/inquiry/domain/discovery-types';
 
-type OptionalDiscoveryPayloadColumn = 'food_beverage' | 'budget_commercial' | 'decor_ambience';
+type OptionalDiscoveryPayloadColumn = 'food_beverage' | 'budget_commercial' | 'decor_ambience' | 'service_experience';
 
 async function getAvailableDiscoveryPayloadColumns(): Promise<Set<OptionalDiscoveryPayloadColumn>> {
   const rows: Array<{ column_name: OptionalDiscoveryPayloadColumn }> = await prisma.$queryRaw`
@@ -21,7 +21,7 @@ async function getAvailableDiscoveryPayloadColumns(): Promise<Set<OptionalDiscov
     FROM information_schema.columns
     WHERE table_schema = current_schema()
       AND table_name = 'cat_inquiry_discovery_areas'
-      AND column_name IN ('food_beverage', 'budget_commercial', 'decor_ambience')
+      AND column_name IN ('food_beverage', 'budget_commercial', 'decor_ambience', 'service_experience')
   `;
 
   return new Set(rows.map((row) => row.column_name));
@@ -170,6 +170,34 @@ function sanitizeBudgetCommercial(budgetCommercial: any): any {
   };
 }
 
+function sanitizeServiceExperience(serviceExperience: any): any {
+  if (!serviceExperience || typeof serviceExperience !== 'object') return undefined;
+
+  return {
+    ...serviceExperience,
+    guestExperiencePriorities: normalizeStringArray(serviceExperience.guestExperiencePriorities),
+    vipGuestTags: normalizeStringArray(serviceExperience.vipGuestTags),
+    signatureMoments: normalizeStringArray(serviceExperience.signatureMoments),
+    servicePreferenceTags: normalizeStringArray(serviceExperience.servicePreferenceTags),
+    vipAdditionalNotes:
+      typeof serviceExperience.vipAdditionalNotes === 'string'
+        ? serviceExperience.vipAdditionalNotes
+        : undefined,
+    practicalNotes:
+      typeof serviceExperience.practicalNotes === 'string'
+        ? serviceExperience.practicalNotes
+        : undefined,
+    hospitalityMemoryResponse:
+      typeof serviceExperience.hospitalityMemoryResponse === 'string'
+        ? serviceExperience.hospitalityMemoryResponse
+        : undefined,
+    businessSummary:
+      typeof serviceExperience.businessSummary === 'string'
+        ? serviceExperience.businessSummary
+        : '',
+  };
+}
+
 function sanitizeDecorAmbience(decorAmbience: any): any {
   if (!decorAmbience || typeof decorAmbience !== 'object') return undefined;
 
@@ -226,6 +254,9 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
   const decorExpr = availableColumns.has('decor_ambience')
     ? 'decor_ambience'
     : 'NULL::jsonb';
+  const serviceExpr = availableColumns.has('service_experience')
+    ? 'service_experience'
+    : 'NULL::jsonb';
 
   const rows: Array<{
     id: string;
@@ -238,6 +269,7 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
     foodBeverage: any;
     budgetCommercial: any;
     decorAmbience: any;
+    serviceExperience: any;
     updatedAt: Date;
   }> = await prisma.$queryRawUnsafe(
     `SELECT
@@ -251,6 +283,7 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
       ${foodExpr} as "foodBeverage",
       ${budgetExpr} as "budgetCommercial",
       ${decorExpr} as "decorAmbience",
+      ${serviceExpr} as "serviceExperience",
       updated_at as "updatedAt"
     FROM cat_inquiry_discovery_areas
     WHERE inquiry_id = $1::uuid
@@ -276,6 +309,7 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
       foodBeverage: persisted.foodBeverage || undefined,
       budgetCommercial: persisted.budgetCommercial || undefined,
       decorAmbience: sanitizeDecorAmbience(persisted.decorAmbience),
+      serviceExperience: sanitizeServiceExperience(persisted.serviceExperience),
       updatedAt: persisted.updatedAt ? new Date(persisted.updatedAt).toISOString() : area.updatedAt,
     };
   });
@@ -322,7 +356,7 @@ export async function PATCH(req: NextRequest, props: any) {
     const { id: inquiryId } = params;
     const body = await req.json();
 
-    const { areaKey, lifecycle, validation, summary, eventBasics, venueDiscovery, foodBeverage, budgetCommercial, decorAmbience } = body as {
+    const { areaKey, lifecycle, validation, summary, eventBasics, venueDiscovery, foodBeverage, budgetCommercial, decorAmbience, serviceExperience } = body as {
       areaKey: DiscoveryAreaKey;
       lifecycle?: DiscoveryLifecycleStatus;
       validation?: BusinessValidationStatus;
@@ -332,6 +366,7 @@ export async function PATCH(req: NextRequest, props: any) {
       foodBeverage?: any;
       budgetCommercial?: any;
       decorAmbience?: any;
+      serviceExperience?: any;
     };
 
     if (!areaKey) {
@@ -582,6 +617,10 @@ export async function PATCH(req: NextRequest, props: any) {
       targetArea.decorAmbience = sanitizeDecorAmbience(decorAmbience);
     }
 
+    if (serviceExperience) {
+      targetArea.serviceExperience = sanitizeServiceExperience(serviceExperience);
+    }
+
     targetArea.updatedAt = new Date().toISOString();
 
     const availableColumns = await getAvailableDiscoveryPayloadColumns();
@@ -652,6 +691,7 @@ export async function PATCH(req: NextRequest, props: any) {
     appendOptionalColumn('food_beverage', targetArea.foodBeverage);
     appendOptionalColumn('budget_commercial', targetArea.budgetCommercial);
     appendOptionalColumn('decor_ambience', targetArea.decorAmbience);
+    appendOptionalColumn('service_experience', targetArea.serviceExperience);
 
     insertColumns.push('created_at', 'created_by', 'updated_at', 'updated_by');
     valuePlaceholders.push('NOW()', `$${sqlParams.length + 1}::uuid`, 'NOW()', `$${sqlParams.length + 1}::uuid`);

@@ -57,6 +57,7 @@ import VenueDiscoveryWorkspacePanel from "@/modules/cat/inquiry/features/venue-d
 import FoodBeverageWorkspacePanel from "@/modules/cat/inquiry/features/food-beverage-discovery/FoodBeverageWorkspacePanel";
 import BudgetCommercialWorkspacePanel from "@/modules/cat/inquiry/features/budget-commercial-discovery/BudgetCommercialWorkspacePanel";
 import DecorAmbienceWorkspacePanel from "@/modules/cat/inquiry/features/decor-ambience-discovery/DecorAmbienceWorkspacePanel";
+import ServiceExperienceWorkspacePanel from "@/modules/cat/inquiry/features/service-experience-discovery/ServiceExperienceWorkspacePanel";
 
 interface InquiryWorkspaceData {
   id: string;
@@ -192,6 +193,7 @@ export default function InquiryWorkspacePage() {
     | "FOOD_BEVERAGE"
     | "BUDGET_COMMERCIALS"
     | "DECOR_AMBIENCE"
+    | "SERVICE_EXPERIENCE"
   >("DIRECTORY");
 
   // WP02B State: Filters
@@ -267,6 +269,11 @@ export default function InquiryWorkspacePage() {
     if (area.areaKey === "DECOR_AMBIENCE") {
       setActiveWorkspaceTab("REQUIREMENTS");
       setActiveDiscoveryView("DECOR_AMBIENCE");
+      return;
+    }
+    if (area.areaKey === "SERVICE_EXPERIENCE") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("SERVICE_EXPERIENCE");
       return;
     }
     setActiveArea(area);
@@ -1142,6 +1149,17 @@ export default function InquiryWorkspacePage() {
               onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
               onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
             />
+          ) : activeDiscoveryView === "SERVICE_EXPERIENCE" ? (
+            <ServiceExperienceWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find(
+                  (a) => a.areaKey === "SERVICE_EXPERIENCE",
+                ) || null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
           ) : (
             <div className="space-y-6">
               {/* Discovery Directory Header Banner */}
@@ -1191,6 +1209,10 @@ export default function InquiryWorkspacePage() {
                           setActiveDiscoveryView("BUDGET_COMMERCIALS");
                         } else if (selectedArea.areaKey === "DECOR_AMBIENCE") {
                           setActiveDiscoveryView("DECOR_AMBIENCE");
+                        } else if (
+                          selectedArea.areaKey === "SERVICE_EXPERIENCE"
+                        ) {
+                          setActiveDiscoveryView("SERVICE_EXPERIENCE");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }
@@ -1230,6 +1252,10 @@ export default function InquiryWorkspacePage() {
                           setActiveDiscoveryView("BUDGET_COMMERCIALS");
                         } else if (selectedArea.areaKey === "DECOR_AMBIENCE") {
                           setActiveDiscoveryView("DECOR_AMBIENCE");
+                        } else if (
+                          selectedArea.areaKey === "SERVICE_EXPERIENCE"
+                        ) {
+                          setActiveDiscoveryView("SERVICE_EXPERIENCE");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }

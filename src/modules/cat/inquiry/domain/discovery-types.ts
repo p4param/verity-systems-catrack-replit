@@ -41,6 +41,7 @@ export interface DiscoveryArea {
   foodBeverage?: FoodBeverageConversation;
   budgetCommercial?: BudgetCommercialConversation;
   decorAmbience?: DecorAmbienceConversation;
+  serviceExperience?: ServiceExperienceConversation;
 }
 
 export type MealScheduleType = 
@@ -438,6 +439,122 @@ export function computeDecorAmbienceValidation(
 
   // Soft advisory validation: If venue restrictions indicated but none checked, flag NEEDS_ATTENTION
   if (data.venueRestrictionStatus === 'YES_RESTRICTIONS' && (!data.venueRestrictions || data.venueRestrictions.length === 0)) {
+    return 'NEEDS_ATTENTION';
+  }
+
+  return 'READY';
+}
+
+// --- Service Experience Discovery (IM-WP02C-06) ---
+// PreferenceImportanceWeighting is reused from the Decor & Ambience section above.
+
+export type HospitalityVisionType =
+  | 'LUXURY_FIVE_STAR'
+  | 'WARM_FAMILY_HOSPITALITY'
+  | 'PROFESSIONAL_EFFICIENT'
+  | 'ROYAL_TRADITIONAL_HOSPITALITY'
+  | 'FRIENDLY_RELAXED'
+  | 'ELEGANT_DISCREET';
+
+export type ServiceAtmospherePreference =
+  | 'HIGHLY_ATTENTIVE'
+  | 'AVAILABLE_UNOBTRUSIVE'
+  | 'FORMAL'
+  | 'CASUAL'
+  | 'PERSONALIZED';
+
+export type GuestExperiencePriority =
+  | 'WARM_HOSPITALITY'
+  | 'FAST_FOOD_SERVICE'
+  | 'PERSONALIZED_GUEST_CARE'
+  | 'QUEUE_FREE_EXPERIENCE'
+  | 'BEVERAGE_SERVICE'
+  | 'CHILDRENS_ASSISTANCE'
+  | 'SENIOR_CITIZEN_SUPPORT';
+
+export type HostInvolvementPreference =
+  | 'RELAX_AND_ENJOY'
+  | 'STAY_INFORMED'
+  | 'BE_INVOLVED_KEY_MOMENTS'
+  | 'COORDINATE_THROUGHOUT';
+
+export type CommunicationStyleType =
+  | 'SINGLE_POINT_OF_CONTACT'
+  | 'CONTINUOUS_UPDATES'
+  | 'MILESTONE_UPDATES_ONLY'
+  | 'MINIMAL_INTERRUPTIONS';
+
+export type VipGuestTag =
+  | 'VIP_GUESTS'
+  | 'SENIOR_CITIZENS'
+  | 'CHILDREN'
+  | 'ACCESSIBILITY_NEEDS'
+  | 'INTERNATIONAL_GUESTS'
+  | 'RELIGIOUS_DIGNITARIES';
+
+export type SignatureHospitalityMoment =
+  | 'WARM_WELCOME_EXPERIENCE'
+  | 'PERSONALIZED_GREETINGS'
+  | 'ARRIVAL_REFRESHMENTS'
+  | 'VIP_TABLE_SERVICE'
+  | 'CAKE_CEREMONY_SUPPORT'
+  | 'TOAST_COORDINATION'
+  | 'FAREWELL_HOSPITALITY'
+  | 'DEPARTURE_THANK_YOU';
+
+export type ServicePreferenceTag =
+  | 'PREMIUM_UNIFORMED_SERVICE'
+  | 'TRADITIONAL_ATTIRE'
+  | 'ENGLISH_SPEAKING_STAFF'
+  | 'LOCAL_LANGUAGE_PREFERENCE'
+  | 'CHILD_FRIENDLY_STAFF'
+  | 'ALLERGY_AWARENESS';
+
+export interface ServiceExperienceConversation {
+  hospitalityVision: HospitalityVisionType;
+  hospitalityVisionWeighting: PreferenceImportanceWeighting;
+  serviceAtmospherePreference: ServiceAtmospherePreference;
+
+  guestExperiencePriorities: GuestExperiencePriority[];
+  guestExperienceWeighting: PreferenceImportanceWeighting;
+
+  hostInvolvementPreference: HostInvolvementPreference;
+  communicationStyle: CommunicationStyleType;
+  communicationStyleWeighting: PreferenceImportanceWeighting;
+
+  vipGuestTags: VipGuestTag[];
+  vipServiceWeighting: PreferenceImportanceWeighting;
+  vipAdditionalNotes?: string;
+
+  signatureMoments: SignatureHospitalityMoment[];
+  signatureMomentsWeighting: PreferenceImportanceWeighting;
+
+  servicePreferenceTags: ServicePreferenceTag[];
+  practicalNotes?: string;
+
+  hospitalityMemoryResponse?: string;
+
+  salesAssessment?: SalesAssessmentConfidence;
+  businessSummary: string;
+  isSummaryManuallyEdited?: boolean;
+  discussionStatus: DiscussionStatus;
+  validationStatus: BusinessValidationStatus;
+}
+
+export function computeServiceExperienceValidation(
+  data?: Partial<ServiceExperienceConversation>
+): BusinessValidationStatus {
+  if (!data) return 'NEEDS_ATTENTION';
+
+  // Core hospitality intent must be captured
+  if (
+    !data.hospitalityVision ||
+    !data.serviceAtmospherePreference ||
+    !data.hostInvolvementPreference ||
+    !data.communicationStyle ||
+    !data.guestExperiencePriorities ||
+    data.guestExperiencePriorities.length === 0
+  ) {
     return 'NEEDS_ATTENTION';
   }
 
