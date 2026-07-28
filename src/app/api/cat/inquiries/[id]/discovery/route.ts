@@ -13,7 +13,7 @@ import {
   BusinessValidationStatus,
 } from '@/modules/cat/inquiry/domain/discovery-types';
 
-type OptionalDiscoveryPayloadColumn = 'food_beverage' | 'budget_commercial' | 'decor_ambience' | 'service_experience';
+type OptionalDiscoveryPayloadColumn = 'food_beverage' | 'budget_commercial' | 'decor_ambience' | 'service_experience' | 'entertainment_addons' | 'special_requirements';
 
 async function getAvailableDiscoveryPayloadColumns(): Promise<Set<OptionalDiscoveryPayloadColumn>> {
   const rows: Array<{ column_name: OptionalDiscoveryPayloadColumn }> = await prisma.$queryRaw`
@@ -21,7 +21,7 @@ async function getAvailableDiscoveryPayloadColumns(): Promise<Set<OptionalDiscov
     FROM information_schema.columns
     WHERE table_schema = current_schema()
       AND table_name = 'cat_inquiry_discovery_areas'
-      AND column_name IN ('food_beverage', 'budget_commercial', 'decor_ambience', 'service_experience')
+      AND column_name IN ('food_beverage', 'budget_commercial', 'decor_ambience', 'service_experience', 'entertainment_addons', 'special_requirements')
   `;
 
   return new Set(rows.map((row) => row.column_name));
@@ -198,6 +198,87 @@ function sanitizeServiceExperience(serviceExperience: any): any {
   };
 }
 
+function sanitizeEntertainmentExperience(entertainmentExperience: any): any {
+  if (!entertainmentExperience || typeof entertainmentExperience !== 'object') return undefined;
+
+  return {
+    ...entertainmentExperience,
+    backgroundEntertainment: normalizeStringArray(entertainmentExperience.backgroundEntertainment),
+    featuredEntertainment: normalizeStringArray(entertainmentExperience.featuredEntertainment),
+    entertainmentAvoidTags: normalizeStringArray(entertainmentExperience.entertainmentAvoidTags),
+    interactiveExperiences: normalizeStringArray(entertainmentExperience.interactiveExperiences),
+    technologyBusinessPurpose: normalizeStringArray(entertainmentExperience.technologyBusinessPurpose),
+    technologyEnhancements: normalizeStringArray(entertainmentExperience.technologyEnhancements),
+    valueAddedServices: normalizeStringArray(entertainmentExperience.valueAddedServices),
+    signatureExperience: normalizeStringArray(entertainmentExperience.signatureExperience),
+    entertainmentGenresToAvoid:
+      typeof entertainmentExperience.entertainmentGenresToAvoid === 'string'
+        ? entertainmentExperience.entertainmentGenresToAvoid
+        : undefined,
+    otherGuestActivities:
+      typeof entertainmentExperience.otherGuestActivities === 'string'
+        ? entertainmentExperience.otherGuestActivities
+        : undefined,
+    venueAwarenessNotes:
+      typeof entertainmentExperience.venueAwarenessNotes === 'string'
+        ? entertainmentExperience.venueAwarenessNotes
+        : undefined,
+    businessSummary:
+      typeof entertainmentExperience.businessSummary === 'string'
+        ? entertainmentExperience.businessSummary
+        : '',
+  };
+}
+
+function sanitizeSpecialRequirements(specialRequirements: any): any {
+  if (!specialRequirements || typeof specialRequirements !== 'object') return undefined;
+
+  const asObject = (value: any): any => (value && typeof value === 'object' ? value : {});
+  const asString = (value: any): string | undefined => (typeof value === 'string' ? value : undefined);
+
+  const accessibility = asObject(specialRequirements.accessibility);
+  const healthWellbeing = asObject(specialRequirements.healthWellbeing);
+  const culturalReligious = asObject(specialRequirements.culturalReligious);
+  const securityProtocol = asObject(specialRequirements.securityProtocol);
+  const venueGuidelines = asObject(specialRequirements.venueGuidelines);
+  const specialRequests = asObject(specialRequirements.specialRequests);
+
+  return {
+    ...specialRequirements,
+    accessibility: {
+      ...accessibility,
+      considerations: normalizeStringArray(accessibility.considerations),
+      otherAccessibilityNotes: asString(accessibility.otherAccessibilityNotes),
+    },
+    healthWellbeing: {
+      ...healthWellbeing,
+      considerations: normalizeStringArray(healthWellbeing.considerations),
+      otherHealthConsiderations: asString(healthWellbeing.otherHealthConsiderations),
+    },
+    culturalReligious: {
+      ...culturalReligious,
+      considerations: normalizeStringArray(culturalReligious.considerations),
+      culturalSensitivityNotes: asString(culturalReligious.culturalSensitivityNotes),
+    },
+    securityProtocol: {
+      ...securityProtocol,
+      considerations: normalizeStringArray(securityProtocol.considerations),
+      securityCoordinationNotes: asString(securityProtocol.securityCoordinationNotes),
+    },
+    venueGuidelines: {
+      ...venueGuidelines,
+      considerations: normalizeStringArray(venueGuidelines.considerations),
+      wasteManagementNotes: asString(venueGuidelines.wasteManagementNotes),
+    },
+    specialRequests: {
+      ...specialRequests,
+      specialRequestsNotes: asString(specialRequests.specialRequestsNotes),
+    },
+    businessSummary:
+      typeof specialRequirements.businessSummary === 'string' ? specialRequirements.businessSummary : '',
+  };
+}
+
 function sanitizeDecorAmbience(decorAmbience: any): any {
   if (!decorAmbience || typeof decorAmbience !== 'object') return undefined;
 
@@ -257,6 +338,12 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
   const serviceExpr = availableColumns.has('service_experience')
     ? 'service_experience'
     : 'NULL::jsonb';
+  const entertainmentExpr = availableColumns.has('entertainment_addons')
+    ? 'entertainment_addons'
+    : 'NULL::jsonb';
+  const specialRequirementsExpr = availableColumns.has('special_requirements')
+    ? 'special_requirements'
+    : 'NULL::jsonb';
 
   const rows: Array<{
     id: string;
@@ -270,6 +357,8 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
     budgetCommercial: any;
     decorAmbience: any;
     serviceExperience: any;
+    entertainmentExperience: any;
+    specialRequirements: any;
     updatedAt: Date;
   }> = await prisma.$queryRawUnsafe(
     `SELECT
@@ -284,6 +373,8 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
       ${budgetExpr} as "budgetCommercial",
       ${decorExpr} as "decorAmbience",
       ${serviceExpr} as "serviceExperience",
+      ${entertainmentExpr} as "entertainmentExperience",
+      ${specialRequirementsExpr} as "specialRequirements",
       updated_at as "updatedAt"
     FROM cat_inquiry_discovery_areas
     WHERE inquiry_id = $1::uuid
@@ -310,6 +401,8 @@ async function getInquiryAreasFromDb(inquiryId: string, tenantId: string): Promi
       budgetCommercial: persisted.budgetCommercial || undefined,
       decorAmbience: sanitizeDecorAmbience(persisted.decorAmbience),
       serviceExperience: sanitizeServiceExperience(persisted.serviceExperience),
+      entertainmentExperience: sanitizeEntertainmentExperience(persisted.entertainmentExperience),
+      specialRequirements: sanitizeSpecialRequirements(persisted.specialRequirements),
       updatedAt: persisted.updatedAt ? new Date(persisted.updatedAt).toISOString() : area.updatedAt,
     };
   });
@@ -356,7 +449,7 @@ export async function PATCH(req: NextRequest, props: any) {
     const { id: inquiryId } = params;
     const body = await req.json();
 
-    const { areaKey, lifecycle, validation, summary, eventBasics, venueDiscovery, foodBeverage, budgetCommercial, decorAmbience, serviceExperience } = body as {
+    const { areaKey, lifecycle, validation, summary, eventBasics, venueDiscovery, foodBeverage, budgetCommercial, decorAmbience, serviceExperience, entertainmentExperience, specialRequirements } = body as {
       areaKey: DiscoveryAreaKey;
       lifecycle?: DiscoveryLifecycleStatus;
       validation?: BusinessValidationStatus;
@@ -367,6 +460,8 @@ export async function PATCH(req: NextRequest, props: any) {
       budgetCommercial?: any;
       decorAmbience?: any;
       serviceExperience?: any;
+      entertainmentExperience?: any;
+      specialRequirements?: any;
     };
 
     if (!areaKey) {
@@ -621,6 +716,14 @@ export async function PATCH(req: NextRequest, props: any) {
       targetArea.serviceExperience = sanitizeServiceExperience(serviceExperience);
     }
 
+    if (entertainmentExperience) {
+      targetArea.entertainmentExperience = sanitizeEntertainmentExperience(entertainmentExperience);
+    }
+
+    if (specialRequirements) {
+      targetArea.specialRequirements = sanitizeSpecialRequirements(specialRequirements);
+    }
+
     targetArea.updatedAt = new Date().toISOString();
 
     const availableColumns = await getAvailableDiscoveryPayloadColumns();
@@ -692,6 +795,8 @@ export async function PATCH(req: NextRequest, props: any) {
     appendOptionalColumn('budget_commercial', targetArea.budgetCommercial);
     appendOptionalColumn('decor_ambience', targetArea.decorAmbience);
     appendOptionalColumn('service_experience', targetArea.serviceExperience);
+    appendOptionalColumn('entertainment_addons', targetArea.entertainmentExperience);
+    appendOptionalColumn('special_requirements', targetArea.specialRequirements);
 
     insertColumns.push('created_at', 'created_by', 'updated_at', 'updated_by');
     valuePlaceholders.push('NOW()', `$${sqlParams.length + 1}::uuid`, 'NOW()', `$${sqlParams.length + 1}::uuid`);

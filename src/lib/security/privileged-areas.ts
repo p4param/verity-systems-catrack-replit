@@ -8,7 +8,7 @@ export interface PrivilegedArea {
 export const PRIVILEGED_AREAS: Record<string, PrivilegedArea> = {
     ADMIN: {
         path: '/admin',
-        requiredRoles: ['Admin'],
+        requiredRoles: ['ADMIN'],
         alertCode: 'UNAUTHORIZED_ADMIN_ACCESS_ATTEMPT',
     },
     BILLING: {

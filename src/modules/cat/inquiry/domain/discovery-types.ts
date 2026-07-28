@@ -42,6 +42,8 @@ export interface DiscoveryArea {
   budgetCommercial?: BudgetCommercialConversation;
   decorAmbience?: DecorAmbienceConversation;
   serviceExperience?: ServiceExperienceConversation;
+  entertainmentExperience?: EntertainmentExperienceConversation;
+  specialRequirements?: SpecialRequirementsConversation;
 }
 
 export type MealScheduleType = 
@@ -558,6 +560,246 @@ export function computeServiceExperienceValidation(
     return 'NEEDS_ATTENTION';
   }
 
+  return 'READY';
+}
+
+// --- Entertainment & Add-ons Discovery (IM-WP02C-07) ---
+// PreferenceImportanceWeighting is reused from the Decor & Ambience section above.
+
+export type EventAtmosphereType =
+  | 'LIVELY_HIGH_ENERGY'
+  | 'WARM_RELAXED_SOCIAL'
+  | 'ELEGANT_REFINED'
+  | 'FUN_FILLED_FAMILY'
+  | 'CULTURAL_TRADITIONAL';
+
+export type GuestEngagementStyle =
+  | 'FULLY_IMMERSED_PARTICIPATING'
+  | 'ENTERTAINED_WHILE_MINGLING'
+  | 'LIGHT_BACKGROUND_ENJOYMENT';
+
+export type BackgroundEntertainmentTag = 'INSTRUMENTAL_MUSIC';
+
+export type FeaturedEntertainmentTag =
+  | 'DJ'
+  | 'LIVE_BAND'
+  | 'SINGER'
+  | 'CULTURAL_PERFORMANCES'
+  | 'DANCE_PERFORMANCES'
+  | 'HOST_EMCEE';
+
+export type EntertainmentAvoidTag =
+  | 'LOUD_MUSIC_DURING_DINING'
+  | 'NO_FIRE_PYROTECHNICS'
+  | 'KEEP_FAMILY_FRIENDLY'
+  | 'NO_LATE_NIGHT_LOUD_PERFORMANCES';
+
+export type GuestParticipationLevel =
+  | 'FULLY_PARTICIPATING_HANDS_ON'
+  | 'WATCHING_ENJOYING'
+  | 'MIX_OF_BOTH';
+
+export type InteractiveExperienceTag =
+  | 'PHOTO_BOOTH'
+  | 'SELFIE_STATION'
+  | 'KIDS_ENTERTAINMENT'
+  | 'GAMES'
+  | 'INTERACTIVE_EXPERIENCES'
+  | 'LIVE_DEMONSTRATIONS';
+
+export type TechnologyBusinessPurpose =
+  | 'ENHANCE_GUEST_ENGAGEMENT'
+  | 'CAPTURE_MEMORIES_KEEPSAKE'
+  | 'EVENT_BRANDING_PROMOTION'
+  | 'SUPPORT_PRESENTATIONS_SPEECHES'
+  | 'ELEVATE_VISUAL_IMPACT';
+
+export type TechnologyEnhancementTag =
+  | 'LED_WALL'
+  | 'LIVE_STREAMING'
+  | 'EVENT_RECORDING'
+  | 'PROJECTORS'
+  | 'PRESENTATION_SUPPORT'
+  | 'DIGITAL_DISPLAYS'
+  | 'EVENT_BRANDING';
+
+export type VenueAwarenessStatus =
+  | 'NO_KNOWN_RESTRICTIONS'
+  | 'SOME_RESTRICTIONS_KNOWN'
+  | 'NOT_SURE_YET';
+
+export type ValueAddedServiceTag =
+  | 'WELCOME_DRINKS'
+  | 'VALET_PARKING'
+  | 'GUEST_REGISTRATION'
+  | 'RETURN_GIFTS'
+  | 'HOSPITALITY_DESK'
+  | 'DIRECTIONAL_SIGNAGE'
+  | 'TRANSPORTATION_ASSISTANCE';
+
+export type ServiceOwnershipPreference =
+  | 'SELF_COORDINATING'
+  | 'REQUEST_TEAM_HELP'
+  | 'SHARED_COORDINATION'
+  | 'NOT_DECIDED_YET';
+
+export type SignatureExperienceTag =
+  | 'AMAZING_ENTERTAINMENT'
+  | 'BEAUTIFUL_CELEBRATION_MOMENTS'
+  | 'INTERACTIVE_GUEST_EXPERIENCES'
+  | 'LUXURY_WELCOME'
+  | 'TECHNOLOGY_EXPERIENCE'
+  | 'PERSONAL_TOUCHES'
+  | 'SIMPLE_ELEGANT_CELEBRATION';
+
+export interface EntertainmentExperienceConversation {
+  eventAtmosphere: EventAtmosphereType;
+  eventAtmosphereWeighting: PreferenceImportanceWeighting;
+  guestEngagementStyle: GuestEngagementStyle;
+
+  backgroundEntertainment: BackgroundEntertainmentTag[];
+  featuredEntertainment: FeaturedEntertainmentTag[];
+  entertainmentAvoidTags: EntertainmentAvoidTag[];
+  entertainmentGenresToAvoid?: string;
+
+  guestParticipationLevel: GuestParticipationLevel;
+  interactiveExperiences: InteractiveExperienceTag[];
+  otherGuestActivities?: string;
+
+  technologyBusinessPurpose: TechnologyBusinessPurpose[];
+  technologyEnhancements: TechnologyEnhancementTag[];
+  venueAwarenessStatus: VenueAwarenessStatus;
+  venueAwarenessNotes?: string;
+
+  valueAddedServices: ValueAddedServiceTag[];
+  serviceImportanceWeighting: PreferenceImportanceWeighting;
+  serviceOwnershipPreference: ServiceOwnershipPreference;
+
+  signatureExperience: SignatureExperienceTag[];
+  priorityExperience?: SignatureExperienceTag;
+  signatureExperienceNotes?: string;
+
+  salesAssessment?: SalesAssessmentConfidence;
+  businessSummary: string;
+  isSummaryManuallyEdited?: boolean;
+  discussionStatus: DiscussionStatus;
+  validationStatus: BusinessValidationStatus;
+}
+
+export function computeEntertainmentExperienceValidation(
+  data?: Partial<EntertainmentExperienceConversation>
+): BusinessValidationStatus {
+  if (!data) return 'NEEDS_ATTENTION';
+
+  // Core experience vision must be captured — everything else in this
+  // workspace is a legitimately optional add-on (a customer may want zero
+  // music, zero technology, and zero value-added services).
+  if (!data.eventAtmosphere || !data.guestEngagementStyle) {
+    return 'NEEDS_ATTENTION';
+  }
+
+  return 'READY';
+}
+
+// --- Special Requirements Discovery (IM-WP02C-08) ---
+// No PreferenceImportanceWeighting anywhere in this interface — deliberate.
+// Every field below is informational awareness only.
+
+export type AccessibilityConsiderationTag =
+  | 'WHEELCHAIR_ACCESS'
+  | 'ELDERLY_GUESTS'
+  | 'CHILDREN'
+  | 'NURSING_MOTHERS'
+  | 'ACCESSIBLE_SEATING'
+  | 'MOBILITY_ASSISTANCE';
+
+export type HealthWellbeingConsiderationTag =
+  | 'SEVERE_ALLERGIES_AWARENESS'
+  | 'EMERGENCY_MEDICAL_AWARENESS'
+  | 'MEDICATION_STORAGE_NEEDS'
+  | 'FIRST_AID_EXPECTATIONS'
+  | 'GUEST_SENSITIVITIES';
+
+export type CulturalReligiousConsiderationTag =
+  | 'RELIGIOUS_CUSTOMS'
+  | 'CEREMONIAL_EXPECTATIONS'
+  | 'PRAYER_REQUIREMENTS'
+  | 'TRADITIONAL_PRACTICES'
+  | 'LANGUAGE_PREFERENCES';
+
+export type SecurityProtocolTag =
+  | 'VIP_ATTENDANCE'
+  | 'RESTRICTED_ACCESS'
+  | 'GUEST_PRIVACY'
+  | 'PHOTOGRAPHY_RESTRICTIONS'
+  | 'MEDIA_PRESENCE';
+
+export type VenueGuidelineTag =
+  | 'PERMITS_ALREADY_KNOWN'
+  | 'VENUE_COMPLIANCE_EXPECTATIONS'
+  | 'NOISE_RESTRICTIONS'
+  | 'ENVIRONMENTAL_RULES'
+  | 'SUSTAINABILITY_REQUESTS';
+
+// Each card's fields are grouped into its own nested interface, mounted as a
+// property on the root SpecialRequirementsConversation object — rather than
+// six flat, same-level field groups — so each card's data has room to grow
+// independently (e.g. a future field added to Health & Guest Wellbeing can
+// never collide with or be confused for a field on a different card).
+
+export interface AccessibilityGuestComfort {
+  considerations: AccessibilityConsiderationTag[];
+  otherAccessibilityNotes?: string;
+}
+
+export interface HealthGuestWellbeing {
+  considerations: HealthWellbeingConsiderationTag[];
+  otherHealthConsiderations?: string;
+}
+
+export interface CulturalReligiousConsiderations {
+  considerations: CulturalReligiousConsiderationTag[];
+  culturalSensitivityNotes?: string;
+}
+
+export interface SecurityProtocolExpectations {
+  considerations: SecurityProtocolTag[];
+  securityCoordinationNotes?: string;
+}
+
+export interface VenueGuidelinesEventConsiderations {
+  considerations: VenueGuidelineTag[];
+  wasteManagementNotes?: string;
+}
+
+export interface SpecialRequestsPeaceOfMind {
+  specialRequestsNotes?: string;
+}
+
+export interface SpecialRequirementsConversation {
+  accessibility: AccessibilityGuestComfort;
+  healthWellbeing: HealthGuestWellbeing;
+  culturalReligious: CulturalReligiousConsiderations;
+  securityProtocol: SecurityProtocolExpectations;
+  venueGuidelines: VenueGuidelinesEventConsiderations;
+  specialRequests: SpecialRequestsPeaceOfMind;
+
+  salesAssessment?: SalesAssessmentConfidence;
+  businessSummary: string;
+  isSummaryManuallyEdited?: boolean;
+  discussionStatus: DiscussionStatus;
+  validationStatus: BusinessValidationStatus;
+}
+
+export function computeSpecialRequirementsValidation(
+  data?: Partial<SpecialRequirementsConversation>
+): BusinessValidationStatus {
+  if (!data) return 'NEEDS_ATTENTION';
+
+  // Business rule for this workspace: zero mandatory fields. Every card is
+  // optional, informational awareness — "no special requirements" is itself
+  // a complete business answer. This is not an absence of validation logic;
+  // it is the validated business rule, expressed as an empty rule set.
   return 'READY';
 }
 

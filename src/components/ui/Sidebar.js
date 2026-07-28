@@ -44,7 +44,10 @@ import {
     Globe2,
     Smartphone,
     ChefHat,
-    Users2
+    Users2,
+    Handshake,
+    MessageSquare,
+    UserCog
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -89,7 +92,10 @@ const LucideIcons = {
     Globe2,
     Smartphone,
     ChefHat,
-    Users2
+    Users2,
+    Handshake,
+    MessageSquare,
+    UserCog
 };
 
 const isHrefActive = (href, pathname, allNavHrefs) => {
@@ -223,11 +229,6 @@ export function Sidebar({ mobileOpen, setMobileOpen }) {
                         name: "Workspace",
                         href: "/business-setup",
                         icon: Sliders,
-                    },
-                    {
-                        name: "Contacts",
-                        href: "/cat/relationships",
-                        icon: Users2,
                     },
                     {
                         name: "Venues",

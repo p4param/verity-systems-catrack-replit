@@ -58,6 +58,8 @@ import FoodBeverageWorkspacePanel from "@/modules/cat/inquiry/features/food-beve
 import BudgetCommercialWorkspacePanel from "@/modules/cat/inquiry/features/budget-commercial-discovery/BudgetCommercialWorkspacePanel";
 import DecorAmbienceWorkspacePanel from "@/modules/cat/inquiry/features/decor-ambience-discovery/DecorAmbienceWorkspacePanel";
 import ServiceExperienceWorkspacePanel from "@/modules/cat/inquiry/features/service-experience-discovery/ServiceExperienceWorkspacePanel";
+import EntertainmentExperienceWorkspacePanel from "@/modules/cat/inquiry/features/entertainment-experience-discovery/EntertainmentExperienceWorkspacePanel";
+import SpecialRequirementsWorkspacePanel from "@/modules/cat/inquiry/features/special-requirements-discovery/SpecialRequirementsWorkspacePanel";
 
 interface InquiryWorkspaceData {
   id: string;
@@ -194,6 +196,8 @@ export default function InquiryWorkspacePage() {
     | "BUDGET_COMMERCIALS"
     | "DECOR_AMBIENCE"
     | "SERVICE_EXPERIENCE"
+    | "ENTERTAINMENT_ADDONS"
+    | "SPECIAL_REQUIREMENTS"
   >("DIRECTORY");
 
   // WP02B State: Filters
@@ -274,6 +278,16 @@ export default function InquiryWorkspacePage() {
     if (area.areaKey === "SERVICE_EXPERIENCE") {
       setActiveWorkspaceTab("REQUIREMENTS");
       setActiveDiscoveryView("SERVICE_EXPERIENCE");
+      return;
+    }
+    if (area.areaKey === "ENTERTAINMENT_ADDONS") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("ENTERTAINMENT_ADDONS");
+      return;
+    }
+    if (area.areaKey === "SPECIAL_REQUIREMENTS") {
+      setActiveWorkspaceTab("REQUIREMENTS");
+      setActiveDiscoveryView("SPECIAL_REQUIREMENTS");
       return;
     }
     setActiveArea(area);
@@ -1160,6 +1174,28 @@ export default function InquiryWorkspacePage() {
               onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
               onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
             />
+          ) : activeDiscoveryView === "ENTERTAINMENT_ADDONS" ? (
+            <EntertainmentExperienceWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find(
+                  (a) => a.areaKey === "ENTERTAINMENT_ADDONS",
+                ) || null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
+          ) : activeDiscoveryView === "SPECIAL_REQUIREMENTS" ? (
+            <SpecialRequirementsWorkspacePanel
+              inquiryId={id}
+              initialArea={
+                overview.areas.find(
+                  (a) => a.areaKey === "SPECIAL_REQUIREMENTS",
+                ) || null
+              }
+              onBackToRequirements={() => setActiveDiscoveryView("DIRECTORY")}
+              onSaveSuccess={handleDiscoveryWorkspaceSaveSuccess}
+            />
           ) : (
             <div className="space-y-6">
               {/* Discovery Directory Header Banner */}
@@ -1213,6 +1249,14 @@ export default function InquiryWorkspacePage() {
                           selectedArea.areaKey === "SERVICE_EXPERIENCE"
                         ) {
                           setActiveDiscoveryView("SERVICE_EXPERIENCE");
+                        } else if (
+                          selectedArea.areaKey === "ENTERTAINMENT_ADDONS"
+                        ) {
+                          setActiveDiscoveryView("ENTERTAINMENT_ADDONS");
+                        } else if (
+                          selectedArea.areaKey === "SPECIAL_REQUIREMENTS"
+                        ) {
+                          setActiveDiscoveryView("SPECIAL_REQUIREMENTS");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }
@@ -1256,6 +1300,14 @@ export default function InquiryWorkspacePage() {
                           selectedArea.areaKey === "SERVICE_EXPERIENCE"
                         ) {
                           setActiveDiscoveryView("SERVICE_EXPERIENCE");
+                        } else if (
+                          selectedArea.areaKey === "ENTERTAINMENT_ADDONS"
+                        ) {
+                          setActiveDiscoveryView("ENTERTAINMENT_ADDONS");
+                        } else if (
+                          selectedArea.areaKey === "SPECIAL_REQUIREMENTS"
+                        ) {
+                          setActiveDiscoveryView("SPECIAL_REQUIREMENTS");
                         } else {
                           openDiscoveryModal(selectedArea);
                         }
