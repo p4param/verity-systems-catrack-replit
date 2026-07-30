@@ -20110,3 +20110,365 @@ prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"
 prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
 prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61) OFFSET $62
  GET /api/secure/profile 200 in 113ms (next.js: 36ms, application-code: 77ms)
+✓ Finished writing to filesystem cache in 42s
+○ Compiling proxy ...
+✓ Finished filesystem cache database compaction in 16.1s
+✓ Finished writing to filesystem cache in 10.5s
+✓ Finished filesystem cache database compaction in 16.3s
+✓ Finished writing to filesystem cache in 18.6s
+✓ Finished filesystem cache database compaction in 39.9s
+✓ Finished writing to filesystem cache in 11.2s
+✓ Finished filesystem cache database compaction in 72s
+ GET / 307 in 18.3s (next.js: 7.3s, application-code: 11.0s)
+ GET / 307 in 9.0s (next.js: 119ms, application-code: 8.9s)
+ GET /login 200 in 21.2s (next.js: 2.8s, application-code: 18.3s)
+ POST /api/auth/refresh 400 in 6.7s (next.js: 5.3s, application-code: 1433ms)
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."email" = $1 OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query UPDATE "public"."users" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."users"."id" = $3 AND 1=1) RETURNING "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+ POST /api/auth/login 200 in 7.9s (next.js: 1986ms, application-code: 5.9s)
+ GET /dashboard 200 in 15.2s (next.js: 11.3s, proxy.ts: 2.4s, application-code: 1434ms)
+ GET /api/platform/navigation/sidebar 200 in 10.8s (next.js: 10.1s, application-code: 727ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."navigation_groups"."id", "public"."navigation_groups"."code", "public"."navigation_groups"."name", "public"."navigation_groups"."description", "public"."navigation_groups"."icon", "public"."navigation_groups"."color", "public"."navigation_groups"."displayOrder", "public"."navigation_groups"."isVisible", "public"."navigation_groups"."isCollapsedByDefault", "public"."navigation_groups"."createdAt", "public"."navigation_groups"."createdBy", "public"."navigation_groups"."updatedAt", "public"."navigation_groups"."updatedBy" FROM "public"."navigation_groups" WHERE 1=1 ORDER BY "public"."navigation_groups"."displayOrder" ASC OFFSET $1
+prisma:query SELECT "public"."navigation_items"."id", "public"."navigation_items"."title", "public"."navigation_items"."parentId", "public"."navigation_items"."navigationGroupId", "public"."navigation_items"."platformModuleId", "public"."navigation_items"."entityId", "public"."navigation_items"."route", "public"."navigation_items"."icon", "public"."navigation_items"."displayOrder", "public"."navigation_items"."menuType", "public"."navigation_items"."target", "public"."navigation_items"."openInNewTab", "public"."navigation_items"."visible", "public"."navigation_items"."mobileVisible", "public"."navigation_items"."customerPortalVisible", "public"."navigation_items"."vendorPortalVisible", "public"."navigation_items"."favoriteAllowed", "public"."navigation_items"."searchable", "public"."navigation_items"."metadata", "public"."navigation_items"."createdAt", "public"."navigation_items"."createdBy", "public"."navigation_items"."updatedAt", "public"."navigation_items"."updatedBy" FROM "public"."navigation_items" WHERE 1=1 ORDER BY "public"."navigation_items"."displayOrder" ASC OFFSET $1
+prisma:query SELECT "public"."platform_modules"."id", "public"."platform_modules"."code", "public"."platform_modules"."name", "public"."platform_modules"."description", "public"."platform_modules"."icon", "public"."platform_modules"."sortOrder", "public"."platform_modules"."isActive", "public"."platform_modules"."isSystem", "public"."platform_modules"."status", "public"."platform_modules"."version", "public"."platform_modules"."metadata", "public"."platform_modules"."navigationGroup", "public"."platform_modules"."displayOrder", "public"."platform_modules"."route", "public"."platform_modules"."defaultPage", "public"."platform_modules"."color", "public"."platform_modules"."badge", "public"."platform_modules"."badgeColor", "public"."platform_modules"."menuVisible", "public"."platform_modules"."showInSearch", "public"."platform_modules"."showOnDashboard", "public"."platform_modules"."showInMobile", "public"."platform_modules"."isLicensed", "public"."platform_modules"."requiresLicense", "public"."platform_modules"."featureFlag", "public"."platform_modules"."moduleDependencies", "public"."platform_modules"."minimumRole", "public"."platform_modules"."defaultPermissionSet", "public"."platform_modules"."defaultLandingPage", "public"."platform_modules"."helpUrl", "public"."platform_modules"."documentationUrl", "public"."platform_modules"."supportEmail", "public"."platform_modules"."createdAt", "public"."platform_modules"."createdBy", "public"."platform_modules"."updatedAt", "public"."platform_modules"."updatedBy" FROM "public"."platform_modules" WHERE 1=1 ORDER BY "public"."platform_modules"."sortOrder" ASC OFFSET $1
+prisma:query SELECT "public"."platform_modules"."id", "public"."platform_modules"."code", "public"."platform_modules"."name", "public"."platform_modules"."description", "public"."platform_modules"."icon", "public"."platform_modules"."sortOrder", "public"."platform_modules"."isActive", "public"."platform_modules"."isSystem", "public"."platform_modules"."status", "public"."platform_modules"."version", "public"."platform_modules"."metadata", "public"."platform_modules"."navigationGroup", "public"."platform_modules"."displayOrder", "public"."platform_modules"."route", "public"."platform_modules"."defaultPage", "public"."platform_modules"."color", "public"."platform_modules"."badge", "public"."platform_modules"."badgeColor", "public"."platform_modules"."menuVisible", "public"."platform_modules"."showInSearch", "public"."platform_modules"."showOnDashboard", "public"."platform_modules"."showInMobile", "public"."platform_modules"."isLicensed", "public"."platform_modules"."requiresLicense", "public"."platform_modules"."featureFlag", "public"."platform_modules"."moduleDependencies", "public"."platform_modules"."minimumRole", "public"."platform_modules"."defaultPermissionSet", "public"."platform_modules"."defaultLandingPage", "public"."platform_modules"."helpUrl", "public"."platform_modules"."documentationUrl", "public"."platform_modules"."supportEmail", "public"."platform_modules"."createdAt", "public"."platform_modules"."createdBy", "public"."platform_modules"."updatedAt", "public"."platform_modules"."updatedBy" FROM "public"."platform_modules" WHERE 1=1 ORDER BY "public"."platform_modules"."sortOrder" ASC OFFSET $1
+prisma:query SELECT "public"."platform_module_permissions"."id", "public"."platform_module_permissions"."platformModuleId", "public"."platform_module_permissions"."permissionId", "public"."platform_module_permissions"."permissionPurpose", "public"."platform_module_permissions"."displayOrder", "public"."platform_module_permissions"."isRequired", "public"."platform_module_permissions"."metadata" FROM "public"."platform_module_permissions" WHERE "public"."platform_module_permissions"."permissionPurpose" = $1 OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+ GET /login 200 in 1931ms (next.js: 39ms, application-code: 1892ms)
+ POST /api/auth/refresh 400 in 88ms (next.js: 41ms, application-code: 47ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."email" = $1 OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query UPDATE "public"."users" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."users"."id" = $3 AND 1=1) RETURNING "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+ POST /api/auth/login 200 in 5.4s (next.js: 116ms, application-code: 5.3s)
+ GET /dashboard 200 in 22.6s (next.js: 572ms, proxy.ts: 161ms, application-code: 21.9s)
+ GET / 307 in 3.5s (next.js: 42ms, application-code: 3.5s)
+ GET /login 200 in 1422ms (next.js: 50ms, application-code: 1372ms)
+ POST /api/auth/refresh 400 in 290ms (next.js: 19ms, application-code: 271ms)
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."email" = $1 OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+ POST /api/auth/login 200 in 39.8s (next.js: 2.6s, application-code: 37.2s)
+prisma:query SELECT 1
+prisma:query UPDATE "public"."users" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."users"."id" = $3 AND 1=1) RETURNING "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+ GET /login 200 in 14.6s (next.js: 284ms, application-code: 14.3s)
+ POST /api/auth/refresh 400 in 488ms (next.js: 43ms, application-code: 445ms)
+[AUTH_LOGIN] Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.user.findMany()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at $n.handleRequestError (src\generated\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (src\generated\client\runtime\library.js:121:6623)
+    at $n.request (src\generated\client\runtime\library.js:121:6307)
+    at async l (src\generated\client\runtime\library.js:130:9633)
+    at async POST (src\app\api\auth\login\route.ts:24:23)
+  119 | ...
+  120 | ...
+> 121 | ...t u=s?{modelName:s,...t.meta}:t.meta;throw new V(l,{code:t.code,clientVersion:this.cli...
+      |                                               ^
+  122 | ...
+  123 | ...
+  124 | ... {
+  code: 'P1001',
+  clientVersion: '5.22.0',
+  meta: {
+    modelName: 'User',
+    database_host: 'localhost',
+    database_port: 5432
+  }
+}
+ POST /api/auth/login 500 in 31.4s (next.js: 19ms, application-code: 31.4s)
+ POST /api/auth/refresh 200 in 938ms (next.js: 520ms, application-code: 418ms)
+ GET /login? 200 in 7.7s (next.js: 350ms, application-code: 7.4s)
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.refreshToken.findFirst()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at $n.handleRequestError (src\generated\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (src\generated\client\runtime\library.js:121:6623)
+    at $n.request (src\generated\client\runtime\library.js:121:6307)
+    at async l (src\generated\client\runtime\library.js:130:9633)
+    at async POST (src\app\api\auth\refresh\route.ts:36:20)
+  119 | ...
+  120 | ...
+> 121 | ...t u=s?{modelName:s,...t.meta}:t.meta;throw new V(l,{code:t.code,clientVersion:this.cli...
+      |                                               ^
+  122 | ...
+  123 | ...
+  124 | ... {
+  code: 'P1001',
+  clientVersion: '5.22.0',
+  meta: {
+    modelName: 'RefreshToken',
+    database_host: 'localhost',
+    database_port: 5432
+  }
+}
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.refreshToken.findFirst()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at $n.handleRequestError (src\generated\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (src\generated\client\runtime\library.js:121:6623)
+    at $n.request (src\generated\client\runtime\library.js:121:6307)
+    at async l (src\generated\client\runtime\library.js:130:9633)
+    at async POST (src\app\api\auth\refresh\route.ts:36:20)
+  119 | ...
+  120 | ...
+> 121 | ...t u=s?{modelName:s,...t.meta}:t.meta;throw new V(l,{code:t.code,clientVersion:this.cli...
+      |                                               ^
+  122 | ...
+  123 | ...
+  124 | ... {
+  code: 'P1001',
+  clientVersion: '5.22.0',
+  meta: {
+    modelName: 'RefreshToken',
+    database_host: 'localhost',
+    database_port: 5432
+  }
+}
+ POST /api/auth/refresh 500 in 16.1s (next.js: 187ms, application-code: 15.9s)
+ GET /login 200 in 75s (next.js: 119ms, application-code: 75s)
+ GET / 307 in 2.2s (next.js: 829ms, application-code: 1401ms)
+ GET /login 200 in 2.2min (next.js: 1340ms, application-code: 2.2min)
+ GET /login? 200 in 19.7s (next.js: 8.4s, application-code: 11.3s)
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.refreshToken.findFirst()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at $n.handleRequestError (src\generated\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (src\generated\client\runtime\library.js:121:6623)
+    at $n.request (src\generated\client\runtime\library.js:121:6307)
+    at async l (src\generated\client\runtime\library.js:130:9633)
+    at async POST (src\app\api\auth\refresh\route.ts:36:20)
+  119 | ...
+  120 | ...
+> 121 | ...t u=s?{modelName:s,...t.meta}:t.meta;throw new V(l,{code:t.code,clientVersion:this.cli...
+      |                                               ^
+  122 | ...
+  123 | ...
+  124 | ... {
+  code: 'P1001',
+  clientVersion: '5.22.0',
+  meta: {
+    modelName: 'RefreshToken',
+    database_host: 'localhost',
+    database_port: 5432
+  }
+}
+ POST /api/auth/refresh 500 in 84s (next.js: 3.4s, application-code: 80s)
+✓ Finished writing to filesystem cache in 39.3s
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."email" = $1 OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query UPDATE "public"."users" SET "lastLoginAt" = $1, "updatedAt" = $2 WHERE ("public"."users"."id" = $3 AND 1=1) RETURNING "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+prisma:query SELECT 1
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+ POST /api/auth/login 200 in 35.8s (next.js: 159ms, application-code: 35.6s)
+ GET /dashboard 200 in 55s (next.js: 44s, proxy.ts: 8.5s, application-code: 1932ms)
+prisma:query SELECT 1
+prisma:query SELECT "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt" FROM "public"."refresh_tokens" WHERE ("public"."refresh_tokens"."tokenHash" = $1 AND "public"."refresh_tokens"."revokedAt" IS NULL AND "public"."refresh_tokens"."expiresAt" > $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query UPDATE "public"."refresh_tokens" SET "revokedAt" = $1, "replacedByToken" = $2 WHERE ("public"."refresh_tokens"."id" = $3 AND 1=1) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ POST /api/auth/refresh 200 in 2.7s (next.js: 182ms, application-code: 2.5s)
+prisma:query SELECT "public"."navigation_groups"."id", "public"."navigation_groups"."code", "public"."navigation_groups"."name", "public"."navigation_groups"."description", "public"."navigation_groups"."icon", "public"."navigation_groups"."color", "public"."navigation_groups"."displayOrder", "public"."navigation_groups"."isVisible", "public"."navigation_groups"."isCollapsedByDefault", "public"."navigation_groups"."createdAt", "public"."navigation_groups"."createdBy", "public"."navigation_groups"."updatedAt", "public"."navigation_groups"."updatedBy" FROM "public"."navigation_groups" WHERE 1=1 ORDER BY "public"."navigation_groups"."displayOrder" ASC OFFSET $1
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt" FROM "public"."refresh_tokens" WHERE ("public"."refresh_tokens"."tokenHash" = $1 AND "public"."refresh_tokens"."revokedAt" IS NULL AND "public"."refresh_tokens"."expiresAt" > $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT 1
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE ("public"."users"."id" = $1 AND "public"."users"."tenantId" = $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."navigation_items"."id", "public"."navigation_items"."title", "public"."navigation_items"."parentId", "public"."navigation_items"."navigationGroupId", "public"."navigation_items"."platformModuleId", "public"."navigation_items"."entityId", "public"."navigation_items"."route", "public"."navigation_items"."icon", "public"."navigation_items"."displayOrder", "public"."navigation_items"."menuType", "public"."navigation_items"."target", "public"."navigation_items"."openInNewTab", "public"."navigation_items"."visible", "public"."navigation_items"."mobileVisible", "public"."navigation_items"."customerPortalVisible", "public"."navigation_items"."vendorPortalVisible", "public"."navigation_items"."favoriteAllowed", "public"."navigation_items"."searchable", "public"."navigation_items"."metadata", "public"."navigation_items"."createdAt", "public"."navigation_items"."createdBy", "public"."navigation_items"."updatedAt", "public"."navigation_items"."updatedBy" FROM "public"."navigation_items" WHERE 1=1 ORDER BY "public"."navigation_items"."displayOrder" ASC OFFSET $1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 16.1s (next.js: 8.6s, application-code: 7.5s)
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ GET /api/secure/profile 200 in 16.2s (next.js: 13.1s, application-code: 3.1s)
+prisma:query SELECT "public"."platform_modules"."id", "public"."platform_modules"."code", "public"."platform_modules"."name", "public"."platform_modules"."description", "public"."platform_modules"."icon", "public"."platform_modules"."sortOrder", "public"."platform_modules"."isActive", "public"."platform_modules"."isSystem", "public"."platform_modules"."status", "public"."platform_modules"."version", "public"."platform_modules"."metadata", "public"."platform_modules"."navigationGroup", "public"."platform_modules"."displayOrder", "public"."platform_modules"."route", "public"."platform_modules"."defaultPage", "public"."platform_modules"."color", "public"."platform_modules"."badge", "public"."platform_modules"."badgeColor", "public"."platform_modules"."menuVisible", "public"."platform_modules"."showInSearch", "public"."platform_modules"."showOnDashboard", "public"."platform_modules"."showInMobile", "public"."platform_modules"."isLicensed", "public"."platform_modules"."requiresLicense", "public"."platform_modules"."featureFlag", "public"."platform_modules"."moduleDependencies", "public"."platform_modules"."minimumRole", "public"."platform_modules"."defaultPermissionSet", "public"."platform_modules"."defaultLandingPage", "public"."platform_modules"."helpUrl", "public"."platform_modules"."documentationUrl", "public"."platform_modules"."supportEmail", "public"."platform_modules"."createdAt", "public"."platform_modules"."createdBy", "public"."platform_modules"."updatedAt", "public"."platform_modules"."updatedBy" FROM "public"."platform_modules" WHERE 1=1 ORDER BY "public"."platform_modules"."sortOrder" ASC OFFSET $1
+prisma:query SELECT "public"."platform_modules"."id", "public"."platform_modules"."code", "public"."platform_modules"."name", "public"."platform_modules"."description", "public"."platform_modules"."icon", "public"."platform_modules"."sortOrder", "public"."platform_modules"."isActive", "public"."platform_modules"."isSystem", "public"."platform_modules"."status", "public"."platform_modules"."version", "public"."platform_modules"."metadata", "public"."platform_modules"."navigationGroup", "public"."platform_modules"."displayOrder", "public"."platform_modules"."route", "public"."platform_modules"."defaultPage", "public"."platform_modules"."color", "public"."platform_modules"."badge", "public"."platform_modules"."badgeColor", "public"."platform_modules"."menuVisible", "public"."platform_modules"."showInSearch", "public"."platform_modules"."showOnDashboard", "public"."platform_modules"."showInMobile", "public"."platform_modules"."isLicensed", "public"."platform_modules"."requiresLicense", "public"."platform_modules"."featureFlag", "public"."platform_modules"."moduleDependencies", "public"."platform_modules"."minimumRole", "public"."platform_modules"."defaultPermissionSet", "public"."platform_modules"."defaultLandingPage", "public"."platform_modules"."helpUrl", "public"."platform_modules"."documentationUrl", "public"."platform_modules"."supportEmail", "public"."platform_modules"."createdAt", "public"."platform_modules"."createdBy", "public"."platform_modules"."updatedAt", "public"."platform_modules"."updatedBy" FROM "public"."platform_modules" WHERE 1=1 ORDER BY "public"."platform_modules"."sortOrder" ASC OFFSET $1
+prisma:query SELECT "public"."platform_module_permissions"."id", "public"."platform_module_permissions"."platformModuleId", "public"."platform_module_permissions"."permissionId", "public"."platform_module_permissions"."permissionPurpose", "public"."platform_module_permissions"."displayOrder", "public"."platform_module_permissions"."isRequired", "public"."platform_module_permissions"."metadata" FROM "public"."platform_module_permissions" WHERE "public"."platform_module_permissions"."permissionPurpose" = $1 OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9) OFFSET $10
+ GET /api/platform/navigation/sidebar 200 in 19.0s (next.js: 1966ms, application-code: 17.0s)
+⨯ Error [PrismaClientKnownRequestError]: 
+Invalid `prisma.refreshToken.update()` invocation:
+
+
+Can't reach database server at `localhost:5432`
+
+Please make sure your database server is running at `localhost:5432`.
+    at $n.handleRequestError (src\generated\client\runtime\library.js:121:7315)
+    at $n.handleAndLogRequestError (src\generated\client\runtime\library.js:121:6623)
+    at $n.request (src\generated\client\runtime\library.js:121:6307)
+    at async l (src\generated\client\runtime\library.js:130:9633)
+    at async POST (src\app\api\auth\refresh\route.ts:64:5)
+  119 | ...
+  120 | ...
+> 121 | ...t u=s?{modelName:s,...t.meta}:t.meta;throw new V(l,{code:t.code,clientVersion:this.cli...
+      |                                               ^
+  122 | ...
+  123 | ...
+  124 | ... {
+  code: 'P1001',
+  clientVersion: '5.22.0',
+  meta: {
+    modelName: 'RefreshToken',
+    database_host: 'localhost',
+    database_port: 5432
+  }
+}
+ POST /api/auth/refresh 500 in 42s (next.js: 9.0s, application-code: 33.2s)
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE ("public"."users"."id" = $1 AND "public"."users"."tenantId" = $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT 1
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ GET /api/secure/alerts?limit=5 200 in 25.3s (next.js: 1446ms, application-code: 23.8s)
+ GET /api/secure/profile 200 in 26.4s (next.js: 3.9s, application-code: 22.5s)
+JWT Verification failed: Error [TokenExpiredError]: jwt expired
+    at verifyJwt (src\lib\auth\jwt.ts:32:20)
+    at requireAuth (src\lib\auth\auth-guard.ts:38:34)
+    at GET (src\app\api\secure\profile\route.ts:8:32)
+  30 |             audience: DEFAULT_OPTIONS.audience,
+  31 |         };
+> 32 |         return jwt.verify(token, JWT_SECRET, verifyOptions) as T;
+     |                    ^
+  33 |     } catch (error) {
+  34 |         console.error("JWT Verification failed:", error);
+  35 |         return null; {
+  expiredAt: 2026-07-29T12:39:15.000Z,
+  constructor: [Function: TokenExpiredError]
+}
+ GET /api/secure/profile 401 in 42s (next.js: 887ms, application-code: 41s)
+○ Compiling /cat/quotations ...
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 2.5s (next.js: 133ms, application-code: 2.3s)
+prisma:query SELECT "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt" FROM "public"."refresh_tokens" WHERE ("public"."refresh_tokens"."tokenHash" = $1 AND "public"."refresh_tokens"."revokedAt" IS NULL AND "public"."refresh_tokens"."expiresAt" > $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE "public"."users"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query UPDATE "public"."refresh_tokens" SET "revokedAt" = $1, "replacedByToken" = $2 WHERE ("public"."refresh_tokens"."id" = $3 AND 1=1) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+prisma:query INSERT INTO "public"."refresh_tokens" ("userId","tokenHash","mfaVerified","deviceInfo","ipAddress","lastActiveAt","expiresAt","createdAt") VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING "public"."refresh_tokens"."id", "public"."refresh_tokens"."userId", "public"."refresh_tokens"."tokenHash", "public"."refresh_tokens"."mfaVerified", "public"."refresh_tokens"."deviceInfo", "public"."refresh_tokens"."ipAddress", "public"."refresh_tokens"."lastActiveAt", "public"."refresh_tokens"."expiresAt", "public"."refresh_tokens"."revokedAt", "public"."refresh_tokens"."revokedByIp", "public"."refresh_tokens"."replacedByToken", "public"."refresh_tokens"."createdAt"
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ POST /api/auth/refresh 200 in 1498ms (next.js: 72ms, application-code: 1426ms)
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE ("public"."users"."id" = $1 AND "public"."users"."tenantId" = $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ GET /api/secure/profile 200 in 4.0s (next.js: 1138ms, application-code: 2.9s)
+prisma:query SELECT "public"."users"."id", "public"."users"."tenantId", "public"."users"."fullName", "public"."users"."email", "public"."users"."passwordHash", "public"."users"."status", "public"."users"."mfaEnabled", "public"."users"."mfaSecret", "public"."users"."mfaSetupRequired", "public"."users"."isActive", "public"."users"."isLocked", "public"."users"."lastLoginAt", "public"."users"."createdAt", "public"."users"."createdBy", "public"."users"."updatedAt", "public"."users"."updatedBy" FROM "public"."users" WHERE ("public"."users"."id" = $1 AND "public"."users"."tenantId" = $2) LIMIT $3 OFFSET $4
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT 1
+prisma:query SELECT "public"."user_roles"."userId", "public"."user_roles"."roleId", "public"."user_roles"."assignedAt", "public"."user_roles"."assignedBy" FROM "public"."user_roles" WHERE "public"."user_roles"."userId" = $1 OFFSET $2
+prisma:query SELECT "public"."roles"."id", "public"."roles"."tenantId", "public"."roles"."name", "public"."roles"."description", "public"."roles"."isSystem", "public"."roles"."requiresMfa", "public"."roles"."isActive", "public"."roles"."createdAt" FROM "public"."roles" WHERE "public"."roles"."id" IN ($1) OFFSET $2
+prisma:query SELECT "public"."role_permissions"."roleId", "public"."role_permissions"."permissionId" FROM "public"."role_permissions" WHERE "public"."role_permissions"."roleId" IN ($1) OFFSET $2
+prisma:query SELECT "public"."permissions"."id", "public"."permissions"."code", "public"."permissions"."description" FROM "public"."permissions" WHERE "public"."permissions"."id" IN ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18,$19,$20,$21,$22,$23,$24,$25,$26,$27,$28,$29,$30,$31,$32,$33,$34,$35,$36,$37,$38,$39,$40,$41,$42,$43,$44,$45,$46,$47,$48,$49,$50,$51,$52,$53,$54,$55,$56,$57,$58,$59,$60,$61,$62,$63,$64) OFFSET $65
+ GET /api/secure/profile 200 in 4.7s (next.js: 240ms, application-code: 4.4s)
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 1500ms (next.js: 141ms, application-code: 1359ms)
+ GET /login 200 in 15.3s (next.js: 133ms, application-code: 15.2s)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 2.4s (next.js: 1057ms, application-code: 1344ms)
+ GET /login? 200 in 11.9s (next.js: 1281ms, application-code: 10.6s)
+ POST /api/auth/refresh 400 in 1391ms (next.js: 102ms, application-code: 1289ms)
+✓ Finished writing to filesystem cache in 19.9s
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 4.5s (next.js: 1455ms, application-code: 3.0s)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 2.9s (next.js: 1267ms, application-code: 1625ms)
+prisma:query SELECT 1
+prisma:query BEGIN
+prisma:query SELECT "public"."security_alerts"."id", "public"."security_alerts"."userId", "public"."security_alerts"."type", "public"."security_alerts"."title", "public"."security_alerts"."message", "public"."security_alerts"."severity", "public"."security_alerts"."metadata", "public"."security_alerts"."isRead", "public"."security_alerts"."createdAt" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) ORDER BY "public"."security_alerts"."createdAt" DESC LIMIT $3 OFFSET $4
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND ("j1"."tenantId" = $2 AND ("j1"."id" IS NOT NULL))) OFFSET $3) AS "sub"
+prisma:query COMMIT
+prisma:query SELECT COUNT(*) FROM (SELECT "public"."security_alerts"."id" FROM "public"."security_alerts" LEFT JOIN "public"."users" AS "j1" ON ("j1"."id") = ("public"."security_alerts"."userId") WHERE ("public"."security_alerts"."userId" = $1 AND "public"."security_alerts"."isRead" = $2 AND ("j1"."tenantId" = $3 AND ("j1"."id" IS NOT NULL))) OFFSET $4) AS "sub"
+ GET /api/secure/alerts?limit=5 200 in 14.7s (next.js: 12.0s, application-code: 2.7s)
+✓ Finished writing to filesystem cache in 59s

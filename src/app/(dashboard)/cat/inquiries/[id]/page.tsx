@@ -60,6 +60,7 @@ import DecorAmbienceWorkspacePanel from "@/modules/cat/inquiry/features/decor-am
 import ServiceExperienceWorkspacePanel from "@/modules/cat/inquiry/features/service-experience-discovery/ServiceExperienceWorkspacePanel";
 import EntertainmentExperienceWorkspacePanel from "@/modules/cat/inquiry/features/entertainment-experience-discovery/EntertainmentExperienceWorkspacePanel";
 import SpecialRequirementsWorkspacePanel from "@/modules/cat/inquiry/features/special-requirements-discovery/SpecialRequirementsWorkspacePanel";
+import { InquiryQuotationPanel } from "@/modules/cat/quotation/components/InquiryQuotationPanel";
 
 interface InquiryWorkspaceData {
   id: string;
@@ -1322,16 +1323,7 @@ export default function InquiryWorkspacePage() {
       )}
 
       {activeWorkspaceTab === "QUOTATIONS" && (
-        <div className="bg-card p-12 rounded-2xl border border-border/40 text-center space-y-3">
-          <DollarSign className="w-10 h-10 text-indigo-600 mx-auto opacity-60" />
-          <h3 className="text-base font-bold text-foreground">
-            Quotation & Proposal Engine
-          </h3>
-          <p className="text-xs text-muted-foreground max-w-md mx-auto">
-            Commercial quotation creation, pricing calculation, and proposal
-            generation.
-          </p>
-        </div>
+        <InquiryQuotationPanel inquiryId={id} />
       )}
 
       {activeWorkspaceTab === "DOCUMENTS" && (
