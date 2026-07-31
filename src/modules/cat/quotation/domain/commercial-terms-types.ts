@@ -6,6 +6,7 @@
 // nav tab.
 
 import { ProposalWorkspaceStatus } from '@/modules/cat/quotation/domain/quotation-types';
+import { formatCurrency } from '@/modules/cat/quotation/domain/proposal-pricing-types';
 
 // Reuses the same payment method vocabulary already established in the
 // Inventory vendor-billing module, for consistency across the app.
@@ -24,6 +25,16 @@ export const ADVANCE_TYPE_LABELS: Record<AdvanceType, string> = {
   PERCENTAGE: 'Percentage of Total',
   FIXED_AMOUNT: 'Fixed Amount',
 };
+
+// Single source of truth for rendering an Advance Value. A Percentage
+// advance (e.g. 33) must always read "33%", never be run through currency
+// formatting — every place that displays Advance Value (Snapshot Viewer,
+// Printable Proposal Layout, Revision Comparison, and any future one)
+// must call this rather than reimplementing the branch.
+export function formatAdvanceValue(advanceType: string | undefined, advanceValue: number | undefined): string {
+  if (advanceValue === undefined || advanceValue === null) return '';
+  return advanceType === 'PERCENTAGE' ? `${advanceValue}%` : formatCurrency(advanceValue);
+}
 
 export interface CommercialTermsContent {
   validUntil?: string;

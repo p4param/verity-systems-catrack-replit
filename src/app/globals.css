@@ -129,3 +129,33 @@ body {
 .bg-card {
   box-shadow: var(--card-shadow);
 }
+
+/* QM-WP04B — Customer Delivery: Printable Proposal Layout.
+   Product Review correction: window.print() must never print the ERP
+   shell (header, sidebar, tabs, dialog chrome) — only the dedicated
+   .printable-proposal subtree. Every element under <body> is hidden, then
+   visibility is restored for .printable-proposal and its descendants only,
+   and the subtree is repositioned to the top of the page since
+   visibility:hidden (unlike display:none) still reserves layout space on
+   every other, now-invisible, element. */
+@media print {
+  @page {
+    margin: 0.75in;
+  }
+
+  body * {
+    visibility: hidden;
+  }
+
+  .printable-proposal,
+  .printable-proposal * {
+    visibility: visible;
+  }
+
+  .printable-proposal {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+  }
+}

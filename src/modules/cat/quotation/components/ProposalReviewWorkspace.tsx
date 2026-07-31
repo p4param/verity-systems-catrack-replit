@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { AlertTriangle, ChevronRight, ClipboardCheck, CheckCircle2 } from 'lucide-react';
+import { AlertTriangle, ChevronRight, ClipboardCheck, CheckCircle2, History, Send } from 'lucide-react';
 
 import { QuotationDetail } from '@/modules/cat/quotation/domain/quotation-types';
 import {
@@ -14,10 +14,26 @@ import { formatCurrency } from '@/modules/cat/quotation/domain/proposal-pricing-
 import { PAYMENT_METHOD_LABELS, CommercialPaymentMethod } from '@/modules/cat/quotation/domain/commercial-terms-types';
 import { ProposalDiscoveryContext } from '@/modules/cat/quotation/components/ProposalDiscoveryContext';
 import { WorkspaceStatusBadge } from '@/modules/cat/quotation/components/WorkspaceStatusBadge';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface ProposalReviewWorkspaceProps {
   quotation: QuotationDetail;
   onEditWorkspace: (key: ProposalWorkspaceKey) => void;
+  onPublished: (revisionNumber: number) => void;
+}
+
+interface PublicationResult {
+  revisionNumber: number;
+  publishedAt: string;
 }
 
 // Outstanding items come back from the API as labels only (no payload
@@ -49,9 +65,19 @@ function EditButton({ onClick }: { onClick: () => void }) {
 // no business data and persists nothing — everything shown here is derived
 // from the other workspaces via a single GET call. No Save Draft, no Mark
 // Ready, no Workspace Status of its own.
-export function ProposalReviewWorkspace({ quotation, onEditWorkspace }: ProposalReviewWorkspaceProps) {
+export function ProposalReviewWorkspace({ quotation, onEditWorkspace, onPublished }: ProposalReviewWorkspaceProps) {
   const [data, setData] = useState<ProposalReviewData | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // QM-WP04C UX Polish — Navigation Gap Fix. Whether the "View Revisions"
+  // action is shown at all: true only once at least one published revision
+  // exists. Reuses the existing GET /revisions endpoint — no new API.
+  const [hasPublishedRevisions, setHasPublishedRevisions] = useState(false);
+
+  const [showPublishDialog, setShowPublishDialog] = useState(false);
+  const [publishing, setPublishing] = useState(false);
+  const [publishError, setPublishError] = useState('');
+  const [publishResult, setPublishResult] = useState<PublicationResult | null>(null);
 
   useEffect(() => {
     const load = async () => {
@@ -71,11 +97,75 @@ export function ProposalReviewWorkspace({ quotation, onEditWorkspace }: Proposal
     load();
   }, [quotation.id]);
 
+  useEffect(() => {
+    const checkPublishedRevisions = async () => {
+      try {
+        const res = await fetch(`/api/cat/quotations/${quotation.id}/revisions`);
+        const json = await res.json();
+        if (json.success) {
+          setHasPublishedRevisions((json.publishedRevisions || []).length > 0);
+        }
+      } catch (err) {
+        console.error('Failed to check published revisions:', err);
+      }
+    };
+    checkPublishedRevisions();
+  }, [quotation.id]);
+
+  const openPublishDialog = () => {
+    setPublishError('');
+    setPublishResult(null);
+    setShowPublishDialog(true);
+  };
+
+  const handlePublish = async () => {
+    setPublishing(true);
+    setPublishError('');
+    try {
+      const res = await fetch(`/api/cat/quotations/${quotation.id}/publish`, { method: 'POST' });
+      const json = await res.json();
+      if (json.success) {
+        setPublishResult({ revisionNumber: json.publication.revisionNumber, publishedAt: json.publication.publishedAt });
+        setHasPublishedRevisions(true);
+        onPublished(json.publication.revisionNumber);
+      } else {
+        setPublishError(json.error || 'Failed to publish Proposal.');
+      }
+    } catch (err: any) {
+      setPublishError(err.message || 'Failed to publish Proposal.');
+    } finally {
+      setPublishing(false);
+    }
+  };
+
+  const closePublishDialog = () => {
+    setShowPublishDialog(false);
+    setPublishResult(null);
+    setPublishError('');
+  };
+
+  const goToRevisions = () => {
+    setShowPublishDialog(false);
+    onEditWorkspace('REVISIONS');
+  };
+
   return (
     <div className="bg-card border border-border/40 rounded-2xl shadow-xs overflow-hidden">
-      <div className="p-5 border-b border-border/40 flex items-center gap-2">
-        <ClipboardCheck className="w-4 h-4 text-primary" />
-        <h3 className="text-sm font-extrabold text-foreground">Proposal Review</h3>
+      <div className="p-5 border-b border-border/40 flex items-center justify-between gap-2">
+        <div className="flex items-center gap-2">
+          <ClipboardCheck className="w-4 h-4 text-primary" />
+          <h3 className="text-sm font-extrabold text-foreground">Proposal Review</h3>
+        </div>
+        {hasPublishedRevisions && (
+          <button
+            type="button"
+            onClick={() => onEditWorkspace('REVISIONS')}
+            className="inline-flex items-center gap-1.5 text-[11px] font-bold text-primary hover:underline cursor-pointer shrink-0"
+          >
+            <History className="w-3.5 h-3.5" />
+            View Revisions
+          </button>
+        )}
       </div>
 
       <div className="p-5 space-y-8">
@@ -85,9 +175,19 @@ export function ProposalReviewWorkspace({ quotation, onEditWorkspace }: Proposal
           <>
             {/* Overall Readiness — the page's primary status indicator */}
             {data.overallReady ? (
-              <div className="flex items-center gap-3 bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-5 shadow-xs">
-                <CheckCircle2 className="w-7 h-7 text-emerald-600 shrink-0" />
-                <span className="text-lg font-black text-emerald-700 tracking-tight">Ready for Next Stage</span>
+              <div className="flex items-center justify-between gap-3 bg-emerald-500/10 border-2 border-emerald-500/30 rounded-2xl p-5 shadow-xs">
+                <div className="flex items-center gap-3">
+                  <CheckCircle2 className="w-7 h-7 text-emerald-600 shrink-0" />
+                  <span className="text-lg font-black text-emerald-700 tracking-tight">Ready for Next Stage</span>
+                </div>
+                <button
+                  type="button"
+                  onClick={openPublishDialog}
+                  className="inline-flex items-center gap-2 px-4 py-2.5 bg-emerald-600 text-white text-xs font-bold rounded-xl cursor-pointer hover:bg-emerald-700 transition shrink-0"
+                >
+                  <Send className="w-3.5 h-3.5" />
+                  <span>Publish Proposal</span>
+                </button>
               </div>
             ) : (
               <div className="bg-amber-500/10 border-2 border-amber-500/30 rounded-2xl p-5 shadow-xs space-y-3">
@@ -211,6 +311,56 @@ export function ProposalReviewWorkspace({ quotation, onEditWorkspace }: Proposal
           </>
         )}
       </div>
+
+      <AlertDialog open={showPublishDialog} onOpenChange={(open) => !open && closePublishDialog()}>
+        <AlertDialogContent>
+          {publishResult ? (
+            <>
+              <AlertDialogHeader>
+                <AlertDialogTitle className="flex items-center gap-2">
+                  <CheckCircle2 className="w-5 h-5 text-emerald-600" />
+                  Proposal Published
+                </AlertDialogTitle>
+                <AlertDialogDescription asChild>
+                  <div className="space-y-3 pt-2">
+                    <div className="space-y-0.5">
+                      <div className="text-sm font-black text-foreground">Revision {publishResult.revisionNumber}</div>
+                      <div className="text-xs font-bold text-emerald-600">Published Successfully</div>
+                    </div>
+                    <div className="text-xs">
+                      <span className="text-muted-foreground">Published At:</span>{' '}
+                      <span className="font-bold text-foreground">{new Date(publishResult.publishedAt).toLocaleString()}</span>
+                    </div>
+                  </div>
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              <AlertDialogFooter>
+                <AlertDialogCancel onClick={closePublishDialog}>Continue Working</AlertDialogCancel>
+                <AlertDialogAction onClick={goToRevisions}>Go to Revisions</AlertDialogAction>
+              </AlertDialogFooter>
+            </>
+          ) : (
+            <>
+              <AlertDialogHeader>
+                <AlertDialogTitle>Publish Proposal?</AlertDialogTitle>
+                <AlertDialogDescription>
+                  Revision {quotation.currentRevision?.revisionNumber ?? 0} will become the official customer proposal.
+                  <br />
+                  <br />
+                  Your quotation will remain editable so you can prepare future revisions if required.
+                </AlertDialogDescription>
+              </AlertDialogHeader>
+              {publishError && <p className="text-xs text-rose-600 font-semibold">{publishError}</p>}
+              <AlertDialogFooter>
+                <AlertDialogCancel disabled={publishing}>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handlePublish} disabled={publishing}>
+                  {publishing ? 'Publishing...' : 'Publish Proposal'}
+                </AlertDialogAction>
+              </AlertDialogFooter>
+            </>
+          )}
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 }

@@ -6,9 +6,12 @@ import {
   ClipboardList,
   DollarSign,
   FileText,
+  Gavel,
+  History,
   ListChecks,
   Lock,
   ScrollText,
+  Send,
   Sparkles,
   Star,
 } from 'lucide-react';
@@ -24,6 +27,9 @@ const WORKSPACE_ICONS: Record<ProposalWorkspaceKey, React.ComponentType<{ classN
   COMMERCIALS: DollarSign,
   TERMS_CONDITIONS: FileText,
   PROPOSAL_REVIEW: ClipboardCheck,
+  REVISIONS: History,
+  CUSTOMER_DELIVERY: Send,
+  CUSTOMER_DECISION: Gavel,
 };
 
 interface ProposalWorkspaceNavigatorProps {

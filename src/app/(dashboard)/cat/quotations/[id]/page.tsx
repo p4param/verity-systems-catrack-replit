@@ -23,6 +23,9 @@ import { AssumptionsExclusionsWorkspace } from '@/modules/cat/quotation/componen
 import { CommercialPricingWorkspace } from '@/modules/cat/quotation/components/CommercialPricingWorkspace';
 import { CommercialTermsWorkspace } from '@/modules/cat/quotation/components/CommercialTermsWorkspace';
 import { ProposalReviewWorkspace } from '@/modules/cat/quotation/components/ProposalReviewWorkspace';
+import { RevisionManagementWorkspace } from '@/modules/cat/quotation/components/RevisionManagementWorkspace';
+import { CustomerDeliveryWorkspace } from '@/modules/cat/quotation/components/CustomerDeliveryWorkspace';
+import { CustomerDecisionWorkspace } from '@/modules/cat/quotation/components/CustomerDecisionWorkspace';
 
 export default function QuotationWorkspacePage() {
   const params = useParams();
@@ -78,6 +81,12 @@ export default function QuotationWorkspacePage() {
 
   const handleCommercialTermsSaved = (commercialTermsStatus: ProposalWorkspaceStatus) => {
     setQuotation((prev) => (prev ? { ...prev, commercialTermsStatus } : prev));
+  };
+
+  const handleProposalPublished = (revisionNumber: number) => {
+    setQuotation((prev) =>
+      prev ? { ...prev, currentRevision: { ...prev.currentRevision, revisionNumber, status: 'DRAFT' } } : prev,
+    );
   };
 
   if (loading) {
@@ -178,7 +187,13 @@ export default function QuotationWorkspacePage() {
       ) : activeWorkspace === 'TERMS_CONDITIONS' ? (
         <CommercialTermsWorkspace quotation={quotation} onSaved={handleCommercialTermsSaved} />
       ) : activeWorkspace === 'PROPOSAL_REVIEW' ? (
-        <ProposalReviewWorkspace quotation={quotation} onEditWorkspace={setActiveWorkspace} />
+        <ProposalReviewWorkspace quotation={quotation} onEditWorkspace={setActiveWorkspace} onPublished={handleProposalPublished} />
+      ) : activeWorkspace === 'REVISIONS' ? (
+        <RevisionManagementWorkspace quotationId={quotation.id} />
+      ) : activeWorkspace === 'CUSTOMER_DELIVERY' ? (
+        <CustomerDeliveryWorkspace quotation={quotation} />
+      ) : activeWorkspace === 'CUSTOMER_DECISION' ? (
+        <CustomerDecisionWorkspace quotation={quotation} />
       ) : (
         (() => {
           const item = PROPOSAL_WORKSPACE_NAV_ITEMS.find((w) => w.key === activeWorkspace);

@@ -12,7 +12,10 @@ export type ProposalWorkspaceKey =
   | 'ASSUMPTIONS_EXCLUSIONS'
   | 'COMMERCIALS'
   | 'TERMS_CONDITIONS'
-  | 'PROPOSAL_REVIEW';
+  | 'PROPOSAL_REVIEW'
+  | 'REVISIONS'
+  | 'CUSTOMER_DELIVERY'
+  | 'CUSTOMER_DECISION';
 
 export interface ProposalWorkspaceNavItem {
   key: ProposalWorkspaceKey;
@@ -84,12 +87,35 @@ export const PROPOSAL_WORKSPACE_NAV_ITEMS: ProposalWorkspaceNavItem[] = [
     implemented: true,
     disabled: false,
   },
+  {
+    key: 'REVISIONS',
+    label: 'Revisions',
+    description: 'View the Working Draft status, published revisions, snapshots, and compare revisions.',
+    implemented: true,
+    disabled: false,
+  },
+  {
+    key: 'CUSTOMER_DELIVERY',
+    label: 'Customer Delivery',
+    description: 'Deliver the current published revision to the customer by Email or PDF Download, and review delivery history.',
+    implemented: true,
+    disabled: false,
+  },
+  {
+    key: 'CUSTOMER_DECISION',
+    label: 'Customer Decision',
+    description: 'Record the customer\'s decision on the current published revision, and review decision history.',
+    implemented: true,
+    disabled: false,
+  },
 ];
 
 // The ordered set of workspaces that participate in sequential "Continue
 // Building" guidance and the Proposal Health Panel's checklist. Proposal
-// Review is intentionally excluded — it is a read-only review dashboard
-// with no Workspace Status of its own, not an authoring workspace.
+// Review, Revisions, Customer Delivery, and Customer Decision are
+// intentionally excluded — none of them are authoring workspaces with a
+// Workspace Status of their own; they're read-only dashboards or
+// post-publish actions.
 export const PROPOSAL_HEALTH_WORKSPACE_KEYS: ProposalWorkspaceKey[] = [
   'EXECUTIVE_SUMMARY',
   'SCOPE_OF_SERVICES',
