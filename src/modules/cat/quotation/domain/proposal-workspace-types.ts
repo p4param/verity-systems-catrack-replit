@@ -11,7 +11,8 @@ export type ProposalWorkspaceKey =
   | 'PROPOSAL_HIGHLIGHTS'
   | 'ASSUMPTIONS_EXCLUSIONS'
   | 'COMMERCIALS'
-  | 'TERMS_CONDITIONS';
+  | 'TERMS_CONDITIONS'
+  | 'PROPOSAL_REVIEW';
 
 export interface ProposalWorkspaceNavItem {
   key: ProposalWorkspaceKey;
@@ -66,31 +67,37 @@ export const PROPOSAL_WORKSPACE_NAV_ITEMS: ProposalWorkspaceNavItem[] = [
     key: 'COMMERCIALS',
     label: 'Commercials',
     description: 'Pricing, packages, and commercial terms for this proposal.',
-    implemented: false,
-    disabled: true,
-    comingIn: 'QM-WP03',
+    implemented: true,
+    disabled: false,
   },
   {
     key: 'TERMS_CONDITIONS',
     label: 'Terms & Conditions',
     description: 'Legal terms, payment schedule, and cancellation policy.',
-    implemented: false,
-    disabled: true,
-    comingIn: 'QM-WP03',
+    implemented: true,
+    disabled: false,
+  },
+  {
+    key: 'PROPOSAL_REVIEW',
+    label: 'Proposal Review',
+    description: 'Final read-only review of the complete proposal before moving to the next stage.',
+    implemented: true,
+    disabled: false,
   },
 ];
 
 // The ordered set of workspaces that participate in sequential "Continue
-// Building" guidance and the Proposal Health Panel's checklist. Commercials
-// and Terms & Conditions are excluded — they are gated to QM-WP03 and always
-// show as "Waiting", never as part of the Not Started / In Progress / Ready
-// sequence.
+// Building" guidance and the Proposal Health Panel's checklist. Proposal
+// Review is intentionally excluded — it is a read-only review dashboard
+// with no Workspace Status of its own, not an authoring workspace.
 export const PROPOSAL_HEALTH_WORKSPACE_KEYS: ProposalWorkspaceKey[] = [
   'EXECUTIVE_SUMMARY',
   'SCOPE_OF_SERVICES',
   'PROPOSAL_NARRATIVE',
   'PROPOSAL_HIGHLIGHTS',
   'ASSUMPTIONS_EXCLUSIONS',
+  'COMMERCIALS',
+  'TERMS_CONDITIONS',
 ];
 
 export const PROPOSAL_WORKSPACE_LABELS: Record<ProposalWorkspaceKey, string> = PROPOSAL_WORKSPACE_NAV_ITEMS.reduce(

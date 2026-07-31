@@ -88,6 +88,22 @@ export interface QuotationAssumptionsExclusions {
   assumptionsExclusionsStatus: ProposalWorkspaceStatus;
 }
 
+// QM-WP03A — Commercial Pricing owns a single workspace status column
+// covering all three of its sections (Charges + Discounts + Adjustments are
+// one workspace, not three). The pricing line lists themselves live in
+// their own dedicated entities/tables, not here.
+export interface QuotationCommercialPricing {
+  commercialPricingStatus: ProposalWorkspaceStatus;
+}
+
+// QM-WP03B — Payment & Commercial Terms owns its own workspace status
+// column, same convention as Proposal Narrative. Only the status rides on
+// the main Quotation detail response; the terms content itself is fetched
+// via the workspace's own dedicated GET endpoint.
+export interface QuotationCommercialTerms {
+  commercialTermsStatus: ProposalWorkspaceStatus;
+}
+
 // QuotationRevision is a foundation-level record only in QM-WP01: Revision 0
 // is created automatically whenever a Quotation is created, and there is
 // exactly one current revision. No revision workflow, comparison, or
@@ -131,7 +147,9 @@ export interface QuotationDetail
     QuotationScopeOfServices,
     QuotationProposalNarrative,
     QuotationProposalHighlights,
-    QuotationAssumptionsExclusions {
+    QuotationAssumptionsExclusions,
+    QuotationCommercialPricing,
+    QuotationCommercialTerms {
   inquiryNumber: string;
   inquiryTitle: string;
   relationshipId: string;

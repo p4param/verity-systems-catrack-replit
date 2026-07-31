@@ -2,6 +2,7 @@
 
 import React from 'react';
 import {
+  ClipboardCheck,
   ClipboardList,
   DollarSign,
   FileText,
@@ -22,6 +23,7 @@ const WORKSPACE_ICONS: Record<ProposalWorkspaceKey, React.ComponentType<{ classN
   ASSUMPTIONS_EXCLUSIONS: ClipboardList,
   COMMERCIALS: DollarSign,
   TERMS_CONDITIONS: FileText,
+  PROPOSAL_REVIEW: ClipboardCheck,
 };
 
 interface ProposalWorkspaceNavigatorProps {

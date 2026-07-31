@@ -11,10 +11,10 @@ import {
 } from '@/modules/cat/quotation/domain/proposal-workspace-types';
 
 interface ProposalHealthPanelProps {
-  // Only implemented workspaces (Executive Summary, Scope of Services) have
-  // a real status. Workspaces not present in this map are still placeholders
-  // and always read as Not Started — health is updated only from each
-  // workspace's own status, never inferred or validated here.
+  // Only implemented workspaces have a real status. Workspaces not present
+  // in this map are still placeholders and always read as Not Started —
+  // health is updated only from each workspace's own status, never
+  // inferred or validated here.
   workspaceStatuses: Partial<Record<ProposalWorkspaceKey, ProposalWorkspaceStatus>>;
 }
 
@@ -43,17 +43,6 @@ export function ProposalHealthPanel({ workspaceStatuses }: ProposalHealthPanelPr
             </div>
           );
         })}
-
-        <div className="pt-1.5 mt-1.5 border-t border-border/30 space-y-1.5">
-          {(['COMMERCIALS', 'TERMS_CONDITIONS'] as ProposalWorkspaceKey[]).map((key) => (
-            <div key={key} className="flex items-center gap-2 text-xs text-muted-foreground/70">
-              <span className="text-[9px] font-bold px-1.5 py-0.2 rounded-full bg-muted text-muted-foreground border border-border/40 uppercase tracking-wider">
-                Waiting
-              </span>
-              <span className="font-medium">{PROPOSAL_WORKSPACE_LABELS[key]}</span>
-            </div>
-          ))}
-        </div>
       </div>
     </div>
   );

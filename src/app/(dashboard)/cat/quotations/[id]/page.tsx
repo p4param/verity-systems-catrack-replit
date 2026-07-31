@@ -20,6 +20,9 @@ import { ScopeOfServicesWorkspace } from '@/modules/cat/quotation/components/Sco
 import { ProposalNarrativeWorkspace } from '@/modules/cat/quotation/components/ProposalNarrativeWorkspace';
 import { ProposalHighlightsWorkspace } from '@/modules/cat/quotation/components/ProposalHighlightsWorkspace';
 import { AssumptionsExclusionsWorkspace } from '@/modules/cat/quotation/components/AssumptionsExclusionsWorkspace';
+import { CommercialPricingWorkspace } from '@/modules/cat/quotation/components/CommercialPricingWorkspace';
+import { CommercialTermsWorkspace } from '@/modules/cat/quotation/components/CommercialTermsWorkspace';
+import { ProposalReviewWorkspace } from '@/modules/cat/quotation/components/ProposalReviewWorkspace';
 
 export default function QuotationWorkspacePage() {
   const params = useParams();
@@ -69,6 +72,14 @@ export default function QuotationWorkspacePage() {
     setQuotation((prev) => (prev ? { ...prev, assumptionsExclusionsStatus } : prev));
   };
 
+  const handleCommercialPricingSaved = (commercialPricingStatus: ProposalWorkspaceStatus) => {
+    setQuotation((prev) => (prev ? { ...prev, commercialPricingStatus } : prev));
+  };
+
+  const handleCommercialTermsSaved = (commercialTermsStatus: ProposalWorkspaceStatus) => {
+    setQuotation((prev) => (prev ? { ...prev, commercialTermsStatus } : prev));
+  };
+
   if (loading) {
     return <div className="p-8 text-center text-xs text-muted-foreground animate-pulse">Loading Quotation Workspace...</div>;
   }
@@ -88,6 +99,8 @@ export default function QuotationWorkspacePage() {
     PROPOSAL_NARRATIVE: quotation.proposalNarrativeStatus,
     PROPOSAL_HIGHLIGHTS: quotation.proposalHighlightsStatus,
     ASSUMPTIONS_EXCLUSIONS: quotation.assumptionsExclusionsStatus,
+    COMMERCIALS: quotation.commercialPricingStatus,
+    TERMS_CONDITIONS: quotation.commercialTermsStatus,
   };
 
   return (
@@ -160,6 +173,12 @@ export default function QuotationWorkspacePage() {
         <ProposalHighlightsWorkspace quotation={quotation} onSaved={handleProposalHighlightsSaved} />
       ) : activeWorkspace === 'ASSUMPTIONS_EXCLUSIONS' ? (
         <AssumptionsExclusionsWorkspace quotation={quotation} onSaved={handleAssumptionsExclusionsSaved} />
+      ) : activeWorkspace === 'COMMERCIALS' ? (
+        <CommercialPricingWorkspace quotation={quotation} onSaved={handleCommercialPricingSaved} />
+      ) : activeWorkspace === 'TERMS_CONDITIONS' ? (
+        <CommercialTermsWorkspace quotation={quotation} onSaved={handleCommercialTermsSaved} />
+      ) : activeWorkspace === 'PROPOSAL_REVIEW' ? (
+        <ProposalReviewWorkspace quotation={quotation} onEditWorkspace={setActiveWorkspace} />
       ) : (
         (() => {
           const item = PROPOSAL_WORKSPACE_NAV_ITEMS.find((w) => w.key === activeWorkspace);
