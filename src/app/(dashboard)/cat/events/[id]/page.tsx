@@ -8,6 +8,7 @@ import { EventSummary, EVENT_STATUS_LABELS } from '@/modules/cat/event/domain/ev
 import { EventWorkspaceKey } from '@/modules/cat/event/domain/event-workspace-types';
 import { EventWorkspaceNavigator } from '@/modules/cat/event/components/EventWorkspaceNavigator';
 import { EventOverviewWorkspace } from '@/modules/cat/event/components/EventOverviewWorkspace';
+import { EventPlanningWorkspace } from '@/modules/cat/event/components/EventPlanningWorkspace';
 
 // EM-WP01 — Event Foundation.
 // The standard Event Workspace, replacing the temporary Event Detail page
@@ -90,7 +91,11 @@ export default function EventWorkspacePage() {
       <EventWorkspaceNavigator activeWorkspace={activeWorkspace} onSelect={setActiveWorkspace} />
 
       {/* Current Workspace */}
-      {activeWorkspace === 'OVERVIEW' && <EventOverviewWorkspace event={event} />}
+      {activeWorkspace === 'OVERVIEW' ? (
+        <EventOverviewWorkspace event={event} />
+      ) : activeWorkspace === 'PLANNING' ? (
+        <EventPlanningWorkspace event={event} />
+      ) : null}
     </div>
   );
 }
