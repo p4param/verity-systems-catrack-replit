@@ -353,7 +353,22 @@ export function ProposalReviewWorkspace({ quotation, onEditWorkspace, onPublishe
               {publishError && <p className="text-xs text-rose-600 font-semibold">{publishError}</p>}
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={publishing}>Cancel</AlertDialogCancel>
-                <AlertDialogAction onClick={handlePublish} disabled={publishing}>
+                <AlertDialogAction
+                  onClick={(e) => {
+                    // AlertDialogAction closes the dialog by default on
+                    // click (documented Radix behavior) — since publishing
+                    // is async and this dialog needs to stay open to show
+                    // the success state afterward, the default close must
+                    // be suppressed here. Bug found while building
+                    // QM-WP04E's structurally identical Convert dialog;
+                    // this exact flow was never live-browser-verified at
+                    // implementation time (see QM-WP04A's own recorded
+                    // verification gap), so it went undetected until now.
+                    e.preventDefault();
+                    handlePublish();
+                  }}
+                  disabled={publishing}
+                >
                   {publishing ? 'Publishing...' : 'Publish Proposal'}
                 </AlertDialogAction>
               </AlertDialogFooter>

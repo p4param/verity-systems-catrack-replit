@@ -71,6 +71,7 @@ export async function POST(req: NextRequest, props: any) {
       REVISIONS: 'NOT_STARTED',
       CUSTOMER_DELIVERY: 'NOT_STARTED',
       CUSTOMER_DECISION: 'NOT_STARTED',
+      EVENT_CONVERSION: 'NOT_STARTED',
     };
 
     const outstandingWorkspaces = PROPOSAL_HEALTH_WORKSPACE_KEYS.filter((key) => statusByKey[key] !== 'READY').map(

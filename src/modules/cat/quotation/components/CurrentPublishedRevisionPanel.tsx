@@ -3,20 +3,41 @@
 import React from 'react';
 import { CheckCircle2, Eye, FileCheck } from 'lucide-react';
 
-import { PublishedRevisionSummary } from '@/modules/cat/quotation/domain/revision-management-types';
+// Only the fields this panel actually renders — deliberately narrower than
+// revision-management-types.ts's full PublishedRevisionSummary (which also
+// carries `id`/`status`, meaningful to the Published Revisions list but
+// not to this panel). QM-WP04E's conversion-eligibility endpoint returns
+// exactly this shape without needing to fabricate the extra fields.
+interface PublishedRevisionInfo {
+  revisionNumber: number;
+  publishedAt: string;
+  publishedBy?: {
+    id: string;
+    fullName: string;
+  };
+}
 
 interface CurrentPublishedRevisionPanelProps {
-  latestPublished: PublishedRevisionSummary | null;
+  latestPublished: PublishedRevisionInfo | null;
   onViewSnapshot: () => void;
   emptyMessage: string;
+  // Optional — QM-WP04E's "Current Proposal" section wants the Quotation
+  // Number shown alongside the revision; QM-WP04B/QM-WP04D don't pass it
+  // and render exactly as before.
+  quotationNumber?: string;
 }
 
 // Shared "Current Published Revision" panel — first introduced in
 // QM-WP04B (Customer Delivery), reused as-is by QM-WP04D (Customer
-// Decision) rather than duplicated. Both workspaces act on the same
-// concept: whatever the latest entry in cat_quotation_publications is for
-// this quotation, never a working draft.
-export function CurrentPublishedRevisionPanel({ latestPublished, onViewSnapshot, emptyMessage }: CurrentPublishedRevisionPanelProps) {
+// Decision) and QM-WP04E (Event Conversion) rather than duplicated. All
+// three workspaces act on the same concept: whatever the latest entry in
+// cat_quotation_publications is for this quotation, never a working draft.
+export function CurrentPublishedRevisionPanel({
+  latestPublished,
+  onViewSnapshot,
+  emptyMessage,
+  quotationNumber,
+}: CurrentPublishedRevisionPanelProps) {
   return (
     <div className="bg-card border border-border/40 rounded-2xl shadow-xs overflow-hidden">
       <div className="p-5 border-b border-border/40 flex items-center gap-2">
@@ -32,6 +53,7 @@ export function CurrentPublishedRevisionPanel({ latestPublished, onViewSnapshot,
               <CheckCircle2 className="w-5 h-5 text-emerald-600 shrink-0" />
               <div>
                 <div className="text-sm font-black text-foreground">Revision {latestPublished.revisionNumber}</div>
+                {quotationNumber && <div className="text-[11px] text-muted-foreground font-mono">{quotationNumber}</div>}
                 <div className="text-[11px] text-muted-foreground">
                   Published {new Date(latestPublished.publishedAt).toLocaleString()}
                   {latestPublished.publishedBy ? ` by ${latestPublished.publishedBy.fullName}` : ''}

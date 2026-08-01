@@ -7,6 +7,7 @@ import { QuotationDetail } from '@/modules/cat/quotation/domain/quotation-types'
 import { PublicationDetail, PublishedRevisionSummary } from '@/modules/cat/quotation/domain/revision-management-types';
 import { ProposalDelivery } from '@/modules/cat/quotation/domain/proposal-delivery-types';
 import {
+  CUSTOMER_DECISION_BADGE_CLASS,
   CUSTOMER_DECISION_LABELS,
   CustomerDecisionRecord,
   CustomerDecisionType,
@@ -18,16 +19,6 @@ import { DeliveryHistoryList } from '@/modules/cat/quotation/components/Delivery
 interface CustomerDecisionWorkspaceProps {
   quotation: QuotationDetail;
 }
-
-const DECISION_BADGE_CLASS: Record<CustomerDecisionType, string> = {
-  PENDING_RESPONSE: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
-  ACCEPTED: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
-  ACCEPTED_WITH_CONDITIONS: 'bg-teal-500/10 text-teal-600 border-teal-500/20',
-  REVISION_REQUESTED: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
-  REJECTED: 'bg-rose-500/10 text-rose-600 border-rose-500/20',
-  EXPIRED: 'bg-muted text-muted-foreground border-border/40',
-  WITHDRAWN: 'bg-muted text-muted-foreground border-border/40',
-};
 
 const DECISION_ORDER: CustomerDecisionType[] = [
   'PENDING_RESPONSE',
@@ -190,7 +181,7 @@ export function CustomerDecisionWorkspace({ quotation }: CustomerDecisionWorkspa
               </div>
               {currentDecision && (
                 <span
-                  className={`inline-flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full border ${DECISION_BADGE_CLASS[currentDecision.decision]}`}
+                  className={`inline-flex items-center text-[10px] font-bold px-2.5 py-1 rounded-full border ${CUSTOMER_DECISION_BADGE_CLASS[currentDecision.decision]}`}
                 >
                   Current: {CUSTOMER_DECISION_LABELS[currentDecision.decision]}
                 </span>
@@ -265,7 +256,7 @@ export function CustomerDecisionWorkspace({ quotation }: CustomerDecisionWorkspa
                   <div className="min-w-0">
                     <div className="flex items-center gap-2 flex-wrap">
                       <span
-                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${DECISION_BADGE_CLASS[d.decision]}`}
+                        className={`text-[10px] font-bold px-2 py-0.5 rounded-full border ${CUSTOMER_DECISION_BADGE_CLASS[d.decision]}`}
                       >
                         {CUSTOMER_DECISION_LABELS[d.decision]}
                       </span>

@@ -63,6 +63,7 @@ export async function GET(req: NextRequest, props: any) {
       REVISIONS: 'NOT_STARTED', // Revisions has no status of its own.
       CUSTOMER_DELIVERY: 'NOT_STARTED', // Customer Delivery has no status of its own.
       CUSTOMER_DECISION: 'NOT_STARTED', // Customer Decision has no status of its own.
+      EVENT_CONVERSION: 'NOT_STARTED', // Event Conversion has no status of its own.
     };
 
     const proposalContent = PROPOSAL_CONTENT_KEYS.map((key) => ({

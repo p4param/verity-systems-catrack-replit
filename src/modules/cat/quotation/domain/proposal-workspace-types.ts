@@ -15,7 +15,8 @@ export type ProposalWorkspaceKey =
   | 'PROPOSAL_REVIEW'
   | 'REVISIONS'
   | 'CUSTOMER_DELIVERY'
-  | 'CUSTOMER_DECISION';
+  | 'CUSTOMER_DECISION'
+  | 'EVENT_CONVERSION';
 
 export interface ProposalWorkspaceNavItem {
   key: ProposalWorkspaceKey;
@@ -108,14 +109,21 @@ export const PROPOSAL_WORKSPACE_NAV_ITEMS: ProposalWorkspaceNavItem[] = [
     implemented: true,
     disabled: false,
   },
+  {
+    key: 'EVENT_CONVERSION',
+    label: 'Event Conversion',
+    description: 'Convert an Accepted, Published proposal into a new operational Event — a one-time Sales to Operations transition.',
+    implemented: true,
+    disabled: false,
+  },
 ];
 
 // The ordered set of workspaces that participate in sequential "Continue
 // Building" guidance and the Proposal Health Panel's checklist. Proposal
-// Review, Revisions, Customer Delivery, and Customer Decision are
-// intentionally excluded — none of them are authoring workspaces with a
-// Workspace Status of their own; they're read-only dashboards or
-// post-publish actions.
+// Review, Revisions, Customer Delivery, Customer Decision, and Event
+// Conversion are intentionally excluded — none of them are authoring
+// workspaces with a Workspace Status of their own; they're read-only
+// dashboards or post-publish/post-decision actions.
 export const PROPOSAL_HEALTH_WORKSPACE_KEYS: ProposalWorkspaceKey[] = [
   'EXECUTIVE_SUMMARY',
   'SCOPE_OF_SERVICES',

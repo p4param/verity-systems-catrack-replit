@@ -25,6 +25,19 @@ export const CUSTOMER_DECISION_LABELS: Record<CustomerDecisionType, string> = {
   WITHDRAWN: 'Withdrawn',
 };
 
+// Shared badge styling — used by CustomerDecisionWorkspace (recording UI)
+// and, from QM-WP04E, EventConversionWorkspace's Customer Decision Summary.
+// Moved here rather than duplicated once a second consumer needed it.
+export const CUSTOMER_DECISION_BADGE_CLASS: Record<CustomerDecisionType, string> = {
+  PENDING_RESPONSE: 'bg-blue-500/10 text-blue-600 border-blue-500/20',
+  ACCEPTED: 'bg-emerald-500/10 text-emerald-600 border-emerald-500/20',
+  ACCEPTED_WITH_CONDITIONS: 'bg-teal-500/10 text-teal-600 border-teal-500/20',
+  REVISION_REQUESTED: 'bg-amber-500/10 text-amber-600 border-amber-500/20',
+  REJECTED: 'bg-rose-500/10 text-rose-600 border-rose-500/20',
+  EXPIRED: 'bg-muted text-muted-foreground border-border/40',
+  WITHDRAWN: 'bg-muted text-muted-foreground border-border/40',
+};
+
 export interface CustomerDecisionRecord {
   id: string;
   revisionNumber: number;

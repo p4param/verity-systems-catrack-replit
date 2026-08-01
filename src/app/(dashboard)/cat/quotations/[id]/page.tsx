@@ -26,6 +26,7 @@ import { ProposalReviewWorkspace } from '@/modules/cat/quotation/components/Prop
 import { RevisionManagementWorkspace } from '@/modules/cat/quotation/components/RevisionManagementWorkspace';
 import { CustomerDeliveryWorkspace } from '@/modules/cat/quotation/components/CustomerDeliveryWorkspace';
 import { CustomerDecisionWorkspace } from '@/modules/cat/quotation/components/CustomerDecisionWorkspace';
+import { EventConversionWorkspace } from '@/modules/cat/quotation/components/EventConversionWorkspace';
 
 export default function QuotationWorkspacePage() {
   const params = useParams();
@@ -163,10 +164,14 @@ export default function QuotationWorkspacePage() {
       {/* Proposal Builder */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
         <div className="lg:col-span-1">
-          <ProposalHealthPanel workspaceStatuses={workspaceStatuses} />
+          <ProposalHealthPanel workspaceStatuses={workspaceStatuses} quotationId={quotation.id} activeWorkspace={activeWorkspace} />
         </div>
         <div className="lg:col-span-2 space-y-3">
-          <ContinueBuildingPanel workspaceStatuses={workspaceStatuses} onOpenWorkspace={setActiveWorkspace} />
+          <ContinueBuildingPanel
+            workspaceStatuses={workspaceStatuses}
+            activeWorkspace={activeWorkspace}
+            onOpenWorkspace={setActiveWorkspace}
+          />
           <ProposalWorkspaceNavigator activeWorkspace={activeWorkspace} onSelect={setActiveWorkspace} />
         </div>
       </div>
@@ -194,6 +199,8 @@ export default function QuotationWorkspacePage() {
         <CustomerDeliveryWorkspace quotation={quotation} />
       ) : activeWorkspace === 'CUSTOMER_DECISION' ? (
         <CustomerDecisionWorkspace quotation={quotation} />
+      ) : activeWorkspace === 'EVENT_CONVERSION' ? (
+        <EventConversionWorkspace quotation={quotation} />
       ) : (
         (() => {
           const item = PROPOSAL_WORKSPACE_NAV_ITEMS.find((w) => w.key === activeWorkspace);

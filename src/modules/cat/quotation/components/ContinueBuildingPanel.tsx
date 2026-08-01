@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ArrowRight } from 'lucide-react';
+import { ArrowRight, CheckCircle2 } from 'lucide-react';
 
 import { ProposalWorkspaceStatus } from '@/modules/cat/quotation/domain/quotation-types';
 import {
@@ -12,20 +12,48 @@ import {
 
 interface ContinueBuildingPanelProps {
   workspaceStatuses: Partial<Record<ProposalWorkspaceKey, ProposalWorkspaceStatus>>;
+  activeWorkspace: ProposalWorkspaceKey;
   onOpenWorkspace: (key: ProposalWorkspaceKey) => void;
 }
 
-// Continue Building follows Workspace Health status only — sequential
-// guidance, not a workflow engine and not an approval gate.
-function nextIncompleteWorkspace(
+// The 4 Proposal Lifecycle workspaces, in the order Continue advances
+// through once every authoring workspace is Ready. They carry no
+// Workspace Status of their own, so — unlike the 7 authoring workspaces —
+// position here is read from which one is currently open, not from a
+// readiness/completion state. Purely navigational, not a workflow engine
+// and not an approval gate, same as the authoring sequence already was.
+const LIFECYCLE_SEQUENCE: ProposalWorkspaceKey[] = ['PROPOSAL_REVIEW', 'REVISIONS', 'CUSTOMER_DELIVERY', 'CUSTOMER_DECISION'];
+
+function nextTarget(
   workspaceStatuses: Partial<Record<ProposalWorkspaceKey, ProposalWorkspaceStatus>>,
-): ProposalWorkspaceKey {
-  const next = PROPOSAL_HEALTH_WORKSPACE_KEYS.find((key) => (workspaceStatuses[key] ?? 'NOT_STARTED') !== 'READY');
-  return next ?? PROPOSAL_HEALTH_WORKSPACE_KEYS[PROPOSAL_HEALTH_WORKSPACE_KEYS.length - 1];
+  activeWorkspace: ProposalWorkspaceKey,
+): ProposalWorkspaceKey | 'COMPLETE' {
+  const nextAuthoring = PROPOSAL_HEALTH_WORKSPACE_KEYS.find((key) => (workspaceStatuses[key] ?? 'NOT_STARTED') !== 'READY');
+  if (nextAuthoring) return nextAuthoring;
+
+  const lifecycleIndex = LIFECYCLE_SEQUENCE.indexOf(activeWorkspace);
+  if (lifecycleIndex === -1) {
+    // All 7 authoring workspaces are Ready, but the user isn't on a
+    // Lifecycle workspace yet — point at the first one, Proposal Review.
+    return LIFECYCLE_SEQUENCE[0];
+  }
+  if (lifecycleIndex === LIFECYCLE_SEQUENCE.length - 1) {
+    return 'COMPLETE';
+  }
+  return LIFECYCLE_SEQUENCE[lifecycleIndex + 1];
 }
 
-export function ContinueBuildingPanel({ workspaceStatuses, onOpenWorkspace }: ContinueBuildingPanelProps) {
-  const target = nextIncompleteWorkspace(workspaceStatuses);
+export function ContinueBuildingPanel({ workspaceStatuses, activeWorkspace, onOpenWorkspace }: ContinueBuildingPanelProps) {
+  const target = nextTarget(workspaceStatuses, activeWorkspace);
+
+  if (target === 'COMPLETE') {
+    return (
+      <div className="flex items-center gap-2 text-xs">
+        <CheckCircle2 className="w-4 h-4 text-emerald-500 shrink-0" />
+        <span className="text-foreground font-bold">Proposal Lifecycle complete — every workspace has been reviewed.</span>
+      </div>
+    );
+  }
 
   return (
     <div className="flex items-center justify-between gap-3 text-xs">
