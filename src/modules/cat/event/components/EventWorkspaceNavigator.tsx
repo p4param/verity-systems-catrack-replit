@@ -1,0 +1,48 @@
+'use client';
+
+import React from 'react';
+import { LayoutDashboard } from 'lucide-react';
+
+import { EVENT_WORKSPACE_NAV_ITEMS, EventWorkspaceKey } from '@/modules/cat/event/domain/event-workspace-types';
+
+const WORKSPACE_ICONS: Record<EventWorkspaceKey, React.ComponentType<{ className?: string }>> = {
+  OVERVIEW: LayoutDashboard,
+};
+
+interface EventWorkspaceNavigatorProps {
+  activeWorkspace: EventWorkspaceKey;
+  onSelect: (key: EventWorkspaceKey) => void;
+}
+
+// Mirrors the visual convention of ProposalWorkspaceNavigator (titled
+// navigator card, pill items) for consistency across the ERP, sized down
+// to the single tab this Work Package establishes.
+export function EventWorkspaceNavigator({ activeWorkspace, onSelect }: EventWorkspaceNavigatorProps) {
+  return (
+    <div className="bg-card border border-border/40 rounded-2xl shadow-xs p-3.5 space-y-2">
+      <div className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider px-0.5">Event Workspaces</div>
+      <div className="flex flex-wrap items-center gap-2">
+        {EVENT_WORKSPACE_NAV_ITEMS.map((item) => {
+          const Icon = WORKSPACE_ICONS[item.key];
+          const isActive = activeWorkspace === item.key;
+          return (
+            <button
+              key={item.key}
+              type="button"
+              onClick={() => onSelect(item.key)}
+              title={item.description}
+              className={`px-4 py-2 rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer whitespace-nowrap ${
+                isActive
+                  ? 'bg-primary text-primary-foreground font-extrabold shadow-sm'
+                  : 'font-bold text-muted-foreground border border-transparent hover:border-border/50 hover:text-foreground hover:bg-muted/40'
+              }`}
+            >
+              <Icon className="w-3.5 h-3.5" />
+              <span>{item.label}</span>
+            </button>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
