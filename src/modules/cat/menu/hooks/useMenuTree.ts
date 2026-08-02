@@ -60,12 +60,20 @@ export function useMenuTree() {
       }),
     );
 
-  // Item-level operations (scoped to one meal's category).
-  const addItem = (mealId: string, categoryId: string) =>
+  // Item-level operations (scoped to one meal's category). addItem accepts
+  // an optional prefill (EM-WP05 — "Choose From Catalog" copies field
+  // values in once, here; the added item is a normal free-text row from
+  // this point on, with no id or link back to the Catalog).
+  const addItem = (mealId: string, categoryId: string, prefill?: Partial<MenuTreeItem>) =>
     setMeals((prev) =>
       prev.map((m) =>
         m.id === mealId
-          ? { ...m, categories: m.categories.map((c) => (c.id === categoryId ? { ...c, items: [...c.items, blankItem()] } : c)) }
+          ? {
+              ...m,
+              categories: m.categories.map((c) =>
+                c.id === categoryId ? { ...c, items: [...c.items, { ...blankItem(), ...prefill }] } : c,
+              ),
+            }
           : m,
       ),
     );

@@ -1,11 +1,27 @@
 'use client';
 
-import React, { useMemo, useState } from 'react';
-import { ChefHat, ChevronDown, ChevronRight, ClipboardCheck, Layers, UtensilsCrossed, Salad } from 'lucide-react';
+import React, { useEffect, useMemo, useState } from 'react';
+import {
+  BookOpen,
+  ChefHat,
+  ChevronDown,
+  ChevronRight,
+  ClipboardCheck,
+  Layers,
+  ListPlus,
+  Search,
+  UtensilsCrossed,
+  Salad,
+} from 'lucide-react';
 
 import { MenuTreeDietaryRequirement, MenuTreeMeal } from '@/modules/cat/menu/domain/menu-tree-types';
 import { UseMenuTreeReturn } from '@/modules/cat/menu/hooks/useMenuTree';
 import { ListSection, inputClass, textareaClass, useListEditor } from '@/modules/cat/event/components/EventListEditing';
+import {
+  MENU_CATALOG_DIETARY_TYPE_LABELS,
+  MenuCatalogItemSummary,
+} from '@/modules/cat/menu-catalog/domain/menu-catalog-types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 function SummaryCard({
   value,
@@ -99,6 +115,72 @@ export function MenuTreeEditor({
       else next.add(categoryId);
       return next;
     });
+
+  // EM-WP05 — Menu Catalog integration. "Add Menu Item" now opens a choice
+  // between the existing free-text workflow (Create One-off Item,
+  // unchanged) and Choose From Catalog, which only copies field values in
+  // once — the added row is a normal free-text item afterward, with no id
+  // or link back to the Catalog.
+  const [addItemTarget, setAddItemTarget] = useState<{ mealId: string; categoryId: string } | null>(null);
+  const [showCatalogPicker, setShowCatalogPicker] = useState(false);
+  const [catalogQuery, setCatalogQuery] = useState('');
+  const [catalogResults, setCatalogResults] = useState<MenuCatalogItemSummary[]>([]);
+  const [catalogLoading, setCatalogLoading] = useState(false);
+
+  const openAddItemChooser = (mealId: string, categoryId: string) => setAddItemTarget({ mealId, categoryId });
+
+  const handleCreateOneOff = () => {
+    if (!addItemTarget) return;
+    tree.addItem(addItemTarget.mealId, addItemTarget.categoryId);
+    setAddItemTarget(null);
+  };
+
+  const openCatalogPicker = () => {
+    setShowCatalogPicker(true);
+    setCatalogQuery('');
+  };
+
+  useEffect(() => {
+    if (!showCatalogPicker) return;
+    const handler = setTimeout(async () => {
+      setCatalogLoading(true);
+      try {
+        const params = new URLSearchParams({ status: 'ACTIVE' });
+        if (catalogQuery) params.set('query', catalogQuery);
+        const res = await fetch(`/api/cat/menu-catalog?${params.toString()}`);
+        const data = await res.json();
+        if (data.success) setCatalogResults(data.items || []);
+      } catch (err) {
+        console.error('Failed to load Menu Catalog for item picker:', err);
+      } finally {
+        setCatalogLoading(false);
+      }
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [showCatalogPicker, catalogQuery]);
+
+  const handleSelectCatalogItem = async (catalogItem: MenuCatalogItemSummary) => {
+    if (!addItemTarget) return;
+    const target = addItemTarget;
+    // The Directory list only carries Name/Category/Cuisine/Diet/Status;
+    // fetch the full record once, at selection time, for Unit/Remarks —
+    // still a one-time copy, never a stored reference.
+    let unit: string | undefined;
+    let remarks: string | undefined;
+    try {
+      const res = await fetch(`/api/cat/menu-catalog/${catalogItem.id}`);
+      const data = await res.json();
+      if (data.success) {
+        unit = data.item.defaultUnit;
+        remarks = data.item.servingNotes || data.item.description;
+      }
+    } catch (err) {
+      console.error('Failed to load Menu Catalog item detail for prefill:', err);
+    }
+    tree.addItem(target.mealId, target.categoryId, { itemName: catalogItem.name, unit, remarks });
+    setShowCatalogPicker(false);
+    setAddItemTarget(null);
+  };
 
   const summary = useMemo(() => {
     const totalCategories = meals.reduce((sum, m) => sum + m.categories.length, 0);
@@ -206,7 +288,7 @@ export function MenuTreeEditor({
                                 emptyLabel="No Menu Items yet."
                                 items={category.items}
                                 loading={false}
-                                onAdd={() => tree.addItem(meal.id, category.id)}
+                                onAdd={() => openAddItemChooser(meal.id, category.id)}
                                 onDelete={(itemId) => tree.deleteItem(meal.id, category.id, itemId)}
                                 onMove={(index, direction) => tree.moveItem(meal.id, category.id, index, direction)}
                                 renderRow={(item) => (
@@ -313,6 +395,87 @@ export function MenuTreeEditor({
         {/* Workspace Action Bar */}
         <div className="p-4 border-t border-border/40 bg-muted/10 flex items-center justify-between gap-3 flex-wrap">{actionBar}</div>
       </div>
+
+      {/* Add Menu Item chooser — Choose From Catalog vs. the existing free-text workflow. */}
+      <Dialog open={!!addItemTarget && !showCatalogPicker} onOpenChange={(open) => !open && setAddItemTarget(null)}>
+        <DialogContent className="max-w-sm">
+          <DialogHeader>
+            <DialogTitle>Add Menu Item</DialogTitle>
+            <DialogDescription>Choose an item from the Menu Catalog, or create a one-off item for this menu only.</DialogDescription>
+          </DialogHeader>
+          <div className="space-y-2">
+            <button
+              type="button"
+              onClick={openCatalogPicker}
+              className="w-full flex items-center gap-2.5 px-4 py-3 bg-primary/5 hover:bg-primary/10 border border-primary/20 rounded-xl text-left cursor-pointer transition"
+            >
+              <BookOpen className="w-4 h-4 text-primary shrink-0" />
+              <div>
+                <div className="text-xs font-bold text-foreground">Choose From Catalog</div>
+                <div className="text-[11px] text-muted-foreground">Copies Name, Unit, and Remarks in — fully editable afterward.</div>
+              </div>
+            </button>
+            <button
+              type="button"
+              onClick={handleCreateOneOff}
+              className="w-full flex items-center gap-2.5 px-4 py-3 bg-muted/40 hover:bg-muted/60 border border-border/40 rounded-xl text-left cursor-pointer transition"
+            >
+              <ListPlus className="w-4 h-4 text-muted-foreground shrink-0" />
+              <div>
+                <div className="text-xs font-bold text-foreground">Create One-off Item</div>
+                <div className="text-[11px] text-muted-foreground">The existing free-text entry — not saved to the Catalog.</div>
+              </div>
+            </button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Choose From Catalog picker. */}
+      <Dialog open={showCatalogPicker} onOpenChange={setShowCatalogPicker}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Choose From Catalog</DialogTitle>
+            <DialogDescription>Only Active Catalog items are shown.</DialogDescription>
+          </DialogHeader>
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              autoFocus
+              value={catalogQuery}
+              onChange={(e) => setCatalogQuery(e.target.value)}
+              placeholder="Search name, category or cuisine..."
+              className="w-full bg-muted/30 border border-border/50 rounded-lg pl-8 pr-3 py-1.5 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-primary"
+            />
+          </div>
+          <div className="space-y-1.5 max-h-80 overflow-y-auto">
+            {catalogLoading ? (
+              <p className="text-xs text-muted-foreground animate-pulse py-4 text-center">Loading...</p>
+            ) : catalogResults.length === 0 ? (
+              <p className="text-xs text-muted-foreground py-4 text-center">No matching Catalog items.</p>
+            ) : (
+              catalogResults.map((item) => (
+                <button
+                  key={item.id}
+                  type="button"
+                  onClick={() => handleSelectCatalogItem(item)}
+                  className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg hover:bg-muted/40 text-left cursor-pointer transition"
+                >
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-foreground truncate">{item.name}</div>
+                    <div className="text-[10px] text-muted-foreground truncate">
+                      {[item.category, item.cuisine].filter(Boolean).join(' · ') || '—'}
+                    </div>
+                  </div>
+                  <span className="text-[9px] font-bold px-2 py-0.5 rounded-full border bg-muted/40 text-muted-foreground shrink-0">
+                    {MENU_CATALOG_DIETARY_TYPE_LABELS[item.dietaryType]}
+                  </span>
+                </button>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
