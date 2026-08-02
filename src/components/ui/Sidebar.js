@@ -49,7 +49,8 @@ import {
     MessageSquare,
     UserCog,
     BookOpen,
-    Utensils
+    Utensils,
+    Carrot
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -99,7 +100,8 @@ const LucideIcons = {
     MessageSquare,
     UserCog,
     BookOpen,
-    Utensils
+    Utensils,
+    Carrot
 };
 
 const isHrefActive = (href, pathname, allNavHrefs) => {
