@@ -1,101 +1,56 @@
 'use client';
 
-import React, { useEffect, useMemo, useState } from 'react';
-import {
-  ChefHat,
-  ChevronDown,
-  ChevronRight,
-  ClipboardCheck,
-  Layers,
-  ListChecks,
-  Salad,
-  Users,
-  UtensilsCrossed,
-} from 'lucide-react';
+import React, { useEffect, useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { ArrowRightLeft, BookOpen, Copy, ListChecks, Users } from 'lucide-react';
 
 import { EventSummary } from '@/modules/cat/event/domain/event-types';
+import { MenuTreeDietaryRequirement } from '@/modules/cat/menu/domain/menu-tree-types';
+import { useMenuTree } from '@/modules/cat/menu/hooks/useMenuTree';
+import { MenuTreeEditor } from '@/modules/cat/menu/components/MenuTreeEditor';
+import { useListEditor } from '@/modules/cat/event/components/EventListEditing';
 import {
-  EventDietaryRequirement,
-  EventMeal,
-  EventMenuCategory,
-  EventMenuItem,
-} from '@/modules/cat/event/domain/event-menu-types';
-import { ListSection, inputClass, textareaClass, useListEditor } from '@/modules/cat/event/components/EventListEditing';
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from '@/components/ui/alert-dialog';
 
 interface EventMenuPlanningWorkspaceProps {
   event: EventSummary;
 }
 
-function blankMeal(): EventMeal {
-  return { id: crypto.randomUUID(), mealName: '', displayOrder: 0, categories: [] };
-}
-function blankCategory(): EventMenuCategory {
-  return { id: crypto.randomUUID(), categoryName: '', displayOrder: 0, items: [] };
-}
-function blankItem(): EventMenuItem {
-  return { id: crypto.randomUUID(), itemName: '', quantity: undefined, unit: '', remarks: '', displayOrder: 0 };
+interface MenuTemplateOption {
+  id: string;
+  templateName: string;
 }
 
-function SummaryCard({
-  value,
-  label,
-  icon: Icon,
-  accentClass,
-}: {
-  value: React.ReactNode;
-  label: string;
-  icon: React.ComponentType<{ className?: string }>;
-  accentClass: string;
-}) {
-  return (
-    <div className="bg-card py-3 px-4 rounded-xl border border-border/40 shadow-2xs flex items-center justify-between">
-      <div>
-        <div className="text-2xl font-black text-foreground tracking-tight">{value}</div>
-        <div className="text-[10px] font-medium text-muted-foreground/80 tracking-tight">{label}</div>
-      </div>
-      <div className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${accentClass}`}>
-        <Icon className="w-4 h-4" />
-      </div>
-    </div>
-  );
+interface EventOption {
+  id: string;
+  eventNumber: string;
+  eventName: string;
 }
 
-function ServiceInstructionsSummaryCard({ present }: { present: boolean }) {
-  return (
-    <div className="bg-card py-3 px-4 rounded-xl border border-border/40 shadow-2xs flex items-center justify-between">
-      <div>
-        <div
-          className={`text-base font-black tracking-tight ${present ? 'text-emerald-600 dark:text-emerald-400' : 'text-muted-foreground'}`}
-        >
-          {present ? 'Present' : 'None'}
-        </div>
-        <div className="text-[10px] font-medium text-muted-foreground/80 tracking-tight">Service Instructions</div>
-      </div>
-      <div
-        className={`w-8 h-8 rounded-lg flex items-center justify-center shrink-0 ${
-          present ? 'bg-emerald-500/10 text-emerald-600' : 'bg-muted text-muted-foreground/60'
-        }`}
-      >
-        <ClipboardCheck className="w-4 h-4" />
-      </div>
-    </div>
-  );
-}
-
-// EM-WP03 — Menu Planning Workspace.
+// EM-WP03 — Menu Planning Workspace, extended by EM-WP04 — Menu Templates.
 // Defines WHAT will be served: Event -> Meals -> Categories -> Menu Items,
-// plus Dietary Requirements and Service Instructions. No recipe linkage,
-// procurement, production, or costing. Editable only — no revisioning, one
-// Save action PUTs the full current tree back in a single call. Reuses the
-// ListSection/useListEditor pattern established by EM-WP02.
+// plus Dietary Requirements and Service Instructions. Save Menu persists
+// in-place edits. Save as Template / Apply Template / Copy From Event are
+// snapshot-copy operations (new rows, new ids, no live link either
+// direction) — see src/lib/cat/menu-snapshot.ts — each requiring explicit
+// confirmation since Apply/Copy fully replace the current Event menu.
 export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspaceProps) {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [savedAt, setSavedAt] = useState<string | null>(null);
 
-  const [meals, setMeals] = useState<EventMeal[]>([]);
-  const dietary = useListEditor<EventDietaryRequirement>(() => ({
+  const tree = useMenuTree();
+  const dietary = useListEditor<MenuTreeDietaryRequirement>(() => ({
     id: crypto.randomUUID(),
     requirement: '',
     guestCount: undefined,
@@ -104,135 +59,49 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
   }));
   const [serviceInstructions, setServiceInstructions] = useState('');
 
-  // Category collapse state — UI-only, not persisted. Categories default
-  // expanded (a category id is only ever added here on explicit collapse).
-  const [collapsedCategoryIds, setCollapsedCategoryIds] = useState<Set<string>>(new Set());
-  const toggleCategoryCollapsed = (categoryId: string) =>
-    setCollapsedCategoryIds((prev) => {
-      const next = new Set(prev);
-      if (next.has(categoryId)) next.delete(categoryId);
-      else next.add(categoryId);
-      return next;
-    });
+  // Save as Template dialog state.
+  const [showSaveAsTemplate, setShowSaveAsTemplate] = useState(false);
+  const [newTemplateName, setNewTemplateName] = useState('');
+  const [newTemplateDescription, setNewTemplateDescription] = useState('');
+  const [savingTemplate, setSavingTemplate] = useState(false);
+  const [saveTemplateError, setSaveTemplateError] = useState('');
+  const [savedTemplate, setSavedTemplate] = useState<{ id: string; templateName: string } | null>(null);
+
+  // Apply Template dialog state.
+  const [showApplyTemplate, setShowApplyTemplate] = useState(false);
+  const [templateOptions, setTemplateOptions] = useState<MenuTemplateOption[]>([]);
+  const [selectedTemplateId, setSelectedTemplateId] = useState('');
+  const [applyingTemplate, setApplyingTemplate] = useState(false);
+  const [applyTemplateError, setApplyTemplateError] = useState('');
+
+  // Copy From Event dialog state.
+  const [showCopyFromEvent, setShowCopyFromEvent] = useState(false);
+  const [eventOptions, setEventOptions] = useState<EventOption[]>([]);
+  const [selectedSourceEventId, setSelectedSourceEventId] = useState('');
+  const [copyingFromEvent, setCopyingFromEvent] = useState(false);
+  const [copyFromEventError, setCopyFromEventError] = useState('');
+
+  const loadMenu = async () => {
+    setLoading(true);
+    try {
+      const res = await fetch(`/api/cat/events/${event.id}/menu`);
+      const data = await res.json();
+      if (data.success) {
+        tree.setMeals(data.meals || []);
+        dietary.setItems(data.dietaryRequirements || []);
+        setServiceInstructions(data.serviceInstructions || '');
+      }
+    } catch (err) {
+      console.error('Failed to load Event Menu:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const load = async () => {
-      setLoading(true);
-      try {
-        const res = await fetch(`/api/cat/events/${event.id}/menu`);
-        const data = await res.json();
-        if (data.success) {
-          setMeals(data.meals || []);
-          dietary.setItems(data.dietaryRequirements || []);
-          setServiceInstructions(data.serviceInstructions || '');
-        }
-      } catch (err) {
-        console.error('Failed to load Event Menu:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
+    loadMenu();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [event.id]);
-
-  // Meal-level operations.
-  const addMeal = () => setMeals((prev) => [...prev, blankMeal()]);
-  const updateMeal = (mealId: string, patch: Partial<EventMeal>) =>
-    setMeals((prev) => prev.map((m) => (m.id === mealId ? { ...m, ...patch } : m)));
-  const deleteMeal = (mealId: string) => setMeals((prev) => prev.filter((m) => m.id !== mealId));
-  const moveMeal = (index: number, direction: -1 | 1) =>
-    setMeals((prev) => {
-      const target = index + direction;
-      if (target < 0 || target >= prev.length) return prev;
-      const next = [...prev];
-      [next[index], next[target]] = [next[target], next[index]];
-      return next;
-    });
-
-  // Category-level operations (scoped to one meal).
-  const addCategory = (mealId: string) =>
-    setMeals((prev) => prev.map((m) => (m.id === mealId ? { ...m, categories: [...m.categories, blankCategory()] } : m)));
-  const updateCategory = (mealId: string, categoryId: string, patch: Partial<EventMenuCategory>) =>
-    setMeals((prev) =>
-      prev.map((m) =>
-        m.id === mealId ? { ...m, categories: m.categories.map((c) => (c.id === categoryId ? { ...c, ...patch } : c)) } : m,
-      ),
-    );
-  const deleteCategory = (mealId: string, categoryId: string) =>
-    setMeals((prev) => prev.map((m) => (m.id === mealId ? { ...m, categories: m.categories.filter((c) => c.id !== categoryId) } : m)));
-  const moveCategory = (mealId: string, index: number, direction: -1 | 1) =>
-    setMeals((prev) =>
-      prev.map((m) => {
-        if (m.id !== mealId) return m;
-        const target = index + direction;
-        if (target < 0 || target >= m.categories.length) return m;
-        const next = [...m.categories];
-        [next[index], next[target]] = [next[target], next[index]];
-        return { ...m, categories: next };
-      }),
-    );
-
-  // Item-level operations (scoped to one meal's category).
-  const addItem = (mealId: string, categoryId: string) =>
-    setMeals((prev) =>
-      prev.map((m) =>
-        m.id === mealId
-          ? { ...m, categories: m.categories.map((c) => (c.id === categoryId ? { ...c, items: [...c.items, blankItem()] } : c)) }
-          : m,
-      ),
-    );
-  const updateItem = (mealId: string, categoryId: string, itemId: string, patch: Partial<EventMenuItem>) =>
-    setMeals((prev) =>
-      prev.map((m) =>
-        m.id === mealId
-          ? {
-              ...m,
-              categories: m.categories.map((c) =>
-                c.id === categoryId ? { ...c, items: c.items.map((i) => (i.id === itemId ? { ...i, ...patch } : i)) } : c,
-              ),
-            }
-          : m,
-      ),
-    );
-  const deleteItem = (mealId: string, categoryId: string, itemId: string) =>
-    setMeals((prev) =>
-      prev.map((m) =>
-        m.id === mealId
-          ? { ...m, categories: m.categories.map((c) => (c.id === categoryId ? { ...c, items: c.items.filter((i) => i.id !== itemId) } : c)) }
-          : m,
-      ),
-    );
-  const moveItem = (mealId: string, categoryId: string, index: number, direction: -1 | 1) =>
-    setMeals((prev) =>
-      prev.map((m) => {
-        if (m.id !== mealId) return m;
-        return {
-          ...m,
-          categories: m.categories.map((c) => {
-            if (c.id !== categoryId) return c;
-            const target = index + direction;
-            if (target < 0 || target >= c.items.length) return c;
-            const next = [...c.items];
-            [next[index], next[target]] = [next[target], next[index]];
-            return { ...c, items: next };
-          }),
-        };
-      }),
-    );
-
-  // Menu Summary — updates immediately, purely derived from local state.
-  const summary = useMemo(() => {
-    const totalCategories = meals.reduce((sum, m) => sum + m.categories.length, 0);
-    const totalItems = meals.reduce((sum, m) => sum + m.categories.reduce((s, c) => s + c.items.length, 0), 0);
-    return {
-      totalMeals: meals.length,
-      totalCategories,
-      totalItems,
-      dietaryCount: dietary.items.length,
-      instructionsPresent: serviceInstructions.trim().length > 0,
-    };
-  }, [meals, dietary.items, serviceInstructions]);
 
   const handleSave = async () => {
     setSaving(true);
@@ -243,7 +112,7 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          meals: meals.map((m) => ({
+          meals: tree.meals.map((m) => ({
             id: m.id,
             mealName: m.mealName,
             categories: m.categories.map((c) => ({
@@ -258,7 +127,7 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
       });
       const data = await res.json();
       if (data.success) {
-        setMeals(data.meals || []);
+        tree.setMeals(data.meals || []);
         dietary.setItems(data.dietaryRequirements || []);
         setServiceInstructions(data.serviceInstructions || '');
         setSavedAt(new Date().toLocaleTimeString());
@@ -272,228 +141,345 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
     }
   };
 
+  const openSaveAsTemplate = () => {
+    setNewTemplateName('');
+    setNewTemplateDescription('');
+    setSaveTemplateError('');
+    setSavedTemplate(null);
+    setShowSaveAsTemplate(true);
+  };
+
+  const handleSaveAsTemplate = async (e: React.MouseEvent) => {
+    e.preventDefault(); // keep the dialog open through the async call — AlertDialogAction closes on click by default.
+    if (!newTemplateName.trim()) {
+      setSaveTemplateError('Template Name is required.');
+      return;
+    }
+    setSavingTemplate(true);
+    setSaveTemplateError('');
+    try {
+      const res = await fetch(`/api/cat/events/${event.id}/menu/save-as-template`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateName: newTemplateName, description: newTemplateDescription || undefined }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        setSavedTemplate(data.template);
+      } else {
+        setSaveTemplateError(data.error || 'Failed to save Event as Template.');
+      }
+    } catch (err: any) {
+      setSaveTemplateError(err.message || 'Failed to save Event as Template.');
+    } finally {
+      setSavingTemplate(false);
+    }
+  };
+
+  const openApplyTemplate = async () => {
+    setSelectedTemplateId('');
+    setApplyTemplateError('');
+    setShowApplyTemplate(true);
+    try {
+      const res = await fetch('/api/cat/menu-templates');
+      const data = await res.json();
+      if (data.success) setTemplateOptions((data.items || []).map((t: any) => ({ id: t.id, templateName: t.templateName })));
+    } catch (err) {
+      console.error('Failed to load Menu Templates for Apply Template:', err);
+    }
+  };
+
+  const handleApplyTemplate = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!selectedTemplateId) {
+      setApplyTemplateError('Choose a Template to apply.');
+      return;
+    }
+    setApplyingTemplate(true);
+    setApplyTemplateError('');
+    try {
+      const res = await fetch(`/api/cat/events/${event.id}/menu/apply-template`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ templateId: selectedTemplateId }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        tree.setMeals(data.meals || []);
+        dietary.setItems(data.dietaryRequirements || []);
+        setServiceInstructions(data.serviceInstructions || '');
+        setSavedAt(new Date().toLocaleTimeString());
+        setShowApplyTemplate(false);
+      } else {
+        setApplyTemplateError(data.error || 'Failed to apply Menu Template.');
+      }
+    } catch (err: any) {
+      setApplyTemplateError(err.message || 'Failed to apply Menu Template.');
+    } finally {
+      setApplyingTemplate(false);
+    }
+  };
+
+  const openCopyFromEvent = async () => {
+    setSelectedSourceEventId('');
+    setCopyFromEventError('');
+    setShowCopyFromEvent(true);
+    try {
+      const res = await fetch('/api/cat/events');
+      const data = await res.json();
+      if (data.success) {
+        setEventOptions(
+          (data.items || [])
+            .filter((e: any) => e.id !== event.id)
+            .map((e: any) => ({ id: e.id, eventNumber: e.eventNumber, eventName: e.eventName })),
+        );
+      }
+    } catch (err) {
+      console.error('Failed to load Events for Copy From Event:', err);
+    }
+  };
+
+  const handleCopyFromEvent = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (!selectedSourceEventId) {
+      setCopyFromEventError('Choose a source Event to copy from.');
+      return;
+    }
+    setCopyingFromEvent(true);
+    setCopyFromEventError('');
+    try {
+      const res = await fetch(`/api/cat/events/${event.id}/menu/copy-from-event`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sourceEventId: selectedSourceEventId }),
+      });
+      const data = await res.json();
+      if (data.success) {
+        tree.setMeals(data.meals || []);
+        dietary.setItems(data.dietaryRequirements || []);
+        setServiceInstructions(data.serviceInstructions || '');
+        setSavedAt(new Date().toLocaleTimeString());
+        setShowCopyFromEvent(false);
+      } else {
+        setCopyFromEventError(data.error || 'Failed to copy menu from Event.');
+      }
+    } catch (err: any) {
+      setCopyFromEventError(err.message || 'Failed to copy menu from Event.');
+    } finally {
+      setCopyingFromEvent(false);
+    }
+  };
+
   return (
-    <div className="space-y-4">
-      {/* Menu Summary — operational at-a-glance view, updates immediately as the menu is edited. */}
-      <div className="space-y-2">
-        <div className="text-[10px] font-extrabold text-muted-foreground uppercase tracking-wider px-0.5">Menu Summary</div>
-        <div className="grid grid-cols-2 sm:grid-cols-5 gap-3">
-          <SummaryCard value={summary.totalMeals} label="Total Meals" icon={UtensilsCrossed} accentClass="bg-indigo-500/10 text-indigo-600" />
-          <SummaryCard value={summary.totalCategories} label="Total Categories" icon={Layers} accentClass="bg-blue-500/10 text-blue-600" />
-          <SummaryCard value={summary.totalItems} label="Total Menu Items" icon={ChefHat} accentClass="bg-primary/10 text-primary" />
-          <SummaryCard value={summary.dietaryCount} label="Dietary Requirements" icon={Salad} accentClass="bg-amber-500/10 text-amber-600" />
-          <ServiceInstructionsSummaryCard present={summary.instructionsPresent} />
-        </div>
-      </div>
-
-      <div className="bg-card border border-border/40 rounded-2xl shadow-xs overflow-hidden">
-        <div className="p-5 border-b border-border/40 flex items-center gap-2">
-          <ListChecks className="w-4 h-4 text-primary" />
-          <h3 className="text-sm font-extrabold text-foreground">Menu Planning</h3>
-        </div>
-
-        <div className="p-5 space-y-8">
-          {/* Meals -> Categories -> Menu Items */}
-          <ListSection
-            title="Meals"
-            helperText="e.g. Lunch, Dinner, Hi-Tea — each Meal groups its own Categories."
-            addLabel="Add Meal"
-            emptyLabel="No Meals yet."
-            items={meals}
-            loading={loading}
-            onAdd={addMeal}
-            onDelete={deleteMeal}
-            onMove={moveMeal}
-            renderRow={(meal) => (
-              <div className="space-y-3">
-                {/* Meal card header — Meal Name + Guest Count (the Event's own
-                    guest count; Menu Planning has no per-meal scheduling
-                    concept, that belongs to Event Planning's Timeline). */}
-                <div className="flex items-center justify-between gap-3 bg-primary/5 border border-primary/10 rounded-lg px-3 py-2">
-                  <div className="flex items-center gap-2 flex-1 min-w-0">
-                    <UtensilsCrossed className="w-4 h-4 text-primary shrink-0" />
-                    <input
-                      type="text"
-                      value={meal.mealName}
-                      onChange={(e) => updateMeal(meal.id, { mealName: e.target.value })}
-                      placeholder="Meal name (e.g. Lunch, Dinner, Hi-Tea)"
-                      className="flex-1 min-w-0 bg-transparent border-none text-sm font-extrabold text-foreground focus:outline-hidden focus:ring-1 focus:ring-primary rounded px-1 py-0.5"
-                    />
-                  </div>
-                  <div className="inline-flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground shrink-0 bg-card px-2.5 py-1 rounded-full border border-border/40">
-                    <Users className="w-3 h-3" />
-                    <span>{event.guestCount != null ? `${event.guestCount} guests` : 'Guest count not set'}</span>
-                  </div>
-                </div>
-
-                <div className="pl-3 border-l-2 border-border/30">
-                  <ListSection
-                    title="Categories"
-                    helperText="e.g. Starters, Main Course, Desserts."
-                    addLabel="Add Category"
-                    emptyLabel="No Categories yet."
-                    items={meal.categories}
-                    loading={false}
-                    onAdd={() => addCategory(meal.id)}
-                    onDelete={(categoryId) => deleteCategory(meal.id, categoryId)}
-                    onMove={(index, direction) => moveCategory(meal.id, index, direction)}
-                    renderRow={(category) => {
-                      const isCollapsed = collapsedCategoryIds.has(category.id);
-                      return (
-                        <div className="space-y-3">
-                          <div className="flex items-center gap-1.5">
-                            <button
-                              type="button"
-                              onClick={() => toggleCategoryCollapsed(category.id)}
-                              title={isCollapsed ? 'Expand Category' : 'Collapse Category'}
-                              className="shrink-0 p-0.5 rounded text-muted-foreground/60 hover:text-foreground cursor-pointer transition"
-                            >
-                              {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                            </button>
-                            <input
-                              type="text"
-                              value={category.categoryName}
-                              onChange={(e) => updateCategory(meal.id, category.id, { categoryName: e.target.value })}
-                              placeholder="Category name (e.g. Starters)"
-                              className={`${inputClass} font-semibold flex-1`}
-                            />
-                            <span className="text-[10px] font-semibold text-muted-foreground/70 shrink-0 pr-1">
-                              {category.items.length} item{category.items.length === 1 ? '' : 's'}
-                            </span>
-                          </div>
-
-                          {!isCollapsed && (
-                            <div className="pl-3 border-l-2 border-border/20">
-                              <ListSection
-                                title="Menu Items"
-                                helperText="No recipe linkage — name, quantity, unit, and remarks only."
-                                addLabel="Add Menu Item"
-                                emptyLabel="No Menu Items yet."
-                                items={category.items}
-                                loading={false}
-                                onAdd={() => addItem(meal.id, category.id)}
-                                onDelete={(itemId) => deleteItem(meal.id, category.id, itemId)}
-                                onMove={(index, direction) => moveItem(meal.id, category.id, index, direction)}
-                                renderRow={(item) => (
-                                  <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                                    <input
-                                      type="text"
-                                      value={item.itemName}
-                                      onChange={(e) => updateItem(meal.id, category.id, item.id, { itemName: e.target.value })}
-                                      placeholder="Name"
-                                      className={`${inputClass} sm:col-span-2`}
-                                    />
-                                    <input
-                                      type="number"
-                                      value={item.quantity ?? ''}
-                                      onChange={(e) =>
-                                        updateItem(meal.id, category.id, item.id, {
-                                          quantity: e.target.value === '' ? undefined : Number(e.target.value),
-                                        })
-                                      }
-                                      placeholder="Quantity"
-                                      className={inputClass}
-                                    />
-                                    <input
-                                      type="text"
-                                      value={item.unit || ''}
-                                      onChange={(e) => updateItem(meal.id, category.id, item.id, { unit: e.target.value })}
-                                      placeholder="Unit"
-                                      className={inputClass}
-                                    />
-                                    <textarea
-                                      rows={1}
-                                      value={item.remarks || ''}
-                                      onChange={(e) => updateItem(meal.id, category.id, item.id, { remarks: e.target.value })}
-                                      placeholder="Remarks"
-                                      className={`${textareaClass} sm:col-span-4`}
-                                    />
-                                  </div>
-                                )}
-                              />
-                            </div>
-                          )}
-                        </div>
-                      );
-                    }}
-                  />
-                </div>
-              </div>
-            )}
-          />
-
-          {/* Dietary Requirements */}
-          <ListSection
-            title="Dietary Requirements"
-            helperText="Requirement, guest count, and notes."
-            addLabel="Add Dietary Requirement"
-            emptyLabel="No Dietary Requirements yet."
-            items={dietary.items}
-            loading={loading}
-            onAdd={dietary.add}
-            onDelete={dietary.remove}
-            onMove={dietary.move}
-            renderRow={(item) => (
-              <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                <input
-                  type="text"
-                  value={item.requirement}
-                  onChange={(e) => dietary.update(item.id, { requirement: e.target.value })}
-                  placeholder="Requirement (e.g. Vegan)"
-                  className={`${inputClass} sm:col-span-2`}
-                />
-                <input
-                  type="number"
-                  value={item.guestCount ?? ''}
-                  onChange={(e) => dietary.update(item.id, { guestCount: e.target.value === '' ? undefined : Number(e.target.value) })}
-                  placeholder="Count"
-                  className={inputClass}
-                />
-                <input
-                  type="text"
-                  value={item.notes || ''}
-                  onChange={(e) => dietary.update(item.id, { notes: e.target.value })}
-                  placeholder="Notes"
-                  className={inputClass}
-                />
-              </div>
-            )}
-          />
-
-          {/* Service Instructions */}
-          <div className="space-y-2">
-            <div className="text-[10px] font-bold text-muted-foreground uppercase tracking-wider">Service Instructions</div>
-            <textarea
-              rows={4}
-              value={serviceInstructions}
-              onChange={(e) => setServiceInstructions(e.target.value)}
-              placeholder="Free-form operational notes for how the menu should be served."
-              className={textareaClass}
-            />
+    <>
+      <MenuTreeEditor
+        loading={loading}
+        tree={tree}
+        dietary={dietary}
+        serviceInstructions={serviceInstructions}
+        onServiceInstructionsChange={setServiceInstructions}
+        title="Menu Planning"
+        titleIcon={ListChecks}
+        error={error}
+        mealBadge={(meal) => (
+          <div className="inline-flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground shrink-0 bg-card px-2.5 py-1 rounded-full border border-border/40">
+            <Users className="w-3 h-3" />
+            <span>{event.guestCount != null ? `${event.guestCount} guests` : 'Guest count not set'}</span>
           </div>
+        )}
+        actionBar={
+          <>
+            <p className="text-[11px] text-muted-foreground max-w-sm">
+              {savedAt ? (
+                <span className="font-semibold text-emerald-600">Saved at {savedAt}.</span>
+              ) : (
+                'Internal only — no revisioning, no workflow, no publish.'
+              )}
+            </p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <button
+                type="button"
+                onClick={openCopyFromEvent}
+                disabled={loading}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted/60 text-foreground font-bold text-xs rounded-lg cursor-pointer disabled:opacity-50 hover:bg-muted transition"
+              >
+                <Copy className="w-3.5 h-3.5" />
+                Copy From Event
+              </button>
+              <button
+                type="button"
+                onClick={openApplyTemplate}
+                disabled={loading}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted/60 text-foreground font-bold text-xs rounded-lg cursor-pointer disabled:opacity-50 hover:bg-muted transition"
+              >
+                <ArrowRightLeft className="w-3.5 h-3.5" />
+                Apply Template
+              </button>
+              <button
+                type="button"
+                onClick={openSaveAsTemplate}
+                disabled={loading}
+                className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-muted/60 text-foreground font-bold text-xs rounded-lg cursor-pointer disabled:opacity-50 hover:bg-muted transition"
+              >
+                <BookOpen className="w-3.5 h-3.5" />
+                Save as Template
+              </button>
+              <button
+                type="button"
+                onClick={handleSave}
+                disabled={saving || loading}
+                className="px-4 py-2 bg-primary text-primary-foreground font-bold text-xs rounded-lg cursor-pointer disabled:opacity-50 hover:opacity-90 transition"
+              >
+                {saving ? 'Saving...' : 'Save Menu'}
+              </button>
+            </div>
+          </>
+        }
+      />
 
-          {error && <p className="text-xs text-rose-600 font-semibold">{error}</p>}
-        </div>
-
-        {/* Workspace Action Bar */}
-        <div className="p-4 border-t border-border/40 bg-muted/10 flex items-center justify-between gap-3">
-          <p className="text-[11px] text-muted-foreground max-w-sm">
-            {savedAt ? (
-              <span className="font-semibold text-emerald-600">Saved at {savedAt}.</span>
+      {/* Save as Template */}
+      <AlertDialog open={showSaveAsTemplate} onOpenChange={setShowSaveAsTemplate}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Save as Template</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 pt-1">
+                {savedTemplate ? (
+                  <p className="text-xs text-emerald-600 font-semibold">
+                    Template &quot;{savedTemplate.templateName}&quot; created from this Event&apos;s current saved menu.
+                  </p>
+                ) : (
+                  <>
+                    <p className="text-xs text-muted-foreground">
+                      Creates a new, independent Menu Template from this Event&apos;s current saved menu. Later edits to either side will
+                      never affect the other. If you have unsaved changes, click Save Menu first.
+                    </p>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Template Name *</label>
+                      <input
+                        type="text"
+                        value={newTemplateName}
+                        onChange={(e) => setNewTemplateName(e.target.value)}
+                        placeholder="e.g. Standard Wedding Menu"
+                        className="w-full bg-muted/30 border border-border/40 rounded-lg px-3 py-2 text-xs text-foreground focus:outline-hidden"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Description</label>
+                      <textarea
+                        rows={2}
+                        value={newTemplateDescription}
+                        onChange={(e) => setNewTemplateDescription(e.target.value)}
+                        placeholder="Optional context for when to use this template."
+                        className="w-full bg-muted/30 border border-border/40 rounded-lg px-3 py-2 text-xs text-foreground focus:outline-hidden"
+                      />
+                    </div>
+                    {saveTemplateError && <p className="text-xs text-rose-600 font-semibold">{saveTemplateError}</p>}
+                  </>
+                )}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            {savedTemplate ? (
+              <>
+                <AlertDialogCancel>Close</AlertDialogCancel>
+                <AlertDialogAction onClick={() => router.push(`/cat/menu-templates/${savedTemplate.id}`)}>
+                  Open Template
+                </AlertDialogAction>
+              </>
             ) : (
-              'Internal only — no revisioning, no workflow, no publish.'
+              <>
+                <AlertDialogCancel>Cancel</AlertDialogCancel>
+                <AlertDialogAction onClick={handleSaveAsTemplate} disabled={savingTemplate}>
+                  {savingTemplate ? 'Saving...' : 'Save as Template'}
+                </AlertDialogAction>
+              </>
             )}
-          </p>
-          <button
-            type="button"
-            onClick={handleSave}
-            disabled={saving || loading}
-            className="px-4 py-2 bg-primary text-primary-foreground font-bold text-xs rounded-lg cursor-pointer disabled:opacity-50 hover:opacity-90 transition"
-          >
-            {saving ? 'Saving...' : 'Save Menu'}
-          </button>
-        </div>
-      </div>
-    </div>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Apply Template */}
+      <AlertDialog open={showApplyTemplate} onOpenChange={setShowApplyTemplate}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Apply Template</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 pt-1">
+                <p className="text-xs text-rose-600 font-semibold">
+                  This replaces this Event&apos;s current menu entirely with a copy of the selected Template. This cannot be undone.
+                </p>
+                <div>
+                  <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Menu Template *</label>
+                  <select
+                    value={selectedTemplateId}
+                    onChange={(e) => setSelectedTemplateId(e.target.value)}
+                    className="w-full bg-muted/30 border border-border/40 rounded-lg px-3 py-2 text-xs text-foreground focus:outline-hidden"
+                  >
+                    <option value="">Select a Template...</option>
+                    {templateOptions.map((t) => (
+                      <option key={t.id} value={t.id}>
+                        {t.templateName}
+                      </option>
+                    ))}
+                  </select>
+                  {templateOptions.length === 0 && (
+                    <p className="text-[11px] text-muted-foreground mt-1">No Menu Templates exist yet.</p>
+                  )}
+                </div>
+                {applyTemplateError && <p className="text-xs text-rose-600 font-semibold">{applyTemplateError}</p>}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleApplyTemplate} disabled={applyingTemplate || !selectedTemplateId}>
+              {applyingTemplate ? 'Applying...' : 'Replace Menu'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
+      {/* Copy From Event */}
+      <AlertDialog open={showCopyFromEvent} onOpenChange={setShowCopyFromEvent}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>Copy From Existing Event</AlertDialogTitle>
+            <AlertDialogDescription asChild>
+              <div className="space-y-3 pt-1">
+                <p className="text-xs text-rose-600 font-semibold">
+                  This replaces this Event&apos;s current menu entirely with a copy of the selected Event&apos;s menu. This cannot be
+                  undone.
+                </p>
+                <div>
+                  <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Source Event *</label>
+                  <select
+                    value={selectedSourceEventId}
+                    onChange={(e) => setSelectedSourceEventId(e.target.value)}
+                    className="w-full bg-muted/30 border border-border/40 rounded-lg px-3 py-2 text-xs text-foreground focus:outline-hidden"
+                  >
+                    <option value="">Select an Event...</option>
+                    {eventOptions.map((e) => (
+                      <option key={e.id} value={e.id}>
+                        {e.eventNumber} — {e.eventName}
+                      </option>
+                    ))}
+                  </select>
+                  {eventOptions.length === 0 && <p className="text-[11px] text-muted-foreground mt-1">No other Events exist yet.</p>}
+                </div>
+                {copyFromEventError && <p className="text-xs text-rose-600 font-semibold">{copyFromEventError}</p>}
+              </div>
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction onClick={handleCopyFromEvent} disabled={copyingFromEvent || !selectedSourceEventId}>
+              {copyingFromEvent ? 'Copying...' : 'Replace Menu'}
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+    </>
   );
 }
