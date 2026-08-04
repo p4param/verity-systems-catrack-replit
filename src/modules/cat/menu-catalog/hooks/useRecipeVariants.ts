@@ -26,7 +26,15 @@ function blankVariant(isDefault: boolean): RecipeVariant {
   };
 }
 function blankIngredient(): RecipeIngredient {
-  return { id: crypto.randomUUID(), ingredientName: '', quantity: undefined, unit: '', notes: '', displayOrder: 0 };
+  return {
+    id: crypto.randomUUID(),
+    ingredientId: '',
+    ingredientName: '',
+    quantity: undefined,
+    recipeUnit: '',
+    preparationInstruction: '',
+    displayOrder: 0,
+  };
 }
 function blankStep(): RecipeStep {
   return { id: crypto.randomUUID(), instruction: '', displayOrder: 0 };

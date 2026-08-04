@@ -9,18 +9,21 @@ import {
   ClipboardCheck,
   Layers,
   ListPlus,
+  Scale,
   Search,
   UtensilsCrossed,
   Salad,
 } from 'lucide-react';
 
-import { MenuTreeDietaryRequirement, MenuTreeMeal } from '@/modules/cat/menu/domain/menu-tree-types';
+import { MenuTreeDietaryRequirement, MenuTreeItem, MenuTreeMeal } from '@/modules/cat/menu/domain/menu-tree-types';
 import { UseMenuTreeReturn } from '@/modules/cat/menu/hooks/useMenuTree';
+import { computeScaledIngredients, computeScaleFactor } from '@/modules/cat/menu/domain/recipe-scaling';
 import { ListSection, inputClass, textareaClass, useListEditor } from '@/modules/cat/event/components/EventListEditing';
 import {
   MENU_CATALOG_DIETARY_TYPE_LABELS,
   MenuCatalogItemSummary,
 } from '@/modules/cat/menu-catalog/domain/menu-catalog-types';
+import { RecipeVariant } from '@/modules/cat/menu-catalog/domain/menu-catalog-recipe-types';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 function SummaryCard({
@@ -84,6 +87,96 @@ interface MenuTreeEditorProps {
   mealBadge?: (meal: MenuTreeMeal) => React.ReactNode;
   error?: string;
   actionBar: React.ReactNode;
+  // EM-WP09 — Recipe Scaling. Event Menu Planning passes true; Menu
+  // Templates never do (Templates are guest-count-agnostic blueprints, so
+  // Recipe Scaling — which depends on a planned Quantity — doesn't apply).
+  showRecipeScaling?: boolean;
+}
+
+// EM-WP09 — Recipe Scaling. Collapsed by default (Progressive Disclosure —
+// avoids cluttering large events with dozens of Menu Items). Only rendered
+// for rows with a catalogItemId, i.e. added via "Choose From Catalog".
+function RecipeScalingPanel({
+  item,
+  variants,
+  loading,
+  onVariantChange,
+}: {
+  item: MenuTreeItem;
+  variants: RecipeVariant[] | undefined;
+  loading: boolean;
+  onVariantChange: (variantId: string) => void;
+}) {
+  if (loading) {
+    return <p className="text-[11px] text-muted-foreground animate-pulse px-1">Loading Recipe...</p>;
+  }
+  if (!variants || variants.length === 0) {
+    return <p className="text-[11px] text-muted-foreground px-1">No Recipe defined for this item yet — add one in Menu Catalog.</p>;
+  }
+
+  const selected = variants.find((v) => v.id === item.recipeVariantId) || variants.find((v) => v.isDefault) || variants[0];
+  const scaleFactor = computeScaleFactor(item.quantity, item.unit, selected);
+  const scaledIngredients = computeScaledIngredients(selected.ingredients, scaleFactor);
+
+  return (
+    <div className="bg-muted/20 border border-border/30 rounded-lg p-3 space-y-2.5">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+        <div>
+          <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Recipe</div>
+          <select
+            value={selected.id}
+            onChange={(e) => onVariantChange(e.target.value)}
+            className={inputClass}
+          >
+            {variants.map((v) => (
+              <option key={v.id} value={v.id}>
+                {v.variantName}
+                {v.isDefault ? ' (Default)' : ''}
+              </option>
+            ))}
+          </select>
+        </div>
+        <div>
+          <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Yield</div>
+          <p className="text-xs font-semibold text-foreground py-1.5" title={selected.yieldNotes || undefined}>
+            {selected.yieldQuantity != null && selected.yieldUnit ? `${selected.yieldQuantity} ${selected.yieldUnit}` : '—'}
+          </p>
+        </div>
+        <div>
+          <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Scale Factor</div>
+          <p className="text-xs font-semibold text-foreground py-1.5">
+            {scaleFactor != null ? (
+              `${scaleFactor.toFixed(2)}×`
+            ) : (
+              <span className="text-muted-foreground font-normal" title="Set a Quantity and Unit matching the Recipe's Yield Unit to compute.">
+                — (unit mismatch or missing quantity)
+              </span>
+            )}
+          </p>
+        </div>
+      </div>
+
+      {selected.ingredients.length > 0 && (
+        <div>
+          <div className="text-[9px] font-bold text-muted-foreground uppercase tracking-wider mb-1">Scaled Ingredients</div>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-0.5">
+            {scaledIngredients.map((ing) => (
+              <div key={ing.ingredientId} className="flex items-center justify-between text-[11px] py-0.5">
+                <span className="text-muted-foreground truncate pr-2">{ing.ingredientName}</span>
+                <span className="font-semibold text-foreground shrink-0">
+                  {ing.scaledQuantity != null
+                    ? `${Number(ing.scaledQuantity.toFixed(2))} ${ing.recipeUnit || ''}`
+                    : ing.baseQuantity != null
+                      ? `${ing.baseQuantity} ${ing.recipeUnit || ''} (unscaled)`
+                      : '—'}
+                </span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+    </div>
+  );
 }
 
 // EM-WP04 — Menu Templates.
@@ -104,6 +197,7 @@ export function MenuTreeEditor({
   mealBadge,
   error,
   actionBar,
+  showRecipeScaling = false,
 }: MenuTreeEditorProps) {
   const { meals } = tree;
 
@@ -126,6 +220,43 @@ export function MenuTreeEditor({
   const [catalogQuery, setCatalogQuery] = useState('');
   const [catalogResults, setCatalogResults] = useState<MenuCatalogItemSummary[]>([]);
   const [catalogLoading, setCatalogLoading] = useState(false);
+
+  // EM-WP09 — Recipe Scaling. Recipe Variants for a given Catalog item are
+  // fetched at most once, on first expand, and cached here — the same dish
+  // can appear on multiple rows/categories without refetching.
+  const [expandedRecipeItemIds, setExpandedRecipeItemIds] = useState<Set<string>>(new Set());
+  const [recipesByCatalogItemId, setRecipesByCatalogItemId] = useState<Map<string, RecipeVariant[]>>(new Map());
+  const [loadingRecipesFor, setLoadingRecipesFor] = useState<Set<string>>(new Set());
+
+  const ensureRecipesLoaded = async (catalogItemId: string) => {
+    if (recipesByCatalogItemId.has(catalogItemId) || loadingRecipesFor.has(catalogItemId)) return;
+    setLoadingRecipesFor((prev) => new Set(prev).add(catalogItemId));
+    try {
+      const res = await fetch(`/api/cat/menu-catalog/${catalogItemId}/recipes`);
+      const data = await res.json();
+      setRecipesByCatalogItemId((prev) => new Map(prev).set(catalogItemId, data.success ? data.variants || [] : []));
+    } catch (err) {
+      console.error('Failed to load Recipes for Recipe Scaling:', err);
+      setRecipesByCatalogItemId((prev) => new Map(prev).set(catalogItemId, []));
+    } finally {
+      setLoadingRecipesFor((prev) => {
+        const next = new Set(prev);
+        next.delete(catalogItemId);
+        return next;
+      });
+    }
+  };
+
+  const toggleRecipeExpanded = (item: MenuTreeItem) => {
+    if (!item.catalogItemId) return;
+    setExpandedRecipeItemIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(item.id)) next.delete(item.id);
+      else next.add(item.id);
+      return next;
+    });
+    if (!expandedRecipeItemIds.has(item.id)) ensureRecipesLoaded(item.catalogItemId);
+  };
 
   const openAddItemChooser = (mealId: string, categoryId: string) => setAddItemTarget({ mealId, categoryId });
 
@@ -177,7 +308,25 @@ export function MenuTreeEditor({
     } catch (err) {
       console.error('Failed to load Menu Catalog item detail for prefill:', err);
     }
-    tree.addItem(target.mealId, target.categoryId, { itemName: catalogItem.name, unit, remarks });
+
+    // EM-WP09 — Recipe Scaling: catalogItemId is a real, persisted link
+    // (unlike unit/remarks above, which are a one-time copy). recipeVariantId
+    // silently defaults to the Default Variant, if one exists — no extra
+    // dialog step; switchable afterward from the Recipe Scaling panel.
+    let recipeVariantId: string | undefined;
+    if (showRecipeScaling) {
+      try {
+        const res = await fetch(`/api/cat/menu-catalog/${catalogItem.id}/recipes`);
+        const data = await res.json();
+        const variants: RecipeVariant[] = data.success ? data.variants || [] : [];
+        setRecipesByCatalogItemId((prev) => new Map(prev).set(catalogItem.id, variants));
+        recipeVariantId = variants.find((v) => v.isDefault)?.id || variants[0]?.id;
+      } catch (err) {
+        console.error('Failed to load Recipes for Recipe Scaling prefill:', err);
+      }
+    }
+
+    tree.addItem(target.mealId, target.categoryId, { itemName: catalogItem.name, unit, remarks, catalogItemId: catalogItem.id, recipeVariantId });
     setShowCatalogPicker(false);
     setAddItemTarget(null);
   };
@@ -283,7 +432,11 @@ export function MenuTreeEditor({
                             <div className="pl-3 border-l-2 border-border/20">
                               <ListSection
                                 title="Menu Items"
-                                helperText="No recipe linkage — name, quantity, unit, and remarks only."
+                                helperText={
+                                  showRecipeScaling
+                                    ? 'Name, quantity, unit, and remarks — items added from the Catalog also carry a Recipe.'
+                                    : 'No recipe linkage — name, quantity, unit, and remarks only.'
+                                }
                                 addLabel="Add Menu Item"
                                 emptyLabel="No Menu Items yet."
                                 items={category.items}
@@ -292,14 +445,32 @@ export function MenuTreeEditor({
                                 onDelete={(itemId) => tree.deleteItem(meal.id, category.id, itemId)}
                                 onMove={(index, direction) => tree.moveItem(meal.id, category.id, index, direction)}
                                 renderRow={(item) => (
+                                  <div className="space-y-1.5">
                                   <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                                    <input
-                                      type="text"
-                                      value={item.itemName}
-                                      onChange={(e) => tree.updateItem(meal.id, category.id, item.id, { itemName: e.target.value })}
-                                      placeholder="Name"
-                                      className={`${inputClass} sm:col-span-2`}
-                                    />
+                                    <div className="sm:col-span-2 flex items-center gap-1.5">
+                                      <input
+                                        type="text"
+                                        value={item.itemName}
+                                        onChange={(e) => tree.updateItem(meal.id, category.id, item.id, { itemName: e.target.value })}
+                                        placeholder="Name"
+                                        className={`${inputClass} flex-1`}
+                                      />
+                                      {showRecipeScaling && item.catalogItemId && (
+                                        <button
+                                          type="button"
+                                          onClick={() => toggleRecipeExpanded(item)}
+                                          title="Recipe Scaling"
+                                          className={`shrink-0 inline-flex items-center gap-1 px-2 py-1.5 rounded-lg text-[10px] font-bold cursor-pointer transition ${
+                                            expandedRecipeItemIds.has(item.id)
+                                              ? 'bg-primary/15 text-primary'
+                                              : 'bg-muted/50 text-muted-foreground hover:bg-muted'
+                                          }`}
+                                        >
+                                          <Scale className="w-3 h-3" />
+                                          Recipe
+                                        </button>
+                                      )}
+                                    </div>
                                     <input
                                       type="number"
                                       value={item.quantity ?? ''}
@@ -325,6 +496,17 @@ export function MenuTreeEditor({
                                       placeholder="Remarks"
                                       className={`${textareaClass} sm:col-span-4`}
                                     />
+                                  </div>
+                                  {showRecipeScaling && item.catalogItemId && expandedRecipeItemIds.has(item.id) && (
+                                    <RecipeScalingPanel
+                                      item={item}
+                                      variants={recipesByCatalogItemId.get(item.catalogItemId)}
+                                      loading={loadingRecipesFor.has(item.catalogItemId)}
+                                      onVariantChange={(variantId) =>
+                                        tree.updateItem(meal.id, category.id, item.id, { recipeVariantId: variantId })
+                                      }
+                                    />
+                                  )}
                                   </div>
                                 )}
                               />
@@ -412,7 +594,11 @@ export function MenuTreeEditor({
               <BookOpen className="w-4 h-4 text-primary shrink-0" />
               <div>
                 <div className="text-xs font-bold text-foreground">Choose From Catalog</div>
-                <div className="text-[11px] text-muted-foreground">Copies Name, Unit, and Remarks in — fully editable afterward.</div>
+                <div className="text-[11px] text-muted-foreground">
+                  {showRecipeScaling
+                    ? 'Copies Name, Unit, and Remarks in, and links its Recipe for Scaling — all fully editable afterward.'
+                    : 'Copies Name, Unit, and Remarks in — fully editable afterward.'}
+                </div>
               </div>
             </button>
             <button

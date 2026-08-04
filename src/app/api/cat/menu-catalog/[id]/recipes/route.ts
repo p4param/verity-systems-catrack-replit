@@ -2,7 +2,9 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requirePermission } from '@/lib/auth/permission-guard';
 
-// EM-WP06 — Recipe Management.
+// EM-WP06 — Recipe Management. EM-WP08 — linked Ingredients to Ingredient
+// Master (structural relationship only — no conversions, yield loss,
+// costing, substitutions, allergens, or inventory behavior).
 // Single GET/PUT pair for every Recipe Variant of one Menu Catalog Item
 // (Recipe Summary, Yield, Ingredients, Preparation Steps, Equipment &
 // Quality). Reuses the CAT_MENU_CATALOG_VIEW/EDIT permissions from
@@ -14,10 +16,10 @@ import { requirePermission } from '@/lib/auth/permission-guard';
 
 interface RecipeIngredientInput {
   id: string;
-  ingredientName: string;
+  ingredientId: string;
   quantity?: number;
-  unit?: string;
-  notes?: string;
+  recipeUnit?: string;
+  preparationInstruction?: string;
 }
 interface RecipeStepInput {
   id: string;
@@ -63,10 +65,15 @@ async function fetchRecipes(catalogItemId: string, tenantId: string) {
   `;
 
   const ingredientRows: any[] = await prisma.$queryRaw`
-    SELECT id, variant_id as "variantId", ingredient_name as "ingredientName", quantity, unit, notes, display_order as "displayOrder"
-    FROM cat_menu_catalog_recipe_ingredients
-    WHERE catalog_item_id = ${catalogItemId}::uuid AND tenant_id = ${tenantId}::uuid
-    ORDER BY display_order ASC
+    SELECT
+      r.id, r.variant_id as "variantId", r.ingredient_id as "ingredientId",
+      m.ingredient_code as "ingredientCode", m.name as "ingredientName", m.base_unit as "ingredientBaseUnit",
+      r.quantity, r.recipe_unit as "recipeUnit", r.preparation_instruction as "preparationInstruction",
+      r.display_order as "displayOrder"
+    FROM cat_menu_catalog_recipe_ingredients r
+    JOIN cat_ingredient_master_items m ON m.id = r.ingredient_id
+    WHERE r.catalog_item_id = ${catalogItemId}::uuid AND r.tenant_id = ${tenantId}::uuid
+    ORDER BY r.display_order ASC
   `;
 
   const stepRows: any[] = await prisma.$queryRaw`
@@ -156,8 +163,8 @@ export async function PUT(req: NextRequest, props: any) {
         return NextResponse.json({ success: false, error: 'Variant Name is required for every Recipe Variant.' }, { status: 400 });
       }
       for (const ingredient of variant.ingredients || []) {
-        if (!ingredient.ingredientName?.trim()) {
-          return NextResponse.json({ success: false, error: 'Ingredient Name is required for every Ingredient.' }, { status: 400 });
+        if (!ingredient.ingredientId?.trim()) {
+          return NextResponse.json({ success: false, error: 'Ingredient is required for every Ingredient line.' }, { status: 400 });
         }
       }
       for (const step of variant.steps || []) {
@@ -180,6 +187,21 @@ export async function PUT(req: NextRequest, props: any) {
       }
       if (defaultCount > 1) {
         return NextResponse.json({ success: false, error: 'Only one Recipe Variant can be set as Default.' }, { status: 400 });
+      }
+    }
+
+    // Every referenced Ingredient must exist in this tenant's Ingredient
+    // Master — checked up front for a clean 400 instead of a raw FK error.
+    const referencedIngredientIds = [...new Set(incomingVariants.flatMap((v) => (v.ingredients || []).map((i) => i.ingredientId)))];
+    if (referencedIngredientIds.length > 0) {
+      const validIngredients: Array<{ id: string }> = await prisma.$queryRaw`
+        SELECT id FROM cat_ingredient_master_items
+        WHERE tenant_id = ${tenantId}::uuid AND id = ANY(${referencedIngredientIds}::uuid[]) AND is_deleted = false
+      `;
+      const validIds = new Set(validIngredients.map((r) => r.id));
+      const invalid = referencedIngredientIds.filter((rid) => !validIds.has(rid));
+      if (invalid.length > 0) {
+        return NextResponse.json({ success: false, error: 'One or more selected Ingredients were not found in Ingredient Master.' }, { status: 400 });
       }
     }
 
@@ -273,19 +295,19 @@ export async function PUT(req: NextRequest, props: any) {
           const ingredient = ingredients[index];
           await tx.$executeRaw`
             INSERT INTO cat_menu_catalog_recipe_ingredients (
-              id, tenant_id, catalog_item_id, variant_id, ingredient_name, quantity, unit, notes, display_order,
+              id, tenant_id, catalog_item_id, variant_id, ingredient_id, quantity, recipe_unit, preparation_instruction, display_order,
               created_at, created_by, updated_at, updated_by
             ) VALUES (
-              ${ingredient.id}::uuid, ${tenantId}::uuid, ${id}::uuid, ${variant.id}::uuid, ${ingredient.ingredientName.trim()},
-              ${ingredient.quantity ?? null}, ${ingredient.unit?.trim() || null}, ${ingredient.notes?.trim() || null}, ${index},
+              ${ingredient.id}::uuid, ${tenantId}::uuid, ${id}::uuid, ${variant.id}::uuid, ${ingredient.ingredientId}::uuid,
+              ${ingredient.quantity ?? null}, ${ingredient.recipeUnit?.trim() || null}, ${ingredient.preparationInstruction?.trim() || null}, ${index},
               NOW(), ${userId}::uuid, NOW(), ${userId}::uuid
             )
             ON CONFLICT (id) DO UPDATE SET
               variant_id = EXCLUDED.variant_id,
-              ingredient_name = EXCLUDED.ingredient_name,
+              ingredient_id = EXCLUDED.ingredient_id,
               quantity = EXCLUDED.quantity,
-              unit = EXCLUDED.unit,
-              notes = EXCLUDED.notes,
+              recipe_unit = EXCLUDED.recipe_unit,
+              preparation_instruction = EXCLUDED.preparation_instruction,
               display_order = EXCLUDED.display_order,
               updated_at = NOW(),
               updated_by = EXCLUDED.updated_by

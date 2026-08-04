@@ -118,7 +118,15 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
             categories: m.categories.map((c) => ({
               id: c.id,
               categoryName: c.categoryName,
-              items: c.items.map((i) => ({ id: i.id, itemName: i.itemName, quantity: i.quantity, unit: i.unit, remarks: i.remarks })),
+              items: c.items.map((i) => ({
+                id: i.id,
+                itemName: i.itemName,
+                quantity: i.quantity,
+                unit: i.unit,
+                remarks: i.remarks,
+                catalogItemId: i.catalogItemId,
+                recipeVariantId: i.recipeVariantId,
+              })),
             })),
           })),
           dietaryRequirements: dietary.items.map((d) => ({ id: d.id, requirement: d.requirement, guestCount: d.guestCount, notes: d.notes })),
@@ -281,6 +289,7 @@ export function EventMenuPlanningWorkspace({ event }: EventMenuPlanningWorkspace
         title="Menu Planning"
         titleIcon={ListChecks}
         error={error}
+        showRecipeScaling
         mealBadge={(meal) => (
           <div className="inline-flex items-center gap-1.5 text-[10px] font-bold text-muted-foreground shrink-0 bg-card px-2.5 py-1 rounded-full border border-border/40">
             <Users className="w-3 h-3" />

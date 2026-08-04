@@ -12,7 +12,7 @@ import { requirePermission } from '@/lib/auth/permission-guard';
 async function fetchItem(id: string, tenantId: string) {
   const rows: any[] = await prisma.$queryRaw`
     SELECT
-      id, name, ingredient_type as "ingredientType", base_unit as "baseUnit", purchase_unit as "purchaseUnit",
+      id, ingredient_code as "ingredientCode", name, ingredient_type as "ingredientType", base_unit as "baseUnit", purchase_unit as "purchaseUnit",
       storage, shelf_life as "shelfLife", food_characteristics as "foodCharacteristics",
       procurement_category as "procurementCategory", description, image_url as "imageUrl", status,
       created_at as "createdAt", updated_at as "updatedAt"

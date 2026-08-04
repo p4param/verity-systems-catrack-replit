@@ -136,15 +136,21 @@ export default function IngredientMasterWorkspacePage() {
 
       {/* Identity */}
       <Section title="Identity" icon={Carrot}>
-        <div>
-          <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Name *</label>
-          <input
-            type="text"
-            value={item.name}
-            onChange={(e) => patch({ name: e.target.value })}
-            placeholder="e.g. Basmati Rice"
-            className={`${inputClass} text-sm font-bold`}
-          />
+        <div className="space-y-3">
+          <div>
+            <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Ingredient Code</label>
+            <input type="text" value={item.ingredientCode} readOnly disabled className={`${inputClass} font-mono text-muted-foreground bg-muted/30 cursor-not-allowed`} />
+          </div>
+          <div>
+            <label className="block text-[10px] font-semibold text-muted-foreground mb-1">Name *</label>
+            <input
+              type="text"
+              value={item.name}
+              onChange={(e) => patch({ name: e.target.value })}
+              placeholder="e.g. Basmati Rice"
+              className={`${inputClass} text-sm font-bold`}
+            />
+          </div>
         </div>
       </Section>
 

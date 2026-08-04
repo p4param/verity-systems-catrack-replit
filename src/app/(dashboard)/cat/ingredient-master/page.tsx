@@ -178,7 +178,7 @@ export default function IngredientMasterDirectoryPage() {
           <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
           <input
             type="text"
-            placeholder="Search name, type or procurement category..."
+            placeholder="Search name, code, type or procurement category..."
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             className="w-full bg-muted/30 border border-border/50 rounded-lg pl-8 pr-3 py-1.5 text-xs text-foreground placeholder:text-muted-foreground focus:outline-hidden focus:ring-1 focus:ring-primary"
@@ -253,8 +253,9 @@ export default function IngredientMasterDirectoryPage() {
         ) : (
           <div className="divide-y divide-border/30">
             <div className="grid grid-cols-12 gap-3 px-5 py-2.5 bg-muted/20 text-[10px] font-bold text-muted-foreground uppercase tracking-wider">
-              <div className="col-span-4">Name</div>
-              <div className="col-span-3">Ingredient Type</div>
+              <div className="col-span-2">Code</div>
+              <div className="col-span-3">Name</div>
+              <div className="col-span-2">Ingredient Type</div>
               <div className="col-span-2">Base Unit</div>
               <div className="col-span-2">Storage</div>
               <div className="col-span-1 text-right">Status</div>
@@ -266,8 +267,9 @@ export default function IngredientMasterDirectoryPage() {
                 onClick={() => router.push(`/cat/ingredient-master/${item.id}`)}
                 className="grid grid-cols-12 gap-3 px-5 py-3 items-center hover:bg-muted/30 transition-colors duration-150 cursor-pointer group"
               >
-                <div className="col-span-4 font-bold text-xs text-foreground group-hover:text-primary transition-colors truncate">{item.name}</div>
-                <div className="col-span-3 text-xs text-muted-foreground truncate">{item.ingredientType || '—'}</div>
+                <div className="col-span-2 text-[11px] font-mono font-semibold text-muted-foreground truncate">{item.ingredientCode}</div>
+                <div className="col-span-3 font-bold text-xs text-foreground group-hover:text-primary transition-colors truncate">{item.name}</div>
+                <div className="col-span-2 text-xs text-muted-foreground truncate">{item.ingredientType || '—'}</div>
                 <div className="col-span-2 text-xs text-muted-foreground truncate">{item.baseUnit || '—'}</div>
                 <div className="col-span-2 text-xs text-muted-foreground truncate">{item.storage || '—'}</div>
                 <div className="col-span-1 text-right">

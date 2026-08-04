@@ -13,6 +13,12 @@ export interface MenuTreeItem {
   unit?: string;
   remarks?: string;
   displayOrder: number;
+  // EM-WP09 — Recipe Scaling. Only ever set on Event Menu Planning items
+  // (via "Choose From Catalog"); Menu Templates never read or write these —
+  // Templates are guest-count-agnostic blueprints, Recipe Scaling is an
+  // Event-specific calculation.
+  catalogItemId?: string;
+  recipeVariantId?: string;
 }
 
 export interface MenuTreeCategory {

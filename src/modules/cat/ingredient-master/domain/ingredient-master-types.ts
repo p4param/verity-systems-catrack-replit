@@ -1,7 +1,7 @@
-// EM-WP07 — Ingredient Master.
-// Independent organizational master data — deliberately NOT connected to
-// Recipes, Procurement, or Inventory yet. No pricing, conversions,
-// vendors, batch tracking, or nutrition.
+// EM-WP07 — Ingredient Master. EM-WP08 — Recipe Ingredients reference
+// this master by id (structural relationship only). Not connected to
+// Procurement or Inventory yet. No pricing, conversions, vendors, batch
+// tracking, or nutrition.
 
 export type IngredientMasterStatus = 'ACTIVE' | 'INACTIVE';
 
@@ -12,6 +12,7 @@ export const INGREDIENT_MASTER_STATUS_LABELS: Record<IngredientMasterStatus, str
 
 export interface IngredientMasterSummary {
   id: string;
+  ingredientCode: string;
   name: string;
   ingredientType?: string;
   baseUnit?: string;
@@ -24,6 +25,7 @@ export interface IngredientMasterSummary {
 
 export interface IngredientMasterDetail {
   id: string;
+  ingredientCode: string;
   name: string;
   ingredientType?: string;
   baseUnit?: string;

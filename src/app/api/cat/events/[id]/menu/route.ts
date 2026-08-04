@@ -15,6 +15,8 @@ interface EventMenuItemInput {
   quantity?: number;
   unit?: string;
   remarks?: string;
+  catalogItemId?: string | null;
+  recipeVariantId?: string | null;
 }
 
 interface EventMenuCategoryInput {
@@ -61,7 +63,8 @@ async function fetchMenu(eventId: string, tenantId: string) {
   `;
 
   const itemRows: any[] = await prisma.$queryRaw`
-    SELECT id, category_id as "categoryId", item_name as "itemName", quantity, unit, remarks, display_order as "displayOrder"
+    SELECT id, category_id as "categoryId", item_name as "itemName", quantity, unit, remarks, display_order as "displayOrder",
+           catalog_item_id as "catalogItemId", recipe_variant_id as "recipeVariantId"
     FROM cat_event_menu_items
     WHERE event_id = ${eventId}::uuid AND tenant_id = ${tenantId}::uuid
     ORDER BY display_order ASC
@@ -173,6 +176,30 @@ export async function PUT(req: NextRequest, props: any) {
       }
     }
 
+    // EM-WP09 — Recipe Scaling: every referenced Recipe Variant must exist,
+    // belong to this tenant, and belong to the exact Catalog item the Menu
+    // Item claims — checked up front for a clean 400, same pattern as the
+    // Ingredient Master check in the Recipe Management PUT handler.
+    const allItems = incomingMeals.flatMap((m) => (m.categories || []).flatMap((c) => c.items || []));
+    const referencedVariantIds = [...new Set(allItems.filter((i) => i.recipeVariantId).map((i) => i.recipeVariantId as string))];
+    if (referencedVariantIds.length > 0) {
+      const validVariants: Array<{ id: string; catalogItemId: string }> = await prisma.$queryRaw`
+        SELECT id, catalog_item_id as "catalogItemId" FROM cat_menu_catalog_recipe_variants
+        WHERE tenant_id = ${tenantId}::uuid AND id = ANY(${referencedVariantIds}::uuid[])
+      `;
+      const catalogItemIdByVariantId = new Map(validVariants.map((v) => [v.id, v.catalogItemId]));
+      for (const item of allItems) {
+        if (!item.recipeVariantId) continue;
+        const owningCatalogItemId = catalogItemIdByVariantId.get(item.recipeVariantId);
+        if (!owningCatalogItemId) {
+          return NextResponse.json({ success: false, error: 'One or more selected Recipe Variants were not found.' }, { status: 400 });
+        }
+        if (!item.catalogItemId || item.catalogItemId !== owningCatalogItemId) {
+          return NextResponse.json({ success: false, error: 'A selected Recipe Variant does not belong to its Menu Item\'s Catalog item.' }, { status: 400 });
+        }
+      }
+    }
+
     await prisma.$transaction(async (tx) => {
       // 1. Meals — delete removed (cascades categories + items), then upsert.
       const existingMeals: Array<{ id: string }> = await tx.$queryRaw`
@@ -244,10 +271,11 @@ export async function PUT(req: NextRequest, props: any) {
             await tx.$executeRaw`
               INSERT INTO cat_event_menu_items (
                 id, tenant_id, event_id, category_id, item_name, quantity, unit, remarks, display_order,
-                created_at, created_by, updated_at, updated_by
+                catalog_item_id, recipe_variant_id, created_at, created_by, updated_at, updated_by
               ) VALUES (
                 ${item.id}::uuid, ${tenantId}::uuid, ${id}::uuid, ${category.id}::uuid, ${item.itemName.trim()},
                 ${item.quantity ?? null}, ${item.unit?.trim() || null}, ${item.remarks?.trim() || null}, ${itemIndex},
+                ${item.catalogItemId || null}::uuid, ${item.recipeVariantId || null}::uuid,
                 NOW(), ${userId}::uuid, NOW(), ${userId}::uuid
               )
               ON CONFLICT (id) DO UPDATE SET
@@ -257,6 +285,8 @@ export async function PUT(req: NextRequest, props: any) {
                 unit = EXCLUDED.unit,
                 remarks = EXCLUDED.remarks,
                 display_order = EXCLUDED.display_order,
+                catalog_item_id = EXCLUDED.catalog_item_id,
+                recipe_variant_id = EXCLUDED.recipe_variant_id,
                 updated_at = NOW(),
                 updated_by = EXCLUDED.updated_by
               WHERE cat_event_menu_items.event_id = EXCLUDED.event_id AND cat_event_menu_items.tenant_id = EXCLUDED.tenant_id

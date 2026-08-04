@@ -1,16 +1,18 @@
-// EM-WP06 — Recipe Management.
-// Recipes define HOW a dish is produced — not procurement, inventory,
-// costing, or production execution. A Menu Catalog Item can have multiple
-// user-named Recipe Variants; exactly one is the Default Variant.
-// Ingredients are free-text rows — no Ingredient Master. No versioning,
-// no workflow.
+// EM-WP06 — Recipe Management. EM-WP08 — Ingredients now reference
+// Ingredient Master (structural relationship only — no conversions,
+// yield loss, costing, substitutions, allergens, or inventory behavior).
+// A Menu Catalog Item can have multiple user-named Recipe Variants;
+// exactly one is the Default Variant. No versioning, no workflow.
 
 export interface RecipeIngredient {
   id: string;
+  ingredientId: string;
+  ingredientCode?: string;
   ingredientName: string;
+  ingredientBaseUnit?: string;
   quantity?: number;
-  unit?: string;
-  notes?: string;
+  recipeUnit?: string;
+  preparationInstruction?: string;
   displayOrder: number;
 }
 
@@ -49,10 +51,10 @@ export interface RecipeVariant {
 
 export interface RecipeIngredientInput {
   id: string;
-  ingredientName: string;
+  ingredientId: string;
   quantity?: number;
-  unit?: string;
-  notes?: string;
+  recipeUnit?: string;
+  preparationInstruction?: string;
 }
 
 export interface RecipeStepInput {

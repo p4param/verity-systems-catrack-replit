@@ -1,10 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { ClipboardList, Layers, Plus, Salad, Star, Trash2 } from 'lucide-react';
+import { ChefHat, ClipboardList, Layers, Plus, Salad, Search, Star, Trash2 } from 'lucide-react';
 
 import { useRecipeVariants } from '@/modules/cat/menu-catalog/hooks/useRecipeVariants';
 import { ListSection, inputClass, textareaClass } from '@/modules/cat/event/components/EventListEditing';
+import { IngredientMasterSummary } from '@/modules/cat/ingredient-master/domain/ingredient-master-types';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 
 interface MenuCatalogRecipesWorkspaceProps {
   catalogItemId: string;
@@ -30,14 +32,14 @@ function Section({
   );
 }
 
-// EM-WP06 — Recipe Management.
-// Recipes define HOW a dish is produced — not procurement, inventory,
-// costing, or production execution. A Catalog Item can have multiple
-// user-named Recipe Variants; exactly one is the Default Variant. Free-text
-// Ingredients only — no Ingredient Master. Reuses the ListSection/
-// useListEditor-style pattern established by EM-WP02/03/04. No status,
-// revision, workflow, or approval semantics — Save Recipes PUTs the full
-// current state of every Variant back in a single call.
+// EM-WP06 — Recipe Management. EM-WP08 — Ingredient lines reference
+// Ingredient Master via a lookup (structural relationship only — no
+// conversions, yield loss, costing, substitutions, allergens, or
+// inventory behavior). A Catalog Item can have multiple user-named
+// Recipe Variants; exactly one is the Default Variant. Reuses the
+// ListSection/useListEditor-style pattern established by EM-WP02/03/04.
+// No status, revision, workflow, or approval semantics — Save Recipes
+// PUTs the full current state of every Variant back in a single call.
 export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipesWorkspaceProps) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -46,6 +48,50 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
   const [activeVariantId, setActiveVariantId] = useState<string | null>(null);
 
   const recipe = useRecipeVariants();
+
+  // Ingredient Master lookup — picks the Ingredient for one ingredient
+  // line. The picker itself queries the existing Ingredient Master
+  // directory endpoint; selecting an item stores its id as the
+  // structural reference (ingredientName/ingredientBaseUnit are cached
+  // on the row purely for display).
+  const [ingredientPickerTarget, setIngredientPickerTarget] = useState<string | null>(null);
+  const [ingredientQuery, setIngredientQuery] = useState('');
+  const [ingredientResults, setIngredientResults] = useState<IngredientMasterSummary[]>([]);
+  const [ingredientLoading, setIngredientLoading] = useState(false);
+
+  const openIngredientPicker = (ingredientRowId: string) => {
+    setIngredientPickerTarget(ingredientRowId);
+    setIngredientQuery('');
+  };
+
+  useEffect(() => {
+    if (!ingredientPickerTarget) return;
+    const handler = setTimeout(async () => {
+      setIngredientLoading(true);
+      try {
+        const params = new URLSearchParams({ status: 'ACTIVE' });
+        if (ingredientQuery) params.set('query', ingredientQuery);
+        const res = await fetch(`/api/cat/ingredient-master?${params.toString()}`);
+        const data = await res.json();
+        if (data.success) setIngredientResults(data.items || []);
+      } catch (err) {
+        console.error('Failed to load Ingredient Master for lookup:', err);
+      } finally {
+        setIngredientLoading(false);
+      }
+    }, 250);
+    return () => clearTimeout(handler);
+  }, [ingredientPickerTarget, ingredientQuery]);
+
+  const handleSelectIngredient = (variantId: string, ingredientRowId: string, master: IngredientMasterSummary) => {
+    recipe.updateIngredient(variantId, ingredientRowId, {
+      ingredientId: master.id,
+      ingredientCode: master.ingredientCode,
+      ingredientName: master.name,
+      ingredientBaseUnit: master.baseUnit,
+    });
+    setIngredientPickerTarget(null);
+  };
 
   useEffect(() => {
     const load = async () => {
@@ -98,7 +144,13 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
             yieldUnit: v.yieldUnit,
             yieldNotes: v.yieldNotes,
             qualityNotes: v.qualityNotes,
-            ingredients: v.ingredients.map((i) => ({ id: i.id, ingredientName: i.ingredientName, quantity: i.quantity, unit: i.unit, notes: i.notes })),
+            ingredients: v.ingredients.map((i) => ({
+              id: i.id,
+              ingredientId: i.ingredientId,
+              quantity: i.quantity,
+              recipeUnit: i.recipeUnit,
+              preparationInstruction: i.preparationInstruction,
+            })),
             steps: v.steps.map((s) => ({ id: s.id, instruction: s.instruction })),
             equipment: v.equipment.map((e) => ({ id: e.id, equipmentName: e.equipmentName, notes: e.notes })),
           })),
@@ -250,7 +302,7 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
             {/* 3. Ingredients */}
             <ListSection
               title="Ingredients"
-              helperText="Free-text only — no Ingredient Master. Name, quantity, unit, and notes."
+              helperText="Ingredient is looked up from Ingredient Master. Recipe Unit is the measurement used in this recipe — distinct from the Ingredient's Base Unit and Purchase Unit."
               addLabel="Add Ingredient"
               emptyLabel="No Ingredients yet."
               items={activeVariant.ingredients}
@@ -260,13 +312,19 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
               onMove={(index, direction) => recipe.moveIngredient(activeVariant.id, index, direction)}
               renderRow={(ingredient) => (
                 <div className="grid grid-cols-1 sm:grid-cols-4 gap-2">
-                  <input
-                    type="text"
-                    value={ingredient.ingredientName}
-                    onChange={(e) => recipe.updateIngredient(activeVariant.id, ingredient.id, { ingredientName: e.target.value })}
-                    placeholder="Ingredient"
-                    className={`${inputClass} sm:col-span-2`}
-                  />
+                  <div className="sm:col-span-2">
+                    <button
+                      type="button"
+                      onClick={() => openIngredientPicker(ingredient.id)}
+                      className={`${inputClass} flex items-center gap-2 text-left cursor-pointer ${!ingredient.ingredientName ? 'text-muted-foreground' : ''}`}
+                    >
+                      <ChefHat className="w-3.5 h-3.5 text-primary/70 shrink-0" />
+                      <span className="truncate">{ingredient.ingredientName || 'Select Ingredient...'}</span>
+                      {ingredient.ingredientBaseUnit && (
+                        <span className="ml-auto text-[10px] text-muted-foreground shrink-0">Base: {ingredient.ingredientBaseUnit}</span>
+                      )}
+                    </button>
+                  </div>
                   <input
                     type="number"
                     value={ingredient.quantity ?? ''}
@@ -280,16 +338,16 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
                   />
                   <input
                     type="text"
-                    value={ingredient.unit || ''}
-                    onChange={(e) => recipe.updateIngredient(activeVariant.id, ingredient.id, { unit: e.target.value })}
-                    placeholder="Unit"
+                    value={ingredient.recipeUnit || ''}
+                    onChange={(e) => recipe.updateIngredient(activeVariant.id, ingredient.id, { recipeUnit: e.target.value })}
+                    placeholder="Recipe Unit"
                     className={inputClass}
                   />
                   <textarea
                     rows={1}
-                    value={ingredient.notes || ''}
-                    onChange={(e) => recipe.updateIngredient(activeVariant.id, ingredient.id, { notes: e.target.value })}
-                    placeholder="Notes"
+                    value={ingredient.preparationInstruction || ''}
+                    onChange={(e) => recipe.updateIngredient(activeVariant.id, ingredient.id, { preparationInstruction: e.target.value })}
+                    placeholder="Preparation Instruction"
                     className={`${textareaClass} sm:col-span-4`}
                   />
                 </div>
@@ -385,6 +443,50 @@ export function MenuCatalogRecipesWorkspace({ catalogItemId }: MenuCatalogRecipe
           {saving ? 'Saving...' : 'Save Recipes'}
         </button>
       </div>
+
+      {/* Ingredient Master lookup. */}
+      <Dialog open={!!ingredientPickerTarget} onOpenChange={(open) => !open && setIngredientPickerTarget(null)}>
+        <DialogContent className="max-w-lg max-h-[80vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle>Select Ingredient</DialogTitle>
+            <DialogDescription>Looked up from Ingredient Master. Only Active items are shown.</DialogDescription>
+          </DialogHeader>
+          <div className="relative">
+            <Search className="w-3.5 h-3.5 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+            <input
+              type="text"
+              autoFocus
+              value={ingredientQuery}
+              onChange={(e) => setIngredientQuery(e.target.value)}
+              placeholder="Search Ingredient Master..."
+              className="w-full bg-muted/30 border border-border/50 rounded-lg pl-8 pr-3 py-1.5 text-xs text-foreground focus:outline-hidden focus:ring-1 focus:ring-primary"
+            />
+          </div>
+          <div className="space-y-1.5 max-h-80 overflow-y-auto">
+            {ingredientLoading ? (
+              <p className="text-xs text-muted-foreground animate-pulse py-4 text-center">Loading...</p>
+            ) : ingredientResults.length === 0 ? (
+              <p className="text-xs text-muted-foreground py-4 text-center">No matching Ingredients.</p>
+            ) : (
+              ingredientResults.map((ing) => (
+                <button
+                  key={ing.id}
+                  type="button"
+                  onClick={() => activeVariant && handleSelectIngredient(activeVariant.id, ingredientPickerTarget!, ing)}
+                  className="w-full flex items-center justify-between gap-2 px-3 py-2 rounded-lg hover:bg-muted/40 text-left cursor-pointer transition"
+                >
+                  <div className="min-w-0">
+                    <div className="text-xs font-bold text-foreground truncate">{ing.name}</div>
+                    <div className="text-[10px] text-muted-foreground truncate">
+                      {[ing.ingredientCode, ing.ingredientType, ing.baseUnit ? `Base: ${ing.baseUnit}` : null].filter(Boolean).join(' • ') || '—'}
+                    </div>
+                  </div>
+                </button>
+              ))
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
