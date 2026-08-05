@@ -1,7 +1,7 @@
 'use client';
 
 import React from 'react';
-import { ChefHat, ClipboardList, LayoutDashboard } from 'lucide-react';
+import { Boxes, ChefHat, ClipboardList, LayoutDashboard } from 'lucide-react';
 
 import { EVENT_WORKSPACE_NAV_ITEMS, EventWorkspaceKey } from '@/modules/cat/event/domain/event-workspace-types';
 
@@ -9,6 +9,7 @@ const WORKSPACE_ICONS: Record<EventWorkspaceKey, React.ComponentType<{ className
   OVERVIEW: LayoutDashboard,
   PLANNING: ClipboardList,
   MENU_PLANNING: ChefHat,
+  INGREDIENT_DEMAND: Boxes,
 };
 
 interface EventWorkspaceNavigatorProps {

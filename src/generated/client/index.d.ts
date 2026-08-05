@@ -635,6 +635,21 @@ export type CatRelationshipDocument = $Result.DefaultSelection<Prisma.$CatRelati
  * 
  */
 export type CatVenue = $Result.DefaultSelection<Prisma.$CatVenuePayload>
+/**
+ * Model CatOccasionType
+ * 
+ */
+export type CatOccasionType = $Result.DefaultSelection<Prisma.$CatOccasionTypePayload>
+/**
+ * Model CatCuisine
+ * 
+ */
+export type CatCuisine = $Result.DefaultSelection<Prisma.$CatCuisinePayload>
+/**
+ * Model CatServiceStyle
+ * 
+ */
+export type CatServiceStyle = $Result.DefaultSelection<Prisma.$CatServiceStylePayload>
 
 /**
  * Enums
@@ -2106,6 +2121,36 @@ export class PrismaClient<
     * ```
     */
   get catVenue(): Prisma.CatVenueDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catOccasionType`: Exposes CRUD operations for the **CatOccasionType** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatOccasionTypes
+    * const catOccasionTypes = await prisma.catOccasionType.findMany()
+    * ```
+    */
+  get catOccasionType(): Prisma.CatOccasionTypeDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catCuisine`: Exposes CRUD operations for the **CatCuisine** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatCuisines
+    * const catCuisines = await prisma.catCuisine.findMany()
+    * ```
+    */
+  get catCuisine(): Prisma.CatCuisineDelegate<ExtArgs>;
+
+  /**
+   * `prisma.catServiceStyle`: Exposes CRUD operations for the **CatServiceStyle** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more CatServiceStyles
+    * const catServiceStyles = await prisma.catServiceStyle.findMany()
+    * ```
+    */
+  get catServiceStyle(): Prisma.CatServiceStyleDelegate<ExtArgs>;
 }
 
 export namespace Prisma {
@@ -2668,7 +2713,10 @@ export namespace Prisma {
     CatContact: 'CatContact',
     CatRelationshipNote: 'CatRelationshipNote',
     CatRelationshipDocument: 'CatRelationshipDocument',
-    CatVenue: 'CatVenue'
+    CatVenue: 'CatVenue',
+    CatOccasionType: 'CatOccasionType',
+    CatCuisine: 'CatCuisine',
+    CatServiceStyle: 'CatServiceStyle'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -2684,7 +2732,7 @@ export namespace Prisma {
 
   export type TypeMap<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, ClientOptions = {}> = {
     meta: {
-      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking" | "catRelationship" | "catContact" | "catRelationshipNote" | "catRelationshipDocument" | "catVenue"
+      modelProps: "tenant" | "user" | "role" | "userRole" | "permission" | "rolePermission" | "passwordResetToken" | "passwordResetRequest" | "mfaBackupCode" | "refreshToken" | "auditLog" | "securityAlert" | "userInvite" | "category" | "vendor" | "apparel" | "stockMovement" | "event" | "eventReservation" | "laundryOrder" | "laundryOrderItem" | "movementType" | "reasonCode" | "stockConditionMaster" | "unitOfMeasure" | "location" | "documentNumbering" | "inventorySettings" | "supplier" | "purchaseOrder" | "purchaseOrderItem" | "dashboardSnapshot" | "kPITrendSnapshot" | "aIRecommendation" | "laundryVendorRate" | "laundryVendorInvoice" | "laundryVendorInvoiceItem" | "laundryBillingSource" | "vendorLiability" | "vendorLiabilityCredit" | "vendorPayment" | "vendorPaymentAllocation" | "vendorLedger" | "cateringEvent" | "cateringEventType" | "cateringEventStatus" | "cateringEventCategory" | "cateringEventPriority" | "cateringEventFunction" | "cateringEventVenue" | "cateringEventContact" | "cateringEventAssignment" | "cateringEventSchedule" | "cateringEventCalendar" | "cateringEventActivity" | "cateringEventNote" | "cateringEventTask" | "cateringEventTaskChecklist" | "cateringEventDocument" | "cateringEventCommunication" | "cateringEventPayment" | "cateringEventCosting" | "cateringEventBudget" | "cateringEventResource" | "cateringEventResourceRequirement" | "cateringEventMenu" | "cateringEventHealthScore" | "cateringEventApproval" | "cateringEventTimeline" | "cateringEventTag" | "cateringEventCustomField" | "cateringEventCustomFieldValue" | "cateringEventNotification" | "cateringEventAuditLog" | "workflowDefinition" | "workflowState" | "platformModule" | "configurationEntity" | "runtimeArtifact" | "entityFieldDefinition" | "entityFieldOption" | "entityFieldLookupDefinition" | "entityView" | "entityLayoutView" | "entityRecord" | "entityValue" | "entityRelationship" | "lookupValue" | "validationRule" | "entityPermission" | "entityAudit" | "navigationGroup" | "navigationItem" | "navigationProfile" | "navigationLayout" | "navigationPermission" | "navigationVersion" | "navigationHistory" | "navigationFavorite" | "navigationQuickLink" | "platformModulePermission" | "navigationSearchIndex" | "platformRecordSequence" | "platformApplication" | "platformApplicationPackage" | "tenantWorkspace" | "workspaceInstallation" | "tenantMembership" | "workspaceMembership" | "tenantSubscription" | "notificationTemplate" | "notificationChannel" | "notificationDelivery" | "deliveryAttemptRecord" | "notificationRecipient" | "providerProfile" | "deliveryTracking" | "catRelationship" | "catContact" | "catRelationshipNote" | "catRelationshipDocument" | "catVenue" | "catOccasionType" | "catCuisine" | "catServiceStyle"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -11225,6 +11273,216 @@ export namespace Prisma {
           count: {
             args: Prisma.CatVenueCountArgs<ExtArgs>
             result: $Utils.Optional<CatVenueCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatOccasionType: {
+        payload: Prisma.$CatOccasionTypePayload<ExtArgs>
+        fields: Prisma.CatOccasionTypeFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatOccasionTypeFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatOccasionTypeFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          findFirst: {
+            args: Prisma.CatOccasionTypeFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatOccasionTypeFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          findMany: {
+            args: Prisma.CatOccasionTypeFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>[]
+          }
+          create: {
+            args: Prisma.CatOccasionTypeCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          createMany: {
+            args: Prisma.CatOccasionTypeCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatOccasionTypeCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>[]
+          }
+          delete: {
+            args: Prisma.CatOccasionTypeDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          update: {
+            args: Prisma.CatOccasionTypeUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          deleteMany: {
+            args: Prisma.CatOccasionTypeDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatOccasionTypeUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatOccasionTypeUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatOccasionTypePayload>
+          }
+          aggregate: {
+            args: Prisma.CatOccasionTypeAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatOccasionType>
+          }
+          groupBy: {
+            args: Prisma.CatOccasionTypeGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatOccasionTypeGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatOccasionTypeCountArgs<ExtArgs>
+            result: $Utils.Optional<CatOccasionTypeCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatCuisine: {
+        payload: Prisma.$CatCuisinePayload<ExtArgs>
+        fields: Prisma.CatCuisineFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatCuisineFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatCuisineFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          findFirst: {
+            args: Prisma.CatCuisineFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatCuisineFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          findMany: {
+            args: Prisma.CatCuisineFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>[]
+          }
+          create: {
+            args: Prisma.CatCuisineCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          createMany: {
+            args: Prisma.CatCuisineCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatCuisineCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>[]
+          }
+          delete: {
+            args: Prisma.CatCuisineDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          update: {
+            args: Prisma.CatCuisineUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          deleteMany: {
+            args: Prisma.CatCuisineDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatCuisineUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatCuisineUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatCuisinePayload>
+          }
+          aggregate: {
+            args: Prisma.CatCuisineAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatCuisine>
+          }
+          groupBy: {
+            args: Prisma.CatCuisineGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatCuisineGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatCuisineCountArgs<ExtArgs>
+            result: $Utils.Optional<CatCuisineCountAggregateOutputType> | number
+          }
+        }
+      }
+      CatServiceStyle: {
+        payload: Prisma.$CatServiceStylePayload<ExtArgs>
+        fields: Prisma.CatServiceStyleFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.CatServiceStyleFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.CatServiceStyleFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          findFirst: {
+            args: Prisma.CatServiceStyleFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.CatServiceStyleFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          findMany: {
+            args: Prisma.CatServiceStyleFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>[]
+          }
+          create: {
+            args: Prisma.CatServiceStyleCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          createMany: {
+            args: Prisma.CatServiceStyleCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.CatServiceStyleCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>[]
+          }
+          delete: {
+            args: Prisma.CatServiceStyleDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          update: {
+            args: Prisma.CatServiceStyleUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          deleteMany: {
+            args: Prisma.CatServiceStyleDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.CatServiceStyleUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          upsert: {
+            args: Prisma.CatServiceStyleUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$CatServiceStylePayload>
+          }
+          aggregate: {
+            args: Prisma.CatServiceStyleAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateCatServiceStyle>
+          }
+          groupBy: {
+            args: Prisma.CatServiceStyleGroupByArgs<ExtArgs>
+            result: $Utils.Optional<CatServiceStyleGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.CatServiceStyleCountArgs<ExtArgs>
+            result: $Utils.Optional<CatServiceStyleCountAggregateOutputType> | number
           }
         }
       }
@@ -146094,6 +146352,3066 @@ export namespace Prisma {
 
 
   /**
+   * Model CatOccasionType
+   */
+
+  export type AggregateCatOccasionType = {
+    _count: CatOccasionTypeCountAggregateOutputType | null
+    _avg: CatOccasionTypeAvgAggregateOutputType | null
+    _sum: CatOccasionTypeSumAggregateOutputType | null
+    _min: CatOccasionTypeMinAggregateOutputType | null
+    _max: CatOccasionTypeMaxAggregateOutputType | null
+  }
+
+  export type CatOccasionTypeAvgAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatOccasionTypeSumAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatOccasionTypeMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    occasionNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatOccasionTypeMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    occasionNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatOccasionTypeCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    occasionNumber: number
+    name: number
+    code: number
+    isActive: number
+    showInDiscoveryQuickSelect: number
+    displayOrder: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type CatOccasionTypeAvgAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatOccasionTypeSumAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatOccasionTypeMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    occasionNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatOccasionTypeMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    occasionNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatOccasionTypeCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    occasionNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type CatOccasionTypeAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatOccasionType to aggregate.
+     */
+    where?: CatOccasionTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatOccasionTypes to fetch.
+     */
+    orderBy?: CatOccasionTypeOrderByWithRelationInput | CatOccasionTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatOccasionTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatOccasionTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatOccasionTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatOccasionTypes
+    **/
+    _count?: true | CatOccasionTypeCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatOccasionTypeAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatOccasionTypeSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatOccasionTypeMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatOccasionTypeMaxAggregateInputType
+  }
+
+  export type GetCatOccasionTypeAggregateType<T extends CatOccasionTypeAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatOccasionType]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatOccasionType[P]>
+      : GetScalarType<T[P], AggregateCatOccasionType[P]>
+  }
+
+
+
+
+  export type CatOccasionTypeGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatOccasionTypeWhereInput
+    orderBy?: CatOccasionTypeOrderByWithAggregationInput | CatOccasionTypeOrderByWithAggregationInput[]
+    by: CatOccasionTypeScalarFieldEnum[] | CatOccasionTypeScalarFieldEnum
+    having?: CatOccasionTypeScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatOccasionTypeCountAggregateInputType | true
+    _avg?: CatOccasionTypeAvgAggregateInputType
+    _sum?: CatOccasionTypeSumAggregateInputType
+    _min?: CatOccasionTypeMinAggregateInputType
+    _max?: CatOccasionTypeMaxAggregateInputType
+  }
+
+  export type CatOccasionTypeGroupByOutputType = {
+    id: string
+    tenantId: string
+    occasionNumber: string
+    name: string
+    code: string
+    isActive: boolean
+    showInDiscoveryQuickSelect: boolean
+    displayOrder: number
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    _count: CatOccasionTypeCountAggregateOutputType | null
+    _avg: CatOccasionTypeAvgAggregateOutputType | null
+    _sum: CatOccasionTypeSumAggregateOutputType | null
+    _min: CatOccasionTypeMinAggregateOutputType | null
+    _max: CatOccasionTypeMaxAggregateOutputType | null
+  }
+
+  type GetCatOccasionTypeGroupByPayload<T extends CatOccasionTypeGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatOccasionTypeGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatOccasionTypeGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatOccasionTypeGroupByOutputType[P]>
+            : GetScalarType<T[P], CatOccasionTypeGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatOccasionTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    occasionNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catOccasionType"]>
+
+  export type CatOccasionTypeSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    occasionNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catOccasionType"]>
+
+  export type CatOccasionTypeSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    occasionNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }
+
+
+  export type $CatOccasionTypePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatOccasionType"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      occasionNumber: string
+      name: string
+      code: string
+      isActive: boolean
+      showInDiscoveryQuickSelect: boolean
+      displayOrder: number
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+    }, ExtArgs["result"]["catOccasionType"]>
+    composites: {}
+  }
+
+  type CatOccasionTypeGetPayload<S extends boolean | null | undefined | CatOccasionTypeDefaultArgs> = $Result.GetResult<Prisma.$CatOccasionTypePayload, S>
+
+  type CatOccasionTypeCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatOccasionTypeFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatOccasionTypeCountAggregateInputType | true
+    }
+
+  export interface CatOccasionTypeDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatOccasionType'], meta: { name: 'CatOccasionType' } }
+    /**
+     * Find zero or one CatOccasionType that matches the filter.
+     * @param {CatOccasionTypeFindUniqueArgs} args - Arguments to find a CatOccasionType
+     * @example
+     * // Get one CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatOccasionTypeFindUniqueArgs>(args: SelectSubset<T, CatOccasionTypeFindUniqueArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatOccasionType that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatOccasionTypeFindUniqueOrThrowArgs} args - Arguments to find a CatOccasionType
+     * @example
+     * // Get one CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatOccasionTypeFindUniqueOrThrowArgs>(args: SelectSubset<T, CatOccasionTypeFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatOccasionType that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeFindFirstArgs} args - Arguments to find a CatOccasionType
+     * @example
+     * // Get one CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatOccasionTypeFindFirstArgs>(args?: SelectSubset<T, CatOccasionTypeFindFirstArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatOccasionType that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeFindFirstOrThrowArgs} args - Arguments to find a CatOccasionType
+     * @example
+     * // Get one CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatOccasionTypeFindFirstOrThrowArgs>(args?: SelectSubset<T, CatOccasionTypeFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatOccasionTypes that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatOccasionTypes
+     * const catOccasionTypes = await prisma.catOccasionType.findMany()
+     * 
+     * // Get first 10 CatOccasionTypes
+     * const catOccasionTypes = await prisma.catOccasionType.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catOccasionTypeWithIdOnly = await prisma.catOccasionType.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatOccasionTypeFindManyArgs>(args?: SelectSubset<T, CatOccasionTypeFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatOccasionType.
+     * @param {CatOccasionTypeCreateArgs} args - Arguments to create a CatOccasionType.
+     * @example
+     * // Create one CatOccasionType
+     * const CatOccasionType = await prisma.catOccasionType.create({
+     *   data: {
+     *     // ... data to create a CatOccasionType
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatOccasionTypeCreateArgs>(args: SelectSubset<T, CatOccasionTypeCreateArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatOccasionTypes.
+     * @param {CatOccasionTypeCreateManyArgs} args - Arguments to create many CatOccasionTypes.
+     * @example
+     * // Create many CatOccasionTypes
+     * const catOccasionType = await prisma.catOccasionType.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatOccasionTypeCreateManyArgs>(args?: SelectSubset<T, CatOccasionTypeCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatOccasionTypes and returns the data saved in the database.
+     * @param {CatOccasionTypeCreateManyAndReturnArgs} args - Arguments to create many CatOccasionTypes.
+     * @example
+     * // Create many CatOccasionTypes
+     * const catOccasionType = await prisma.catOccasionType.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatOccasionTypes and only return the `id`
+     * const catOccasionTypeWithIdOnly = await prisma.catOccasionType.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatOccasionTypeCreateManyAndReturnArgs>(args?: SelectSubset<T, CatOccasionTypeCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatOccasionType.
+     * @param {CatOccasionTypeDeleteArgs} args - Arguments to delete one CatOccasionType.
+     * @example
+     * // Delete one CatOccasionType
+     * const CatOccasionType = await prisma.catOccasionType.delete({
+     *   where: {
+     *     // ... filter to delete one CatOccasionType
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatOccasionTypeDeleteArgs>(args: SelectSubset<T, CatOccasionTypeDeleteArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatOccasionType.
+     * @param {CatOccasionTypeUpdateArgs} args - Arguments to update one CatOccasionType.
+     * @example
+     * // Update one CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatOccasionTypeUpdateArgs>(args: SelectSubset<T, CatOccasionTypeUpdateArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatOccasionTypes.
+     * @param {CatOccasionTypeDeleteManyArgs} args - Arguments to filter CatOccasionTypes to delete.
+     * @example
+     * // Delete a few CatOccasionTypes
+     * const { count } = await prisma.catOccasionType.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatOccasionTypeDeleteManyArgs>(args?: SelectSubset<T, CatOccasionTypeDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatOccasionTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatOccasionTypes
+     * const catOccasionType = await prisma.catOccasionType.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatOccasionTypeUpdateManyArgs>(args: SelectSubset<T, CatOccasionTypeUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatOccasionType.
+     * @param {CatOccasionTypeUpsertArgs} args - Arguments to update or create a CatOccasionType.
+     * @example
+     * // Update or create a CatOccasionType
+     * const catOccasionType = await prisma.catOccasionType.upsert({
+     *   create: {
+     *     // ... data to create a CatOccasionType
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatOccasionType we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatOccasionTypeUpsertArgs>(args: SelectSubset<T, CatOccasionTypeUpsertArgs<ExtArgs>>): Prisma__CatOccasionTypeClient<$Result.GetResult<Prisma.$CatOccasionTypePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatOccasionTypes.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeCountArgs} args - Arguments to filter CatOccasionTypes to count.
+     * @example
+     * // Count the number of CatOccasionTypes
+     * const count = await prisma.catOccasionType.count({
+     *   where: {
+     *     // ... the filter for the CatOccasionTypes we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatOccasionTypeCountArgs>(
+      args?: Subset<T, CatOccasionTypeCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatOccasionTypeCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatOccasionType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatOccasionTypeAggregateArgs>(args: Subset<T, CatOccasionTypeAggregateArgs>): Prisma.PrismaPromise<GetCatOccasionTypeAggregateType<T>>
+
+    /**
+     * Group by CatOccasionType.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatOccasionTypeGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatOccasionTypeGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatOccasionTypeGroupByArgs['orderBy'] }
+        : { orderBy?: CatOccasionTypeGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatOccasionTypeGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatOccasionTypeGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatOccasionType model
+   */
+  readonly fields: CatOccasionTypeFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatOccasionType.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatOccasionTypeClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatOccasionType model
+   */ 
+  interface CatOccasionTypeFieldRefs {
+    readonly id: FieldRef<"CatOccasionType", 'String'>
+    readonly tenantId: FieldRef<"CatOccasionType", 'String'>
+    readonly occasionNumber: FieldRef<"CatOccasionType", 'String'>
+    readonly name: FieldRef<"CatOccasionType", 'String'>
+    readonly code: FieldRef<"CatOccasionType", 'String'>
+    readonly isActive: FieldRef<"CatOccasionType", 'Boolean'>
+    readonly showInDiscoveryQuickSelect: FieldRef<"CatOccasionType", 'Boolean'>
+    readonly displayOrder: FieldRef<"CatOccasionType", 'Int'>
+    readonly createdAt: FieldRef<"CatOccasionType", 'DateTime'>
+    readonly createdBy: FieldRef<"CatOccasionType", 'String'>
+    readonly updatedAt: FieldRef<"CatOccasionType", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatOccasionType", 'String'>
+    readonly isDeleted: FieldRef<"CatOccasionType", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatOccasionType", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatOccasionType findUnique
+   */
+  export type CatOccasionTypeFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter, which CatOccasionType to fetch.
+     */
+    where: CatOccasionTypeWhereUniqueInput
+  }
+
+  /**
+   * CatOccasionType findUniqueOrThrow
+   */
+  export type CatOccasionTypeFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter, which CatOccasionType to fetch.
+     */
+    where: CatOccasionTypeWhereUniqueInput
+  }
+
+  /**
+   * CatOccasionType findFirst
+   */
+  export type CatOccasionTypeFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter, which CatOccasionType to fetch.
+     */
+    where?: CatOccasionTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatOccasionTypes to fetch.
+     */
+    orderBy?: CatOccasionTypeOrderByWithRelationInput | CatOccasionTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatOccasionTypes.
+     */
+    cursor?: CatOccasionTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatOccasionTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatOccasionTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatOccasionTypes.
+     */
+    distinct?: CatOccasionTypeScalarFieldEnum | CatOccasionTypeScalarFieldEnum[]
+  }
+
+  /**
+   * CatOccasionType findFirstOrThrow
+   */
+  export type CatOccasionTypeFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter, which CatOccasionType to fetch.
+     */
+    where?: CatOccasionTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatOccasionTypes to fetch.
+     */
+    orderBy?: CatOccasionTypeOrderByWithRelationInput | CatOccasionTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatOccasionTypes.
+     */
+    cursor?: CatOccasionTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatOccasionTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatOccasionTypes.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatOccasionTypes.
+     */
+    distinct?: CatOccasionTypeScalarFieldEnum | CatOccasionTypeScalarFieldEnum[]
+  }
+
+  /**
+   * CatOccasionType findMany
+   */
+  export type CatOccasionTypeFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter, which CatOccasionTypes to fetch.
+     */
+    where?: CatOccasionTypeWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatOccasionTypes to fetch.
+     */
+    orderBy?: CatOccasionTypeOrderByWithRelationInput | CatOccasionTypeOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatOccasionTypes.
+     */
+    cursor?: CatOccasionTypeWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatOccasionTypes from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatOccasionTypes.
+     */
+    skip?: number
+    distinct?: CatOccasionTypeScalarFieldEnum | CatOccasionTypeScalarFieldEnum[]
+  }
+
+  /**
+   * CatOccasionType create
+   */
+  export type CatOccasionTypeCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * The data needed to create a CatOccasionType.
+     */
+    data: XOR<CatOccasionTypeCreateInput, CatOccasionTypeUncheckedCreateInput>
+  }
+
+  /**
+   * CatOccasionType createMany
+   */
+  export type CatOccasionTypeCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatOccasionTypes.
+     */
+    data: CatOccasionTypeCreateManyInput | CatOccasionTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatOccasionType createManyAndReturn
+   */
+  export type CatOccasionTypeCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatOccasionTypes.
+     */
+    data: CatOccasionTypeCreateManyInput | CatOccasionTypeCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatOccasionType update
+   */
+  export type CatOccasionTypeUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * The data needed to update a CatOccasionType.
+     */
+    data: XOR<CatOccasionTypeUpdateInput, CatOccasionTypeUncheckedUpdateInput>
+    /**
+     * Choose, which CatOccasionType to update.
+     */
+    where: CatOccasionTypeWhereUniqueInput
+  }
+
+  /**
+   * CatOccasionType updateMany
+   */
+  export type CatOccasionTypeUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatOccasionTypes.
+     */
+    data: XOR<CatOccasionTypeUpdateManyMutationInput, CatOccasionTypeUncheckedUpdateManyInput>
+    /**
+     * Filter which CatOccasionTypes to update
+     */
+    where?: CatOccasionTypeWhereInput
+  }
+
+  /**
+   * CatOccasionType upsert
+   */
+  export type CatOccasionTypeUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * The filter to search for the CatOccasionType to update in case it exists.
+     */
+    where: CatOccasionTypeWhereUniqueInput
+    /**
+     * In case the CatOccasionType found by the `where` argument doesn't exist, create a new CatOccasionType with this data.
+     */
+    create: XOR<CatOccasionTypeCreateInput, CatOccasionTypeUncheckedCreateInput>
+    /**
+     * In case the CatOccasionType was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatOccasionTypeUpdateInput, CatOccasionTypeUncheckedUpdateInput>
+  }
+
+  /**
+   * CatOccasionType delete
+   */
+  export type CatOccasionTypeDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+    /**
+     * Filter which CatOccasionType to delete.
+     */
+    where: CatOccasionTypeWhereUniqueInput
+  }
+
+  /**
+   * CatOccasionType deleteMany
+   */
+  export type CatOccasionTypeDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatOccasionTypes to delete
+     */
+    where?: CatOccasionTypeWhereInput
+  }
+
+  /**
+   * CatOccasionType without action
+   */
+  export type CatOccasionTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatOccasionType
+     */
+    select?: CatOccasionTypeSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatCuisine
+   */
+
+  export type AggregateCatCuisine = {
+    _count: CatCuisineCountAggregateOutputType | null
+    _avg: CatCuisineAvgAggregateOutputType | null
+    _sum: CatCuisineSumAggregateOutputType | null
+    _min: CatCuisineMinAggregateOutputType | null
+    _max: CatCuisineMaxAggregateOutputType | null
+  }
+
+  export type CatCuisineAvgAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatCuisineSumAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatCuisineMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    cuisineNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatCuisineMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    cuisineNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatCuisineCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    cuisineNumber: number
+    name: number
+    code: number
+    isActive: number
+    showInDiscoveryQuickSelect: number
+    displayOrder: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type CatCuisineAvgAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatCuisineSumAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatCuisineMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cuisineNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatCuisineMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cuisineNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatCuisineCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    cuisineNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type CatCuisineAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatCuisine to aggregate.
+     */
+    where?: CatCuisineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatCuisines to fetch.
+     */
+    orderBy?: CatCuisineOrderByWithRelationInput | CatCuisineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatCuisineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatCuisines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatCuisines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatCuisines
+    **/
+    _count?: true | CatCuisineCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatCuisineAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatCuisineSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatCuisineMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatCuisineMaxAggregateInputType
+  }
+
+  export type GetCatCuisineAggregateType<T extends CatCuisineAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatCuisine]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatCuisine[P]>
+      : GetScalarType<T[P], AggregateCatCuisine[P]>
+  }
+
+
+
+
+  export type CatCuisineGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatCuisineWhereInput
+    orderBy?: CatCuisineOrderByWithAggregationInput | CatCuisineOrderByWithAggregationInput[]
+    by: CatCuisineScalarFieldEnum[] | CatCuisineScalarFieldEnum
+    having?: CatCuisineScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatCuisineCountAggregateInputType | true
+    _avg?: CatCuisineAvgAggregateInputType
+    _sum?: CatCuisineSumAggregateInputType
+    _min?: CatCuisineMinAggregateInputType
+    _max?: CatCuisineMaxAggregateInputType
+  }
+
+  export type CatCuisineGroupByOutputType = {
+    id: string
+    tenantId: string
+    cuisineNumber: string
+    name: string
+    code: string
+    isActive: boolean
+    showInDiscoveryQuickSelect: boolean
+    displayOrder: number
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    _count: CatCuisineCountAggregateOutputType | null
+    _avg: CatCuisineAvgAggregateOutputType | null
+    _sum: CatCuisineSumAggregateOutputType | null
+    _min: CatCuisineMinAggregateOutputType | null
+    _max: CatCuisineMaxAggregateOutputType | null
+  }
+
+  type GetCatCuisineGroupByPayload<T extends CatCuisineGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatCuisineGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatCuisineGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatCuisineGroupByOutputType[P]>
+            : GetScalarType<T[P], CatCuisineGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatCuisineSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    cuisineNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catCuisine"]>
+
+  export type CatCuisineSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    cuisineNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catCuisine"]>
+
+  export type CatCuisineSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    cuisineNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }
+
+
+  export type $CatCuisinePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatCuisine"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      cuisineNumber: string
+      name: string
+      code: string
+      isActive: boolean
+      showInDiscoveryQuickSelect: boolean
+      displayOrder: number
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+    }, ExtArgs["result"]["catCuisine"]>
+    composites: {}
+  }
+
+  type CatCuisineGetPayload<S extends boolean | null | undefined | CatCuisineDefaultArgs> = $Result.GetResult<Prisma.$CatCuisinePayload, S>
+
+  type CatCuisineCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatCuisineFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatCuisineCountAggregateInputType | true
+    }
+
+  export interface CatCuisineDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatCuisine'], meta: { name: 'CatCuisine' } }
+    /**
+     * Find zero or one CatCuisine that matches the filter.
+     * @param {CatCuisineFindUniqueArgs} args - Arguments to find a CatCuisine
+     * @example
+     * // Get one CatCuisine
+     * const catCuisine = await prisma.catCuisine.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatCuisineFindUniqueArgs>(args: SelectSubset<T, CatCuisineFindUniqueArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatCuisine that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatCuisineFindUniqueOrThrowArgs} args - Arguments to find a CatCuisine
+     * @example
+     * // Get one CatCuisine
+     * const catCuisine = await prisma.catCuisine.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatCuisineFindUniqueOrThrowArgs>(args: SelectSubset<T, CatCuisineFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatCuisine that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineFindFirstArgs} args - Arguments to find a CatCuisine
+     * @example
+     * // Get one CatCuisine
+     * const catCuisine = await prisma.catCuisine.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatCuisineFindFirstArgs>(args?: SelectSubset<T, CatCuisineFindFirstArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatCuisine that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineFindFirstOrThrowArgs} args - Arguments to find a CatCuisine
+     * @example
+     * // Get one CatCuisine
+     * const catCuisine = await prisma.catCuisine.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatCuisineFindFirstOrThrowArgs>(args?: SelectSubset<T, CatCuisineFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatCuisines that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatCuisines
+     * const catCuisines = await prisma.catCuisine.findMany()
+     * 
+     * // Get first 10 CatCuisines
+     * const catCuisines = await prisma.catCuisine.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catCuisineWithIdOnly = await prisma.catCuisine.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatCuisineFindManyArgs>(args?: SelectSubset<T, CatCuisineFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatCuisine.
+     * @param {CatCuisineCreateArgs} args - Arguments to create a CatCuisine.
+     * @example
+     * // Create one CatCuisine
+     * const CatCuisine = await prisma.catCuisine.create({
+     *   data: {
+     *     // ... data to create a CatCuisine
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatCuisineCreateArgs>(args: SelectSubset<T, CatCuisineCreateArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatCuisines.
+     * @param {CatCuisineCreateManyArgs} args - Arguments to create many CatCuisines.
+     * @example
+     * // Create many CatCuisines
+     * const catCuisine = await prisma.catCuisine.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatCuisineCreateManyArgs>(args?: SelectSubset<T, CatCuisineCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatCuisines and returns the data saved in the database.
+     * @param {CatCuisineCreateManyAndReturnArgs} args - Arguments to create many CatCuisines.
+     * @example
+     * // Create many CatCuisines
+     * const catCuisine = await prisma.catCuisine.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatCuisines and only return the `id`
+     * const catCuisineWithIdOnly = await prisma.catCuisine.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatCuisineCreateManyAndReturnArgs>(args?: SelectSubset<T, CatCuisineCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatCuisine.
+     * @param {CatCuisineDeleteArgs} args - Arguments to delete one CatCuisine.
+     * @example
+     * // Delete one CatCuisine
+     * const CatCuisine = await prisma.catCuisine.delete({
+     *   where: {
+     *     // ... filter to delete one CatCuisine
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatCuisineDeleteArgs>(args: SelectSubset<T, CatCuisineDeleteArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatCuisine.
+     * @param {CatCuisineUpdateArgs} args - Arguments to update one CatCuisine.
+     * @example
+     * // Update one CatCuisine
+     * const catCuisine = await prisma.catCuisine.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatCuisineUpdateArgs>(args: SelectSubset<T, CatCuisineUpdateArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatCuisines.
+     * @param {CatCuisineDeleteManyArgs} args - Arguments to filter CatCuisines to delete.
+     * @example
+     * // Delete a few CatCuisines
+     * const { count } = await prisma.catCuisine.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatCuisineDeleteManyArgs>(args?: SelectSubset<T, CatCuisineDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatCuisines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatCuisines
+     * const catCuisine = await prisma.catCuisine.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatCuisineUpdateManyArgs>(args: SelectSubset<T, CatCuisineUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatCuisine.
+     * @param {CatCuisineUpsertArgs} args - Arguments to update or create a CatCuisine.
+     * @example
+     * // Update or create a CatCuisine
+     * const catCuisine = await prisma.catCuisine.upsert({
+     *   create: {
+     *     // ... data to create a CatCuisine
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatCuisine we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatCuisineUpsertArgs>(args: SelectSubset<T, CatCuisineUpsertArgs<ExtArgs>>): Prisma__CatCuisineClient<$Result.GetResult<Prisma.$CatCuisinePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatCuisines.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineCountArgs} args - Arguments to filter CatCuisines to count.
+     * @example
+     * // Count the number of CatCuisines
+     * const count = await prisma.catCuisine.count({
+     *   where: {
+     *     // ... the filter for the CatCuisines we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatCuisineCountArgs>(
+      args?: Subset<T, CatCuisineCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatCuisineCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatCuisine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatCuisineAggregateArgs>(args: Subset<T, CatCuisineAggregateArgs>): Prisma.PrismaPromise<GetCatCuisineAggregateType<T>>
+
+    /**
+     * Group by CatCuisine.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatCuisineGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatCuisineGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatCuisineGroupByArgs['orderBy'] }
+        : { orderBy?: CatCuisineGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatCuisineGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatCuisineGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatCuisine model
+   */
+  readonly fields: CatCuisineFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatCuisine.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatCuisineClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatCuisine model
+   */ 
+  interface CatCuisineFieldRefs {
+    readonly id: FieldRef<"CatCuisine", 'String'>
+    readonly tenantId: FieldRef<"CatCuisine", 'String'>
+    readonly cuisineNumber: FieldRef<"CatCuisine", 'String'>
+    readonly name: FieldRef<"CatCuisine", 'String'>
+    readonly code: FieldRef<"CatCuisine", 'String'>
+    readonly isActive: FieldRef<"CatCuisine", 'Boolean'>
+    readonly showInDiscoveryQuickSelect: FieldRef<"CatCuisine", 'Boolean'>
+    readonly displayOrder: FieldRef<"CatCuisine", 'Int'>
+    readonly createdAt: FieldRef<"CatCuisine", 'DateTime'>
+    readonly createdBy: FieldRef<"CatCuisine", 'String'>
+    readonly updatedAt: FieldRef<"CatCuisine", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatCuisine", 'String'>
+    readonly isDeleted: FieldRef<"CatCuisine", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatCuisine", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatCuisine findUnique
+   */
+  export type CatCuisineFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter, which CatCuisine to fetch.
+     */
+    where: CatCuisineWhereUniqueInput
+  }
+
+  /**
+   * CatCuisine findUniqueOrThrow
+   */
+  export type CatCuisineFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter, which CatCuisine to fetch.
+     */
+    where: CatCuisineWhereUniqueInput
+  }
+
+  /**
+   * CatCuisine findFirst
+   */
+  export type CatCuisineFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter, which CatCuisine to fetch.
+     */
+    where?: CatCuisineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatCuisines to fetch.
+     */
+    orderBy?: CatCuisineOrderByWithRelationInput | CatCuisineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatCuisines.
+     */
+    cursor?: CatCuisineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatCuisines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatCuisines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatCuisines.
+     */
+    distinct?: CatCuisineScalarFieldEnum | CatCuisineScalarFieldEnum[]
+  }
+
+  /**
+   * CatCuisine findFirstOrThrow
+   */
+  export type CatCuisineFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter, which CatCuisine to fetch.
+     */
+    where?: CatCuisineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatCuisines to fetch.
+     */
+    orderBy?: CatCuisineOrderByWithRelationInput | CatCuisineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatCuisines.
+     */
+    cursor?: CatCuisineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatCuisines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatCuisines.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatCuisines.
+     */
+    distinct?: CatCuisineScalarFieldEnum | CatCuisineScalarFieldEnum[]
+  }
+
+  /**
+   * CatCuisine findMany
+   */
+  export type CatCuisineFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter, which CatCuisines to fetch.
+     */
+    where?: CatCuisineWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatCuisines to fetch.
+     */
+    orderBy?: CatCuisineOrderByWithRelationInput | CatCuisineOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatCuisines.
+     */
+    cursor?: CatCuisineWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatCuisines from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatCuisines.
+     */
+    skip?: number
+    distinct?: CatCuisineScalarFieldEnum | CatCuisineScalarFieldEnum[]
+  }
+
+  /**
+   * CatCuisine create
+   */
+  export type CatCuisineCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * The data needed to create a CatCuisine.
+     */
+    data: XOR<CatCuisineCreateInput, CatCuisineUncheckedCreateInput>
+  }
+
+  /**
+   * CatCuisine createMany
+   */
+  export type CatCuisineCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatCuisines.
+     */
+    data: CatCuisineCreateManyInput | CatCuisineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatCuisine createManyAndReturn
+   */
+  export type CatCuisineCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatCuisines.
+     */
+    data: CatCuisineCreateManyInput | CatCuisineCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatCuisine update
+   */
+  export type CatCuisineUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * The data needed to update a CatCuisine.
+     */
+    data: XOR<CatCuisineUpdateInput, CatCuisineUncheckedUpdateInput>
+    /**
+     * Choose, which CatCuisine to update.
+     */
+    where: CatCuisineWhereUniqueInput
+  }
+
+  /**
+   * CatCuisine updateMany
+   */
+  export type CatCuisineUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatCuisines.
+     */
+    data: XOR<CatCuisineUpdateManyMutationInput, CatCuisineUncheckedUpdateManyInput>
+    /**
+     * Filter which CatCuisines to update
+     */
+    where?: CatCuisineWhereInput
+  }
+
+  /**
+   * CatCuisine upsert
+   */
+  export type CatCuisineUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * The filter to search for the CatCuisine to update in case it exists.
+     */
+    where: CatCuisineWhereUniqueInput
+    /**
+     * In case the CatCuisine found by the `where` argument doesn't exist, create a new CatCuisine with this data.
+     */
+    create: XOR<CatCuisineCreateInput, CatCuisineUncheckedCreateInput>
+    /**
+     * In case the CatCuisine was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatCuisineUpdateInput, CatCuisineUncheckedUpdateInput>
+  }
+
+  /**
+   * CatCuisine delete
+   */
+  export type CatCuisineDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+    /**
+     * Filter which CatCuisine to delete.
+     */
+    where: CatCuisineWhereUniqueInput
+  }
+
+  /**
+   * CatCuisine deleteMany
+   */
+  export type CatCuisineDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatCuisines to delete
+     */
+    where?: CatCuisineWhereInput
+  }
+
+  /**
+   * CatCuisine without action
+   */
+  export type CatCuisineDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatCuisine
+     */
+    select?: CatCuisineSelect<ExtArgs> | null
+  }
+
+
+  /**
+   * Model CatServiceStyle
+   */
+
+  export type AggregateCatServiceStyle = {
+    _count: CatServiceStyleCountAggregateOutputType | null
+    _avg: CatServiceStyleAvgAggregateOutputType | null
+    _sum: CatServiceStyleSumAggregateOutputType | null
+    _min: CatServiceStyleMinAggregateOutputType | null
+    _max: CatServiceStyleMaxAggregateOutputType | null
+  }
+
+  export type CatServiceStyleAvgAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatServiceStyleSumAggregateOutputType = {
+    displayOrder: number | null
+  }
+
+  export type CatServiceStyleMinAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    styleNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatServiceStyleMaxAggregateOutputType = {
+    id: string | null
+    tenantId: string | null
+    styleNumber: string | null
+    name: string | null
+    code: string | null
+    isActive: boolean | null
+    showInDiscoveryQuickSelect: boolean | null
+    displayOrder: number | null
+    createdAt: Date | null
+    createdBy: string | null
+    updatedAt: Date | null
+    updatedBy: string | null
+    isDeleted: boolean | null
+    deletedAt: Date | null
+  }
+
+  export type CatServiceStyleCountAggregateOutputType = {
+    id: number
+    tenantId: number
+    styleNumber: number
+    name: number
+    code: number
+    isActive: number
+    showInDiscoveryQuickSelect: number
+    displayOrder: number
+    createdAt: number
+    createdBy: number
+    updatedAt: number
+    updatedBy: number
+    isDeleted: number
+    deletedAt: number
+    _all: number
+  }
+
+
+  export type CatServiceStyleAvgAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatServiceStyleSumAggregateInputType = {
+    displayOrder?: true
+  }
+
+  export type CatServiceStyleMinAggregateInputType = {
+    id?: true
+    tenantId?: true
+    styleNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatServiceStyleMaxAggregateInputType = {
+    id?: true
+    tenantId?: true
+    styleNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+  }
+
+  export type CatServiceStyleCountAggregateInputType = {
+    id?: true
+    tenantId?: true
+    styleNumber?: true
+    name?: true
+    code?: true
+    isActive?: true
+    showInDiscoveryQuickSelect?: true
+    displayOrder?: true
+    createdAt?: true
+    createdBy?: true
+    updatedAt?: true
+    updatedBy?: true
+    isDeleted?: true
+    deletedAt?: true
+    _all?: true
+  }
+
+  export type CatServiceStyleAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatServiceStyle to aggregate.
+     */
+    where?: CatServiceStyleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatServiceStyles to fetch.
+     */
+    orderBy?: CatServiceStyleOrderByWithRelationInput | CatServiceStyleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: CatServiceStyleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatServiceStyles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatServiceStyles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned CatServiceStyles
+    **/
+    _count?: true | CatServiceStyleCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: CatServiceStyleAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: CatServiceStyleSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: CatServiceStyleMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: CatServiceStyleMaxAggregateInputType
+  }
+
+  export type GetCatServiceStyleAggregateType<T extends CatServiceStyleAggregateArgs> = {
+        [P in keyof T & keyof AggregateCatServiceStyle]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateCatServiceStyle[P]>
+      : GetScalarType<T[P], AggregateCatServiceStyle[P]>
+  }
+
+
+
+
+  export type CatServiceStyleGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: CatServiceStyleWhereInput
+    orderBy?: CatServiceStyleOrderByWithAggregationInput | CatServiceStyleOrderByWithAggregationInput[]
+    by: CatServiceStyleScalarFieldEnum[] | CatServiceStyleScalarFieldEnum
+    having?: CatServiceStyleScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: CatServiceStyleCountAggregateInputType | true
+    _avg?: CatServiceStyleAvgAggregateInputType
+    _sum?: CatServiceStyleSumAggregateInputType
+    _min?: CatServiceStyleMinAggregateInputType
+    _max?: CatServiceStyleMaxAggregateInputType
+  }
+
+  export type CatServiceStyleGroupByOutputType = {
+    id: string
+    tenantId: string
+    styleNumber: string
+    name: string
+    code: string
+    isActive: boolean
+    showInDiscoveryQuickSelect: boolean
+    displayOrder: number
+    createdAt: Date
+    createdBy: string | null
+    updatedAt: Date
+    updatedBy: string | null
+    isDeleted: boolean
+    deletedAt: Date | null
+    _count: CatServiceStyleCountAggregateOutputType | null
+    _avg: CatServiceStyleAvgAggregateOutputType | null
+    _sum: CatServiceStyleSumAggregateOutputType | null
+    _min: CatServiceStyleMinAggregateOutputType | null
+    _max: CatServiceStyleMaxAggregateOutputType | null
+  }
+
+  type GetCatServiceStyleGroupByPayload<T extends CatServiceStyleGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<CatServiceStyleGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof CatServiceStyleGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], CatServiceStyleGroupByOutputType[P]>
+            : GetScalarType<T[P], CatServiceStyleGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type CatServiceStyleSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    styleNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catServiceStyle"]>
+
+  export type CatServiceStyleSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    tenantId?: boolean
+    styleNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }, ExtArgs["result"]["catServiceStyle"]>
+
+  export type CatServiceStyleSelectScalar = {
+    id?: boolean
+    tenantId?: boolean
+    styleNumber?: boolean
+    name?: boolean
+    code?: boolean
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: boolean
+    createdAt?: boolean
+    createdBy?: boolean
+    updatedAt?: boolean
+    updatedBy?: boolean
+    isDeleted?: boolean
+    deletedAt?: boolean
+  }
+
+
+  export type $CatServiceStylePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "CatServiceStyle"
+    objects: {}
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      tenantId: string
+      styleNumber: string
+      name: string
+      code: string
+      isActive: boolean
+      showInDiscoveryQuickSelect: boolean
+      displayOrder: number
+      createdAt: Date
+      createdBy: string | null
+      updatedAt: Date
+      updatedBy: string | null
+      isDeleted: boolean
+      deletedAt: Date | null
+    }, ExtArgs["result"]["catServiceStyle"]>
+    composites: {}
+  }
+
+  type CatServiceStyleGetPayload<S extends boolean | null | undefined | CatServiceStyleDefaultArgs> = $Result.GetResult<Prisma.$CatServiceStylePayload, S>
+
+  type CatServiceStyleCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = 
+    Omit<CatServiceStyleFindManyArgs, 'select' | 'include' | 'distinct'> & {
+      select?: CatServiceStyleCountAggregateInputType | true
+    }
+
+  export interface CatServiceStyleDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['CatServiceStyle'], meta: { name: 'CatServiceStyle' } }
+    /**
+     * Find zero or one CatServiceStyle that matches the filter.
+     * @param {CatServiceStyleFindUniqueArgs} args - Arguments to find a CatServiceStyle
+     * @example
+     * // Get one CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends CatServiceStyleFindUniqueArgs>(args: SelectSubset<T, CatServiceStyleFindUniqueArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "findUnique"> | null, null, ExtArgs>
+
+    /**
+     * Find one CatServiceStyle that matches the filter or throw an error with `error.code='P2025'` 
+     * if no matches were found.
+     * @param {CatServiceStyleFindUniqueOrThrowArgs} args - Arguments to find a CatServiceStyle
+     * @example
+     * // Get one CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends CatServiceStyleFindUniqueOrThrowArgs>(args: SelectSubset<T, CatServiceStyleFindUniqueOrThrowArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "findUniqueOrThrow">, never, ExtArgs>
+
+    /**
+     * Find the first CatServiceStyle that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleFindFirstArgs} args - Arguments to find a CatServiceStyle
+     * @example
+     * // Get one CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends CatServiceStyleFindFirstArgs>(args?: SelectSubset<T, CatServiceStyleFindFirstArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "findFirst"> | null, null, ExtArgs>
+
+    /**
+     * Find the first CatServiceStyle that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleFindFirstOrThrowArgs} args - Arguments to find a CatServiceStyle
+     * @example
+     * // Get one CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends CatServiceStyleFindFirstOrThrowArgs>(args?: SelectSubset<T, CatServiceStyleFindFirstOrThrowArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "findFirstOrThrow">, never, ExtArgs>
+
+    /**
+     * Find zero or more CatServiceStyles that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all CatServiceStyles
+     * const catServiceStyles = await prisma.catServiceStyle.findMany()
+     * 
+     * // Get first 10 CatServiceStyles
+     * const catServiceStyles = await prisma.catServiceStyle.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const catServiceStyleWithIdOnly = await prisma.catServiceStyle.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends CatServiceStyleFindManyArgs>(args?: SelectSubset<T, CatServiceStyleFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "findMany">>
+
+    /**
+     * Create a CatServiceStyle.
+     * @param {CatServiceStyleCreateArgs} args - Arguments to create a CatServiceStyle.
+     * @example
+     * // Create one CatServiceStyle
+     * const CatServiceStyle = await prisma.catServiceStyle.create({
+     *   data: {
+     *     // ... data to create a CatServiceStyle
+     *   }
+     * })
+     * 
+     */
+    create<T extends CatServiceStyleCreateArgs>(args: SelectSubset<T, CatServiceStyleCreateArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "create">, never, ExtArgs>
+
+    /**
+     * Create many CatServiceStyles.
+     * @param {CatServiceStyleCreateManyArgs} args - Arguments to create many CatServiceStyles.
+     * @example
+     * // Create many CatServiceStyles
+     * const catServiceStyle = await prisma.catServiceStyle.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends CatServiceStyleCreateManyArgs>(args?: SelectSubset<T, CatServiceStyleCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many CatServiceStyles and returns the data saved in the database.
+     * @param {CatServiceStyleCreateManyAndReturnArgs} args - Arguments to create many CatServiceStyles.
+     * @example
+     * // Create many CatServiceStyles
+     * const catServiceStyle = await prisma.catServiceStyle.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many CatServiceStyles and only return the `id`
+     * const catServiceStyleWithIdOnly = await prisma.catServiceStyle.createManyAndReturn({ 
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends CatServiceStyleCreateManyAndReturnArgs>(args?: SelectSubset<T, CatServiceStyleCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "createManyAndReturn">>
+
+    /**
+     * Delete a CatServiceStyle.
+     * @param {CatServiceStyleDeleteArgs} args - Arguments to delete one CatServiceStyle.
+     * @example
+     * // Delete one CatServiceStyle
+     * const CatServiceStyle = await prisma.catServiceStyle.delete({
+     *   where: {
+     *     // ... filter to delete one CatServiceStyle
+     *   }
+     * })
+     * 
+     */
+    delete<T extends CatServiceStyleDeleteArgs>(args: SelectSubset<T, CatServiceStyleDeleteArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "delete">, never, ExtArgs>
+
+    /**
+     * Update one CatServiceStyle.
+     * @param {CatServiceStyleUpdateArgs} args - Arguments to update one CatServiceStyle.
+     * @example
+     * // Update one CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends CatServiceStyleUpdateArgs>(args: SelectSubset<T, CatServiceStyleUpdateArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "update">, never, ExtArgs>
+
+    /**
+     * Delete zero or more CatServiceStyles.
+     * @param {CatServiceStyleDeleteManyArgs} args - Arguments to filter CatServiceStyles to delete.
+     * @example
+     * // Delete a few CatServiceStyles
+     * const { count } = await prisma.catServiceStyle.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends CatServiceStyleDeleteManyArgs>(args?: SelectSubset<T, CatServiceStyleDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more CatServiceStyles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many CatServiceStyles
+     * const catServiceStyle = await prisma.catServiceStyle.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends CatServiceStyleUpdateManyArgs>(args: SelectSubset<T, CatServiceStyleUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create or update one CatServiceStyle.
+     * @param {CatServiceStyleUpsertArgs} args - Arguments to update or create a CatServiceStyle.
+     * @example
+     * // Update or create a CatServiceStyle
+     * const catServiceStyle = await prisma.catServiceStyle.upsert({
+     *   create: {
+     *     // ... data to create a CatServiceStyle
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the CatServiceStyle we want to update
+     *   }
+     * })
+     */
+    upsert<T extends CatServiceStyleUpsertArgs>(args: SelectSubset<T, CatServiceStyleUpsertArgs<ExtArgs>>): Prisma__CatServiceStyleClient<$Result.GetResult<Prisma.$CatServiceStylePayload<ExtArgs>, T, "upsert">, never, ExtArgs>
+
+
+    /**
+     * Count the number of CatServiceStyles.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleCountArgs} args - Arguments to filter CatServiceStyles to count.
+     * @example
+     * // Count the number of CatServiceStyles
+     * const count = await prisma.catServiceStyle.count({
+     *   where: {
+     *     // ... the filter for the CatServiceStyles we want to count
+     *   }
+     * })
+    **/
+    count<T extends CatServiceStyleCountArgs>(
+      args?: Subset<T, CatServiceStyleCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], CatServiceStyleCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a CatServiceStyle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends CatServiceStyleAggregateArgs>(args: Subset<T, CatServiceStyleAggregateArgs>): Prisma.PrismaPromise<GetCatServiceStyleAggregateType<T>>
+
+    /**
+     * Group by CatServiceStyle.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {CatServiceStyleGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends CatServiceStyleGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: CatServiceStyleGroupByArgs['orderBy'] }
+        : { orderBy?: CatServiceStyleGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, CatServiceStyleGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetCatServiceStyleGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the CatServiceStyle model
+   */
+  readonly fields: CatServiceStyleFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for CatServiceStyle.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__CatServiceStyleClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the CatServiceStyle model
+   */ 
+  interface CatServiceStyleFieldRefs {
+    readonly id: FieldRef<"CatServiceStyle", 'String'>
+    readonly tenantId: FieldRef<"CatServiceStyle", 'String'>
+    readonly styleNumber: FieldRef<"CatServiceStyle", 'String'>
+    readonly name: FieldRef<"CatServiceStyle", 'String'>
+    readonly code: FieldRef<"CatServiceStyle", 'String'>
+    readonly isActive: FieldRef<"CatServiceStyle", 'Boolean'>
+    readonly showInDiscoveryQuickSelect: FieldRef<"CatServiceStyle", 'Boolean'>
+    readonly displayOrder: FieldRef<"CatServiceStyle", 'Int'>
+    readonly createdAt: FieldRef<"CatServiceStyle", 'DateTime'>
+    readonly createdBy: FieldRef<"CatServiceStyle", 'String'>
+    readonly updatedAt: FieldRef<"CatServiceStyle", 'DateTime'>
+    readonly updatedBy: FieldRef<"CatServiceStyle", 'String'>
+    readonly isDeleted: FieldRef<"CatServiceStyle", 'Boolean'>
+    readonly deletedAt: FieldRef<"CatServiceStyle", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * CatServiceStyle findUnique
+   */
+  export type CatServiceStyleFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter, which CatServiceStyle to fetch.
+     */
+    where: CatServiceStyleWhereUniqueInput
+  }
+
+  /**
+   * CatServiceStyle findUniqueOrThrow
+   */
+  export type CatServiceStyleFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter, which CatServiceStyle to fetch.
+     */
+    where: CatServiceStyleWhereUniqueInput
+  }
+
+  /**
+   * CatServiceStyle findFirst
+   */
+  export type CatServiceStyleFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter, which CatServiceStyle to fetch.
+     */
+    where?: CatServiceStyleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatServiceStyles to fetch.
+     */
+    orderBy?: CatServiceStyleOrderByWithRelationInput | CatServiceStyleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatServiceStyles.
+     */
+    cursor?: CatServiceStyleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatServiceStyles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatServiceStyles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatServiceStyles.
+     */
+    distinct?: CatServiceStyleScalarFieldEnum | CatServiceStyleScalarFieldEnum[]
+  }
+
+  /**
+   * CatServiceStyle findFirstOrThrow
+   */
+  export type CatServiceStyleFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter, which CatServiceStyle to fetch.
+     */
+    where?: CatServiceStyleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatServiceStyles to fetch.
+     */
+    orderBy?: CatServiceStyleOrderByWithRelationInput | CatServiceStyleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for CatServiceStyles.
+     */
+    cursor?: CatServiceStyleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatServiceStyles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatServiceStyles.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of CatServiceStyles.
+     */
+    distinct?: CatServiceStyleScalarFieldEnum | CatServiceStyleScalarFieldEnum[]
+  }
+
+  /**
+   * CatServiceStyle findMany
+   */
+  export type CatServiceStyleFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter, which CatServiceStyles to fetch.
+     */
+    where?: CatServiceStyleWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of CatServiceStyles to fetch.
+     */
+    orderBy?: CatServiceStyleOrderByWithRelationInput | CatServiceStyleOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing CatServiceStyles.
+     */
+    cursor?: CatServiceStyleWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` CatServiceStyles from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` CatServiceStyles.
+     */
+    skip?: number
+    distinct?: CatServiceStyleScalarFieldEnum | CatServiceStyleScalarFieldEnum[]
+  }
+
+  /**
+   * CatServiceStyle create
+   */
+  export type CatServiceStyleCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * The data needed to create a CatServiceStyle.
+     */
+    data: XOR<CatServiceStyleCreateInput, CatServiceStyleUncheckedCreateInput>
+  }
+
+  /**
+   * CatServiceStyle createMany
+   */
+  export type CatServiceStyleCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many CatServiceStyles.
+     */
+    data: CatServiceStyleCreateManyInput | CatServiceStyleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatServiceStyle createManyAndReturn
+   */
+  export type CatServiceStyleCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * The data used to create many CatServiceStyles.
+     */
+    data: CatServiceStyleCreateManyInput | CatServiceStyleCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * CatServiceStyle update
+   */
+  export type CatServiceStyleUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * The data needed to update a CatServiceStyle.
+     */
+    data: XOR<CatServiceStyleUpdateInput, CatServiceStyleUncheckedUpdateInput>
+    /**
+     * Choose, which CatServiceStyle to update.
+     */
+    where: CatServiceStyleWhereUniqueInput
+  }
+
+  /**
+   * CatServiceStyle updateMany
+   */
+  export type CatServiceStyleUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update CatServiceStyles.
+     */
+    data: XOR<CatServiceStyleUpdateManyMutationInput, CatServiceStyleUncheckedUpdateManyInput>
+    /**
+     * Filter which CatServiceStyles to update
+     */
+    where?: CatServiceStyleWhereInput
+  }
+
+  /**
+   * CatServiceStyle upsert
+   */
+  export type CatServiceStyleUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * The filter to search for the CatServiceStyle to update in case it exists.
+     */
+    where: CatServiceStyleWhereUniqueInput
+    /**
+     * In case the CatServiceStyle found by the `where` argument doesn't exist, create a new CatServiceStyle with this data.
+     */
+    create: XOR<CatServiceStyleCreateInput, CatServiceStyleUncheckedCreateInput>
+    /**
+     * In case the CatServiceStyle was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<CatServiceStyleUpdateInput, CatServiceStyleUncheckedUpdateInput>
+  }
+
+  /**
+   * CatServiceStyle delete
+   */
+  export type CatServiceStyleDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+    /**
+     * Filter which CatServiceStyle to delete.
+     */
+    where: CatServiceStyleWhereUniqueInput
+  }
+
+  /**
+   * CatServiceStyle deleteMany
+   */
+  export type CatServiceStyleDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which CatServiceStyles to delete
+     */
+    where?: CatServiceStyleWhereInput
+  }
+
+  /**
+   * CatServiceStyle without action
+   */
+  export type CatServiceStyleDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the CatServiceStyle
+     */
+    select?: CatServiceStyleSelect<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -148472,6 +151790,66 @@ export namespace Prisma {
   };
 
   export type CatVenueScalarFieldEnum = (typeof CatVenueScalarFieldEnum)[keyof typeof CatVenueScalarFieldEnum]
+
+
+  export const CatOccasionTypeScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    occasionNumber: 'occasionNumber',
+    name: 'name',
+    code: 'code',
+    isActive: 'isActive',
+    showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt'
+  };
+
+  export type CatOccasionTypeScalarFieldEnum = (typeof CatOccasionTypeScalarFieldEnum)[keyof typeof CatOccasionTypeScalarFieldEnum]
+
+
+  export const CatCuisineScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    cuisineNumber: 'cuisineNumber',
+    name: 'name',
+    code: 'code',
+    isActive: 'isActive',
+    showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt'
+  };
+
+  export type CatCuisineScalarFieldEnum = (typeof CatCuisineScalarFieldEnum)[keyof typeof CatCuisineScalarFieldEnum]
+
+
+  export const CatServiceStyleScalarFieldEnum: {
+    id: 'id',
+    tenantId: 'tenantId',
+    styleNumber: 'styleNumber',
+    name: 'name',
+    code: 'code',
+    isActive: 'isActive',
+    showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+    displayOrder: 'displayOrder',
+    createdAt: 'createdAt',
+    createdBy: 'createdBy',
+    updatedAt: 'updatedAt',
+    updatedBy: 'updatedBy',
+    isDeleted: 'isDeleted',
+    deletedAt: 'deletedAt'
+  };
+
+  export type CatServiceStyleScalarFieldEnum = (typeof CatServiceStyleScalarFieldEnum)[keyof typeof CatServiceStyleScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -161279,6 +164657,303 @@ export namespace Prisma {
     deletedAt?: DateTimeNullableWithAggregatesFilter<"CatVenue"> | Date | string | null
     deletedBy?: UuidNullableWithAggregatesFilter<"CatVenue"> | string | null
     version?: BigIntWithAggregatesFilter<"CatVenue"> | bigint | number
+  }
+
+  export type CatOccasionTypeWhereInput = {
+    AND?: CatOccasionTypeWhereInput | CatOccasionTypeWhereInput[]
+    OR?: CatOccasionTypeWhereInput[]
+    NOT?: CatOccasionTypeWhereInput | CatOccasionTypeWhereInput[]
+    id?: UuidFilter<"CatOccasionType"> | string
+    tenantId?: UuidFilter<"CatOccasionType"> | string
+    occasionNumber?: StringFilter<"CatOccasionType"> | string
+    name?: StringFilter<"CatOccasionType"> | string
+    code?: StringFilter<"CatOccasionType"> | string
+    isActive?: BoolFilter<"CatOccasionType"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatOccasionType"> | boolean
+    displayOrder?: IntFilter<"CatOccasionType"> | number
+    createdAt?: DateTimeFilter<"CatOccasionType"> | Date | string
+    createdBy?: UuidNullableFilter<"CatOccasionType"> | string | null
+    updatedAt?: DateTimeFilter<"CatOccasionType"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatOccasionType"> | string | null
+    isDeleted?: BoolFilter<"CatOccasionType"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatOccasionType"> | Date | string | null
+  }
+
+  export type CatOccasionTypeOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    occasionNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+  }
+
+  export type CatOccasionTypeWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatOccasionTypeWhereInput | CatOccasionTypeWhereInput[]
+    OR?: CatOccasionTypeWhereInput[]
+    NOT?: CatOccasionTypeWhereInput | CatOccasionTypeWhereInput[]
+    tenantId?: UuidFilter<"CatOccasionType"> | string
+    occasionNumber?: StringFilter<"CatOccasionType"> | string
+    name?: StringFilter<"CatOccasionType"> | string
+    code?: StringFilter<"CatOccasionType"> | string
+    isActive?: BoolFilter<"CatOccasionType"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatOccasionType"> | boolean
+    displayOrder?: IntFilter<"CatOccasionType"> | number
+    createdAt?: DateTimeFilter<"CatOccasionType"> | Date | string
+    createdBy?: UuidNullableFilter<"CatOccasionType"> | string | null
+    updatedAt?: DateTimeFilter<"CatOccasionType"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatOccasionType"> | string | null
+    isDeleted?: BoolFilter<"CatOccasionType"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatOccasionType"> | Date | string | null
+  }, "id">
+
+  export type CatOccasionTypeOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    occasionNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: CatOccasionTypeCountOrderByAggregateInput
+    _avg?: CatOccasionTypeAvgOrderByAggregateInput
+    _max?: CatOccasionTypeMaxOrderByAggregateInput
+    _min?: CatOccasionTypeMinOrderByAggregateInput
+    _sum?: CatOccasionTypeSumOrderByAggregateInput
+  }
+
+  export type CatOccasionTypeScalarWhereWithAggregatesInput = {
+    AND?: CatOccasionTypeScalarWhereWithAggregatesInput | CatOccasionTypeScalarWhereWithAggregatesInput[]
+    OR?: CatOccasionTypeScalarWhereWithAggregatesInput[]
+    NOT?: CatOccasionTypeScalarWhereWithAggregatesInput | CatOccasionTypeScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatOccasionType"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatOccasionType"> | string
+    occasionNumber?: StringWithAggregatesFilter<"CatOccasionType"> | string
+    name?: StringWithAggregatesFilter<"CatOccasionType"> | string
+    code?: StringWithAggregatesFilter<"CatOccasionType"> | string
+    isActive?: BoolWithAggregatesFilter<"CatOccasionType"> | boolean
+    showInDiscoveryQuickSelect?: BoolWithAggregatesFilter<"CatOccasionType"> | boolean
+    displayOrder?: IntWithAggregatesFilter<"CatOccasionType"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"CatOccasionType"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatOccasionType"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatOccasionType"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatOccasionType"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatOccasionType"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatOccasionType"> | Date | string | null
+  }
+
+  export type CatCuisineWhereInput = {
+    AND?: CatCuisineWhereInput | CatCuisineWhereInput[]
+    OR?: CatCuisineWhereInput[]
+    NOT?: CatCuisineWhereInput | CatCuisineWhereInput[]
+    id?: UuidFilter<"CatCuisine"> | string
+    tenantId?: UuidFilter<"CatCuisine"> | string
+    cuisineNumber?: StringFilter<"CatCuisine"> | string
+    name?: StringFilter<"CatCuisine"> | string
+    code?: StringFilter<"CatCuisine"> | string
+    isActive?: BoolFilter<"CatCuisine"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatCuisine"> | boolean
+    displayOrder?: IntFilter<"CatCuisine"> | number
+    createdAt?: DateTimeFilter<"CatCuisine"> | Date | string
+    createdBy?: UuidNullableFilter<"CatCuisine"> | string | null
+    updatedAt?: DateTimeFilter<"CatCuisine"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatCuisine"> | string | null
+    isDeleted?: BoolFilter<"CatCuisine"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatCuisine"> | Date | string | null
+  }
+
+  export type CatCuisineOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cuisineNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+  }
+
+  export type CatCuisineWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatCuisineWhereInput | CatCuisineWhereInput[]
+    OR?: CatCuisineWhereInput[]
+    NOT?: CatCuisineWhereInput | CatCuisineWhereInput[]
+    tenantId?: UuidFilter<"CatCuisine"> | string
+    cuisineNumber?: StringFilter<"CatCuisine"> | string
+    name?: StringFilter<"CatCuisine"> | string
+    code?: StringFilter<"CatCuisine"> | string
+    isActive?: BoolFilter<"CatCuisine"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatCuisine"> | boolean
+    displayOrder?: IntFilter<"CatCuisine"> | number
+    createdAt?: DateTimeFilter<"CatCuisine"> | Date | string
+    createdBy?: UuidNullableFilter<"CatCuisine"> | string | null
+    updatedAt?: DateTimeFilter<"CatCuisine"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatCuisine"> | string | null
+    isDeleted?: BoolFilter<"CatCuisine"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatCuisine"> | Date | string | null
+  }, "id">
+
+  export type CatCuisineOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cuisineNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: CatCuisineCountOrderByAggregateInput
+    _avg?: CatCuisineAvgOrderByAggregateInput
+    _max?: CatCuisineMaxOrderByAggregateInput
+    _min?: CatCuisineMinOrderByAggregateInput
+    _sum?: CatCuisineSumOrderByAggregateInput
+  }
+
+  export type CatCuisineScalarWhereWithAggregatesInput = {
+    AND?: CatCuisineScalarWhereWithAggregatesInput | CatCuisineScalarWhereWithAggregatesInput[]
+    OR?: CatCuisineScalarWhereWithAggregatesInput[]
+    NOT?: CatCuisineScalarWhereWithAggregatesInput | CatCuisineScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatCuisine"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatCuisine"> | string
+    cuisineNumber?: StringWithAggregatesFilter<"CatCuisine"> | string
+    name?: StringWithAggregatesFilter<"CatCuisine"> | string
+    code?: StringWithAggregatesFilter<"CatCuisine"> | string
+    isActive?: BoolWithAggregatesFilter<"CatCuisine"> | boolean
+    showInDiscoveryQuickSelect?: BoolWithAggregatesFilter<"CatCuisine"> | boolean
+    displayOrder?: IntWithAggregatesFilter<"CatCuisine"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"CatCuisine"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatCuisine"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatCuisine"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatCuisine"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatCuisine"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatCuisine"> | Date | string | null
+  }
+
+  export type CatServiceStyleWhereInput = {
+    AND?: CatServiceStyleWhereInput | CatServiceStyleWhereInput[]
+    OR?: CatServiceStyleWhereInput[]
+    NOT?: CatServiceStyleWhereInput | CatServiceStyleWhereInput[]
+    id?: UuidFilter<"CatServiceStyle"> | string
+    tenantId?: UuidFilter<"CatServiceStyle"> | string
+    styleNumber?: StringFilter<"CatServiceStyle"> | string
+    name?: StringFilter<"CatServiceStyle"> | string
+    code?: StringFilter<"CatServiceStyle"> | string
+    isActive?: BoolFilter<"CatServiceStyle"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatServiceStyle"> | boolean
+    displayOrder?: IntFilter<"CatServiceStyle"> | number
+    createdAt?: DateTimeFilter<"CatServiceStyle"> | Date | string
+    createdBy?: UuidNullableFilter<"CatServiceStyle"> | string | null
+    updatedAt?: DateTimeFilter<"CatServiceStyle"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatServiceStyle"> | string | null
+    isDeleted?: BoolFilter<"CatServiceStyle"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatServiceStyle"> | Date | string | null
+  }
+
+  export type CatServiceStyleOrderByWithRelationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    styleNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+  }
+
+  export type CatServiceStyleWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: CatServiceStyleWhereInput | CatServiceStyleWhereInput[]
+    OR?: CatServiceStyleWhereInput[]
+    NOT?: CatServiceStyleWhereInput | CatServiceStyleWhereInput[]
+    tenantId?: UuidFilter<"CatServiceStyle"> | string
+    styleNumber?: StringFilter<"CatServiceStyle"> | string
+    name?: StringFilter<"CatServiceStyle"> | string
+    code?: StringFilter<"CatServiceStyle"> | string
+    isActive?: BoolFilter<"CatServiceStyle"> | boolean
+    showInDiscoveryQuickSelect?: BoolFilter<"CatServiceStyle"> | boolean
+    displayOrder?: IntFilter<"CatServiceStyle"> | number
+    createdAt?: DateTimeFilter<"CatServiceStyle"> | Date | string
+    createdBy?: UuidNullableFilter<"CatServiceStyle"> | string | null
+    updatedAt?: DateTimeFilter<"CatServiceStyle"> | Date | string
+    updatedBy?: UuidNullableFilter<"CatServiceStyle"> | string | null
+    isDeleted?: BoolFilter<"CatServiceStyle"> | boolean
+    deletedAt?: DateTimeNullableFilter<"CatServiceStyle"> | Date | string | null
+  }, "id">
+
+  export type CatServiceStyleOrderByWithAggregationInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    styleNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrderInput | SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrderInput | SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrderInput | SortOrder
+    _count?: CatServiceStyleCountOrderByAggregateInput
+    _avg?: CatServiceStyleAvgOrderByAggregateInput
+    _max?: CatServiceStyleMaxOrderByAggregateInput
+    _min?: CatServiceStyleMinOrderByAggregateInput
+    _sum?: CatServiceStyleSumOrderByAggregateInput
+  }
+
+  export type CatServiceStyleScalarWhereWithAggregatesInput = {
+    AND?: CatServiceStyleScalarWhereWithAggregatesInput | CatServiceStyleScalarWhereWithAggregatesInput[]
+    OR?: CatServiceStyleScalarWhereWithAggregatesInput[]
+    NOT?: CatServiceStyleScalarWhereWithAggregatesInput | CatServiceStyleScalarWhereWithAggregatesInput[]
+    id?: UuidWithAggregatesFilter<"CatServiceStyle"> | string
+    tenantId?: UuidWithAggregatesFilter<"CatServiceStyle"> | string
+    styleNumber?: StringWithAggregatesFilter<"CatServiceStyle"> | string
+    name?: StringWithAggregatesFilter<"CatServiceStyle"> | string
+    code?: StringWithAggregatesFilter<"CatServiceStyle"> | string
+    isActive?: BoolWithAggregatesFilter<"CatServiceStyle"> | boolean
+    showInDiscoveryQuickSelect?: BoolWithAggregatesFilter<"CatServiceStyle"> | boolean
+    displayOrder?: IntWithAggregatesFilter<"CatServiceStyle"> | number
+    createdAt?: DateTimeWithAggregatesFilter<"CatServiceStyle"> | Date | string
+    createdBy?: UuidNullableWithAggregatesFilter<"CatServiceStyle"> | string | null
+    updatedAt?: DateTimeWithAggregatesFilter<"CatServiceStyle"> | Date | string
+    updatedBy?: UuidNullableWithAggregatesFilter<"CatServiceStyle"> | string | null
+    isDeleted?: BoolWithAggregatesFilter<"CatServiceStyle"> | boolean
+    deletedAt?: DateTimeNullableWithAggregatesFilter<"CatServiceStyle"> | Date | string | null
   }
 
   export type TenantCreateInput = {
@@ -175622,6 +179297,363 @@ export namespace Prisma {
     version?: BigIntFieldUpdateOperationsInput | bigint | number
   }
 
+  export type CatOccasionTypeCreateInput = {
+    id?: string
+    tenantId: string
+    occasionNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatOccasionTypeUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    occasionNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatOccasionTypeUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    occasionNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatOccasionTypeUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    occasionNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatOccasionTypeCreateManyInput = {
+    id?: string
+    tenantId: string
+    occasionNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatOccasionTypeUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    occasionNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatOccasionTypeUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    occasionNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatCuisineCreateInput = {
+    id?: string
+    tenantId: string
+    cuisineNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatCuisineUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    cuisineNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatCuisineUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cuisineNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatCuisineUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cuisineNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatCuisineCreateManyInput = {
+    id?: string
+    tenantId: string
+    cuisineNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatCuisineUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cuisineNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatCuisineUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    cuisineNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatServiceStyleCreateInput = {
+    id?: string
+    tenantId: string
+    styleNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatServiceStyleUncheckedCreateInput = {
+    id?: string
+    tenantId: string
+    styleNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatServiceStyleUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    styleNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatServiceStyleUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    styleNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatServiceStyleCreateManyInput = {
+    id?: string
+    tenantId: string
+    styleNumber: string
+    name: string
+    code: string
+    isActive?: boolean
+    showInDiscoveryQuickSelect?: boolean
+    displayOrder?: number
+    createdAt?: Date | string
+    createdBy?: string | null
+    updatedAt?: Date | string
+    updatedBy?: string | null
+    isDeleted?: boolean
+    deletedAt?: Date | string | null
+  }
+
+  export type CatServiceStyleUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    styleNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
+  export type CatServiceStyleUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    tenantId?: StringFieldUpdateOperationsInput | string
+    styleNumber?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    showInDiscoveryQuickSelect?: BoolFieldUpdateOperationsInput | boolean
+    displayOrder?: IntFieldUpdateOperationsInput | number
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: NullableStringFieldUpdateOperationsInput | string | null
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedBy?: NullableStringFieldUpdateOperationsInput | string | null
+    isDeleted?: BoolFieldUpdateOperationsInput | boolean
+    deletedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+  }
+
   export type UuidFilter<$PrismaModel = never> = {
     equals?: string | StringFieldRefInput<$PrismaModel>
     in?: string[] | ListStringFieldRefInput<$PrismaModel>
@@ -184607,6 +188639,183 @@ export namespace Prisma {
 
   export type CatVenueSumOrderByAggregateInput = {
     version?: SortOrder
+  }
+
+  export type CatOccasionTypeCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    occasionNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatOccasionTypeAvgOrderByAggregateInput = {
+    displayOrder?: SortOrder
+  }
+
+  export type CatOccasionTypeMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    occasionNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatOccasionTypeMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    occasionNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatOccasionTypeSumOrderByAggregateInput = {
+    displayOrder?: SortOrder
+  }
+
+  export type CatCuisineCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cuisineNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatCuisineAvgOrderByAggregateInput = {
+    displayOrder?: SortOrder
+  }
+
+  export type CatCuisineMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cuisineNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatCuisineMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    cuisineNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatCuisineSumOrderByAggregateInput = {
+    displayOrder?: SortOrder
+  }
+
+  export type CatServiceStyleCountOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    styleNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatServiceStyleAvgOrderByAggregateInput = {
+    displayOrder?: SortOrder
+  }
+
+  export type CatServiceStyleMaxOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    styleNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatServiceStyleMinOrderByAggregateInput = {
+    id?: SortOrder
+    tenantId?: SortOrder
+    styleNumber?: SortOrder
+    name?: SortOrder
+    code?: SortOrder
+    isActive?: SortOrder
+    showInDiscoveryQuickSelect?: SortOrder
+    displayOrder?: SortOrder
+    createdAt?: SortOrder
+    createdBy?: SortOrder
+    updatedAt?: SortOrder
+    updatedBy?: SortOrder
+    isDeleted?: SortOrder
+    deletedAt?: SortOrder
+  }
+
+  export type CatServiceStyleSumOrderByAggregateInput = {
+    displayOrder?: SortOrder
   }
 
   export type UserCreateNestedManyWithoutTenantInput = {
@@ -232916,6 +237125,18 @@ export namespace Prisma {
      * @deprecated Use CatVenueDefaultArgs instead
      */
     export type CatVenueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatVenueDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatOccasionTypeDefaultArgs instead
+     */
+    export type CatOccasionTypeArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatOccasionTypeDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatCuisineDefaultArgs instead
+     */
+    export type CatCuisineArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatCuisineDefaultArgs<ExtArgs>
+    /**
+     * @deprecated Use CatServiceStyleDefaultArgs instead
+     */
+    export type CatServiceStyleArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = CatServiceStyleDefaultArgs<ExtArgs>
 
   /**
    * Batch Payload for updateMany & deleteMany & createMany

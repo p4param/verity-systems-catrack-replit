@@ -2123,6 +2123,57 @@ exports.Prisma.CatVenueScalarFieldEnum = {
   version: 'version'
 };
 
+exports.Prisma.CatOccasionTypeScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  occasionNumber: 'occasionNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.CatCuisineScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  cuisineNumber: 'cuisineNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
+exports.Prisma.CatServiceStyleScalarFieldEnum = {
+  id: 'id',
+  tenantId: 'tenantId',
+  styleNumber: 'styleNumber',
+  name: 'name',
+  code: 'code',
+  isActive: 'isActive',
+  showInDiscoveryQuickSelect: 'showInDiscoveryQuickSelect',
+  displayOrder: 'displayOrder',
+  createdAt: 'createdAt',
+  createdBy: 'createdBy',
+  updatedAt: 'updatedAt',
+  updatedBy: 'updatedBy',
+  isDeleted: 'isDeleted',
+  deletedAt: 'deletedAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -2341,7 +2392,10 @@ exports.Prisma.ModelName = {
   CatContact: 'CatContact',
   CatRelationshipNote: 'CatRelationshipNote',
   CatRelationshipDocument: 'CatRelationshipDocument',
-  CatVenue: 'CatVenue'
+  CatVenue: 'CatVenue',
+  CatOccasionType: 'CatOccasionType',
+  CatCuisine: 'CatCuisine',
+  CatServiceStyle: 'CatServiceStyle'
 };
 
 /**

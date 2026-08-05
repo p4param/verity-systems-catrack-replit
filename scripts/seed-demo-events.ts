@@ -27,11 +27,21 @@ interface EventSpec {
   operationalNotes: string;
   risks: string[];
   checklist: ChecklistItem[];
+  // DD-001C — EM-WP10A Production Center verification. When set, this
+  // overrides the Inquiry's tentative_event_date for this Event's
+  // event_date, so a deliberately chosen, type-diverse set of Events can
+  // share one Work Date without touching Inquiry/Quotation data. Five
+  // Events (Wedding, Corporate, Birthday, Religious/Community,
+  // Institutional) share SHARED_WORK_DATE below.
+  workDateOverride?: string;
 }
+
+const SHARED_WORK_DATE = '2026-11-14';
 
 const EVENTS: EventSpec[] = [
   {
     quotationCode: 'QT-DEMO-01', templateName: 'North Indian Wedding',
+    workDateOverride: SHARED_WORK_DATE, // Wedding
     opsOwner: 'Suresh Iyer', opsPhone: '+91 99870 11201', opsEmail: 'suresh.iyer@example.com',
     operationalSummary: 'Large-scale wedding reception for 400 guests. Two-line buffet with live chaat and pasta counters. Coordinate closely with venue banquet team for parallel setup.',
     timeline: [
@@ -55,6 +65,7 @@ const EVENTS: EventSpec[] = [
   },
   {
     quotationCode: 'QT-DEMO-02', templateName: 'Birthday Celebration',
+    workDateOverride: SHARED_WORK_DATE, // Birthday
     opsOwner: 'Meena Pillai', opsPhone: '+91 99870 11202', opsEmail: 'meena.pillai@example.com',
     operationalSummary: 'Small, cheerful birthday event for 60 guests, mostly families with children. Coordinate cake-cutting with dessert counter timing.',
     timeline: [
@@ -76,6 +87,7 @@ const EVENTS: EventSpec[] = [
   },
   {
     quotationCode: 'QT-DEMO-03', templateName: 'Executive Conference Lunch',
+    workDateOverride: SHARED_WORK_DATE, // Institutional (closest existing profile — bulk contract/delegate lunch service)
     opsOwner: 'Ravi Shankar', opsPhone: '+91 99870 11203', opsEmail: 'ravi.shankar@example.com',
     operationalSummary: 'Corporate annual meet lunch for 150 delegates. Service must run precisely on schedule around the conference agenda.',
     timeline: [
@@ -142,6 +154,7 @@ const EVENTS: EventSpec[] = [
   },
   {
     quotationCode: 'QT-DEMO-06', templateName: 'Corporate Dinner',
+    workDateOverride: SHARED_WORK_DATE, // Corporate
     opsOwner: 'Ravi Shankar', opsPhone: '+91 99870 11203', opsEmail: 'ravi.shankar@example.com',
     operationalSummary: 'High-visibility awards night for 200 guests. Presentation quality and pacing are critical given media presence.',
     timeline: [
@@ -163,6 +176,7 @@ const EVENTS: EventSpec[] = [
   },
   {
     quotationCode: 'QT-DEMO-07', templateName: 'Festival Buffet',
+    workDateOverride: SHARED_WORK_DATE, // Religious/Community
     opsOwner: 'Meena Pillai', opsPhone: '+91 99870 11202', opsEmail: 'meena.pillai@example.com',
     operationalSummary: 'Fully vegetarian Diwali celebration for 100 guests at a residential lawn venue in Jaipur.',
     timeline: [
@@ -247,7 +261,37 @@ const EVENTS: EventSpec[] = [
   },
 ];
 
-async function applyTemplateToEvent(pool: any, tenantId: string, adminId: string, eventId: string, templateName: string) {
+// DD-001A Hotfix — Demo Dataset Recipe Link Integrity.
+// Menu Template items never store catalog_item_id/recipe_variant_id (by
+// design — cat_menu_template_items has no such columns; Templates stay
+// recipe-agnostic, see EM-WP09). Applying a Template to an Event is the
+// point where those links must be resolved: by exact (tenant, name) match
+// against Menu Catalog, then that Catalog item's Default Recipe Variant.
+// Automatic, name-based resolution — not manual linking. One query per
+// event-application, reused across every item in that template.
+async function buildCatalogRecipeLinkMap(pool: any, tenantId: string): Promise<Map<string, { catalogItemId: string; recipeVariantId: string }>> {
+  const rows = await pool.query(
+    `SELECT mi.name, mi.id as catalog_item_id, rv.id as recipe_variant_id
+       FROM cat_menu_catalog_items mi
+       JOIN cat_menu_catalog_recipe_variants rv ON rv.catalog_item_id = mi.id AND rv.is_default = true
+      WHERE mi.tenant_id = $1`,
+    [tenantId],
+  );
+  const map = new Map<string, { catalogItemId: string; recipeVariantId: string }>();
+  for (const row of rows.rows) {
+    map.set(row.name, { catalogItemId: row.catalog_item_id, recipeVariantId: row.recipe_variant_id });
+  }
+  return map;
+}
+
+async function applyTemplateToEvent(
+  pool: any,
+  tenantId: string,
+  adminId: string,
+  eventId: string,
+  templateName: string,
+  catalogRecipeLinkByName: Map<string, { catalogItemId: string; recipeVariantId: string }>,
+) {
   const tmplRes = await pool.query(
     `SELECT id FROM cat_menu_templates WHERE tenant_id = $1 AND template_name = $2 AND is_deleted = false`,
     [tenantId, templateName],
@@ -305,10 +349,16 @@ async function applyTemplateToEvent(pool: any, tenantId: string, adminId: string
   for (const item of items.rows) {
     const newCategoryId = categoryIdMap.get(item.category_id);
     if (!newCategoryId) continue;
+    const link = catalogRecipeLinkByName.get(item.item_name);
     await pool.query(
-      `INSERT INTO cat_event_menu_items (id, tenant_id, event_id, category_id, item_name, quantity, unit, remarks, display_order, created_at, created_by, updated_at, updated_by)
-       VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, NOW(), $9, NOW(), $9)`,
-      [tenantId, eventId, newCategoryId, item.item_name, item.quantity, item.unit, item.remarks, item.display_order, adminId],
+      `INSERT INTO cat_event_menu_items (
+         id, tenant_id, event_id, category_id, item_name, quantity, unit, remarks, display_order,
+         catalog_item_id, recipe_variant_id, created_at, created_by, updated_at, updated_by
+       ) VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), $11, NOW(), $11)`,
+      [
+        tenantId, eventId, newCategoryId, item.item_name, item.quantity, item.unit, item.remarks, item.display_order,
+        link?.catalogItemId ?? null, link?.recipeVariantId ?? null, adminId,
+      ],
     );
   }
 
@@ -380,6 +430,7 @@ async function seedPlanning(pool: any, tenantId: string, adminId: string, eventI
 async function main() {
   const pool = getPool();
   const { tenantId, adminId } = await getAdminAndTenant(pool);
+  const catalogRecipeLinkByName = await buildCatalogRecipeLinkMap(pool, tenantId);
 
   let converted = 0;
   let reused = 0;
@@ -439,7 +490,7 @@ async function main() {
            NOW(), $13, NOW(), $13
          ) RETURNING id`,
         [tenantId, eventNumber, inquiry.relationship_id, quotation.id, pub.revision_number,
-         quotation.title, inquiry.event_type, inquiry.tentative_event_date, inquiry.venue, inquiry.expected_guest_count,
+         quotation.title, inquiry.event_type, spec.workDateOverride || inquiry.tentative_event_date, inquiry.venue, inquiry.expected_guest_count,
          grandTotal, currencyCode, adminId],
       );
       eventId = eventRes.rows[0].id;
@@ -453,7 +504,7 @@ async function main() {
     }
 
     await seedPlanning(pool, tenantId, adminId, eventId, spec);
-    await applyTemplateToEvent(pool, tenantId, adminId, eventId, spec.templateName);
+    await applyTemplateToEvent(pool, tenantId, adminId, eventId, spec.templateName, catalogRecipeLinkByName);
   }
 
   console.log(`Events: ${converted} newly converted, ${reused} already converted (reused), ${skipped} skipped (of ${EVENTS.length} defined). Planning and Menu applied for all.`);

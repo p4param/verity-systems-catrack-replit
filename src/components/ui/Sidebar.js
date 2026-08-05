@@ -50,7 +50,8 @@ import {
     UserCog,
     BookOpen,
     Utensils,
-    Carrot
+    Carrot,
+    Factory
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -101,7 +102,8 @@ const LucideIcons = {
     UserCog,
     BookOpen,
     Utensils,
-    Carrot
+    Carrot,
+    Factory
 };
 
 const isHrefActive = (href, pathname, allNavHrefs) => {
