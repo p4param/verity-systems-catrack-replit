@@ -9,14 +9,16 @@ import { join } from "path";
 //
 // Order:
 //   1. Ingredient Master, Menu Catalog          (independent master data)
-//   2. Recipe Variants, Menu Templates          (depend on Menu Catalog)
-//   3. Relationships                             (independent)
-//   4. Inquiries                                 (depend on Relationships)
-//   5. Quotations                                (depend on Inquiries)
-//   6. Events                                    (depend on Quotations + Menu Templates)
+//   2. Vendors                                   (depend on Ingredient Master, for Supply Portfolio)
+//   3. Recipe Variants, Menu Templates          (depend on Menu Catalog)
+//   4. Relationships                             (independent)
+//   5. Inquiries                                 (depend on Relationships)
+//   6. Quotations                                (depend on Inquiries)
+//   7. Events                                    (depend on Quotations + Menu Templates)
 
 const SCRIPTS = [
   "seed-demo-ingredient-master.ts",
+  "seed-demo-vendors.ts",
   "seed-demo-menu-catalog.ts",
   "seed-demo-recipe-variants.ts",
   "seed-demo-menu-templates.ts",

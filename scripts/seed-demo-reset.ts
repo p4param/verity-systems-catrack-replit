@@ -2,6 +2,7 @@ import { getPool, getAdminAndTenant } from "./lib/demo-db";
 import { ALL as INGREDIENT_MASTER_ALL } from "./seed-demo-ingredient-master";
 import { ALL as MENU_CATALOG_ALL } from "./seed-demo-menu-catalog";
 import { TEMPLATES as MENU_TEMPLATES } from "./seed-demo-menu-templates";
+import { VENDORS as DEMO_VENDORS } from "./seed-demo-vendors";
 
 // Official Demo Dataset — Reset Utility.
 //
@@ -24,6 +25,7 @@ import { TEMPLATES as MENU_TEMPLATES } from "./seed-demo-menu-templates";
 const MENU_TEMPLATE_NAMES = MENU_TEMPLATES.map((t) => t.name);
 const MENU_CATALOG_NAMES = MENU_CATALOG_ALL.map((m) => m.name);
 const INGREDIENT_MASTER_NAMES = INGREDIENT_MASTER_ALL.map((i) => i.name);
+const VENDOR_NAMES = DEMO_VENDORS.map((v) => v.name);
 
 async function main() {
   const pool = getPool();
@@ -129,7 +131,16 @@ async function main() {
         ])
       : { rowCount: 0 };
 
-  // 12. Ingredient Master.
+  // 12. Vendors (PM-WP01) — cascades their own Supply Portfolio
+  //     (cat_vendor_ingredients) rows automatically. Independent of the
+  //     Relationship/Inquiry/Quotation/Event chain — Vendors are the
+  //     procurement side, not the sales side.
+  const vendorsResult =
+    VENDOR_NAMES.length > 0
+      ? await pool.query(`DELETE FROM cat_vendors WHERE tenant_id = $1 AND name = ANY($2::text[])`, [tenantId, VENDOR_NAMES])
+      : { rowCount: 0 };
+
+  // 13. Ingredient Master.
   const ingredientsResult =
     INGREDIENT_MASTER_NAMES.length > 0
       ? await pool.query(
@@ -150,6 +161,7 @@ async function main() {
   console.log(`  Menu Templates:            ${templatesResult.rowCount}`);
   console.log(`  Recipe Variants:           ${variantsResult.rowCount}`);
   console.log(`  Menu Catalog:              ${catalogResult.rowCount}`);
+  console.log(`  Vendors:                   ${vendorsResult.rowCount}`);
   console.log(`  Ingredient Master:         ${ingredientsResult.rowCount}`);
 
   await pool.end();

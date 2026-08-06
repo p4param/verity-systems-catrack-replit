@@ -1,5 +1,7 @@
 import { getPool, getAdminAndTenant } from "./lib/demo-db";
 import { computeProductionDemand } from "../src/modules/cat/event/domain/production-demand-engine";
+import { getProductionCenterData } from "../src/modules/cat/production-center/domain/get-production-center-data";
+import { computePurchasePlan } from "../src/modules/cat/purchase-planning/domain/purchase-planning-engine";
 
 // Official Demo Dataset — Validation (DD-001A).
 // Confirms there is no broken production chain anywhere in DD-001: every
@@ -223,6 +225,70 @@ async function main() {
     console.log("Production Center reconciliation — no Work Date is currently shared by 2+ demo Events; skipped (not a failure).");
   }
 
+  // 8. PM-WP02 — Purchase Planning. For every Work Date shared by 2+ demo
+  // Events, confirm every Purchase Planning row reconciles exactly
+  // against Production Center's own overall[] (same requiredQuantity/
+  // unit — never independently recomputed), and confirm each DD-001D
+  // scenario ingredient resolves to its documented recommendation
+  // outcome. This is the concrete, automatic proof DD-001D's scenarios
+  // keep working on every dataset change, not a point-in-time screenshot.
+  const DD001D_SCENARIOS: Record<string, { status: string; confidence: string; vendorCount: number }> = {
+    Paneer: { status: "READY", confidence: "HIGH", vendorCount: 1 },
+    Ghee: { status: "READY", confidence: "LOW", vendorCount: 2 },
+    Turmeric: { status: "READY", confidence: "MEDIUM", vendorCount: 1 },
+    Salt: { status: "READY", confidence: "HIGH", vendorCount: 5 },
+    Coriander: { status: "MULTIPLE_PREFERRED_VENDORS", confidence: "NONE", vendorCount: 2 },
+    "Bakery Bread": { status: "BLOCKED_PREFERRED_VENDOR", confidence: "NONE", vendorCount: 2 },
+    Chickpeas: { status: "NO_ACTIVE_VENDOR", confidence: "NONE", vendorCount: 1 },
+  };
+  const purchasePlanningStatusCounts = new Map<string, Map<string, number>>();
+
+  for (const dateRow of sharedDates.rows) {
+    const workDate = dateRow.work_date;
+    const production = await getProductionCenterData(tenantId, workDate, "ALL");
+    const { rows: planningRows } = await computePurchasePlan(tenantId, production.overall);
+
+    for (const item of production.overall) {
+      const planningRow = planningRows.find((r) => r.ingredientId === item.ingredientId && r.unit === item.unit);
+      if (!planningRow || Math.abs(planningRow.requiredQuantity - item.quantity) > TOLERANCE) {
+        failures.push({
+          check: "Purchase Planning reconciliation",
+          detail: `${workDate}: "${item.ingredientName}" (${item.unit}) — Purchase Planning quantity does not match Production Center's overall[]`,
+        });
+      }
+    }
+
+    if (workDate === "2026-11-14") {
+      for (const [name, expected] of Object.entries(DD001D_SCENARIOS)) {
+        const row = planningRows.find((r) => r.ingredientName === name);
+        if (!row) {
+          failures.push({ check: "DD-001D scenario coverage", detail: `"${name}" not found in Purchase Planning for ${workDate}` });
+          continue;
+        }
+        if (row.status !== expected.status || row.confidence !== expected.confidence || row.vendorsAvailable.length !== expected.vendorCount) {
+          failures.push({
+            check: "DD-001D scenario coverage",
+            detail: `"${name}" expected status=${expected.status} confidence=${expected.confidence} vendors=${expected.vendorCount}, got status=${row.status} confidence=${row.confidence} vendors=${row.vendorsAvailable.length}`,
+          });
+        }
+      }
+      // "No Vendor Configured" is deliberately not pinned to one named
+      // ingredient (several in-house "Produced" items naturally qualify,
+      // and which ones do can shift as recipes change) — assert the
+      // scenario is genuinely represented instead.
+      const noVendorCount = planningRows.filter((r) => r.status === "NO_VENDOR").length;
+      if (noVendorCount === 0) {
+        failures.push({ check: "DD-001D scenario coverage", detail: `Expected at least one "No Vendor Configured" ingredient on ${workDate}, found none` });
+      }
+    }
+
+    const statusCounts = new Map<string, number>();
+    for (const row of planningRows) statusCounts.set(row.status, (statusCounts.get(row.status) || 0) + 1);
+    purchasePlanningStatusCounts.set(workDate, statusCounts);
+
+    console.log(`Purchase Planning reconciliation — ${workDate}: ${planningRows.length} rows checked against Production Center's overall[].`);
+  }
+
   // ---- Report ----
   if (failures.length === 0) {
     console.log("PASS — no broken production chains, no orphan rows, no incomplete recipes.\n");
@@ -253,6 +319,38 @@ async function main() {
   for (const row of byCuisine.rows) console.log(`  ${row.cuisine}: ${row.variants}`);
   console.log("\nRecipe Coverage Summary — by category:");
   for (const row of byCategory.rows) console.log(`  ${row.category}: ${row.variants}`);
+
+  // ---- Vendor Coverage Summary (PM-WP01, non-blocking, informational) ----
+  const vendorByCategory = await pool.query(
+    `SELECT COALESCE(business_category, 'Uncategorized') as business_category, COUNT(*) AS vendors
+       FROM cat_vendors
+      WHERE tenant_id = $1
+      GROUP BY business_category ORDER BY vendors DESC, business_category`,
+    [tenantId],
+  );
+  const vendorPortfolioCoverage = await pool.query(
+    `SELECT COUNT(DISTINCT vi.vendor_id)::int as vendors_with_portfolio, COUNT(vi.id)::int as total_links
+       FROM cat_vendors v
+       LEFT JOIN cat_vendor_ingredients vi ON vi.vendor_id = v.id
+      WHERE v.tenant_id = $1`,
+    [tenantId],
+  );
+  console.log("\nVendor Coverage Summary — by Business Category:");
+  for (const row of vendorByCategory.rows) console.log(`  ${row.business_category}: ${row.vendors}`);
+  console.log(
+    `\nVendors with a Supply Portfolio: ${vendorPortfolioCoverage.rows[0].vendors_with_portfolio} | Total Vendor-Ingredient links: ${vendorPortfolioCoverage.rows[0].total_links}`,
+  );
+
+  // ---- Purchase Planning Coverage Summary (PM-WP02, non-blocking, informational) ----
+  if (purchasePlanningStatusCounts.size > 0) {
+    console.log("\nPurchase Planning Coverage Summary — by Status:");
+    for (const [workDate, statusCounts] of purchasePlanningStatusCounts) {
+      console.log(`  ${workDate}:`);
+      for (const [status, count] of [...statusCounts.entries()].sort((a, b) => b[1] - a[1])) {
+        console.log(`    ${status}: ${count}`);
+      }
+    }
+  }
 
   await pool.end();
   if (failures.length > 0) process.exit(1);

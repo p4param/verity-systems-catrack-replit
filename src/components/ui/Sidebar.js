@@ -51,7 +51,8 @@ import {
     BookOpen,
     Utensils,
     Carrot,
-    Factory
+    Factory,
+    ClipboardList
 } from "lucide-react";
 import { clsx } from "clsx";
 import { useAuth } from "@/lib/auth/auth-context";
@@ -103,7 +104,8 @@ const LucideIcons = {
     BookOpen,
     Utensils,
     Carrot,
-    Factory
+    Factory,
+    ClipboardList
 };
 
 const isHrefActive = (href, pathname, allNavHrefs) => {

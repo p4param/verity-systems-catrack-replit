@@ -232,14 +232,14 @@ export function ProductionCenterWorkspace() {
                 </p>
               </div>
               <div className="flex items-center gap-2">
-                <div className="relative">
+                <div className="relative w-48 shrink-0">
                   <Search className="w-3.5 h-3.5 absolute left-2.5 top-1/2 -translate-y-1/2 text-muted-foreground" />
                   <input
                     type="text"
                     value={search}
                     onChange={(e) => setSearch(e.target.value)}
                     placeholder="Search ingredient..."
-                    className={`${inputClass} pl-8 w-48`}
+                    className={`${inputClass} pl-8`}
                   />
                 </div>
                 <select value={sortKey} onChange={(e) => setSortKey(e.target.value as SortKey)} className={inputClass}>

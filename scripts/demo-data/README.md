@@ -38,6 +38,7 @@ All scripts live in `scripts/` and are run with `npx tsx`.
 | Script | Purpose |
 | --- | --- |
 | `seed-demo-ingredient-master.ts` | Seeds ~100 Ingredient Master items (Purchased, Produced, Packaged, Consumables). |
+| `seed-demo-vendors.ts` | Seeds ~20 Vendors (PM-WP01) across Business Categories, with realistic Ingredient Supply Portfolios for Food Supplier / Packaging vendors. |
 | `seed-demo-menu-catalog.ts` | Seeds ~150 Menu Catalog dishes across categories and cuisines. |
 | `seed-demo-recipe-variants.ts` | Seeds Recipe Variants (ingredients, steps, equipment) for a subset of Menu Catalog dishes. |
 | `seed-demo-menu-templates.ts` | Seeds ~15 Menu Templates built from Menu Catalog items. |
@@ -47,7 +48,7 @@ All scripts live in `scripts/` and are run with `npx tsx`.
 | `seed-demo-events.ts` | Converts each accepted demo Quotation into an Event with Planning and Menu applied. |
 | `seed-demo-all.ts` | Orchestrator — runs all eight seed scripts above in dependency order. |
 | `seed-demo-reset.ts` | Removes ONLY the Official Demo Dataset, in reverse dependency order. Never touches customer/business data. |
-| `verify-demo-dataset.ts` | Read-only validation (DD-001A) — confirms every Menu Template/Event item resolves through a Recipe Variant to Ingredient Master, no orphan rows, no duplicate/missing Default Variants, and every Recipe Variant is complete (summary, yield, ingredients, steps, equipment). Prints a non-blocking Recipe Coverage Summary by cuisine/category. |
+| `verify-demo-dataset.ts` | Read-only validation (DD-001A) — confirms every Menu Template/Event item resolves through a Recipe Variant to Ingredient Master, no orphan rows, no duplicate/missing Default Variants, and every Recipe Variant is complete (summary, yield, ingredients, steps, equipment). Also confirms Production Center's multi-Event reconciliation and (DD-001D) that Purchase Planning's rows reconcile against Production Center and that every named recommendation scenario resolves correctly — blocking. Prints non-blocking Recipe/Vendor/Purchase Planning Coverage Summaries. |
 
 ## Execution Examples
 
