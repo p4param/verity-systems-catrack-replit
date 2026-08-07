@@ -1,9 +1,19 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import { requirePermission } from '@/lib/auth/permission-guard';
+import { renumberAfterLinkRemoval } from '@/modules/cat/vendor-recommendation/domain/vendor-recommendation-operations';
 
-// PM-WP01 — Vendor Master, Supply Portfolio tab. Update (preferred flag /
-// notes) or remove a single Vendor -> Ingredient link.
+// PM-WP01 — Vendor Master, Supply Portfolio tab. Update Notes or remove
+// a single Vendor -> Ingredient link.
+//
+// PM-WP04A — ownership split, enforced here, not just in the UI: PUT
+// only ever accepts and writes `notes`. If a caller sends `priority` or
+// `isPreferred`, that is rejected outright (400) rather than silently
+// ignored — Priority may only be changed through the Ingredient
+// Workspace's five domain operations. DELETE now closes any ranking gap
+// the removed link leaves behind, in the same transaction as the
+// deletion, reusing the identical renumbering logic Remove From Ranking
+// uses.
 
 export async function PUT(req: NextRequest, props: any) {
   try {
@@ -14,7 +24,13 @@ export async function PUT(req: NextRequest, props: any) {
     const { id, ingredientId } = params;
 
     const body = await req.json();
-    const { isPreferred, notes } = body as { isPreferred?: boolean; notes?: string };
+    if ('priority' in body || 'isPreferred' in body) {
+      return NextResponse.json(
+        { success: false, error: 'Priority can only be changed from the Ingredient Workspace, not from Vendor Master.' },
+        { status: 400 },
+      );
+    }
+    const { notes } = body as { notes?: string };
 
     const existing: any[] = await prisma.$queryRaw`
       SELECT id FROM cat_vendor_ingredients WHERE vendor_id = ${id}::uuid AND ingredient_id = ${ingredientId}::uuid AND tenant_id = ${tenantId}::uuid
@@ -25,7 +41,6 @@ export async function PUT(req: NextRequest, props: any) {
 
     await prisma.$executeRaw`
       UPDATE cat_vendor_ingredients SET
-        is_preferred = ${isPreferred ?? false},
         notes = ${notes?.trim() || null},
         updated_at = NOW(),
         updated_by = ${userId}::uuid
@@ -44,12 +59,22 @@ export async function DELETE(req: NextRequest, props: any) {
   try {
     const user = await requirePermission(req, 'CAT_VENDOR_EDIT');
     const tenantId = user.tenantId;
+    const userId = user.id;
     const params = await props.params;
     const { id, ingredientId } = params;
 
-    await prisma.$executeRaw`
-      DELETE FROM cat_vendor_ingredients WHERE vendor_id = ${id}::uuid AND ingredient_id = ${ingredientId}::uuid AND tenant_id = ${tenantId}::uuid
-    `;
+    await prisma.$transaction(async (tx) => {
+      const rows: any[] = await tx.$queryRaw`
+        SELECT id FROM cat_vendor_ingredients WHERE vendor_id = ${id}::uuid AND ingredient_id = ${ingredientId}::uuid AND tenant_id = ${tenantId}::uuid
+      `;
+      const link = rows[0];
+      if (!link) return;
+
+      await tx.$executeRaw`
+        DELETE FROM cat_vendor_ingredients WHERE id = ${link.id}::uuid
+      `;
+      await renumberAfterLinkRemoval(tx, tenantId, userId, ingredientId, link.id);
+    });
 
     return NextResponse.json({ success: true });
   } catch (error: any) {

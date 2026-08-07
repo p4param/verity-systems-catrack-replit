@@ -5,8 +5,15 @@ import { requirePermission } from '@/lib/auth/permission-guard';
 // PM-WP01 — Vendor Master, Supply Portfolio tab (Ingredients, V2.0's only
 // resource type). A flat, order-independent set — add/remove one link at
 // a time, unlike Menu Planning's full-reconcile-on-PUT tree pattern.
-// Vendor -> Ingredient links are owned here and will later be read (never
-// duplicated) by Purchase Planning.
+//
+// PM-WP04A — ownership split: Vendor Workspace owns the link itself
+// (this route's GET/POST) and its Notes, but NOT Priority — Priority is
+// owned exclusively by the Ingredient Workspace's five domain
+// operations (see /api/cat/ingredient-master/[id]/vendors/...). This
+// route still reads `priority` (for read-only display here) but never
+// writes it. A newly-created link always starts unranked — ranking a
+// Vendor is always a deliberate, separate step taken from the
+// Ingredient side, never automatic on creation.
 
 async function ensureVendorInTenant(vendorId: string, tenantId: string) {
   const rows: any[] = await prisma.$queryRaw`
@@ -19,7 +26,7 @@ async function fetchLinks(vendorId: string, tenantId: string) {
   return prisma.$queryRaw`
     SELECT
       vi.id, vi.ingredient_id as "ingredientId", im.ingredient_code as "ingredientCode", im.name as "ingredientName",
-      im.base_unit as "baseUnit", vi.is_preferred as "isPreferred", vi.notes
+      im.base_unit as "baseUnit", vi.priority, vi.notes
     FROM cat_vendor_ingredients vi
     JOIN cat_ingredient_master_items im ON im.id = vi.ingredient_id
     WHERE vi.vendor_id = ${vendorId}::uuid AND vi.tenant_id = ${tenantId}::uuid
@@ -62,7 +69,7 @@ export async function POST(req: NextRequest, props: any) {
     }
 
     const body = await req.json();
-    const { ingredientId, isPreferred, notes } = body as { ingredientId?: string; isPreferred?: boolean; notes?: string };
+    const { ingredientId } = body as { ingredientId?: string };
 
     if (!ingredientId) {
       return NextResponse.json({ success: false, error: 'Ingredient is required.' }, { status: 400 });
@@ -83,8 +90,8 @@ export async function POST(req: NextRequest, props: any) {
     }
 
     await prisma.$executeRaw`
-      INSERT INTO cat_vendor_ingredients (id, tenant_id, vendor_id, ingredient_id, is_preferred, notes, created_at, created_by, updated_at, updated_by)
-      VALUES (gen_random_uuid(), ${tenantId}::uuid, ${id}::uuid, ${ingredientId}::uuid, ${isPreferred ?? false}, ${notes?.trim() || null}, NOW(), ${userId}::uuid, NOW(), ${userId}::uuid)
+      INSERT INTO cat_vendor_ingredients (id, tenant_id, vendor_id, ingredient_id, priority, notes, created_at, created_by, updated_at, updated_by)
+      VALUES (gen_random_uuid(), ${tenantId}::uuid, ${id}::uuid, ${ingredientId}::uuid, NULL, NULL, NOW(), ${userId}::uuid, NOW(), ${userId}::uuid)
     `;
 
     const items = await fetchLinks(id, tenantId);

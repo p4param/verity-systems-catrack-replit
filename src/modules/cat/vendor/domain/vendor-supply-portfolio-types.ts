@@ -5,6 +5,11 @@
 // future resource type is a new group + a new backing table, not a
 // restructure of this tab. Vendor -> Resource links are owned here and
 // will later be read (never duplicated) by Purchase Planning.
+//
+// PM-WP04A — ownership split: this tab still owns the link itself
+// (add/remove) and Notes, but Priority (replacing isPreferred) is now
+// read-only here — shown for context, edited only from the Ingredient
+// Workspace's Vendor Recommendations tab.
 
 export type SupplyResourceType = 'INGREDIENT';
 
@@ -14,6 +19,6 @@ export interface VendorIngredientLink {
   ingredientCode: string;
   ingredientName: string;
   baseUnit?: string;
-  isPreferred: boolean;
+  priority: number | null;
   notes?: string;
 }

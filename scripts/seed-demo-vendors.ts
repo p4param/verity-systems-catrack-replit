@@ -251,6 +251,17 @@ async function main() {
 
     // Supply Portfolio — full reconcile per vendor, same pattern as Recipe
     // Variants' ingredient reconciliation.
+    //
+    // PM-WP04A: writes `priority` (1 for preferredIngredients, NULL/
+    // unranked otherwise) as the sole recommendation-ranking field —
+    // `is_preferred` is frozen going forward (kept only as a migration
+    // rollback safety net) and is deliberately no longer written here.
+    // `preferredIngredients` stays the VendorSpec field name for now
+    // (minimal diff) — its only two vendors sharing one ingredient
+    // (Coriander: Green Leaf Herbs + Fresh Farms Produce Co.) is the
+    // deliberate Multiple-Priority-1-Vendors defensive fixture; direct
+    // SQL insert here bypasses the five domain operations entirely, the
+    // same way every seed script bypasses application-level flows.
     await pool.query(`DELETE FROM cat_vendor_ingredients WHERE vendor_id = $1`, [vendorId]);
     const preferredSet = new Set(v.preferredIngredients || []);
     for (const ingredientName of v.suppliesIngredients || []) {
@@ -259,10 +270,11 @@ async function main() {
         console.warn(`  Skipping "${v.name}" -> "${ingredientName}" — no matching Ingredient Master item. Run seed-demo-ingredient-master.ts first.`);
         continue;
       }
+      const priority = preferredSet.has(ingredientName) ? 1 : null;
       await pool.query(
-        `INSERT INTO cat_vendor_ingredients (id, tenant_id, vendor_id, ingredient_id, is_preferred, created_at, created_by, updated_at, updated_by)
+        `INSERT INTO cat_vendor_ingredients (id, tenant_id, vendor_id, ingredient_id, priority, created_at, created_by, updated_at, updated_by)
          VALUES (gen_random_uuid(), $1, $2, $3, $4, NOW(), $5, NOW(), $5)`,
-        [tenantId, vendorId, ingredientId, preferredSet.has(ingredientName), adminId],
+        [tenantId, vendorId, ingredientId, priority, adminId],
       );
       linksWritten++;
     }

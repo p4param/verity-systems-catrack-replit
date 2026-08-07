@@ -17,7 +17,7 @@ import { VENDORS as DEMO_VENDORS } from "./seed-demo-vendors";
 // constraints): Events -> Customer Decisions -> Proposal Deliveries ->
 // Published Revisions (demo only) -> Quotations -> Inquiries -> Contacts
 // -> Relationships -> Menu Templates -> Recipe Variants -> Menu Catalog ->
-// Ingredient Master.
+// Purchase Orders -> Vendors -> Ingredient Master.
 //
 // Idempotent: safe to run on a full dataset, a partial dataset, or an
 // already-empty dataset. Every DELETE is a WHERE-scoped no-op-safe query.
@@ -131,7 +131,27 @@ async function main() {
         ])
       : { rowCount: 0 };
 
-  // 12. Vendors (PM-WP01) — cascades their own Supply Portfolio
+  // 12. Purchase Orders (PM-WP03) — must be deleted before Vendors and
+  //     Ingredient Master: cat_purchase_orders.vendor_id and
+  //     cat_purchase_order_items.ingredient_id are both ON DELETE
+  //     RESTRICT, so either later step would fail with a foreign key
+  //     violation if any Purchase Order referencing a demo Vendor or
+  //     demo Ingredient still existed. Unlike every other entity here,
+  //     there is no seed-demo-purchase-orders.ts yet (that's DD-001E,
+  //     PM-WP03G) and therefore no stable PO-DEMO-% style code to scope
+  //     by — every Purchase Order in this tenant is either this
+  //     project's own test data or a demo one, so the whole tenant's
+  //     set is removed unconditionally. Once DD-001E introduces a real
+  //     naming convention, narrow this to match it. cat_purchase_orders
+  //     already ON DELETE CASCADEs its own items, but they're deleted
+  //     explicitly first purely to report an accurate row count.
+  const purchaseOrderItemsResult = await pool.query(
+    `DELETE FROM cat_purchase_order_items WHERE tenant_id = $1`,
+    [tenantId],
+  );
+  const purchaseOrdersResult = await pool.query(`DELETE FROM cat_purchase_orders WHERE tenant_id = $1`, [tenantId]);
+
+  // 13. Vendors (PM-WP01) — cascades their own Supply Portfolio
   //     (cat_vendor_ingredients) rows automatically. Independent of the
   //     Relationship/Inquiry/Quotation/Event chain — Vendors are the
   //     procurement side, not the sales side.
@@ -140,7 +160,7 @@ async function main() {
       ? await pool.query(`DELETE FROM cat_vendors WHERE tenant_id = $1 AND name = ANY($2::text[])`, [tenantId, VENDOR_NAMES])
       : { rowCount: 0 };
 
-  // 13. Ingredient Master.
+  // 14. Ingredient Master.
   const ingredientsResult =
     INGREDIENT_MASTER_NAMES.length > 0
       ? await pool.query(
@@ -161,6 +181,7 @@ async function main() {
   console.log(`  Menu Templates:            ${templatesResult.rowCount}`);
   console.log(`  Recipe Variants:           ${variantsResult.rowCount}`);
   console.log(`  Menu Catalog:              ${catalogResult.rowCount}`);
+  console.log(`  Purchase Orders:           ${purchaseOrdersResult.rowCount} (${purchaseOrderItemsResult.rowCount} items)`);
   console.log(`  Vendors:                   ${vendorsResult.rowCount}`);
   console.log(`  Ingredient Master:         ${ingredientsResult.rowCount}`);
 

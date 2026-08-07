@@ -15,6 +15,14 @@ interface IngredientMasterPickerProps {
   onSelect: (item: IngredientMasterOption) => void;
   excludeIds?: string[];
   placeholder?: string;
+  // PM-WP03B — Purchase Order Items. When provided, results are scoped
+  // to only the Ingredients this Vendor's Supply Portfolio actually
+  // lists (fetched once via the existing Vendor Supply Portfolio GET
+  // endpoint, then filtered client-side on every keystroke) instead of
+  // searching all of Ingredient Master — a Purchase Order Item must be
+  // something the selected Vendor can supply. Omit for the original
+  // Vendor Supply Portfolio use (search all of Ingredient Master).
+  vendorId?: string;
 }
 
 // PM-WP01 — Vendor Master, Supply Portfolio tab. A search-and-add picker
@@ -22,18 +30,51 @@ interface IngredientMasterPickerProps {
 // structure) but fires onSelect and clears, rather than holding a
 // persistent single value — adding an Ingredient to a Vendor's Supply
 // Portfolio is an "add to a list" action, not "choose one field's value."
-export function IngredientMasterPicker({ onSelect, excludeIds = [], placeholder }: IngredientMasterPickerProps) {
+export function IngredientMasterPicker({ onSelect, excludeIds = [], placeholder, vendorId }: IngredientMasterPickerProps) {
   const [searchTerm, setSearchTerm] = useState('');
   const [results, setResults] = useState<IngredientMasterOption[]>([]);
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [highlightedIndex, setHighlightedIndex] = useState(-1);
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const [vendorPortfolio, setVendorPortfolio] = useState<IngredientMasterOption[] | null>(null);
+
+  // Fetch the Vendor's Supply Portfolio once per vendorId — the list is
+  // small (a Supply Portfolio, not all of Ingredient Master), so
+  // filtering it client-side on every keystroke needs no debounce and no
+  // repeated round trips.
+  useEffect(() => {
+    if (!vendorId) {
+      setVendorPortfolio(null);
+      return;
+    }
+    fetch(`/api/cat/vendors/${vendorId}/ingredients`)
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.success) {
+          setVendorPortfolio(
+            (data.items || []).map((i: any) => ({ id: i.ingredientId, ingredientCode: i.ingredientCode, name: i.ingredientName, baseUnit: i.baseUnit })),
+          );
+        }
+      })
+      .catch((err) => console.error('Vendor Supply Portfolio fetch error:', err));
+  }, [vendorId]);
 
   useEffect(() => {
     if (searchTerm.trim().length < 2) {
       setResults([]);
       setHighlightedIndex(-1);
+      return;
+    }
+
+    if (vendorId) {
+      const q = searchTerm.trim().toLowerCase();
+      const items = (vendorPortfolio || [])
+        .filter((i) => !excludeIds.includes(i.id))
+        .filter((i) => i.name.toLowerCase().includes(q) || i.ingredientCode.toLowerCase().includes(q));
+      setResults(items);
+      setHighlightedIndex(items.length > 0 ? 0 : -1);
+      setIsOpen(true);
       return;
     }
 
@@ -57,7 +98,7 @@ export function IngredientMasterPicker({ onSelect, excludeIds = [], placeholder 
 
     return () => clearTimeout(handler);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchTerm]);
+  }, [searchTerm, vendorId, vendorPortfolio]);
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {

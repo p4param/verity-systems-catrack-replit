@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { Boxes, Carrot, Star, Trash2 } from 'lucide-react';
+import { Boxes, Carrot, Trash2 } from 'lucide-react';
 
 import { VendorIngredientLink } from '@/modules/cat/vendor/domain/vendor-supply-portfolio-types';
 import { IngredientMasterOption, IngredientMasterPicker } from '@/modules/cat/vendor/components/IngredientMasterPicker';
@@ -9,6 +9,18 @@ import { inputClass } from '@/modules/cat/event/components/EventListEditing';
 
 interface VendorSupplyPortfolioWorkspaceProps {
   vendorId: string;
+}
+
+function PriorityBadge({ priority }: { priority: number | null }) {
+  return priority === null ? (
+    <span className="text-[10px] font-medium px-2 py-0.5 rounded-full bg-muted/40 text-muted-foreground shrink-0 whitespace-nowrap">
+      No Recommendation
+    </span>
+  ) : (
+    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-primary/10 text-primary shrink-0 whitespace-nowrap">
+      Priority {priority}
+    </span>
+  );
 }
 
 // PM-WP01 — Vendor Master, Supply Portfolio tab.
@@ -19,6 +31,11 @@ interface VendorSupplyPortfolioWorkspaceProps {
 // new group in this same tab, per Product Review, not a new top-level tab
 // and not a restructure of this one. Read/write via
 // /api/cat/vendors/[id]/ingredients — flat add/remove, no reordering.
+//
+// PM-WP04A — ownership split: this tab still owns adding/removing a
+// Vendor-Ingredient link and its Notes, but Priority is now read-only
+// here (shown as a badge for context) — it can only be changed from the
+// Ingredient Workspace's Vendor Recommendations tab (PM-WP04B).
 export function VendorSupplyPortfolioWorkspace({ vendorId }: VendorSupplyPortfolioWorkspaceProps) {
   const [links, setLinks] = useState<VendorIngredientLink[]>([]);
   const [loading, setLoading] = useState(true);
@@ -64,28 +81,6 @@ export function VendorSupplyPortfolioWorkspace({ vendorId }: VendorSupplyPortfol
     }
   };
 
-  const handleTogglePreferred = async (link: VendorIngredientLink) => {
-    const previousPreferred = link.isPreferred;
-    const nextPreferred = !previousPreferred;
-    setLinks((prev) => prev.map((l) => (l.id === link.id ? { ...l, isPreferred: nextPreferred } : l)));
-    setError('');
-    try {
-      const res = await fetch(`/api/cat/vendors/${vendorId}/ingredients/${link.ingredientId}`, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPreferred: nextPreferred, notes: link.notes }),
-      });
-      const data = await res.json();
-      if (!data.success) {
-        setLinks((prev) => prev.map((l) => (l.id === link.id ? { ...l, isPreferred: previousPreferred } : l)));
-        setError(data.error || 'Failed to update preferred flag.');
-      }
-    } catch (err: any) {
-      setLinks((prev) => prev.map((l) => (l.id === link.id ? { ...l, isPreferred: previousPreferred } : l)));
-      setError(err.message || 'Failed to update preferred flag.');
-    }
-  };
-
   const handleRemove = async (link: VendorIngredientLink) => {
     setLinks((prev) => prev.filter((l) => l.id !== link.id));
     setError('');
@@ -108,7 +103,7 @@ export function VendorSupplyPortfolioWorkspace({ vendorId }: VendorSupplyPortfol
       const res = await fetch(`/api/cat/vendors/${vendorId}/ingredients/${link.ingredientId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ isPreferred: link.isPreferred, notes: link.notes }),
+        body: JSON.stringify({ notes: link.notes }),
       });
       const data = await res.json();
       if (!data.success) {
@@ -130,7 +125,7 @@ export function VendorSupplyPortfolioWorkspace({ vendorId }: VendorSupplyPortfol
             <h3 className="text-sm font-extrabold text-foreground">Supply Portfolio</h3>
             <p className="text-[11px] text-muted-foreground mt-0.5">
               What this Vendor supplies, by resource type. Only Ingredients today — Equipment, Packaging, and other resource types will
-              appear here as their own group once built.
+              appear here as their own group once built. Priority is shown for context only — manage it from the Ingredient Workspace.
             </p>
           </div>
         </div>
@@ -156,14 +151,7 @@ export function VendorSupplyPortfolioWorkspace({ vendorId }: VendorSupplyPortfol
               <div className="space-y-1.5">
                 {links.map((link) => (
                   <div key={link.id} className="flex items-center gap-3 bg-muted/10 border border-border/30 rounded-lg px-3 py-2">
-                    <button
-                      type="button"
-                      onClick={() => handleTogglePreferred(link)}
-                      title={link.isPreferred ? 'Preferred — click to unset' : 'Mark as preferred'}
-                      className="shrink-0 cursor-pointer"
-                    >
-                      <Star className={`w-4 h-4 ${link.isPreferred ? 'fill-amber-400 text-amber-400' : 'text-muted-foreground/40'}`} />
-                    </button>
+                    <PriorityBadge priority={link.priority} />
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-foreground truncate">{link.ingredientName}</span>

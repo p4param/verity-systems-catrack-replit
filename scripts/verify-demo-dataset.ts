@@ -237,8 +237,8 @@ async function main() {
     Ghee: { status: "READY", confidence: "LOW", vendorCount: 2 },
     Turmeric: { status: "READY", confidence: "MEDIUM", vendorCount: 1 },
     Salt: { status: "READY", confidence: "HIGH", vendorCount: 5 },
-    Coriander: { status: "MULTIPLE_PREFERRED_VENDORS", confidence: "NONE", vendorCount: 2 },
-    "Bakery Bread": { status: "BLOCKED_PREFERRED_VENDOR", confidence: "NONE", vendorCount: 2 },
+    Coriander: { status: "MULTIPLE_PRIORITY_1_VENDORS", confidence: "NONE", vendorCount: 2 },
+    "Bakery Bread": { status: "BLOCKED_PRIORITY_1_VENDOR", confidence: "NONE", vendorCount: 2 },
     Chickpeas: { status: "NO_ACTIVE_VENDOR", confidence: "NONE", vendorCount: 1 },
   };
   const purchasePlanningStatusCounts = new Map<string, Map<string, number>>();
